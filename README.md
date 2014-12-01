@@ -7,7 +7,7 @@ Python art net interface. with patterns you can run for the ledpoles and the led
 I made it easier to config and run patters with python code.
 
 
-what to do if you want to run it ?
+## what to do if you want to run it ?
 
 make you pattern, import it into patterns.py
 
@@ -35,7 +35,7 @@ TARGETS {
 etc etc.
 
 
-usefull tools in art-net_C are:
+## usefull tools in art-net_C are:
 
 artmonitor <ip>		#tells a bit more info on the device like mac address and more.
 
@@ -45,7 +45,7 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 
 
 
-on the todo list:
+## on the todo list:
 
 break out patterns in patterns.py in to seperate files.
 
@@ -58,7 +58,7 @@ snake might be fun to implement.
 everything with multiplayer or not ?
 
 
-other things that might be verry usefull to make or do:
+## other things that might be verry usefull to make or do:
 
 more a hardware todo is make firmware for the ESP8266 wifi module
 
