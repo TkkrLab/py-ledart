@@ -3,7 +3,9 @@ py-art-net
 
 Python art net interface. with patterns you can run for the ledpoles and the ledmatrix fridgefire made.
 
+
 I made it easier to config and run patters with python code.
+
 
 what to do if you want to run it ?
 make you pattern, import it into patterns.py
@@ -15,11 +17,14 @@ use a existing config as a template and follow it.
 you can run multiple devices from a signle config file.
 as wel as multpile patterns like:
 
+
+```python
 TARGETS {
 	target1_ip:pattern()
 	target2_ip:nextPattern()
 	target3_ip:anotherPattern()
 }
+```
 
 etc etc.
 
