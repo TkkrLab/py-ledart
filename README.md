@@ -8,13 +8,19 @@ I made it easier to config and run patters with python code.
 
 
 what to do if you want to run it ?
+
 make you pattern, import it into patterns.py
+
 then in configs folder created a config file or edit a existing one.
+
 create it like:
+
 name_conf.py
 
 use a existing config as a template and follow it.
+
 you can run multiple devices from a signle config file.
+
 as wel as multpile patterns like:
 
 
@@ -44,11 +50,17 @@ on the todo list:
 break out patterns in patterns.py in to seperate files.
 
 might be fun to make a pong implementation.
+
 i think it would be helpfull to implement a "Graphics" library
+
 snake might be fun to implement.
 
-everything with multiplayer ?
+everything with multiplayer or not ?
 
-other things on the todo:
+
+other things that might be verry usefull to make or do:
+
 more a hardware todo is make firmware for the ESP8266 wifi module
+
 that does art net. no need for utp cables any more.
+
