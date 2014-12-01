@@ -7,7 +7,7 @@ Python art net interface. with patterns you can run for the ledpoles and the led
 I made it easier to config and run patters with python code.
 
 
-## what to do if you want to run it ?
+#### what to do if you want to run it ?
 
 make you pattern, import it into patterns.py
 
@@ -67,11 +67,11 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 
 break out patterns in patterns.py in to seperate files.
 
-might be fun to make a pong implementation.
+fridgefire's matrix might be fun to make a pong implementation on.
 
-i think it would be helpfull to implement a "Graphics" library
+or a snake might be fun to implement for it.
 
-snake might be fun to implement.
+I think it would be helpfull to implement a "Graphics" library
 
 everything with multiplayer or not ?
 
