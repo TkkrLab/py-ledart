@@ -28,10 +28,16 @@ TARGETS {
 
 etc etc.
 
+
 usefull tools in art-net_C are:
+
 artmonitor <ip>		#tells a bit more info on the device like mac address and more.
+
 artpoll <broadcast> 	#finds all the devices on the network. writes that data to a file. make sure field-devices exist (file)
+
 artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net device works.
+
+
 
 on the todo list:
 
