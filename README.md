@@ -25,12 +25,30 @@ as wel as multpile patterns like:
 
 
 ```python
-TARGETS {
-	target1_ip:pattern()
-	target2_ip:nextPattern()
-	target3_ip:anotherPattern()
-}
+	TARGETS {
+		target1_ip:pattern()
+		target2_ip:nextPattern()
+		target3_ip:anotherPattern()
+	}
 ```
+
+Then to run the actual patterns you run from the command line:
+
+```shell
+	:$ python runPatternJob.py -d <delay> -c <config>
+```
+
+for example:
+
+```shell
+	:$ python runpatternJob.py -d 0.2 -c myLamps_conf.py
+```
+
+both delay and config are optional,
+the default delay is 15ms which is the delay that dictates how fast the refresh is ran.
+
+and the default config is default_conf.py
+which won't work if you didn't put the right things in it. like the right ip.
 
 etc etc.
 
