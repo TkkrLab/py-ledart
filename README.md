@@ -75,6 +75,9 @@ I think it would be helpfull to implement a "Graphics" library
 
 everything with multiplayer or not ?
 
+another thing that might be fun to make is a vu meter?
+
+and yet another thing might be a network traffic monitor of kind.
 
 #### other things that might be verry usefull to make or do:
 
