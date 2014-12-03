@@ -7,3 +7,4 @@ from RainPattern import RainPattern
 from PolicePattern import PolicePattern
 from BarberpolePattern import BarberpolePattern
 from ColorFadePattern import ColorFadePattern
+from Graphics import *

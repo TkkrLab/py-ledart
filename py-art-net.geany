@@ -15,6 +15,7 @@ indent_mode=2
 [project]
 name=py-art-net
 base_path=/home/robert/py-art-net/
+description=
 
 [long line marker]
 long_line_behaviour=1
@@ -22,6 +23,7 @@ long_line_column=72
 
 [files]
 current_page=0
+FILE_NAME_0=278;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fpy-art-net%2Fpatterns%2FPatterns.py;0;4
 
 [VTE]
-last_dir=/home/robert/projects/art-net
+last_dir=/home/robert/py-art-net
