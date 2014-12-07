@@ -154,7 +154,7 @@ class GraphicsCircleTest(object):
 		self.graphics = Graphics(matrix_width, matrix_height)
 		self.radius = 0
 		self.direction = 1
-		self.color = CYAN
+		self.color = RED
 	def generate(self):
 		#clear the drawing surface
 		self.graphics.fill(BLACK)

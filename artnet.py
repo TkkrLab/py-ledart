@@ -16,4 +16,6 @@ def buildPacket(universe, dmxdata):
 		data += chr(r)
 		data += chr(g)
 		data += chr(b)
+#	data += chr(0x01)
+#	data += chr(0x01)
 	return data
