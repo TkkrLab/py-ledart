@@ -6,7 +6,7 @@ local_host = "127.0.0.1"
 
 TARGETS = {
 	#led_ceiling_matrix_ip:RainPattern(chance=0.2),
-	local_host:GraphicsPixelTest(),
+	local_host:GraphicsLineTest(),
 	#led_ceiling_matrix_ip:PolicePattern(),
 	#led_ceiling_matrix_ip:GraphicsCircleTest(),
 	#local_host:GraphicsCircleTest(),
