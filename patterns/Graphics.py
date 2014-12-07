@@ -100,16 +100,16 @@ class GraphicsPixelTest(object):
 	def __init__(self):
 		self.graphics = Graphics(matrix_width, matrix_height)
 		self.color = GREEN
-		self.pos = 0,0
+		self.pos = random.randint(1,matrix_width),random.randint(1,matrix_height)
 		self.speed = 1
 		self.deltax, self.deltay = self.speed,self.speed
 	def generate(self):
 		self.graphics.fill(BLACK)
 		x,y = self.pos
 		self.graphics.drawPixel(x,y, self.color)
-		if x > matrix_width-1 or x < 0:
+		if x >= matrix_width-1 or x <= 0:
 			self.deltax *= -1
-		if y > matrix_height-1 or y < 0:
+		if y >= matrix_height-1 or y <= 0:
 			self.deltay *= -1
 		self.pos = x+self.deltax,y+self.deltay
 		return self.graphics.getSurface()
