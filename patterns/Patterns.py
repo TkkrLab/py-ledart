@@ -7,4 +7,5 @@ from RainPattern import RainPattern
 from PolicePattern import PolicePattern
 from BarberpolePattern import BarberpolePattern
 from ColorFadePattern import ColorFadePattern
+#for ledmatrix 
 from Graphics import *
