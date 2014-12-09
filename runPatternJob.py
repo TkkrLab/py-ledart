@@ -34,7 +34,7 @@ while(True):
 	for t in TARGETS:
 		pattern = TARGETS[t]
 		data = pattern.generate()
-#		data = convertSnakeModes(data)
+		data = convertSnakeModes(data)
 		sock.sendto(buildPacket(0, data), (t, UDP_PORT))
 	time.sleep(args.delay)
 sock.close()

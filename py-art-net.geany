@@ -22,18 +22,22 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=223;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fstardog.py;0;4
-FILE_NAME_1=21364;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fparts.py;0;4
-FILE_NAME_2=10722;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fspaceship.py;0;4
+current_page=4
+FILE_NAME_0=82;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fstardog.py;0;4
+FILE_NAME_1=14065;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fparts.py;0;4
+FILE_NAME_2=13052;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fspaceship.py;0;4
 FILE_NAME_3=1250;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fadjectives.py;0;4
-FILE_NAME_4=7690;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Ffloaters.py;0;4
-FILE_NAME_5=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fvec2d.py;0;4
-FILE_NAME_6=2126;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fscripts.py;0;4
-FILE_NAME_7=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fskills.py;0;4
-FILE_NAME_8=2083;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fgame.py;0;4
-FILE_NAME_9=12816;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fmenus.py;0;4
-FILE_NAME_10=796;None;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Ftodo-and-plans.txt;0;4
+FILE_NAME_4=9737;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Ffloaters.py;0;4
+FILE_NAME_5=4799;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fscripts.py;0;4
+FILE_NAME_6=0;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fskills.py;0;4
+FILE_NAME_7=361;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fgame.py;0;4
+FILE_NAME_8=1316;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fmenus.py;0;4
+FILE_NAME_9=778;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2FsolarSystem.py;0;4
+FILE_NAME_10=229;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2FtinyFighter.py;0;4
+FILE_NAME_11=3890;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Futils.py;0;4
+FILE_NAME_12=3126;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fdialogs.py;0;4
+FILE_NAME_13=2808;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2FmenuElements.py;0;4
+FILE_NAME_14=4233;Python;0;EUTF-8;1;1;0;%2Fhome%2Frobert%2Fstardog%2Fstardog%2Fcode%2Fgui.py;0;4
 
 [VTE]
 last_dir=/home/robert/stardog/stardog/code

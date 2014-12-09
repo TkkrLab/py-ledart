@@ -9,3 +9,7 @@ from BarberpolePattern import BarberpolePattern
 from ColorFadePattern import ColorFadePattern
 #for ledmatrix 
 from Graphics import *
+from Tron import *
+from Snake import *
+from Pong import *
+from Snake import *
