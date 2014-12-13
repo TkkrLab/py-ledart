@@ -38,12 +38,11 @@ class Life(object):
 		self.copy_buffer(self.buffer, self.field)
 	#create a random field
 	def createRandomField(self):
-		for i,cell in enumerate(self.field):
+		for i in xrange(self.fiedlSize):
 			self.field[i] = random.randint(0,1);
 	def copy_buffer(self, buffer, field):
 		for index in xrange(self.fieldSize):
 			self.field[index] = self.buffer[index]
-		return
 	def checkUpper(self, field, position):
 		if position-self.fieldWidth > 0:
 			if field[position-self.fieldWidth]:
