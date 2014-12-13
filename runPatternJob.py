@@ -9,6 +9,7 @@ UDP_PORT = 6453
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--delay", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
 parser.add_argument("-c", "--config", help="load config.", metavar="<config_conf.py>", nargs="?", default="default_conf.py", type=str)
+parser.add_argument("--snakeMode", help="flips every x amount of data", nargs="?", default=None, type=str)
 args = parser.parse_args()
 
 
@@ -34,7 +35,8 @@ while(True):
 	for t in TARGETS:
 		pattern = TARGETS[t]
 		data = pattern.generate()
-		data = convertSnakeModes(data)
+		if args.snakeMode == "enabled":
+			data = convertSnakeModes(data)
 		sock.sendto(buildPacket(0, data), (t, UDP_PORT))
 	time.sleep(args.delay)
 sock.close()

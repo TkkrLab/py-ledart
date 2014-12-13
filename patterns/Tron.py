@@ -35,6 +35,8 @@ class TronPlayer(object):
 			if event.key == self.moveKeys[3]:
 				self.deltax = 0
 				self.deltay = self.speed
+	def bindKey(self, key, action):
+		self.moveKeys[action] = key
 	def update(self, other):
 		x,y = self.pos
 		#update position
@@ -62,7 +64,7 @@ class TronPlayer(object):
 		for x,y in self.body:
 			self.game.graphics.drawPixel(x,y,self.color)
 
-class OldTron(object):
+class OldTron(object): #version before creating players that handle processing on thier own.
 	def __init__(self):
 		self.graphics = Graphics(matrix_width, matrix_height)
 		

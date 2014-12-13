@@ -6,10 +6,10 @@ michiel_laptop = "10.42.4.12"
 local_host = "127.0.0.1"
 
 TARGETS = {
-	#led_ceiling_matrix_ip:RainPattern(chance=0.2),
-	led_ceiling_matrix_ip:OldTron(),
+	#led_ceiling_matrix_ip:OldTron(),
 	#led_ceiling_matrix_ip:Tron(),
-	#led_ceiling_matrix_ip:PolicePattern(),
+	local_host:MatrixLife()
+	
 	#led_ceiling_matrix_ip:GraphicsCircleTest(),
 	#led_ceiling_matrix_ip:GraphicsCircleTest(),
 	#led_ceiling_matrix_ip:GraphicsRectTest(),

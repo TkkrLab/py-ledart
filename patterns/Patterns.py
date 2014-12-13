@@ -13,3 +13,4 @@ from Tron import *
 from Snake import *
 from Pong import *
 from Snake import *
+from PixelLife import *
