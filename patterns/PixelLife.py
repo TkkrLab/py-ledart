@@ -10,8 +10,13 @@ class MatrixLife(object):
 	def __init__(self):
 		self.life = Life(matrix_width, matrix_height, 1, color=BLUE)
 		self.graphics = Graphics(matrix_width, matrix_height)
+	"""
+	this draw function manipulates the graphics surface directly.
+	it's either elegent in one way.
+	and really really ugly in another way.
+	"""
 	def draw(self):
-		for index,cel in enumerate(self.life.buffer):
+		for index,cel in enumerate(self.life.field):
 			if cel:
 				self.graphics.surface[index] = BLUE
 			else:
