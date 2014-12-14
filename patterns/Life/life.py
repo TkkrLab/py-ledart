@@ -18,7 +18,11 @@ class Life(object):
 		
 		self.buffer = [0]*self.fieldSize
 		
-		self.position = 0;
+		self.position = 0
+		
+		self.resetLim = 40 #reset field after this many iterations if field stays the same.
+		self.resetCount = 0 #keep track of count
+		self.previousCount = 0 #holds the previous cell count.
 		
 		self.createRandomField()
 	def process(self):
@@ -36,10 +40,27 @@ class Life(object):
 				else:
 					self.buffer[self.position] = 0
 		self.copy_buffer(self.buffer, self.field)
+		#check if the field isn't the same.
+		#between itterations. and if it is the same
+		#for the amount of resetLim it will generate a new field.
+		self.checkField()
 	#create a random field
 	def createRandomField(self):
-		for i in xrange(self.fiedlSize):
-			self.field[i] = random.randint(0,1);
+		for i in xrange(self.fieldSize):
+			self.field[i] = random.randint(0,1)
+	def checkField(self):
+		count = 0
+		for i in self.field:
+			if i:
+				count += 1
+		#check if field is the same size between itterations.
+		if count == self.previousCount:
+			self.resetCount+=1
+		#if resetCount == restLim then restCount = 0 and create random field
+		if self.resetCount == self.resetLim:
+			self.resetCount = 0
+			self.createRandomField()
+		self.previousCount = count
 	def copy_buffer(self, buffer, field):
 		for index in xrange(self.fieldSize):
 			self.field[index] = self.buffer[index]
