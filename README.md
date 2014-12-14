@@ -65,13 +65,22 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 
 #### on the todo list:
 
+*pong
+*snake <W.I.P>
+*tron <W.I.P>
+*tetris 
+*arcadia
+*game of life (conway) <Done it's called PixelLife>
+*VU meter
+*network monitor 
+
 break out patterns in patterns.py in to seperate files.
 
 fridgefire's matrix might be fun to make a pong implementation on.
 
 or a snake might be fun to implement for it.
 
-I think it would be helpfull to implement a "Graphics" library
+I think it would be helpfull to implement a "Graphics" library <This is done the class is called Graphics>
 
 everything with multiplayer or not ?
 
