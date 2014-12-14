@@ -13,6 +13,72 @@ CYAN = (255,255,0)
 
 COLORS = [RED, GREEN, BLUE, WHITE, BLACK, PURPLE, YELLOW, CYAN]
 
+class ColorObject(object):
+	def __init__(self):
+		pass
+	def add(self,color1,color2):
+		red = color1[0]+color2[0]
+		green = color1[1]+color2[1]
+		blue = color1[2]+color2[2]
+		if red > 255:
+			red = 255
+		if blue > 255:
+			blue = 255
+		if green > 255:
+			green = 255
+		return (red,green,blue)
+	def subtract(self,color,color2):
+		red = color[0]-color2[0]
+		green = color[1]-color2[1]
+		blue = color[2]-color2[2]
+		if red < 0:
+			red = 0
+		if green < 0:
+			green = 0
+		if blue < 0:
+			blue = 0
+		return (red,green,blue)
+	def multiply(self,color,number):
+		if number == 0:
+			number = 1
+		red = int(color[0]*number)
+		green = int(color[1]*number)
+		blue = int(color[2]*number)
+		if red > 255:
+			red = 255
+		if red < 0:
+			red = 0
+		if green > 255:
+			green = 255
+		if green < 0:
+			green = 0
+		if blue > 255:
+			blue = 255
+		if blue < 0:
+			blue = 0
+		return (red,green,blue)
+	def divide(self,color,number):
+		if number == 0:
+			number = 1
+		red = int(color[0]/number)
+		green = int(color[1]/number)
+		blue = int(color[2]/number)
+		if red > 255:
+			red = 255
+		if red < 0:
+			red = 0
+		if green > 255:
+			green = 255
+		if green < 0:
+			green = 0
+		if blue > 255:
+			blue = 255
+		if blue < 0:
+			blue = 0
+		return (red,green,blue)
+
+Color = ColorObject()
+
 class Graphics(object):
 	def __init__(self, width, height):
 		self.width = width

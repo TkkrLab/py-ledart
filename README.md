@@ -73,6 +73,7 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 *game of life (conway) <Done it's called PixelLife>
 *VU meter
 *network monitor 
+*make mario appear on the matrix or other mobs from the game or any other image from other games.
 
 break out patterns in patterns.py in to seperate files.
 

@@ -43,12 +43,12 @@ class Life(object):
 		#check if the field isn't the same.
 		#between itterations. and if it is the same
 		#for the amount of resetLim it will generate a new field.
-		self.checkField()
+		self.checkFieldState()
 	#create a random field
 	def createRandomField(self):
 		for i in xrange(self.fieldSize):
 			self.field[i] = random.randint(0,1)
-	def checkField(self):
+	def checkFieldState(self):
 		count = 0
 		for i in self.field:
 			if i:
