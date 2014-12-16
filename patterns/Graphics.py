@@ -95,13 +95,19 @@ class Graphics(object):
 			return 0
 		else:
 			index = self.calcIndex(x,y)
-			if index < matrix_size and index >= 0:
+			if index < self.size and index >= 0:
 				self.surface[index] = color
 	def calcIndex(self, x,y):
 		return ((y*self.width)+x)
 	def fill(self, color):
 		for i in range(0, self.size):
 			self.surface[i] = color
+	def getSurfaceSize(self):
+		return self.size
+	def getSurfaceWidth(self):
+		return self.width
+	def getSurfaceHeight(self):
+		return self.height
 	def getSurface(self):
 		return self.surface
 	def drawPixel(self, x, y, color):

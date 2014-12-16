@@ -10,9 +10,11 @@ TARGETS = {
 	#led_ceiling_matrix_ip:Tron(),
 	
 	#local_host:MixedLife(),
-	local_host:BlueLife(),
-	#led_ceiling_matrix_ip:BlueLife(),
+	local_host:Pong(),
+	led_ceiling_matrix_ip:Pong(),
 	#local_host:RandomLife(),
+	#led_ceiling_matrix_ip:Pong(),
+	#local_host:Pong(),
 	
 	#local_host:FallingStar(chance=0.2),
 	#local_host:RainPattern(chance=0.2),
