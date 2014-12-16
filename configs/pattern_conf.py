@@ -8,8 +8,15 @@ local_host = "127.0.0.1"
 TARGETS = {
 	#led_ceiling_matrix_ip:OldTron(),
 	#led_ceiling_matrix_ip:Tron(),
-	local_host:MatrixLife(),
-	led_ceiling_matrix_ip:MatrixLife(),	
+	
+	#local_host:MixedLife(),
+	local_host:BlueLife(),
+	#led_ceiling_matrix_ip:BlueLife(),
+	#local_host:RandomLife(),
+	
+	#local_host:FallingStar(chance=0.2),
+	#local_host:RainPattern(chance=0.2),
+	
 	#led_ceiling_matrix_ip:GraphicsCircleTest(),
 	#led_ceiling_matrix_ip:GraphicsCircleTest(),
 	#led_ceiling_matrix_ip:GraphicsRectTest(),
