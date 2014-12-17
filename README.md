@@ -65,7 +65,7 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 
 #### on the todo list:
 
-*pong
+*pong <W.I.P> basicly almost working
 *snake <W.I.P>
 *tron <W.I.P>
 *tetris 
@@ -75,6 +75,10 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 *network monitor 
 *make mario appear on the matrix or other mobs from the game or any other image from other games.
 
+*problem with pwm not being linear (the amount of power it gives per pulse)
+*thus implement a scale which does make it linear. so fading is nice and even.
+*link that gave me the Yes that's it! moment:
+*http://forum.arduino.cc/index.php?PHPSESSID=fiq8nr1j9sstegstf2o6btdgq2&topic=286351.0
 break out patterns in patterns.py in to seperate files.
 
 fridgefire's matrix might be fun to make a pong implementation on.
