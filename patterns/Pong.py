@@ -16,6 +16,7 @@ class Controller(object):
 				self.direction = -1
 			elif pos > self.previousVal:
 				self.direction = 1
+			print pos
 			return pos
 		except Exception, e:
 			print "sys.exit: "+str(e)
@@ -67,6 +68,9 @@ class Ball(object):
 		self.colliding = False
 		self.dx = 1
 		self.dy = 1
+		
+		self.tail = []
+		self.tail_lim = 3
 	def getPos(self):
 		return self.pos
 	def setPos(self, pos):
@@ -77,7 +81,6 @@ class Ball(object):
 		self.colliding = colliding
 	def process(self):
 		x,y = self.pos
-		
 		#do boundery checking
 		if x >= self.graphics.width-1:
 			x = self.graphics.width-1
@@ -91,14 +94,20 @@ class Ball(object):
 			self.dy *= -1
 			#check in what direction we are going.
 			#and bring the ball just in front of it.
+			#and take care of the ball offsets.
 			if self.dy > 0:
-				y += 2
+				y += 1
 			elif self.dy < 0:
-				y -= 2
+				y -= 1 
+			if self.dx > 0:
+				x -= 1
+			elif self.dx < 0:
+				x += 1
 		
 		#add deltas to cordinates to get movement.
 		x += self.dx
 		y += self.dy
+		
 		#save our new cordinates
 		self.pos = x,y
 	def draw(self):
@@ -114,8 +123,8 @@ class Pong(object):
 		
 		self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
 		#timing variables used to controle the speed of the ball
-		speed = matrix_height #speed = pixels/s
-		self.interval = 1./speed
+		self.speed = matrix_height-1 #speed = pixels/s
+		self.interval = 1./self.speed
 		self.previous = 0
 		
 		self.print_score = False
