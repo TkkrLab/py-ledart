@@ -114,7 +114,7 @@ class Pong(object):
 		
 		self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
 		#timing variables used to controle the speed of the ball
-		speed = matrix_height/2 #cover the matrix height is 2 seconds.
+		speed = matrix_height #speed = pixels/s
 		self.interval = 1./speed
 		self.previous = 0
 		
