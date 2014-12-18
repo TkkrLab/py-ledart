@@ -12,11 +12,6 @@ class Controller(object):
 		try:
 			self.ser_port.flushInput()
 			pos = ord(self.ser_port.read())
-			if pos < self.previousVal:
-				self.direction = -1
-			elif pos > self.previousVal:
-				self.direction = 1
-			print pos
 			return pos
 		except Exception, e:
 			print "sys.exit: "+str(e)

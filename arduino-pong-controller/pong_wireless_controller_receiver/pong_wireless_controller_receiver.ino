@@ -15,10 +15,8 @@ void loop()
 {
   uint8_t buf[VW_MAX_MESSAGE_LEN];
   uint8_t buflen = VW_MAX_MESSAGE_LEN;
-  if (vw_get_message(buf, &buflen)) // Non-blocking
-  {
-    Serial.write(buf[0]);
-  }
+  vw_get_message(buf, &buflen);
+  Serial.write(buf[0]);
 }
 
 
