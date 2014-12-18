@@ -87,17 +87,6 @@ class Ball(object):
 		#the pong game will let us know when the ball is colliding with a paddle
 		if self.colliding:
 			self.dy *= -1
-			#check in what direction we are going.
-			#and bring the ball just in front of it.
-			#and take care of the ball offsets.
-			if self.dy > 0:
-				y += 1
-			elif self.dy < 0:
-				y -= 1 
-			if self.dx > 0:
-				x -= 1
-			elif self.dx < 0:
-				x += 1
 		
 		#add deltas to cordinates to get movement.
 		x += self.dx
@@ -130,7 +119,7 @@ class Pong(object):
 		bx,by = ball.getPos()
 		bsize = ball.getPos()
 		
-		if by == py and bx >= px and bx < px+pwidth:
+		if by+ball.dy == py and bx >= px and bx < px+pwidth:
 			return True
 		else:
 			return False
