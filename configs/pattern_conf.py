@@ -13,7 +13,7 @@ TARGETS = {
 	#local_host:RandomLife(),
 	#led_ceiling_matrix_ip:Pong(),
 	
-	local_host:Pong(),
+	#local_host:Pong(),
 	pixelMatrix:Pong(),
 	
 	#local_host:FallingStar(chance=0.2),

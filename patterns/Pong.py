@@ -1,5 +1,5 @@
 from Graphics import *
-import serial, sys
+import serial, sys, time
 
 class Controller(object):
 	ser_port = None
@@ -10,10 +10,12 @@ class Controller(object):
 		try:
 			self.ser_port.flushInput()
 			value = ord(self.ser_port.read())
-			print value
 			return value
 		except:
 			sys.exit(0)
+	def __del__(self):
+		if self.ser_port:
+			self.ser_port.close()
 
 class Paddle(object):
 	def __init__(self, pos, color, controller, graphics):
@@ -66,6 +68,8 @@ class Ball(object):
 		self.colliding = colliding
 	def process(self):
 		x,y = self.pos
+		
+		#do boundery checking
 		if x >= self.graphics.width-1:
 			x = self.graphics.width-1
 			self.dx *= -1
@@ -76,9 +80,17 @@ class Ball(object):
 		#the pong game will let us know when the ball is colliding with a paddle
 		if self.colliding:
 			self.dy *= -1
+			#check in what direction we are going.
+			#and bring the ball just in front of it.
+			if self.dy > 0:
+				y += 2
+			elif self.dy < 0:
+				y -= 2
 		
+		#add deltas to cordinates to get movement.
 		x += self.dx
 		y += self.dy
+		#save our new cordinates
 		self.pos = x,y
 	def draw(self):
 		x,y = self.pos
@@ -87,11 +99,15 @@ class Ball(object):
 class Pong(object):
 	def __init__(self):
 		self.graphics = Graphics(matrix_width, matrix_height)
-		self.controller = Controller("/dev/ttyACM0", baud=9600)
+		self.controller = Controller("/dev/ttyACM1", baud=9600)
 		self.paddle1 = Paddle((0,0), BLUE, self.controller, self.graphics)
 		self.paddle2 = Paddle((0, matrix_height-1), BLUE, self.controller, self.graphics)
-		self.ball = Ball((self.graphics.width/2, self.graphics.height/2), GREEN, self.graphics)
-	
+		
+		self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
+		#timing variables used to controle the speed of the ball
+		speed = matrix_height/2 #cover the matrix height is 2 seconds.
+		self.interval = 1./speed
+		self.previous = 0
 	def checkOnPaddle(self, paddle, ball):
 		
 		px,py = paddle.getPos()
@@ -104,10 +120,20 @@ class Pong(object):
 		else:
 			return False
 	
+	def getRandomDir(self):
+		direction = 0
+		#don't want dir to be 0
+		while not direction:
+			direction = random.randint(-1,1)
+		return direction
+	
 	def process(self):
-		self.ball.process()
 		self.paddle1.process()
 		self.paddle2.process()
+		#only move ball x amount per second.
+		if( (time.time()-self.previous) >= self.interval ):
+			self.previous = time.time()
+			self.ball.process()
 		
 		#if ball on paddle bounce it back.
 		if self.checkOnPaddle(self.paddle1, self.ball):
@@ -116,19 +142,23 @@ class Pong(object):
 			self.ball.setColliding(True)
 		else:
 			self.ball.setColliding(False)
+		
 		#if ball beyond left or right limit something score ?
 		#for now just reset
 		bx,by = self.ball.getPos()
-		if by < self.graphics.width-10 or by > self.graphics.height+10:
+		lim = 2 #so lim(it) pixel out it resets
+		if by < -lim or by > self.graphics.height+lim:
 			self.ball.setPos((self.graphics.width/2, self.graphics.height/2))
+			self.ball.dx = self.getRandomDir()
+			self.ball.dy = self.getRandomDir()
 	def handleInput(self):
 		self.paddle1.handleInput()
 		self.paddle2.handleInput()
 	def draw(self):
 		self.graphics.fill(BLACK)
+		self.ball.draw()
 		self.paddle1.draw()
 		self.paddle2.draw()
-		self.ball.draw()
 	def generate(self):
 		self.handleInput()
 		self.process()
