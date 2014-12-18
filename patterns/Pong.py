@@ -22,9 +22,15 @@ class Paddle(object):
 		self.pos = pos
 		self.paddle_width = 3
 		self.side = pos[1]
+		
+		self.score = 0
+		
 		self.color = color
+		
 		self.controller = controller
+		
 		self.graphics = graphics
+		
 		self.inputValue = 0
 	def getPos(self):
 		return self.pos
