@@ -6,13 +6,22 @@ class Controller(object):
 	def __init__(self, port = "/dev/ttyACM0", baud=9600):
 		if not self.ser_port:
 			self.ser_port = serial.Serial(port, baud)
-	def getPotVal(self):
+		self.previousVal = 0
+		self.direction = 0
+	def getPos(self):
 		try:
 			self.ser_port.flushInput()
-			value = ord(self.ser_port.read())
-			return value
-		except:
+			pos = ord(self.ser_port.read())
+			if pos < self.previousVal:
+				self.direction = -1
+			elif pos > self.previousVal:
+				self.direction = 1
+			return pos
+		except Exception, e:
+			print "sys.exit: "+str(e)
 			sys.exit(0)
+	def getDirection(self):
+		return self.direction
 	def __del__(self):
 		if self.ser_port:
 			self.ser_port.close()
@@ -44,13 +53,7 @@ class Paddle(object):
 			x = self.graphics.width-2
 		self.pos = x,self.side
 	def handleInput(self):
-		self.inputValue = self.controller.getPotVal()
-		"""
-		x = self.controller.getPotVal()-1
-		if x > self.graphics.getSurfaceWidth()-self.paddle_width:
-			x = self.graphics.getSurfaceWidth()-self.paddle_width+1
-		self.pos = x,self.side
-		"""
+		self.inputValue = self.controller.getPos()
 	def draw(self):
 		x,y = self.pos
 		self.graphics.drawLine(x, y, x+self.paddle_width-1, y, self.color)
@@ -114,6 +117,8 @@ class Pong(object):
 		speed = matrix_height/2 #cover the matrix height is 2 seconds.
 		self.interval = 1./speed
 		self.previous = 0
+		
+		self.print_score = False
 	def checkOnPaddle(self, paddle, ball):
 		
 		px,py = paddle.getPos()
@@ -154,6 +159,14 @@ class Pong(object):
 		bx,by = self.ball.getPos()
 		lim = 2 #so lim(it) pixel out it resets
 		if by < -lim or by > self.graphics.height+lim:
+			if by < -lim:
+				self.paddle1.score += 1
+			if by > self.graphics.height+lim:
+				self.paddle2.score += 1
+			#print score shows it works!
+			if self.print_score:
+				print "player1 score: %d"%(self.paddle1.score)
+				print "player2 score: %d"%(self.paddle2.score)
 			self.ball.setPos((self.graphics.width/2, self.graphics.height/2))
 			self.ball.dx = self.getRandomDir()
 			self.ball.dy = self.getRandomDir()
