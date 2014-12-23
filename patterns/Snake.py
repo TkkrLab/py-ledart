@@ -1,4 +1,4 @@
-from Grahpics import *
+from Graphics import *
 from Controllers import *
 class Snake(object):
     def __init__(self):
