@@ -13,8 +13,8 @@ TARGETS = {
 	#local_host:RandomLife(),
 	#local_host:BlueLife(),
 	
-	local_host:Pong(),
 	pixelMatrix:Pong(),
+	#pixelMatrix:BlueLife(),
 	
 	#local_host:FallingStar(chance=0.2),
 	#local_host:RainPattern(chance=0.2),
