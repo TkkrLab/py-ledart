@@ -257,3 +257,16 @@ class GraphicsCircleTest(object):
 		
 		#get the surface drawn
 		return self.graphics.getSurface()
+
+class GraphicsDotTest(object):
+	def __init__(self):
+		self.graphics = Graphics(matrix_width, matrix_height)
+		self.radius = 0
+		self.color = (123,111,222)
+		self.pos = (0,0)
+	def generate(self):
+		self.graphics.fill(BLACK)
+		x,y = self.pos
+		self.graphics.drawPixel(x,y, self.color)
+		self.graphics.drawPixel(matrix_width-1, matrix_height-1, self.color)
+		return self.graphics.getSurface()

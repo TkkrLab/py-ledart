@@ -2,8 +2,19 @@ from Graphics import *
 from Controllers import *
 import serial, sys, time
 
+
+class PongController(PygameController, MegaController):
+    def __init__(self, plugged=0):
+        PygameController.__init__(self, plugged)
+    def getPos(self, button):
+        value = PygameController.getAxis(self, button)
+        value = translate(value, 1.0,-1.0, 0, 10.1)
+        value = int(round(value))
+        print value
+        return value
+
 class Paddle(object):
-    def __init__(self, pos, color, controller, graphics):
+    def __init__(self, pos, color, controller, controller_in, graphics):
         self.pos = pos
         self.paddle_width = 3
         self.side = pos[1]
@@ -13,6 +24,7 @@ class Paddle(object):
         self.color = color
         
         self.controller = controller
+        self.controller_in = controller_in
         
         self.graphics = graphics
         
@@ -29,7 +41,7 @@ class Paddle(object):
             x = self.graphics.width-2
         self.pos = x,self.side
     def handleInput(self):
-        self.inputValue = self.controller.getPos()
+        self.inputValue = self.controller.getPos(self.controller_in)
     def draw(self):
         x,y = self.pos
         self.graphics.drawLine(x, y, x+self.paddle_width-1, y, self.color)
@@ -81,15 +93,16 @@ class Ball(object):
 class Pong(object):
     def __init__(self, speed = matrix_height/2):
         self.graphics = Graphics(matrix_width, matrix_height)
-        self.controller = MegaController(axis = 2)#Controller("/dev/ttyACM1", baud=9600)
-        self.controller2 = MegaController(axis = 1 )
-        self.paddle1 = Paddle((0,0), BLUE, self.controller, self.graphics)
-        self.paddle2 = Paddle((0, matrix_height-1), BLUE, self.controller2, self.graphics)
+        
+        self.controller = PongController(plugged = 0)#Controller("/dev/ttyACM1", baud=9600)
+        
+        self.paddle1 = Paddle((0,0), BLUE, self.controller, self.controller.THROTTLE_Y, self.graphics)
+        self.paddle2 = Paddle((0, matrix_height-1), BLUE, self.controller, self.controller.JOY_Y, self.graphics)
         
         self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
         #timing variables used to controle the speed of the ball
+        self.start_speed = speed
         self.speed = speed #speed = pixels/s
-        self.interval = 1./self.speed
         self.previous = 0
         
         self.print_score = False
@@ -116,15 +129,15 @@ class Pong(object):
         self.paddle1.process()
         self.paddle2.process()
         #only move ball x amount per second.
-        if( (time.time()-self.previous) >= self.interval ):
+        if( (time.time()-self.previous) >= 1./self.speed ):
             self.previous = time.time()
             self.ball.process()
         
         #if ball on paddle bounce it back.
-        if self.checkOnPaddle(self.paddle1, self.ball):
+        if self.checkOnPaddle(self.paddle1, self.ball) or \
+            self.checkOnPaddle(self.paddle2, self.ball):
             self.ball.setColliding(True)
-        elif self.checkOnPaddle(self.paddle2, self.ball):
-            self.ball.setColliding(True)
+            self.speed += 0.3
         else:
             self.ball.setColliding(False)
         
@@ -144,6 +157,7 @@ class Pong(object):
             self.ball.setPos((self.graphics.width/2, self.graphics.height/2))
             self.ball.dx = self.getRandomDir()
             self.ball.dy = self.getRandomDir()
+            self.speed = self.start_speed
     def handleInput(self):
         self.paddle1.handleInput()
         self.paddle2.handleInput()

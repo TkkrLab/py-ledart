@@ -22,7 +22,8 @@ TARGETS = config.TARGETS
 #---------
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, True)
+sock.setblocking(False)
+#sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, True)
 
 def signal_handler(signal, frame):
 	print "\nCaught Ctrl-C closing connections."
