@@ -147,14 +147,14 @@ class Pong(object):
         if self.checkOnPaddle(self.paddle1, self.ball) or \
             self.checkOnPaddle(self.paddle2, self.ball):
             self.ball.setColliding(True)
-            self.speed += 0.3
+            self.speed += 0.4
         else:
             self.ball.setColliding(False)
         
-        #if ball beyond left or right limit something score ?
-        #for now just reset
+        #if ball beyond left or right limit set score
+        #and reset the ball with a random direction, and orignal speed.
         bx,by = self.ball.getPos()
-        lim = 2 #so lim(it) pixel out it resets
+        lim = 2 #so lim(it) pixel out, it resets
         if by < -lim or by > self.graphics.height+lim:
             if by < -lim:
                 self.paddle1.score += 1
