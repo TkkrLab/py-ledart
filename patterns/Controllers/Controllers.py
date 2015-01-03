@@ -64,6 +64,32 @@ class MegaController(object):
     F7 = 6
     F8 = 7
 
+class XboxController(object):
+    LEFT_TRIGGER = 2
+    RIGHT_TRIGGER = 5
+    LEFT_AXIS_X = 0
+    LEFT_AXIS_Y = 1
+    RIGHT_AXIS_X = 3
+    RIGHT_AXIS_Y = 4
+
+    A_BUTTON = 0
+    B_BUTTON = 1
+    X_BUTTON = 2
+    Y_BUTTON = 3
+    LEFT_DPAD = 11
+    RIGHT_DPAD = 12
+    UP_DPAD = 13
+    DOWN_DPAD = 14
+    START = 7
+    SELECT = 6
+    LB = 4
+    RB = 5
+    LOGO_BUTTON = 8
+    LEFT_AXIS_BUTTON = 9
+    RIGHT_AXIS_BUTTON = 10
+
+
+
 class TtyController(object):
     ser_port = None
     def __init__(self, port = "/dev/ttyACM0", baud=9600):

@@ -1,17 +1,27 @@
 from Graphics import *
-from Controllers import *
+from Controllers.Controllers import *
 import serial, sys, time
 
 
-class PongController(PygameController, MegaController):
-    def __init__(self, plugged=0):
+class PongController(PygameController, XboxController):
+    def __init__(self, plugged = 0):
         PygameController.__init__(self, plugged)
     def getPos(self, button):
         value = PygameController.getAxis(self, button)
-        value = translate(value, 1.0,-1.0, 0, 10.1)
-        value = int(round(value))
         print value
+        value = translate(value, 1.0, -1.0, 0, 10.1)
+        value = int(round(value))
         return value
+
+# class PongController(PygameController, MegaController):
+#     def __init__(self, plugged=0):
+#         PygameController.__init__(self, plugged)
+#     def getPos(self, button):
+#         value = PygameController.getAxis(self, button)
+#         value = translate(value, 1.0,-1.0, 0, 10.1)
+#         value = int(round(value))
+#         print value
+#         return value
 
 class Paddle(object):
     def __init__(self, pos, color, controller, controller_in, graphics):
@@ -96,8 +106,8 @@ class Pong(object):
         
         self.controller = PongController(plugged = 0)#Controller("/dev/ttyACM1", baud=9600)
         
-        self.paddle1 = Paddle((0,0), BLUE, self.controller, self.controller.THROTTLE_Y, self.graphics)
-        self.paddle2 = Paddle((0, matrix_height-1), BLUE, self.controller, self.controller.JOY_Y, self.graphics)
+        self.paddle1 = Paddle((0,0), BLUE, self.controller, self.controller.LEFT_AXIS_Y, self.graphics)
+        self.paddle2 = Paddle((0, matrix_height-1), BLUE, self.controller, self.controller.RIGHT_AXIS_Y, self.graphics)
         
         self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
         #timing variables used to controle the speed of the ball

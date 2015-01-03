@@ -1,5 +1,5 @@
 from Graphics import *
-from Controllers import *
+from Controllers.Controllers import *
 class Snake(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
