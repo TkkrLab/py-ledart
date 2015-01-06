@@ -35,13 +35,13 @@ as wel as multpile patterns like:
 Then to run the actual patterns you run from the command line:
 
 ```shell
-	:$ python runPatternJob.py -d <delay> -c <config>
+	:$ python runPatternJob.py --delay=<delay> --config=<config>
 ```
 
 for example:
 
 ```shell
-	:$ python runpatternJob.py -d 0.2 -c myLamps_conf.py
+	:$ python runpatternJob.py --delay=0.2 --config=myLamps_conf.py
 ```
 
 both delay and config are optional,
@@ -51,6 +51,16 @@ and the default config is default_conf.py
 which won't work if you didn't put the right things in it. like the right ip.
 
 etc etc.
+
+if you want to run the code with the build in simulator just add --matrixSim=enabled
+to the command line options and it will run localy on your screen.
+for exampe:
+```shell
+	:$ python runpatternJob.py --delay=0.2 --config=myLamps_conf.py --matrixSim=enabled
+```
+
+but ofcourse this would look right if you config file contains code for anything other than a matrix display.
+but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
 #### usefull tools in art-net_C are:
@@ -65,12 +75,12 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 
 #### on the todo list:
 
-*pong <W.I.P> basicly almost working
+*pong [Done]
 *snake <W.I.P>
 *tron <W.I.P>
 *tetris 
 *arcadia
-*game of life (conway) <Done it's called PixelLife>
+*game of life (conway) [Done it's called PixelLife]
 *VU meter
 *network monitor 
 *make mario appear on the matrix or other mobs from the game or any other image from other games.
