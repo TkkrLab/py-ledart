@@ -46,8 +46,9 @@ class Paddle(object):
         x,y = self.pos
         x = self.inputValue-1 #offset make it go a bit into the screen on one side
         #boundery check make it only go one block in at the other end though.
-        if x >= self.graphics.width-2:
-            x = self.graphics.width-2
+        half = self.paddle_width/2
+        if x >= self.graphics.width-half:
+            x = self.graphics.width-half
         self.pos = x,self.side
     def handleInput(self):
         self.inputValue = self.controller.getPos(self.controller_in)
