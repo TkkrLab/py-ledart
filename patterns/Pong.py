@@ -25,7 +25,7 @@ class PongController(PygameController, XboxController):
 class Paddle(object):
     def __init__(self, pos, color, controller, controller_in, graphics):
         self.pos = pos
-        self.paddle_width = 3
+        self.paddle_width = 5
         self.side = pos[1]
         
         self.score = 0
