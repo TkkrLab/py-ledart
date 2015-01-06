@@ -1,7 +1,12 @@
 
+import sys,os
+#first things first make sure we are able to find the necesary files we need.
+cwd = os.getcwd()
+sys.path.append(cwd)
+sys.path.append(cwd+"/patterns/Graphics/")
+
 from Graphics import *
 from Pixel import *
-import sys
 
 matrix_height = 17
 matrix_width = 10
