@@ -49,6 +49,7 @@ while(True):
 		#send it out over the network.
 		if args.matrixSim:
 			matrixscreen.process(data)
-		sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+		else:
+			sock.sendto(buildPacket(0, data), (t, UDP_PORT))
 	time.sleep(args.delay)
 sock.close()

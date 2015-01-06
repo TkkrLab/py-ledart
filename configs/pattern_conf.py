@@ -11,13 +11,14 @@ TARGETS = {
     #local_host:BarberpolePattern(),
     #pixelMatrix:OldTron(),
     #pixelMatrix:Tron(),
+    local_host:Snake(),
     
     #local_host:MixedLife(),
     #local_host:RandomLife(),
     #local_host:BlueLife(),
     #raspberrypi:BlueLife(),
     
-    local_host:Pong(speed=5),
+    #local_host:Pong(speed=5),
     #pixelMatrix:Pong(speed=5),
     #pixelMatrix:Pong(speed=8),
     #pixelMatrix:Snake(),

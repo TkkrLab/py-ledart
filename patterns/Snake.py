@@ -9,18 +9,24 @@ class SnakeController(PygameController, XboxController):
         self.LEFT = XboxController.LEFT_DPAD
         self.RIGHT = XboxController.RIGHT_DPAD
     def getUp(self):
-        value = PygameController.getButtons(self.UP)
+        value = self.getButtons(self.UP)
+        return value
     def getDown(self):
-        value = PygameController.getButtons(self.DOWN)
+        value = self.getButtons(self.DOWN)
+        return value
     def getLeft(self):
-        value = PygameController.getButtons(self.LEFT)
-    def getUp(self):
-        value = PygameController.getButtons(self.UP)
+        value = self.getButtons(self.LEFT)
+        return value
+    def getRight(self):
+        value = self.getButtons(self.RIGHT)
+        return value
 
 class Snake(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
         
+        self.controller = SnakeController()
+
         self.color = WHITE
         
         self.pos = random.randint(1,matrix_width-1), random.randint(1,matrix_height-1)
@@ -32,7 +38,19 @@ class Snake(object):
         #add our head to our body :)
         self.body.append(self.pos)
     def inputHandling(self):
-        pass
+        if self.controller.getUp():
+            self.deltax = 1
+            self.deltay = 0
+        if self.controller.getDown():
+            self.deltax = -1
+            self.deltay = 0
+        if self.controller.getLeft():
+            self.deltax = 0
+            self.deltay = -1
+        if self.controller.getRight():
+            self.deltax = 0
+            self.deltay = 1
+
     def update(self):
         x,y = self.pos
         #update position
@@ -53,15 +71,13 @@ class Snake(object):
             self.pos = x,y
         else:
             self.pos = x,y
-        print self.deltax,self.deltay
-        print x,y
         
         #look if our "tail is in the way" and only if we have a tail.
         if len(self.body) > 2:
             if len(self.body) != len(set(self.body)):
-                print "GameOver!"
-                self.body = [self.pos]
-                self.deltax = 0; self.deltay = 0;
+                self.body = []
+                self.deltax = 0
+                self.deltay = 0
         else: 
             pass #implement growing logic
         #add current point to tail

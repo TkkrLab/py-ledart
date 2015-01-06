@@ -1,3 +1,4 @@
+import sys
 def translate(value, leftmin, leftmax, rightmin, rightmax):
     leftspan = leftmax - leftmin
     rightspan = rightmax - rightmin
@@ -22,27 +23,26 @@ class PygameController(object):
         self.num_axis = self.joystick.get_numaxes()
         self.num_buttons = self.joystick.get_numbuttons()
         self.num_hats = self.joystick.get_numhats()
-    def getAxis(self, button):
+    def handleEvents(self):
+        self.pygame.event.pump()
         for event in self.pygame.event.get():
-            pass
-
+            if event.type == self.pygame.QUIT:
+                sys.exit(0)
+    def getAxis(self, button):
+        self.handleEvents()
         if self.num_axis:
             return self.joystick.get_axis(button)
         else:
             raise ControllerError("No Axis")
     def getButtons(self, button):
-        for event in self.pygame.event.get():
-            pass
-
+        self.handleEvents()
         if self.num_buttons:
             return self.joystick.get_button(button)
         else:
             raise ControllerError("No Buttons")
 
     def getHats(self, button):
-        for event in self.pygame.event.get():
-            pass
-
+        self.handleEvents()
         if self.num_hats:
             return self.joystick.get_hat(button)
         else:
