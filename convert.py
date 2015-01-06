@@ -1,4 +1,4 @@
-from matrix import *
+from MatrixSim.MatrixScreen import *
 
 def convertSnakeModes(pattern):
 	for y in range(0,matrix_height,2):
