@@ -54,7 +54,10 @@ class Paddle(object):
         self.inputValue = self.controller.getPos(self.controller_in)
     def draw(self):
         x,y = self.pos
-        self.graphics.drawLine(x, y, x+self.paddle_width-1, y, self.color)
+        half = self.padd_width/2
+        #self.graphics.drawLine(x, y, x+self.paddle_width-1, y, self.color)
+        self.graphics.drawLine(x, y, x+half, y, self.color)
+        self.graphics.drawLine(x, y, x-half, y, self.color)
 
 class Ball(object):
     def __init__(self, pos, color, graphics):
