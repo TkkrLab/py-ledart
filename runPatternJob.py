@@ -1,10 +1,14 @@
 import argparse, socket, time
-import imp, signal, sys
+import imp, signal, sys, os
+
+#first things first make sure we are able to find the necesary files we need.
+cwd = os.getcwd()
+sys.path.append(cwd)
+sys.path.append(cwd+"/patterns/Graphics/")
 
 from artnet import buildPacket
 from convert import convertSnakeModes
-from matrix import *
-from MatrixSim.MatrixScreen import MatrixScreen
+from MatrixSim.MatrixScreen import *
 
 UDP_PORT = 6453
 
@@ -50,7 +54,6 @@ while(True):
 		#send it out over the network.
 		if args.matrixSim:
 			matrixscreen.process(data)
-		else:
-			sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+		sock.sendto(buildPacket(0, data), (t, UDP_PORT))
 	time.sleep(args.delay)
 sock.close()

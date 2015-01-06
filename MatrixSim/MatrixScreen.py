@@ -3,6 +3,9 @@ from Graphics import *
 from Pixel import *
 import sys
 
+matrix_height = 17
+matrix_width = 10
+
 class MatrixScreen(object):
 	import pygame
 	def __init__(self, width, height, pixelSize):
@@ -17,8 +20,9 @@ class MatrixScreen(object):
 
 		self.window = self.pygame.display.set_mode((self.window_width, self.window_height))
 
-		widthRange = xrange(0, self.window_width, pixelSize)
-		heightRange = xrange(0, self.window_height, pixelSize)
+		widthRange = range(0, self.window_width, pixelSize)
+		heightRange = range(0, self.window_height, pixelSize)[::-1] #reverse order because else the display is flipped.
+
 
 		#due to how the ledmatrix is display x, y are filled as is the
 		#window_width/height thing a bit above here.
