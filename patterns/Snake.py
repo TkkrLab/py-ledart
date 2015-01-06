@@ -1,5 +1,22 @@
 from Graphics import *
 from Controllers.Controllers import *
+
+class SnakeController(PygameController, XboxController):
+    def __init__(self, plugged=0):
+        PygameController.__init__(self, plugged)
+        self.UP = XboxController.UP_DPAD
+        self.DOWN = XboxController.DOWN_DPAD
+        self.LEFT = XboxController.LEFT_DPAD
+        self.RIGHT = XboxController.RIGHT_DPAD
+    def getUp(self):
+        value = PygameController.getButtons(self.UP)
+    def getDown(self):
+        value = PygameController.getButtons(self.DOWN)
+    def getLeft(self):
+        value = PygameController.getButtons(self.LEFT)
+    def getUp(self):
+        value = PygameController.getButtons(self.UP)
+
 class Snake(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
@@ -15,26 +32,7 @@ class Snake(object):
         #add our head to our body :)
         self.body.append(self.pos)
     def inputHandling(self):
-        """
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                sys.exit(1)
-            if event.type == KEYDOWN:
-                #can only move in straig lines so make sure that the oposite
-                #delta is set to 0
-                if event.key == K_LEFT:
-                    self.deltax = -self.speed
-                    self.deltay = 0
-                if event.key == K_RIGHT:
-                    self.deltax = self.speed
-                    self.deltay = 0
-                if event.key == K_UP:
-                    self.deltay = -self.speed
-                    self.deltax = 0
-                if event.key == K_DOWN:
-                    self.deltay = self.speed
-                    self.deltax = 0
-        """
+        pass
     def update(self):
         x,y = self.pos
         #update position

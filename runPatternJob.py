@@ -3,6 +3,8 @@ import imp, signal, sys
 
 from artnet import buildPacket
 from convert import convertSnakeModes
+from matrix import *
+from MatrixSim.MatrixScreen import MatrixScreen
 
 UDP_PORT = 6453
 
@@ -10,6 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--delay", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
 parser.add_argument("-c", "--config", help="load config.", metavar="<config_conf.py>", nargs="?", default="default_conf.py", type=str)
 parser.add_argument("--snakeMode", help="flips every x amount of data", nargs="?", default=None, type=str)
+parser.add_argument("--matrixSim", help="turns on buildin matrix simulation", nargs="?", default=None, type=str)
 args = parser.parse_args()
 
 
@@ -32,12 +35,22 @@ def signal_handler(signal, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
+#setup a screen if matrixSim argument was set.
+if args.matrixSim:
+	matrixscreen = MatrixScreen(matrix_width, matrix_height, 30)
+
 while(True):
 	for t in TARGETS:
 		pattern = TARGETS[t]
 		data = pattern.generate()
+		#convert the data for the special matrix layout.
 		if args.snakeMode == "enabled":
 			data = convertSnakeModes(data)
-		sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+		#if this is a simulation draw it to the matrixscreen else 
+		#send it out over the network.
+		if args.matrixSim:
+			matrixscreen.process(data)
+		else:
+			sock.sendto(buildPacket(0, data), (t, UDP_PORT))
 	time.sleep(args.delay)
 sock.close()

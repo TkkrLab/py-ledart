@@ -13,6 +13,12 @@ CYAN = (255,255,0)
 
 COLORS = [RED, GREEN, BLUE, WHITE, BLACK, PURPLE, YELLOW, CYAN]
 
+def randColor():
+	r = random.randint(0, 255)
+	g = random.randint(0, 255)
+	b = random.randint(0, 255)
+	return (r,g,b)
+
 class ColorObject(object):
 	def __init__(self):
 		pass
