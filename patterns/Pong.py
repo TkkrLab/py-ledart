@@ -8,7 +8,6 @@ class PongController(PygameController, XboxController):
         PygameController.__init__(self, plugged)
     def getPos(self, button):
         value = PygameController.getAxis(self, button)
-        print value
         value = translate(value, 1.0, -1.0, 0, 10.1)
         value = int(round(value))
         return value

@@ -17,7 +17,7 @@ TARGETS = {
     #local_host:BlueLife(),
     #raspberrypi:BlueLife(),
     
-    #local_host:Pong(speed=5),
+    local_host:Pong(speed=5),
     #pixelMatrix:Pong(speed=5),
     #pixelMatrix:Pong(speed=8),
     #pixelMatrix:Snake(),
@@ -30,5 +30,5 @@ TARGETS = {
     #pixelMatrix:GraphicsRectTest(),
     #pixelMatrix:GraphicsLineTest(),
     #local_host:GraphicsPixelTest(),
-    local_host:GraphicsDotTest(),
+    #local_host:GraphicsDotTest(),
 }
