@@ -25,7 +25,7 @@ class PongController(PygameController, XboxController):
 class Paddle(object):
     def __init__(self, pos, color, controller, controller_in, graphics):
         self.pos = pos
-        self.paddle_width = 5
+        self.paddle_width = 3
         self.side = pos[1]
         
         self.score = 0
@@ -46,18 +46,14 @@ class Paddle(object):
         x,y = self.pos
         x = self.inputValue-1 #offset make it go a bit into the screen on one side
         #boundery check make it only go one block in at the other end though.
-        half = self.paddle_width/2
-        if x >= self.graphics.width-half:
-            x = self.graphics.width-half
+        if x >= self.graphics.width-2:
+            x = self.graphics.width-2
         self.pos = x,self.side
     def handleInput(self):
         self.inputValue = self.controller.getPos(self.controller_in)
     def draw(self):
         x,y = self.pos
-        half = self.paddle_width/2
-        #self.graphics.drawLine(x, y, x+self.paddle_width-1, y, self.color)
-        self.graphics.drawLine(x, y, x+half, y, self.color)
-        self.graphics.drawLine(x, y, x-half, y, self.color)
+        self.graphics.drawLine(x, y, x+self.paddle_width-1, y, self.color)
 
 class Ball(object):
     def __init__(self, pos, color, graphics):
