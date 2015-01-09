@@ -14,6 +14,7 @@ parser.add_argument("--config", help="load config.", metavar="<config_conf.py>",
 parser.add_argument("--snakeMode", help="flips every x amount of data", nargs="?", default=None, type=str)
 parser.add_argument("--matrixSim", help="turns on buildin matrix simulation", nargs="?", default=None, type=str)
 parser.add_argument("--pixelSize", help="sets the pixel size for the matrix sim", nargs="?", default=30, type=int)
+parser.add_argument("--netSilent", help="if enabled won't send out udp packets anywhere", nargs="?", default=None, type=str)
 #parser.add_argument("--matrixSize", help="set the width and hight of matrix for exampel: --matrixSize=10,17", nargs="+", type=int)
 args = parser.parse_args()
 
@@ -51,9 +52,12 @@ while(True):
 			data = convertSnakeModes(data)
 		#if this is a simulation draw it to the matrixscreen else 
 		#send it out over the network.
-		if args.matrixSim:
-			matrixscreen.process(data)
-		else:
+		if not args.netSilent:
 			sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+		if args.matrixSim:
+			if args.snakeMode:
+				matrixscreen.process(convertSnakeModes(data))
+			else:
+				matrixscreen.process(data)
 	time.sleep(args.delay)
 sock.close()

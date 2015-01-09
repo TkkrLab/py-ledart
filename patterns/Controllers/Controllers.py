@@ -65,12 +65,12 @@ class MegaController(object):
     F8 = 7
 
 class XboxController(object):
-    LEFT_TRIGGER = 4
+    LEFT_TRIGGER = 3
     RIGHT_TRIGGER = 5
     LEFT_AXIS_X = 0
     LEFT_AXIS_Y = 1
     RIGHT_AXIS_X = 2
-    RIGHT_AXIS_Y = 3
+    RIGHT_AXIS_Y = 4
 
     A_BUTTON = 0
     B_BUTTON = 1

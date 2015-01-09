@@ -18,10 +18,10 @@ TARGETS = {
     #local_host:BlueLife(),
     #raspberrypi:BlueLife(),
     
-    local_host:Pong(speed=5),
+    #local_host:Pong(speed=5),
     #pixelMatrix:Pong(speed=5),
     #pixelMatrix:Pong(speed=8),
-    #pixelMatrix:Snake(),
+    pixelMatrix:Snake(),
     #pixelMatrix:BlueLife(),
     
     #local_host:FallingStar(chance=0.2),

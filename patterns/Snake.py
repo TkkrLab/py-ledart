@@ -45,7 +45,7 @@ class Food(object):
 
 
 class Snake(object):
-    def __init__(self, speed=1, plugged = 0):
+    def __init__(self, speed=17, plugged = 0):
         self.graphics = Graphics(matrix_width, matrix_height)
         
         self.controller = SnakeController(plugged)
