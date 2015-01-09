@@ -7,9 +7,7 @@ sys.path.append(cwd+"/patterns/Graphics/")
 
 from Graphics import *
 from Pixel import *
-
-matrix_height = 17
-matrix_width = 10
+from matrix import *
 
 class MatrixScreen(object):
 	import pygame

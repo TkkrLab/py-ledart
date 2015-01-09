@@ -4,15 +4,19 @@ import imp, signal, sys
 from artnet import buildPacket
 from convert import convertSnakeModes
 from MatrixSim.MatrixScreen import *
+from matrix import *
 
 UDP_PORT = 6453
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-d", "--delay", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
-parser.add_argument("-c", "--config", help="load config.", metavar="<config_conf.py>", nargs="?", default="default_conf.py", type=str)
+parser.add_argument("--delay", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
+parser.add_argument("--config", help="load config.", metavar="<config_conf.py>", nargs="?", default="default_conf.py", type=str)
 parser.add_argument("--snakeMode", help="flips every x amount of data", nargs="?", default=None, type=str)
 parser.add_argument("--matrixSim", help="turns on buildin matrix simulation", nargs="?", default=None, type=str)
+parser.add_argument("--pixelSize", help="sets the pixel size for the matrix sim", nargs="?", default=30, type=int)
+#parser.add_argument("--matrixSize", help="set the width and hight of matrix for exampel: --matrixSize=10,17", nargs="+", type=int)
 args = parser.parse_args()
+
 
 
 #the bit below here allows loading of the config files specified by --config written by Duality
@@ -36,7 +40,7 @@ signal.signal(signal.SIGINT, signal_handler)
 
 #setup a screen if matrixSim argument was set.
 if args.matrixSim:
-	matrixscreen = MatrixScreen(matrix_width, matrix_height, 30)
+	matrixscreen = MatrixScreen(matrix_width, matrix_height, args.pixelSize)
 
 while(True):
 	for t in TARGETS:

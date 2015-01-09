@@ -1,5 +1,6 @@
 from Graphics import *
 from Controllers.Controllers import *
+import time
 
 class SnakeController(PygameController, XboxController):
     def __init__(self, plugged=0):
@@ -21,73 +22,107 @@ class SnakeController(PygameController, XboxController):
         value = self.getButtons(self.RIGHT)
         return value
 
+class Food(object):
+    def __init__(self, pos, color, graphics):
+        self.pos = pos
+        self.graphics = graphics
+        self.color = color
+    def setPos(self, pos):
+        self.pos = pos
+    def randPos(self):
+        x = random.randint(0, matrix_width-1)
+        y = random.randint(0, matrix_height-1)
+        self.pos = x,y
+    def randColor(self):
+        r = random.randint(0, 255)
+        g = random.randint(0, 255)
+        b = random.randint(0, 255)
+        self.color = (r,g,b)
+    def draw(self):
+        x,y = self.pos
+        self.graphics.drawPixel(x,y, self.color)
+
+
+
 class Snake(object):
-    def __init__(self):
+    def __init__(self, speed=1, plugged = 0):
         self.graphics = Graphics(matrix_width, matrix_height)
         
-        self.controller = SnakeController()
+        self.controller = SnakeController(plugged)
 
         self.color = WHITE
         
         self.pos = random.randint(1,matrix_width-1), random.randint(1,matrix_height-1)
-        self.speed = 1
+        self.speed = speed
+        self.previousTick = 0
         self.deltax,self.deltay = 0,0
         
         self.body = []
+        self.tailLen = 0
+        self.food = Food((0,0), WHITE, self.graphics)
+        self.food.randPos()
         
         #add our head to our body :)
         self.body.append(self.pos)
     def inputHandling(self):
-        if self.controller.getUp():
+        if self.controller.getUp() and self.deltax != -1:
             self.deltax = 1
             self.deltay = 0
-        if self.controller.getDown():
+        if self.controller.getDown() and self.deltax != 1:
             self.deltax = -1
             self.deltay = 0
-        if self.controller.getLeft():
+        if self.controller.getLeft() and self.deltay != 1:
             self.deltax = 0
             self.deltay = -1
-        if self.controller.getRight():
+        if self.controller.getRight() and self.deltay != -1:
             self.deltax = 0
             self.deltay = 1
 
     def update(self):
         x,y = self.pos
-        #update position
-        x += self.deltax
-        y += self.deltay
-        #if the snake goes offscreen it appears on the other side.
-        if x >= matrix_width:
-            x = 0
-            self.pos = x,y
-        elif x < 0:
-            x = matrix_width-1
-            self.pos = x,y
-        elif y >= matrix_height:
-            y = 0
-            self.pos = x,y
-        elif y < 0:
-            y = matrix_height-1
-            self.pos = x,y
-        else:
-            self.pos = x,y
-        
-        #look if our "tail is in the way" and only if we have a tail.
-        if len(self.body) > 2:
-            if len(self.body) != len(set(self.body)):
-                self.body = []
-                self.deltax = 0
-                self.deltay = 0
-        else: 
-            pass #implement growing logic
-        #add current point to tail
-        #only if we moved though
-        if self.deltax or self.deltay:
+        #update position certain amount per second.
+        if( (time.time()-self.previousTick) >= 1./self.speed ):
+            self.previousTick = time.time()
+            x += self.deltax
+            y += self.deltay
+            #if the snake goes offscreen it appears on the other side.
+            if x >= matrix_width:
+                x = 0
+                self.pos = x,y
+            elif x < 0:
+                x = matrix_width-1
+                self.pos = x,y
+            elif y >= matrix_height:
+                y = 0
+                self.pos = x,y
+            elif y < 0:
+                y = matrix_height-1
+                self.pos = x,y
+            else:
+                self.pos = x,y
+
+            if len(self.body) > self.tailLen:
+                del self.body[0]
             self.body.append(self.pos)
+            #and if we hit food increase tail length
+            if self.food.pos == self.pos:
+                while self.food.pos in self.body:
+                    self.food.randPos()
+                self.food.randColor()
+                self.tailLen += 1
+            #look if our "tail is in the way" and only if we have a tail.
+            if len(self.body) > 2:
+                #check if head colides with body
+                if len(self.body) != len(set(self.body)):
+                    self.body = [self.pos]
+                    self.tailLen = 0
+                    self.deltax = 0
+                    self.deltay = 0
         
     def draw(self):
         for x,y in self.body:
             self.graphics.drawPixel(x,y,self.color)
+        self.food.draw()
     def generate(self):
         self.graphics.fill(BLACK)
         self.inputHandling()
