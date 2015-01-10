@@ -45,14 +45,16 @@ class Food(object):
 
 
 class Snake(object):
-    def __init__(self, speed=17, plugged = 0):
+    def __init__(self, speed=8, plugged = 0):
         self.graphics = Graphics(matrix_width, matrix_height)
         
         self.controller = SnakeController(plugged)
 
-        self.color = WHITE
+        self.body_color = GREEN
+        self.head_color = BLUE
         
         self.pos = random.randint(1,matrix_width-1), random.randint(1,matrix_height-1)
+        self.original_speed = speed
         self.speed = speed
         self.previousTick = 0
         self.deltax,self.deltay = 0,0
@@ -105,7 +107,9 @@ class Snake(object):
                 del self.body[0]
             self.body.append(self.pos)
             #and if we hit food increase tail length
+            #also increase our speed
             if self.food.pos == self.pos:
+                self.speed += 0.5
                 while self.food.pos in self.body:
                     self.food.randPos()
                 self.food.randColor()
@@ -116,12 +120,18 @@ class Snake(object):
                 if len(self.body) != len(set(self.body)):
                     self.body = [self.pos]
                     self.tailLen = 0
+                    self.speed = self.original_speed
                     self.deltax = 0
                     self.deltay = 0
         
     def draw(self):
-        for x,y in self.body:
-            self.graphics.drawPixel(x,y,self.color)
+        for i,(x,y) in enumerate(self.body):
+            if i == self.tailLen:
+                #draw our head a certain color
+                self.graphics.drawPixel(x,y, self.head_color)
+            else:
+                #else just draw our body this color
+                self.graphics.drawPixel(x,y,Color.subtract(self.body_color, (int(255/(i+1)),)*3))
         self.food.draw()
     def generate(self):
         self.graphics.fill(BLACK)
