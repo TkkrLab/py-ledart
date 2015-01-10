@@ -19,7 +19,18 @@ def randColor():
 	b = random.randint(0, 255)
 	return (r,g,b)
 
-class ColorObject(object):
+class ColorRGB(object):
+	def __init__(self, r, g, b):
+		self.r = r
+		self.g = g
+		self.b = b
+		self.colorRGB = (r,g,b)
+	def setColor(self, color):
+		self.color = color
+	def getColor(self):
+		return self.color
+
+class ColorOps(object):
 	def __init__(self):
 		pass
 	def add(self,color1,color2):
@@ -83,7 +94,7 @@ class ColorObject(object):
 			blue = 0
 		return (red,green,blue)
 
-Color = ColorObject()
+Color = ColorOps()
 
 class Graphics(object):
 	def __init__(self, width, height):
