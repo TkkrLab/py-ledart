@@ -48,6 +48,9 @@ class TronPlayer(object):
 		for x,y in self.body:
 			self.game.graphics.drawPixel(x,y,self.color)
 
+class Tron(object):
+	pass
+
 class OldTron(object): #version before creating players that handle processing on thier own.
 	def __init__(self):
 		self.graphics = Graphics(matrix_width, matrix_height)

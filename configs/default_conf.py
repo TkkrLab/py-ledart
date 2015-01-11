@@ -1,10 +1,10 @@
 #import barberpole
-from patterns.Patterns import BarberpolePattern
+from patterns.Patterns import *
 
-led_ceiling_matrix_ip = "10.42.4.12"
+matrix = "192.168.1.116"
 
 TARGETS = {
-	led_ceiling_matrix_ip:BarberpolePattern()
+	matrix:BarberpolePattern()
 	#led_ceiling_matrix_ip:PolicePattern()
 	#led_ceiling_matrix_ip:ColorFadePattern()
 	#led_ceiling_matrix_ip:RainPattern(chance=0.2)
