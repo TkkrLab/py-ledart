@@ -6,15 +6,6 @@ from matrix import *
 
 try:
 	from MatrixSim.MatrixScreen import *
-
-	#the bit below here allows loading of the config files specified by --config written by Duality
-	#this will then also load patterns.
-	package = "configs"
-	fp, path, description = imp.find_module(package)
-	fp, path, description = imp.find_module(str(args.config)[:-3], [path])
-	config = imp.load_module("configuration", fp, path, description)
-	TARGETS = config.TARGETS
-	#---------
 except Exception, e:
 	print e
 
@@ -30,6 +21,15 @@ parser.add_argument("--pixelSize", help="sets the pixel size for the matrix sim"
 parser.add_argument("--netSilent", help="if enabled won't send out udp packets anywhere", nargs="?", default=None, type=str)
 #parser.add_argument("--matrixSize", help="set the width and hight of matrix for exampel: --matrixSize=10,17", nargs="+", type=int)
 args = parser.parse_args()
+
+#the bit below here allows loading of the config files specified by --config written by Duality
+#this will then also load patterns.
+package = "configs"
+fp, path, description = imp.find_module(package)
+fp, path, description = imp.find_module(str(args.config)[:-3], [path])
+config = imp.load_module("configuration", fp, path, description)
+TARGETS = config.TARGETS
+#---------
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.setblocking(False)
