@@ -1,3 +1,4 @@
 *.pyc
 config/*.pyc
 pattern/*.pyc
+*.geany
