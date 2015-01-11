@@ -45,21 +45,27 @@ for example:
 ```
 
 both delay and config are optional,
+
 the default delay is 15ms which is the delay that dictates how fast the refresh is ran.
 
 and the default config is default_conf.py
+
 which won't work if you didn't put the right things in it. like the right ip.
 
 etc etc.
 
 if you want to run the code with the build in simulator just add --matrixSim=enabled
+
 to the command line options and it will run localy on your screen.
+
 for exampe:
 ```shell
 	:$ python runpatternJob.py --delay=0.2 --config=myLamps_conf.py --matrixSim=enabled
 ```
 
+
 but ofcourse this would look right if you config file contains code for anything other than a matrix display.
+
 but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
@@ -76,26 +82,40 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 #### on the todo list:
 
 *pong [Done]
-*snake <W.I.P>
+
+*snake [Done]
+
 *tron <W.I.P>
+
 *tetris 
+
 *arcadia
+
 *game of life (conway) [Done it's called PixelLife]
+
 *VU meter
+
 *network monitor 
+
 *make mario appear on the matrix or other mobs from the game or any other image from other games.
 
 *problem with pwm not being linear (the amount of power it gives per pulse)
+
 *thus implement a scale which does make it linear. so fading is nice and even.
+
 *link that gave me the Yes that's it! moment:
+
 *http://forum.arduino.cc/index.php?PHPSESSID=fiq8nr1j9sstegstf2o6btdgq2&topic=286351.0
+
 break out patterns in patterns.py in to seperate files.
 
 fridgefire's matrix might be fun to make a pong implementation on.
 
 or a snake might be fun to implement for it.
 
-I think it would be helpfull to implement a "Graphics" library <This is done the class is called Graphics>
+I think it would be helpfull to implement a "Graphics" library [This is done the class is called Graphics]
+
+also implemented a color library, and classes for making color objects. handy for pallets and much more.
 
 everything with multiplayer or not ?
 
