@@ -109,15 +109,11 @@ artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net devi
 
 break out patterns in patterns.py in to seperate files.
 
-fridgefire's matrix might be fun to make a pong implementation on.
-
-or a snake might be fun to implement for it.
-
 I think it would be helpfull to implement a "Graphics" library [This is done the class is called Graphics]
 
 also implemented a color library, and classes for making color objects. handy for pallets and much more.
 
-everything with multiplayer or not ?
+everything with multiplayer or not ? [probably not]
 
 another thing that might be fun to make is a vu meter?
 
