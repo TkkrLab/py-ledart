@@ -3,10 +3,9 @@ import imp, signal, sys
 
 from artnet import buildPacket
 from convert import convertSnakeModes
-from MatrixSim.MatrixScreen import *
 from matrix import *
 
-UDP_PORT = 6453
+UDP_PORT = 6454
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--delay", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
@@ -18,7 +17,8 @@ parser.add_argument("--netSilent", help="if enabled won't send out udp packets a
 #parser.add_argument("--matrixSize", help="set the width and hight of matrix for exampel: --matrixSize=10,17", nargs="+", type=int)
 args = parser.parse_args()
 
-
+if args.matrixSim:
+	from MatrixSim.MatrixScreen import *
 
 #the bit below here allows loading of the config files specified by --config written by Duality
 package = "configs"

@@ -1,7 +1,7 @@
 #import all patterns availble for use.
 from patterns.Patterns import *
 
-pixelMatrix = "10.42.118.127"
+pixelMatrix = "192.168.1.116"
 raspberrypi = "192.168.2.42"
 michiel_laptop = "10.42.4.12"
 local_host = "127.0.0.1"
