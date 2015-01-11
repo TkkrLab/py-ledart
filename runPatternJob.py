@@ -2,7 +2,6 @@ import argparse, socket, time
 import imp, signal, sys
 
 from artnet import buildPacket
-from convert import convertSnakeModes
 from matrix import *
 
 UDP_PORT = 6454

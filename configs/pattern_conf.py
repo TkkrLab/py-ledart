@@ -21,8 +21,8 @@ TARGETS = {
     #local_host:Pong(speed=5),
     #pixelMatrix:Pong(speed=3),
     #pixelMatrix:Pong(speed=8),
-    pixelMatrix:Snake(),
-    #pixelMatrix:BlueLife(),
+    #pixelMatrix:Snake(),
+    pixelMatrix:BlueLife(),
     
     #local_host:FallingStar(chance=0.2),
     #local_host:RainPattern(chance=0.2),
