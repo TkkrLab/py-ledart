@@ -1,6 +1,8 @@
 from Graphics import *
 import random
 
+#still a work in progress. not really done yet.
+
 #falling stars by Duality
 class Star(object):
 	def __init__(self, color=BLUE):

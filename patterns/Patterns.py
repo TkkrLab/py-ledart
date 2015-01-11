@@ -1,6 +1,3 @@
-#!/usr/bin/python
-
-import random, sys
 #import patters here if they are in a different file.
 
 #ohm led poles.

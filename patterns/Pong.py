@@ -1,6 +1,6 @@
 from Graphics import *
 from Controllers.Controllers import *
-import serial, sys, time
+import time
 
 
 class PongController(PygameController, XboxController):

@@ -1,6 +1,4 @@
 from Graphics import *
-import pygame,sys
-from pygame.locals import *
 
 class TronPlayer(object):
 	def __init__(self, color, game, pos=(5,5)):
@@ -20,21 +18,7 @@ class TronPlayer(object):
 		self.debug = False
 		
 	def inputHandling(self, event):
-		if event.KEYDOWN:
-			#can only move in straight lines so make sure that the other delta
-			#is set to 0
-			if event.key == self.moveKeys[0]:
-				self.deltax = -self.speed
-				self.deltay = 0
-			if event.key == self.moveKeys[1]:
-				self.deltax = self.speed
-				self.deltay = 0
-			if event.key == self.moveKeys[2]:
-				self.deltax = 0
-				self.deltay = -self.speed
-			if event.key == self.moveKeys[3]:
-				self.deltax = 0
-				self.deltay = self.speed
+		pass
 	def bindKey(self, key, action):
 		self.moveKeys[action] = key
 	def update(self, other):
@@ -86,24 +70,7 @@ class OldTron(object): #version before creating players that handle processing o
 		pygame.init()
 		self.window = pygame.display.set_mode((80,60))
 	def inputHandling(self):
-		for event in pygame.event.get():
-			if event.type == QUIT:
-				sys.exit(1)
-			if event.type == KEYDOWN:
-				#can only move in straig lines so make sure that the oposite
-				#delta is set to 0
-				if event.key == K_LEFT:
-					self.deltax = -self.speed
-					self.deltay = 0
-				if event.key == K_RIGHT:
-					self.deltax = self.speed
-					self.deltay = 0
-				if event.key == K_UP:
-					self.deltay = -self.speed
-					self.deltax = 0
-				if event.key == K_DOWN:
-					self.deltay = self.speed
-					self.deltax = 0
+		pass
 	def update(self):
 		x,y = self.pos
 		#update position
