@@ -11,7 +11,7 @@ class PlasmaThird(object):
 		self.y_range = xrange(0, matrix_height, 1)
 
 		self.speed = speed
-		self.interval = 1./speed
+		self.interval = speed
 		self.time = random.randint(0,100)
 		self.previousTick = 0
 
@@ -26,7 +26,6 @@ class PlasmaThird(object):
 			g = int(128+256*sin(r)/100)
 			b = int(128+256*sin(g)/50)
 			colorRGB = (r,g,b)
-			print colorRGB
 			self.palette.append(colorRGB)
 	def generatePlasmaSurface(self):
 		self.angle = self.time
@@ -44,7 +43,7 @@ class PlasmaThird(object):
 				self.plasma.drawPixel(x,y,color)
 		return list(self.plasma.getSurface())
 	def process(self):
-		if((time.time()-self.previousTick) >= self.interval):
+		if((time.time()-self.previousTick) >= 1./self.interval):
 			self.previousTick = time.time()
 			self.time+=1
 	def draw(self):
@@ -76,7 +75,7 @@ class PlasmaSecond(object):
 		self.y_range = xrange(0, matrix_height, 1)
 
 		self.speed = speed
-		self.interval = .1/speed
+		self.interval = 1000/self.speed
 		self.time = random.randint(0,100)
 		self.previousTick = 0
 
@@ -108,7 +107,8 @@ class PlasmaSecond(object):
 				self.plasma.drawPixel(x,y,color)
 		return list(self.plasma.getSurface())
 	def process(self):
-		if((time.time()-self.previousTick) >= self.interval):
+		millis = round(round(time.time()*1000))
+		if((millis-self.previousTick) >= self.interval):
 			self.previousTick = time.time()
 			self.time+=1
 	def draw(self):

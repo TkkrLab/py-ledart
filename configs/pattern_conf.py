@@ -25,8 +25,8 @@ TARGETS = {
     #pixelMatrix:BlueLife(),
     #pixelMatrix:DisplayPng(),
     #pixelMatrix:PlasmaFirst(),
-    #pixelMatrix:PlasmaSecond(),
-    michiel_laptop:PlasmaSecond(),
+    pixelMatrix:PlasmaSecond(),
+    #michiel_laptop:PlasmaSecond(),
     #pixelMatrix:PlasmaThird(),
     
     #local_host:FallingStar(chance=0.2),

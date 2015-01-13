@@ -35,9 +35,9 @@ class BlueLife(object):
 		for index, cell in enumerate(self.life.field):
 			color = self.graphics.surface[index]
 			if cell:
-				color = Color.add(color, self.life.cellColor)
+				color = (BLUE)
 			else:
-				color = Color.subtract(color, BLUE)
+				color = (0,0,0)
 			self.graphics.surface[index] = color
 	def generate(self):
 		self.life.process()

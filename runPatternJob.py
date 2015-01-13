@@ -17,6 +17,7 @@ parser.add_argument("--snakeMode", help="flips every x amount of data", nargs="?
 parser.add_argument("--matrixSim", help="turns on buildin matrix simulation", nargs="?", default=None, type=str)
 parser.add_argument("--pixelSize", help="sets the pixel size for the matrix sim", nargs="?", default=30, type=int)
 parser.add_argument("--netSilent", help="if enabled won't send out udp packets anywhere", nargs="?", default=None, type=str)
+parser.add_argument("--showFps", help="prints out the actuall fps the program runs at", nargs="?", default=None, type=str)
 #parser.add_argument("--matrixSize", help="set the width and hight of matrix for exampel: --matrixSize=10,17", nargs="+", type=int)
 args = parser.parse_args()
 
@@ -46,6 +47,7 @@ if args.matrixSim == "enabled":
 
 while(True):
 	this = time.time()
+	fps = (args.fps-(time.time()-this))
 	for t in TARGETS:
 		pattern = TARGETS[t]
 		data = pattern.generate()
@@ -64,6 +66,7 @@ while(True):
 					matrixscreen.process(data)
 			except KeyboardInterrupt:
 				signal_handler(None, None)
-	fps = (args.fps-(time.time()-this))
 	time.sleep(1./fps)
+	if args.showFps == "enabled":
+		print "actuall fps>> "+str(1./(time.time()-this))
 signal_handler(None, None)
