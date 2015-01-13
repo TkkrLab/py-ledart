@@ -8,14 +8,20 @@ from ColorFadePattern import ColorFadePattern
 #for ledmatrix
 #patterns that don't use pygame
 
-from RainPattern import RainPattern
+from RainPattern import *
 from PixelLife import *
-from FallingStar import FallingStar
+from FallingStar import *
+from Plasma import *
+
+try:
+    from DisplayPng import *
+except Exception, e:
+    print e
 
 #patterns that do use pygame
 try:
-	from Tron import Tron
-	from Snake import Snake
-	from Pong import Pong
+	from Tron import *
+	from Snake import *
+	from Pong import *
 except Exception, e:
 	print e

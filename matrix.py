@@ -1,5 +1,6 @@
 matrix_height = 17
 matrix_width = 10
+matrix_size = (matrix_height*matrix_width)
 
 #some matrixes need conversion in some kind
 def convertSnakeModes(pattern):

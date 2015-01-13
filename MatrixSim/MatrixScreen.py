@@ -32,7 +32,7 @@ class MatrixScreen(object):
 		for x in widthRange:
 			for y in heightRange:
 				pos = (x,y)
-				color = randColor()
+				color = BLUE
 				pixel = Pixel(pos, pixelSize, color)
 				self.pixels.append(pixel)
 	def handleInput(self):
