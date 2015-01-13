@@ -3,14 +3,29 @@ from Controllers.Controllers import *
 import time
 
 
-class PongController(PygameController, XboxController):
-    def __init__(self, plugged = 0):
-        PygameController.__init__(self, plugged)
+class PongController(DummyController, XboxController):
+    def __init__(self, plugged=0):
+        DummyController.__init__(self, plugged)
+        self.time = time.time
+        self.tick = 0.01
+        self.previousTick = 0
+        self.pos = 0
     def getPos(self, button):
-        value = PygameController.getAxis(self, button)
-        value = translate(value, 1.0, -1.0, 0, 10.1)
-        value = int(round(value))
-        return value
+        millis = self.time()
+        if(millis - self.previousTick > self.tick):
+            self.previousTick = millis
+            self.pos  = DummyController.getValue(self)
+            print self.pos
+        return int(translate(self.pos, 0, 1023, 0, 10.1))
+
+#class PongController(PygameController, XboxController):
+#    def __init__(self, plugged = 0):
+#        PygameController.__init__(self, plugged)
+#    def getPos(self, button):
+#        value = PygameController.getAxis(self, button)
+#        value = translate(value, 1.0, -1.0, 0, 10.1)
+#        value = int(round(value))
+#        return value
 
 # class PongController(PygameController, MegaController):
 #     def __init__(self, plugged=0):

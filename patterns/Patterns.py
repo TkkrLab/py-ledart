@@ -20,8 +20,11 @@ except Exception, e:
 
 #patterns that do use pygame
 try:
-	from Tron import *
-	from Snake import *
-	from Pong import *
+    from Pong import *
 except Exception, e:
-	print e
+    print e
+try:
+    from Tron import *
+    from Snake import *
+except Exception, e:
+    print e

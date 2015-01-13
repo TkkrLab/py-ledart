@@ -47,7 +47,6 @@ if args.matrixSim == "enabled":
 
 while(True):
 	this = time.time()
-	fps = (args.fps-(time.time()-this))
 	for t in TARGETS:
 		pattern = TARGETS[t]
 		data = pattern.generate()
@@ -66,7 +65,7 @@ while(True):
 					matrixscreen.process(data)
 			except KeyboardInterrupt:
 				signal_handler(None, None)
-	time.sleep(1./fps)
+	time.sleep(1./args.fps)
 	if args.showFps == "enabled":
 		print "actuall fps>> "+str(1./(time.time()-this))
 signal_handler(None, None)

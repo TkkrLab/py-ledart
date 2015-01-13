@@ -86,9 +86,9 @@ class PlasmaSecond(object):
 	def generatePalette(self):
 		self.palette = []
 		for x in xrange(0, (2**8), 1):
-			r = 0#int(128.0 +128*sin(pi*x/40.))
-			g = int(128.0 +128*sin(pi*x/20.))
-			b = int(128.0 +128*sin(pi*x/20.))
+			r = 30#int(128.0 +128*sin(pi*x/40.))
+			g = int(128.0 +128*sin(pi*x/80.))
+			b = int(128.0 +128*sin(pi*x/40.))
 			colorRGB = (r,g,b)
 			self.palette.append(colorRGB)
 	def generatePlasmaSurface(self):
@@ -123,7 +123,7 @@ class PlasmaSecond(object):
 				b = (plasma_color[2]+color_shift[2])%256
 				color = (r,g,b,)
 				#darken the color to create a better contrast
-				color = ColorRGBOps.darken(color, 80)
+				color = ColorRGBOps.darken(color, 100)
 				self.graphics.drawPixel(x,y, color)
 	def generate(self):
 		self.graphics.fill(BLACK)
