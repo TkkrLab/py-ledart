@@ -23,8 +23,9 @@ TARGETS = {
     #pixelMatrix:Pong(speed=8),
     #pixelMatrix:Snake(),
     #pixelMatrix:BlueLife(),
-    pixelMatrix:PlasmaFirst(),
     #pixelMatrix:DisplayPng(),
+    #pixelMatrix:PlasmaFirst(),
+    pixelMatrix:PlasmaSecond(),
     
     #local_host:FallingStar(chance=0.2),
     #local_host:RainPattern(chance=0.2),

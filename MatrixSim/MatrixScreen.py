@@ -36,9 +36,13 @@ class MatrixScreen(object):
 				pixel = Pixel(pos, pixelSize, color)
 				self.pixels.append(pixel)
 	def handleInput(self):
+		self.pygame.event.pump()
 		for event in self.pygame.event.get():
 			if event.type == self.pygame.QUIT:
 				sys.exit(0)
+			if event.type == self.pygame.KEYDOWN:
+				if event.key == self.pygame.K_c and self.pygame.key.get_mods()&self.pygame.KMOD_LCTRL:
+					raise KeyboardInterrupt
 	def draw(self, data):
 		#extract pixels and color from data
 		#get both a list index and the color data.

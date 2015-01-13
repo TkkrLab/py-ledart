@@ -43,7 +43,7 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 #setup a screen if matrixSim argument was set.
-if args.matrixSim:
+if args.matrixSim == "enabled":
 	matrixscreen = MatrixScreen(matrix_width, matrix_height, args.pixelSize)
 
 while(True):
@@ -57,10 +57,13 @@ while(True):
 		#send it out over the network.
 		if not args.netSilent:
 			sock.sendto(buildPacket(0, data), (t, UDP_PORT))
-		if args.matrixSim:
-			if args.snakeMode:
-				matrixscreen.process(convertSnakeModes(data))
-			else:
-				matrixscreen.process(data)
+		if args.matrixSim == "enabled":
+			try:
+				if args.snakeMode == "enabled":
+					matrixscreen.process(convertSnakeModes(data))
+				else:
+					matrixscreen.process(data)
+			except KeyboardInterrupt:
+				signal_handler(None, None)
 	time.sleep(args.delay)
 sock.close()
