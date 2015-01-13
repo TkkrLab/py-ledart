@@ -8,12 +8,10 @@ try:
 	from MatrixSim.MatrixScreen import *
 except Exception, e:
 	print e
-
-
 UDP_PORT = 6454
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--delay", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
+parser.add_argument("--fps", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
 parser.add_argument("--config", help="load config.", metavar="<config_conf.py>", nargs="?", default="default_conf.py", type=str)
 parser.add_argument("--snakeMode", help="flips every x amount of data", nargs="?", default=None, type=str)
 parser.add_argument("--matrixSim", help="turns on buildin matrix simulation", nargs="?", default=None, type=str)
@@ -47,6 +45,7 @@ if args.matrixSim == "enabled":
 	matrixscreen = MatrixScreen(matrix_width, matrix_height, args.pixelSize)
 
 while(True):
+	this = time.time()
 	for t in TARGETS:
 		pattern = TARGETS[t]
 		data = pattern.generate()
@@ -55,7 +54,7 @@ while(True):
 			data = convertSnakeModes(data)
 		#if this is a simulation draw it to the matrixscreen else 
 		#send it out over the network.
-		if not args.netSilent:
+		if not (args.netSilent == "enabled"):
 			sock.sendto(buildPacket(0, data), (t, UDP_PORT))
 		if args.matrixSim == "enabled":
 			try:
@@ -65,5 +64,7 @@ while(True):
 					matrixscreen.process(data)
 			except KeyboardInterrupt:
 				signal_handler(None, None)
-	time.sleep(args.delay)
-sock.close()
+	fps = (args.fps-(time.time()-this))
+	time.sleep(1./fps)
+	print "toke: "+str(fps)
+signal_handler(None, None)

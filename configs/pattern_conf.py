@@ -3,7 +3,7 @@ from patterns.Patterns import *
 
 pixelMatrix = "192.168.1.116"
 raspberrypi = "192.168.2.42"
-michiel_laptop = "10.42.4.12"
+michiel_laptop = "192.168.1.199"
 local_host = "127.0.0.1"
 broadcast = "10.42.255.255"
 
@@ -25,7 +25,9 @@ TARGETS = {
     #pixelMatrix:BlueLife(),
     #pixelMatrix:DisplayPng(),
     #pixelMatrix:PlasmaFirst(),
-    pixelMatrix:PlasmaSecond(),
+    #pixelMatrix:PlasmaSecond(),
+    michiel_laptop:PlasmaSecond(),
+    #pixelMatrix:PlasmaThird(),
     
     #local_host:FallingStar(chance=0.2),
     #local_host:RainPattern(chance=0.2),

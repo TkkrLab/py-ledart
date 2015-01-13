@@ -54,7 +54,11 @@ class MatrixScreen(object):
 
 		#display the pixels.
 		for pixel in self.pixels:
-			self.pygame.draw.rect(self.window, pixel.color, pixel.getRect())
+			r = pixel.color[COLOR_ORDER[0]]
+			g = pixel.color[COLOR_ORDER[1]]
+			b = pixel.color[COLOR_ORDER[2]]
+			color = (r,g,b)
+			self.pygame.draw.rect(self.window, color, pixel.getRect())
 			#draw a nice little square around so it looks more like a pixel.
 			self.pygame.draw.rect(self.window, BLACK, pixel.getRect(), 1)
 
