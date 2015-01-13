@@ -66,5 +66,4 @@ while(True):
 				signal_handler(None, None)
 	fps = (args.fps-(time.time()-this))
 	time.sleep(1./fps)
-	print "toke: "+str(fps)
 signal_handler(None, None)
