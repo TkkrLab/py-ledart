@@ -15,7 +15,7 @@ class PongController(DummyController, XboxController):
         if(millis - self.previousTick > self.tick):
             self.previousTick = millis
             self.pos  = DummyController.getValue(self)
-            print self.pos
+            #print self.pos
         return int(translate(self.pos, 0, 1023, 0, 10.1))
 
 #class PongController(PygameController, XboxController):

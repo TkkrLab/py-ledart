@@ -1,7 +1,7 @@
 #import all patterns availble for use.
 from patterns.Patterns import *
 
-pixelMatrix = "192.168.1.116"
+pixelMatrix = "pixelmatrix"
 raspberrypi = "192.168.2.42"
 michiel_laptop = "192.168.1.199"
 local_host = "127.0.0.1"
@@ -18,14 +18,14 @@ TARGETS = {
     #local_host:BlueLife(),
     #raspberrypi:BlueLife(),
     
-    local_host:Pong(speed=5),
+    #local_host:Pong(speed=5),
     #pixelMatrix:Pong(speed=3),
     #pixelMatrix:Pong(speed=8),
     #pixelMatrix:Snake(),
     #pixelMatrix:BlueLife(),
     #pixelMatrix:DisplayPng(),
     #pixelMatrix:PlasmaFirst(),
-    #pixelMatrix:PlasmaSecond(),
+    pixelMatrix:PlasmaSecond(),
     #michiel_laptop:PlasmaSecond(),
     #pixelMatrix:PlasmaThird(),
     
