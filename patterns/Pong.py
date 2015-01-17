@@ -3,20 +3,26 @@ from Controllers.Controllers import *
 import time
 
 
-class PongController(DummyController, XboxController):
-    def __init__(self, plugged=0):
-        DummyController.__init__(self, plugged)
-        self.time = time.time
-        self.tick = 0.01
-        self.previousTick = 0
-        self.pos = 0
+class PongController(XboxController):
+    def __init__(self, plugged=0, ball=None):
+        self.ball = ball
     def getPos(self, button):
-        millis = self.time()
-        if(millis - self.previousTick > self.tick):
-            self.previousTick = millis
-            self.pos  = DummyController.getValue(self)
-            #print self.pos
-        return int(translate(self.pos, 0, 1023, 0, 10.1))
+        return self.ball.pos[0]
+
+# class PongController(DummyController, XboxController):
+#     def __init__(self, plugged=0):
+#         DummyController.__init__(self, plugged)
+#         self.time = time.time
+#         self.tick = 0.01
+#         self.previousTick = 0
+#         self.pos = 0
+#     def getPos(self, button):
+#         millis = self.time()
+#         if(millis - self.previousTick > self.tick):
+#             self.previousTick = millis
+#             self.pos  = DummyController.getValue(self)
+#             #print self.pos
+#         return int(translate(self.pos, 0, 1023, 0, 10.1))
 
 #class PongController(PygameController, XboxController):
 #    def __init__(self, plugged = 0):
@@ -118,12 +124,13 @@ class Pong(object):
     def __init__(self, speed = matrix_height/2):
         self.graphics = Graphics(matrix_width, matrix_height)
         
-        self.controller = PongController(plugged = 0)#Controller("/dev/ttyACM1", baud=9600)
+        self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
+
+        self.controller = PongController(plugged = 0, ball=self.ball)#Controller("/dev/ttyACM1", baud=9600)
         
         self.paddle1 = Paddle((0,0), BLUE, self.controller, self.controller.LEFT_AXIS_Y, self.graphics)
         self.paddle2 = Paddle((0, matrix_height-1), BLUE, self.controller, self.controller.RIGHT_AXIS_Y, self.graphics)
         
-        self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
         #timing variables used to controle the speed of the ball
         self.start_speed = speed
         self.speed = speed #speed = pixels/s

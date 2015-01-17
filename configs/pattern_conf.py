@@ -20,12 +20,12 @@ TARGETS = {
     
     #local_host:Pong(speed=5),
     #pixelMatrix:Pong(speed=3),
-    #pixelMatrix:Pong(speed=8),
+    pixelMatrix:Pong(speed=8),
     #pixelMatrix:Snake(),
     #pixelMatrix:BlueLife(),
     #pixelMatrix:DisplayPng(),
     #pixelMatrix:PlasmaFirst(),
-    pixelMatrix:PlasmaSecond(),
+    #pixelMatrix:PlasmaSecond(),
     #michiel_laptop:PlasmaSecond(),
     #pixelMatrix:PlasmaThird(),
     

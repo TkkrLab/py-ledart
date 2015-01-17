@@ -1,4 +1,5 @@
 import sys
+
 def translate(value, leftmin, leftmax, rightmin, rightmax):
     leftspan = leftmax - leftmin
     rightspan = rightmax - rightmin
