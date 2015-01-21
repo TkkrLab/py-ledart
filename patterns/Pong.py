@@ -3,11 +3,19 @@ from Controllers.Controllers import *
 import time
 
 
-class PongController(XboxController):
-    def __init__(self, plugged=0, ball=None):
-        self.ball = ball
+class PongController(ttyController, PongTtyController):
+    def __init__(self, plugged=0, baud=115200):
+        ttyController.__init__(self, plugged, baud)
     def getPos(self, button):
-        return self.ball.pos[0]
+        value = ttyController.getPos(self, button)
+        value = translate(value, 0, 255, 0, 10);
+        return int(value)
+
+# class PongController(XboxController):
+#     def __init__(self, plugged=0, ball=None):
+#         self.ball = ball
+#     def getPos(self, button):
+#         return self.ball.pos[0]
 
 # class PongController(DummyController, XboxController):
 #     def __init__(self, plugged=0):
@@ -126,10 +134,12 @@ class Pong(object):
         
         self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
 
-        self.controller = PongController(plugged = 0, ball=self.ball)#Controller("/dev/ttyACM1", baud=9600)
+        self.controller = PongController(plugged = 0)#Controller("/dev/ttyACM1", baud=9600)
         
-        self.paddle1 = Paddle((0,0), BLUE, self.controller, self.controller.LEFT_AXIS_Y, self.graphics)
-        self.paddle2 = Paddle((0, matrix_height-1), BLUE, self.controller, self.controller.RIGHT_AXIS_Y, self.graphics)
+        paddle1_pos = (0,0)
+        self.paddle1 = Paddle(paddle1_pos, BLUE, self.controller, self.controller.POT1, self.graphics)
+        paddle2_pos = (0, matrix_height-1)
+        self.paddle2 = Paddle(paddle2_pos, BLUE, self.controller, self.controller.POT2, self.graphics)
         
         #timing variables used to controle the speed of the ball
         self.start_speed = speed

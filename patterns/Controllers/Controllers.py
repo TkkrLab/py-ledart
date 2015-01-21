@@ -61,21 +61,38 @@ class XboxController(object):
     RIGHT_AXIS_BUTTON = 10
 
 
+class PongTtyController(object):
+    POT1 = 0
+    POT2 = 1
 
-class TtyController(object):
+class ttyController(object):
+    import serial
     ser_port = None
-    def __init__(self, port = "/dev/ttyACM0", baud=9600):
+    pos = (0,0)
+    def __init__(self, plugged=0, baud=115200, debug=False):
+        port = "/dev/ttyACM"+str(0)
         if not self.ser_port:
-            self.ser_port = serial.Serial(port, baud)
-    def getPos(self):
+            self.ser_port = self.serial.Serial(port, baud, timeout=None)
+        self.debug = debug
+    def getPos(self, button):
         try:
-            self.ser_port.flushInput()
-            pos = ord(self.ser_port.read())
-            return pos
+            #ask for next two bytes.
+            self.ser_port.write('n');
+            #look if anything in buffer.
+            #if so extract values and return.
+            if(self.ser_port.inWaiting()):
+                first, second = self.ser_port.read(2)
+                #get values.
+                first, second = ord(first), ord(second)
+                if self.debug:
+                    print first, second
+                self.pos = (first, second)
+            return self.pos[button]
         except Exception, e:
             print "sys.exit: "+str(e)
             sys.exit(0)
     def __del__(self):
         if self.ser_port:
+            print "closing serial port"
             self.ser_port.close()
 
