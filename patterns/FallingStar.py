@@ -1,4 +1,5 @@
 from Graphics.Graphics import *
+from matrix import *
 import random
 
 #still a work in progress. not really done yet.

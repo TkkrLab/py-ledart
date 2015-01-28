@@ -1,3 +1,14 @@
+
+class PygameDummyController(object):
+    def __init__(self, plugged=0):
+        self.default = 1.0
+    def getAxis(self, button):
+        return self.default
+    def getButtons(self, button):
+        return int(self.default)
+    def getHats(self, button):
+        return int(self.default)
+
 class PygameController(object):
     import pygame
     #axis for which axis to read (button)

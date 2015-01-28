@@ -46,9 +46,9 @@ class BlueLife(object):
 
 class MixedLife(object):
 	def __init__(self):
-		blue = Color.divide(BLUE, 2)
-		green = Color.divide(GREEN, 2)
-		red = Color.divide(RED, 2)
+		blue = ColorRGBOps.darken(BLUE, 128)
+		green = ColorRGBOps.darken(GREEN, 128)
+		red = ColorRGBOps.darken(RED, 128)
 		self.life1 = Life(matrix_width, matrix_height, 1, color=blue)
 		self.life2 = Life(matrix_width, matrix_height, 1, color=green)
 		self.life3 = Life(matrix_width, matrix_height, 1, color=red)

@@ -1,4 +1,6 @@
 from Graphics.Graphics import *
+from pygame.locals import *
+import pygame
 
 class TronPlayer(object):
 	def __init__(self, color, game, pos=(5,5)):

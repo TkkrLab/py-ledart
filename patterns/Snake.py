@@ -3,25 +3,40 @@ from Controllers.Controllers import *
 from Controllers.PygameController import *
 import time
 
-class SnakeController(PygameController, XboxController):
+#for now the snakeController is a pygame controller.
+# class SnakeController(PygameController, XboxController):
+#     def __init__(self, plugged=0):
+#         PygameController.__init__(self, plugged)
+#         self.UP = XboxController.UP_DPAD
+#         self.DOWN = XboxController.DOWN_DPAD
+#         self.LEFT = XboxController.LEFT_DPAD
+#         self.RIGHT = XboxController.RIGHT_DPAD
+#     def getUp(self):
+#         value = self.getButtons(self.UP)
+#         return value
+#     def getDown(self):
+#         value = self.getButtons(self.DOWN)
+#         return value
+#     def getLeft(self):
+#         value = self.getButtons(self.LEFT)
+#         return value
+#     def getRight(self):
+#         value = self.getButtons(self.RIGHT)
+#         return value
+
+class SnakeController(PygameDummyController, XboxController):
     def __init__(self, plugged=0):
-        PygameController.__init__(self, plugged)
-        self.UP = XboxController.UP_DPAD
-        self.DOWN = XboxController.DOWN_DPAD
-        self.LEFT = XboxController.LEFT_DPAD
-        self.RIGHT = XboxController.RIGHT_DPAD
+        PygameDummyController.__init__(self, plugged)
     def getUp(self):
-        value = self.getButtons(self.UP)
-        return value
+        return self.getButtons(self.UP)
     def getDown(self):
-        value = self.getButtons(self.DOWN)
-        return value
+        return self.getButtons(self.DOWN)
     def getLeft(self):
-        value = self.getButtons(self.LEFT)
-        return value
+        return self.getButtons(self.LEFT)
     def getRight(self):
-        value = self.getButtons(self.RIGHT)
-        return value
+        return self.getButtons(self.RIGHT)
+
+
 
 class Food(object):
     def __init__(self, pos, color, graphics):
