@@ -11,7 +11,7 @@ except Exception, e:
 UDP_PORT = 6454
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--fps", help="controlle flow speed.", metavar="<delay>", nargs="?", default=0.15, type=float)
+parser.add_argument("--fps", help="controlle flow speed.", metavar="<delay>", nargs="?", default=15, type=float)
 parser.add_argument("--config", help="load config.", metavar="<config_conf.py>", nargs="?", default="default_conf.py", type=str)
 parser.add_argument("--snakeMode", help="flips every x amount of data", nargs="?", default=None, type=str)
 parser.add_argument("--matrixSim", help="turns on buildin matrix simulation", nargs="?", default=None, type=str)
@@ -57,15 +57,18 @@ while(True):
 		#send it out over the network.
 		if not (args.netSilent == "enabled"):
 			sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+		#make sure matrixSim always displays the data the right way.
 		if args.matrixSim == "enabled":
 			try:
 				if args.snakeMode == "enabled":
 					matrixscreen.process(convertSnakeModes(data))
 				else:
 					matrixscreen.process(data)
+			#matrix sim needs this because i am to lazy to press the x button.
 			except KeyboardInterrupt:
 				signal_handler(None, None)
 	time.sleep(1./args.fps)
+	#shows the fps the whole program runs at.
 	if args.showFps == "enabled":
 		print "actuall fps>> "+str(1./(time.time()-this))
 signal_handler(None, None)

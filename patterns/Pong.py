@@ -1,5 +1,6 @@
-from Graphics import *
+from Graphics.Graphics import *
 from Controllers.Controllers import *
+from matrix import *
 import time
 
 

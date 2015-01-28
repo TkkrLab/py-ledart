@@ -1,4 +1,4 @@
-from Graphics import *
+from Graphics.Graphics import *
 import random
 
 #still a work in progress. not really done yet.

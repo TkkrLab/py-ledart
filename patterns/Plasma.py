@@ -1,6 +1,6 @@
-from Graphics import *
-import time
+from Graphics.Graphics import *
 from math import sin, cos, sqrt, pi, radians
+import time
 
 class PlasmaThird(object):
 	def __init__(self, speed=10):

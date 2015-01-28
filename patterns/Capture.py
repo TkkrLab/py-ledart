@@ -1,4 +1,4 @@
-from Graphics import *
+from Graphics.Graphics import *
 
 class Capture(object):
     def __init__(self):

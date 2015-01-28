@@ -13,18 +13,29 @@ from PixelLife import *
 from FallingStar import *
 from Plasma import *
 
+#uses pygame for testing.
+try:
+	from PixelBros import *
+except Exception, e:
+	print "PixelBros>>"+str(e)
+#this one uses a library png so try to load.
+#but if not installed pass.
 try:
     from DisplayPng import *
 except Exception, e:
-    print e
+    print "DisplayPng>>"+str(e)
 
 #patterns that do use pygame
-#try:
-from Pong import *
-#except Exception, e:
-    #print e
+try:
+	from Pong import *
+except Exception, e:
+    print "Pong>>"+str(e)
+
 try:
     from Tron import *
+except Exception, e:
+	print "Tron>>"+str(e)
+try:
     from Snake import *
 except Exception, e:
-    print e
+    print "snake>>"+str(e)

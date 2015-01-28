@@ -4,8 +4,8 @@ import sys,os
 cwd = os.getcwd()
 sys.path.append(cwd)
 sys.path.append(cwd+"/patterns/Graphics/")
-
 from Graphics import *
+
 from Pixel import *
 from matrix import *
 

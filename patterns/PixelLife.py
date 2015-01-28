@@ -1,4 +1,4 @@
-from Graphics import *
+from Graphics.Graphics import *
 from Life.life import *
 import random
 

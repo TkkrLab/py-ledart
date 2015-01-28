@@ -1,5 +1,6 @@
-from Graphics import *
+from Graphics.Graphics import *
 from Controllers.Controllers import *
+from Controllers.PygameController import *
 import time
 
 class SnakeController(PygameController, XboxController):
