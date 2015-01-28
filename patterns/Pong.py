@@ -57,7 +57,7 @@ class PongController(ttyController, PongTtyController):
 class Paddle(object):
     def __init__(self, pos, color, controller, controller_in, graphics):
         self.pos = pos
-        self.paddle_width = 3
+        self.paddle_width = 5
         self.side = pos[1]
         
         self.score = 0
@@ -137,7 +137,7 @@ class Pong(object):
         
         self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
 
-        self.controller = PongController(plugged = 0)#Controller("/dev/ttyACM1", baud=9600)
+        self.controller = PongController(plugged = 0, ball=self.ball)#Controller("/dev/ttyACM1", baud=9600)
         
         paddle1_pos = (0,0)
         self.paddle1 = Paddle(paddle1_pos, BLUE, self.controller, self.controller.POT1, self.graphics)
