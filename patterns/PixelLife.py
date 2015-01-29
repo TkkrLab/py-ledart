@@ -32,13 +32,21 @@ class BlueLife(object):
 		self.life = Life(matrix_width, matrix_height, 1, color=BLUE)
 		self.graphics = Graphics(matrix_width, matrix_height)
 	def draw(self):
-		for index, cell in enumerate(self.life.field):
-			color = self.graphics.getSurface()[index]
-			if cell:
-				color = (BLUE)
-			else:
-				color = (0,0,0)
-			self.graphics.getSurface()[index] = color
+		life_matrix = self.graphics.toMatrix(self.life.field, self.graphics.getSurfaceWidth())
+		for y in self.graphics.heightRange:
+			for x in self.graphics.widthRange:
+				if life_matrix[y][x]:
+					color = BLUE
+				else:
+					color = BLACK
+				self.graphics.drawPixel(x,y,color)
+		# for index, cell in enumerate(self.life.field):
+		# 	color = self.graphics.getSurface()[index]
+		# 	if cell:
+		# 		color = (BLUE)
+		# 	else:
+		# 		color = (0,0,0)
+		# 	self.graphics.getSurface()[index] = color
 	def generate(self):
 		self.life.process()
 		self.draw()
