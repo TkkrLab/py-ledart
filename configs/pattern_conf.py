@@ -18,20 +18,21 @@ TARGETS = {
     # local_host:BlueLife(),
     # raspberrypi:BlueLife(),
     
-    # local_host:PixelBros(),
-     local_host:Pong(speed=5),
+    # local_host:SuperPixelBros(),
+    # local_host:Pong(speed=5),
     # pixelMatrix:Pong(speed=3),
     # pixelMatrix:Pong(speed=8),
     # pixelMatrix:Snake(),
-    # pixelMatrix:BlueLife(),
-    # pixelMatrix:DisplayPng(),
+     local_host:BlueLife(),
+    # #needs images. wip still.
+    # # pixelMatrix:DisplayPng(),
     # pixelMatrix:PlasmaFirst(),
     # pixelMatrix:PlasmaSecond(),
     # michiel_laptop:PlasmaSecond(),
     # pixelMatrix:PlasmaThird(),
     
-    #this one is broken somehow. not even half the code there? that was there?
-    #local_host:FallingStar(color=(255,255,255), chance=0.2),
+    # #this one is broken somehow. not even half the code there? that was there?
+    # # local_host:FallingStar(color=(255,255,255), chance=0.2),
     
     # local_host:RainPattern(chance=0.2),
     

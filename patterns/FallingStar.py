@@ -1,4 +1,4 @@
-from Graphics.Graphics import *
+from Graphics import *
 from matrix import *
 import random
 

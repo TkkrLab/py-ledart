@@ -15,7 +15,7 @@ from Plasma import *
 
 #uses pygame for testing.
 try:
-	from PixelBros import *
+	from SuperPixelBros import *
 except Exception, e:
 	print "PixelBros>>"+str(e)
 #this one uses a library png so try to load.

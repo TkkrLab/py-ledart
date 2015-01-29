@@ -1,4 +1,4 @@
-from Graphics.Graphics import *
+from Graphics import *
 from pygame.locals import *
 import pygame
 
@@ -51,7 +51,10 @@ class TronPlayer(object):
 			self.game.graphics.drawPixel(x,y,self.color)
 
 class Tron(object):
-	pass
+	def __init__(self):
+		self.graphics = Graphics(matrix_width, matrix_height)
+	def generate(self):
+		return self.graphics.getSurface()
 
 class OldTron(object): #version before creating players that handle processing on thier own.
 	def __init__(self):

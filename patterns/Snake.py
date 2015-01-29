@@ -1,5 +1,6 @@
-from Graphics.Graphics import *
-from Controllers.Controllers import *
+from Graphics import *
+from Controllers import *
+#import the library for pygame controllers with thier definitions.
 from Controllers.PygameController import *
 import time
 

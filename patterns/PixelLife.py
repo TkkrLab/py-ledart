@@ -1,4 +1,4 @@
-from Graphics.Graphics import *
+from Graphics import *
 from Life.life import *
 import random
 
@@ -33,12 +33,12 @@ class BlueLife(object):
 		self.graphics = Graphics(matrix_width, matrix_height)
 	def draw(self):
 		for index, cell in enumerate(self.life.field):
-			color = self.graphics.surface[index]
+			color = self.graphics.getSurface()[index]
 			if cell:
 				color = (BLUE)
 			else:
 				color = (0,0,0)
-			self.graphics.surface[index] = color
+			self.graphics.getSurface()[index] = color
 	def generate(self):
 		self.life.process()
 		self.draw()

@@ -1,4 +1,4 @@
-from Graphics.Graphics import *
+from Graphics import *
 from math import sin, cos, sqrt, pi, radians
 import time
 
