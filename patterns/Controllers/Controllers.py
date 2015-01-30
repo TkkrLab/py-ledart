@@ -69,8 +69,8 @@ class ttyController(object):
     import serial
     ser_port = None
     pos = (0,0)
-    def __init__(self, plugged=0, baud=115200, debug=False):
-        port = "/dev/ttyACM"+str(0)
+    def __init__(self, plugged=0, baud=115200, port="ACM", debug=False):
+        port = "/dev/tty"+port+str(0)
         if not self.ser_port:
             self.ser_port = self.serial.Serial(port, baud)
         self.debug = debug
