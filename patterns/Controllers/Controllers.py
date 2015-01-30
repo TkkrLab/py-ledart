@@ -72,7 +72,7 @@ class ttyController(object):
     def __init__(self, plugged=0, baud=115200, debug=False):
         port = "/dev/ttyACM"+str(0)
         if not self.ser_port:
-            self.ser_port = self.serial.Serial(port, baud, timeout=None)
+            self.ser_port = self.serial.Serial(port, baud)
         self.debug = debug
     def getPos(self, button):
         try:

@@ -19,11 +19,11 @@ TARGETS = {
     # raspberrypi:BlueLife(),
     
     # local_host:SuperPixelBros(),
-    # local_host:Pong(speed=5),
+     local_host:Pong(speed=5),
     # pixelMatrix:Pong(speed=3),
     # pixelMatrix:Pong(speed=8),
     # pixelMatrix:Snake(),
-     local_host:BlueLife(),
+    # local_host:BlueLife(),
     # #needs images. wip still.
     # # pixelMatrix:DisplayPng(),
     # pixelMatrix:PlasmaFirst(),

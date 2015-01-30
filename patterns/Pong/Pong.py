@@ -5,20 +5,20 @@ import time
 
 #this controller class if for the wireless pong controllers.
 #with the 2.4 GHz nrf's inside.
-# class PongController(ttyController, PongTtyController):
-#     def __init__(self, plugged=0, baud=115200):
-#         ttyController.__init__(self, plugged, baud)
-#     def getPos(self, button):
-#         value = ttyController.getPos(self, button)
-#         value = translate(value, 0, 255, 0, 10);
-#         return int(value)
+class PongController(ttyController, PongTtyController):
+    def __init__(self, plugged=0, baud=115200):
+        ttyController.__init__(self, plugged, baud)
+    def getPos(self, button):
+        value = ttyController.getPos(self, button)
+        value = translate(value, 0, 255, 0, 10);
+        return int(value)
 
 #this controller is really simple it plays against it's self.
-class PongController(ttyController, PongTtyController):
-    def __init__(self, plugged=0, ball=None):
-        self.ball = ball
-    def getPos(self, button):
-        return self.ball.pos[0]
+# class PongController(ttyController, PongTtyController):
+#     def __init__(self, plugged=0, ball=None):
+#         self.ball = ball
+#     def getPos(self, button):
+#         return self.ball.pos[0]
 
 # class PongController(DummyController, XboxController):
 #     def __init__(self, plugged=0):
@@ -137,7 +137,7 @@ class Pong(object):
         
         self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
 
-        self.controller = PongController(plugged = 0, ball=self.ball)#Controller("/dev/ttyACM1", baud=9600)
+        self.controller = PongController("/dev/ttyACM0", baud=115200)
         
         paddle1_pos = (0,0)
         self.paddle1 = Paddle(paddle1_pos, BLUE, self.controller, self.controller.POT1, self.graphics)
