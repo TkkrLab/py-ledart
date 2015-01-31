@@ -13,7 +13,7 @@ class ColorRGBOps(object):
 	def __init__(self):
 		self.redChannel = 0
 		self.greenChannel = 1
-		self.blueChannel = 3
+		self.blueChannel = 2
 	def swapChannel(self, color, first, second):
 		color = list(color)
 		first = color[first]
@@ -34,10 +34,14 @@ class ColorRGBOps(object):
 		r,g,b = color
 		return ((r+g+b)/3,)*3
 	def brighten(self, color, amount):
+		if type(amount) == tuple:
+			ra,ga,ba = amount
+		elif type(amount) == int:
+			ra,ga,ba = (amount,amount,amount)
 		r,g,b = color
-		r += amount
-		g += amount
-		b += amount
+		r -= ra
+		g -= ga
+		b -= ba
 		if r > 255: r = 255
 		if g > 255: g = 255
 		if b > 255: b = 255
@@ -46,10 +50,14 @@ class ColorRGBOps(object):
 		if b < 0 : b = 10
 		return (r,g,b)
 	def darken(self, color, amount):
+		if type(amount) == tuple:
+			ra,ga,ba = amount
+		elif type(amount) == int:
+			ra,ga,ba = (amount,amount,amount)
 		r,g,b = color
-		r -= amount
-		g -= amount
-		b -= amount
+		r -= ra
+		g -= ga
+		b -= ba
 		if r > 255: r = 255
 		if g > 255: g = 255
 		if b > 255: b = 255

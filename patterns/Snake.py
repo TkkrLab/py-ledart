@@ -29,13 +29,13 @@ class SnakeController(PygameDummyController, XboxController):
     def __init__(self, plugged=0):
         PygameDummyController.__init__(self, plugged)
     def getUp(self):
-        return self.getButtons(self.UP)
+        return self.getButtons(self.UP_DPAD)
     def getDown(self):
-        return self.getButtons(self.DOWN)
+        return self.getButtons(self.DOWN_DPAD)
     def getLeft(self):
-        return self.getButtons(self.LEFT)
+        return self.getButtons(self.LEFT_DPAD)
     def getRight(self):
-        return self.getButtons(self.RIGHT)
+        return self.getButtons(self.RIGHT_DPAD)
 
 
 

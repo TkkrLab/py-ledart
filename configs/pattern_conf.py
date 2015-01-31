@@ -13,26 +13,26 @@ TARGETS = {
     # pixelMatrix:Tron(),
     # local_host:Snake(speed=17),
     
+    #MixedLife() doesn't work atm but will be fixed
     # local_host:MixedLife(),
     # local_host:RandomLife(),
     # local_host:BlueLife(),
     # raspberrypi:BlueLife(),
     
-    # local_host:SuperPixelBros(),
-     local_host:Pong(speed=5),
+     local_host:SuperPixelBros(),
+    # local_host:Pong(speed=5),
     # pixelMatrix:Pong(speed=3),
     # pixelMatrix:Pong(speed=8),
     # pixelMatrix:Snake(),
     # local_host:BlueLife(),
+
     # #needs images. wip still.
     # # pixelMatrix:DisplayPng(),
+
     # pixelMatrix:PlasmaFirst(),
     # pixelMatrix:PlasmaSecond(),
     # michiel_laptop:PlasmaSecond(),
     # pixelMatrix:PlasmaThird(),
-    
-    # #this one is broken somehow. not even half the code there? that was there?
-    # # local_host:FallingStar(color=(255,255,255), chance=0.2),
     
     # local_host:RainPattern(chance=0.2),
     

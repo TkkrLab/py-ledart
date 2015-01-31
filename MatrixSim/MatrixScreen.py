@@ -1,9 +1,10 @@
 
 import sys,os
 #first things first make sure we are able to find the necesary files we need.
-cwd = os.getcwd()
-sys.path.append(cwd)
-sys.path.append(cwd+"/patterns/Graphics/")
+wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
+print wd
+sys.path.append(wd)
+sys.path.append(wd+"/patterns/Graphics/")
 from Graphics import *
 
 from Pixel import *

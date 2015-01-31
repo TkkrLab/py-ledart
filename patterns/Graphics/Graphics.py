@@ -284,7 +284,7 @@ class GraphicsLineTest(object):
 		if x >= matrix_height:
 			x = 0
 			y = 0
-		self.pos = x+1, y+1
+		self.pos = x+1, y
 		return self.graphics.getSurface()
 
 class GraphicsRectTest(object):

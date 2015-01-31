@@ -1,3 +1,4 @@
+import sys
 
 class PygameDummyController(object):
     def __init__(self, plugged=0):

@@ -1,4 +1,8 @@
 import sys
+try:
+    from PygameController import *
+except Exception, e:
+    print "pygamecontroller>> "+e
 
 def translate(value, leftmin, leftmax, rightmin, rightmax):
     leftspan = leftmax - leftmin
