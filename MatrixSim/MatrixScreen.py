@@ -1,5 +1,5 @@
 
-import sys,os
+import sys,os,time
 #first things first make sure we are able to find the necesary files we need.
 wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
 print wd
@@ -12,6 +12,9 @@ from matrix import *
 
 class MatrixScreen(object):
 	import pygame
+	timing = 0
+	fps = 0
+	timed = False
 	def __init__(self, width, height, pixelSize, fullscreen=False):
 		self.width = width
 		self.height = height
@@ -74,6 +77,12 @@ class MatrixScreen(object):
 		#update the screen so our data show.
 		self.pygame.display.update()
 	def process(self, data):
+		self.timed = not self.timed
+		if self.timed:
+			self.timing = time.time()
+		else:
+			self.fps = 1./(time.time()-self.timing)
+		self.pygame.display.set_caption("artnet matrix sim FPS:"+str(int(self.fps)))
 		self.handleInput()
 		self.draw(data)
 	def __del__(self):
