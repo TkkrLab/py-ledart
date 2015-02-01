@@ -76,7 +76,7 @@ def sendout():
             #matrix sim needs this because i am to lazy to press the x button.
             except KeyboardInterrupt:
                 signal_handler(None, None)
-                
+
 #hold values for time.
 current = 0
 previous = 0
@@ -86,7 +86,7 @@ while(True):
     if args.fps > 0:
         current = time.time()
         if (current-previous) >= fps:
-            previous = current
+            previous = time.time()
             sendout()
     #else send everything out as fast as possible
     else:
