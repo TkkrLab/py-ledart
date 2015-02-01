@@ -51,7 +51,7 @@ class MatrixScreen(object):
                 if self.pygame.mouse.get_focused():
                         self.pygame.mouse.set_visible(False)
                 else:
-                        self.pygame.mouse.set_vissible(True)
+                        self.pygame.mouse.set_visible(True)
 	def draw(self, data):
 		#extract pixels and color from data
 		#get both a list index and the color data.
