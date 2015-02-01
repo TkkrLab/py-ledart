@@ -14,9 +14,9 @@ TARGETS = {
     # local_host:Snake(speed=17),
     
     # MixedLife() doesn't work atm but will be fixed
-    local_host:MixedLife(),
+    # local_host:MixedLife(),
     # local_host:RandomLife(),
-    # local_host:BlueLife(),
+    local_host:BlueLife(),
     # raspberrypi:BlueLife(),
     
     # local_host:SuperPixelBros(),

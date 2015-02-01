@@ -131,17 +131,22 @@ class Ball(object):
         x,y = self.pos
         self.graphics.drawPixel(x,y,self.color)
 
+#pong game.
 class Pong(object):
     def __init__(self, speed = matrix_height/2):
         self.graphics = Graphics(matrix_width, matrix_height)
         
+        #create a ball. multiple balls should be possible :) 
         self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
+
+        #try to use the tty controller. but if it's not available use the automatic one.
         try:
             self.controller = PongController(plugged=0, baud=115200, port="ACM")
         except Exception, e:
             print "unable to find controllers playing on automatic\n>> "+str(e)
             self.controller = PongControllerAuto(plugged=0, ball=self.ball)
         
+        #create two paddles
         paddle1_pos = (0,0)
         self.paddle1 = Paddle(paddle1_pos, BLUE, self.controller, self.controller.POT1, self.graphics)
         paddle2_pos = (0, matrix_height-1)
@@ -153,25 +158,34 @@ class Pong(object):
         self.previous = 0
         
         self.print_score = False
+    #returns True on hit, and False otherwise.
     def checkOnPaddle(self, paddle, ball):
-        
+        #get all the attributes in a convenient form
         px,py = paddle.getPos()
         pwidth = paddle.getWidth()
         bx,by = ball.getPos()
         bsize = ball.getPos()
         
+        #check wheter the ball hit the paddle
         if by+ball.dy == py and bx >= px and bx < px+pwidth:
             return True
         else:
             return False
     
+    #returns a random number suited to be used for
+    #a random direction the ball moves in
+    #when the game starts.
     def getRandomDir(self):
         direction = 0
         #don't want dir to be 0
         while not direction:
             direction = random.randint(-1,1)
         return direction
-    
+    #main processing function that calls all the processing functions.
+    #besides that checks if the ball hit a paddle and lets 
+    #the ball now it collided.
+    #further it allso controlles the speed of the ball.
+    #and allso score is tracked from here.
     def process(self):
         self.paddle1.process()
         self.paddle2.process()
@@ -205,14 +219,19 @@ class Pong(object):
             self.ball.dx = self.getRandomDir()
             self.ball.dy = self.getRandomDir()
             self.speed = self.start_speed
+    #calls the handling processes for
+    #all the objects that need it.
     def handleInput(self):
         self.paddle1.handleInput()
         self.paddle2.handleInput()
+    #draw all the thing that need to be draw.
+    #draw the ball and paddles.
     def draw(self):
         self.graphics.fill(BLACK)
         self.ball.draw()
         self.paddle1.draw()
         self.paddle2.draw()
+    #returns the generated pattern for displaying.
     def generate(self):
         self.handleInput()
         self.process()
