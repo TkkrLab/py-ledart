@@ -10,7 +10,6 @@ from ColorFadePattern import ColorFadePattern
 
 from RainPattern import *
 from PixelLife import *
-from FallingStar import *
 from Plasma import *
 
 #uses pygame for testing.

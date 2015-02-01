@@ -14,11 +14,11 @@ class PongController(ttyController, PongTtyController):
         return int(value)
 
 #this controller is really simple it plays against it's self.
-# class PongController(ttyController, PongTtyController):
-#     def __init__(self, plugged=0, ball=None):
-#         self.ball = ball
-#     def getPos(self, button):
-#         return self.ball.pos[0]
+class PongControllerAuto(ttyController, PongTtyController):
+    def __init__(self, plugged=0, ball=None):
+        self.ball = ball
+    def getPos(self, button):
+        return self.ball.pos[0]
 
 # class PongController(DummyController, XboxController):
 #     def __init__(self, plugged=0):
@@ -136,8 +136,11 @@ class Pong(object):
         self.graphics = Graphics(matrix_width, matrix_height)
         
         self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
-
-        self.controller = PongController("/dev/ttyACM0", baud=115200)
+        try:
+            self.controller = PongController(plugged=0, baud=115200, port="ACM")
+        except Exception, e:
+            print "unable to find controllers playing on automatic\n>> "+str(e)
+            self.controller = PongControllerAuto(plugged=0, ball=self.ball)
         
         paddle1_pos = (0,0)
         self.paddle1 = Paddle(paddle1_pos, BLUE, self.controller, self.controller.POT1, self.graphics)

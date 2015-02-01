@@ -18,6 +18,7 @@ parser.add_argument("--matrixSim", help="turns on buildin matrix simulation", na
 parser.add_argument("--pixelSize", help="sets the pixel size for the matrix sim", nargs="?", default=30, type=int)
 parser.add_argument("--netSilent", help="if enabled won't send out udp packets anywhere", nargs="?", default=None, type=str)
 parser.add_argument("--showFps", help="prints out the actuall fps the program runs at", nargs="?", default=None, type=str)
+parser.add_argument("--fullscreen", help="makes matrixsim go fullscreen (hides mouse pointer)", nargs="?", default=False, type=str)
 #parser.add_argument("--matrixSize", help="set the width and hight of matrix for exampel: --matrixSize=10,17", nargs="+", type=int)
 args = parser.parse_args()
 
@@ -43,7 +44,11 @@ signal.signal(signal.SIGINT, signal_handler)
 
 #setup a screen if matrixSim argument was set.
 if args.matrixSim == "enabled":
-	matrixscreen = MatrixScreen(matrix_width, matrix_height, args.pixelSize)
+        if args.fullscreen == "enabled":
+               fullscreen=True
+        else:
+               fullscreen=False
+	matrixscreen = MatrixScreen(matrix_width, matrix_height, args.pixelSize, fullscreen)
 
 while(True):
 	this = time.time()
@@ -67,7 +72,7 @@ while(True):
 			#matrix sim needs this because i am to lazy to press the x button.
 			except KeyboardInterrupt:
 				signal_handler(None, None)
-	time.sleep(1./args.fps)
+	#time.sleep(1./args.fps)
 	#shows the fps the whole program runs at.
 	if args.showFps == "enabled":
 		print "actuall fps>> "+str(1./(time.time()-this))

@@ -12,7 +12,7 @@ from matrix import *
 
 class MatrixScreen(object):
 	import pygame
-	def __init__(self, width, height, pixelSize):
+	def __init__(self, width, height, pixelSize, fullscreen=False):
 		self.width = width
 		self.height = height
 		self.pixelSize = pixelSize
@@ -21,8 +21,10 @@ class MatrixScreen(object):
 
 		self.window_width = height*pixelSize
 		self.window_height = width*pixelSize
-
-		self.window = self.pygame.display.set_mode((self.window_width, self.window_height))
+                self.flags = self.pygame.DOUBLEBUF|self.pygame.HWSURFACE
+                if fullscreen:
+                        self.flags |= self.pygame.FULLSCREEN
+		self.window = self.pygame.display.set_mode((self.window_width, self.window_height), self.flags)
 		self.pygame.display.set_caption("pygame artnet matrix simulator.")
 
 		widthRange = range(0, self.window_width, pixelSize)
@@ -42,9 +44,14 @@ class MatrixScreen(object):
 		for event in self.pygame.event.get():
 			if event.type == self.pygame.QUIT:
 				sys.exit(0)
-			if event.type == self.pygame.KEYDOWN:
+                        if event.type == self.pygame.KEYDOWN:
 				if event.key == self.pygame.K_c and self.pygame.key.get_mods()&self.pygame.KMOD_LCTRL:
 					raise KeyboardInterrupt
+                #check if mouse in window then make invisible else visible
+                if self.pygame.mouse.get_focused():
+                        self.pygame.mouse.set_visible(False)
+                else:
+                        self.pygame.mouse.set_vissible(True)
 	def draw(self, data):
 		#extract pixels and color from data
 		#get both a list index and the color data.
