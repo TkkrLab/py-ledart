@@ -1,0 +1,3 @@
+from Graphics import *
+from Life.life import *
+import ragraphics.drawPixel(0,50, BLACK)
