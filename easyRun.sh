@@ -1,1 +1,2 @@
-python ~/py-art-net/runPatternJob.py --fps=10 --matrixSim=enabled --netSilent=enabled --config=pattern_conf.py
+killall python; python runPatternJob.py --snakeMode enabled --fps 25 --config default_conf.py
+

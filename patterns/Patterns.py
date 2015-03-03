@@ -11,6 +11,7 @@ from ColorFadePattern import ColorFadePattern
 from RainPattern import *
 from PixelLife import *
 from Plasma import *
+from sven import *
 
 #uses pygame for testing.
 try:

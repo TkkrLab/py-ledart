@@ -13,7 +13,7 @@ def getPngPixelData(image):
 
 class DisplayPng(object):
     def __init__(self):
-        image = '/home/robert/py-art-net/patterns/Graphics/resize.png'
+        image = '/home/pi/py-art-net/hacked.png'
         self.data = getPngPixelData(image)
         self.pixeldata = self.data[0]
     def generate(self):
