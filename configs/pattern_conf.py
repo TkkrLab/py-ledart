@@ -16,7 +16,7 @@ TARGETS = {
     # MixedLife() doesn't work atm but will be fixed
     # local_host:MixedLife(),
     # local_host:RandomLife(),
-    local_host:BlueLife(),
+    pixelMatrix:BlueLife(),
     # raspberrypi:BlueLife(),
     
     # local_host:SuperPixelBros(),
