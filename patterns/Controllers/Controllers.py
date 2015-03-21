@@ -103,7 +103,7 @@ class ttyController(object):
                 if self.debug:
                     print(first, second)
                 self.pos = (first, second)
-            self.ser_port.flush()
+                self.ser_port.flush()
             return self.pos[button]
         except Exception as e:
             print("sys.exit: "+str(e))
