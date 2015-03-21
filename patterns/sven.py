@@ -2,20 +2,18 @@
 made by: sven
 Displays: random leds at random positions.
 """
-from matrix import *
-from Graphics import *
+from matrix import matrix_width, matrix_height
+from Graphics import Graphics, GREEN, randColor
 import random
 
 
 class sven(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
-        self.color = RED
-        self.pos = 0, 0
+        self.color = randColor()
 
     def generate(self):
         self.graphics.fill(GREEN)
-        x, y = self.pos
         #self.graphics.drawLine(matrix_width-x,matrix_height-y,x,y, self.color)
         b = 0
         i = 0
