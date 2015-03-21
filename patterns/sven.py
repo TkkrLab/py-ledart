@@ -1,3 +1,7 @@
+"""
+made by: sven
+Displays: random leds at random positions.
+"""
 from matrix import *
 from Graphics import *
 import random
@@ -20,6 +24,6 @@ class sven(object):
             a = random.randint(0, matrix_width)
             b = random.randint(0, matrix_height)
             self.graphics.drawPixel(a, b, color2)
-            i = i+ 1
+            i = i + 1
         b = b + 1
         return self.graphics.getSurface()
