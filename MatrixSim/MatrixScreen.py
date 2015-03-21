@@ -1,16 +1,17 @@
-
-import sys,os,time
+import sys
+import os
+import time
 
 #first things first make sure we are able to find the necesary files we need.
 wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
-print wd
 sys.path.append(wd)
 sys.path.append(wd+"/patterns/Graphics/")
 
-from Graphics import *
 
-from Pixel import *
-from matrix import *
+from Graphics import Graphics
+from Pixel import Pixel
+from matrix import 
+
 
 class MatrixScreen(object):
     import pygame
@@ -27,7 +28,7 @@ class MatrixScreen(object):
         self.window_width = height*pixelSize
         self.window_height = width*pixelSize
 
-        self.flags = self.pygame.DOUBLEBUF|self.pygame.HWSURFACE
+        self.flags = self.pygame.DOUBLEBUF | self.pygame.HWSURFACE
         if fullscreen:
             self.flags |= self.pygame.FULLSCREEN
             
@@ -42,7 +43,7 @@ class MatrixScreen(object):
         #window_width/height thing a bit above here.
         for x in widthRange:
             for y in heightRange:
-                pos = (x,y)
+                pos = (x, y)
                 color = BLUE
                 pixel = Pixel(pos, pixelSize, color)
                 self.pixels.append(pixel)
