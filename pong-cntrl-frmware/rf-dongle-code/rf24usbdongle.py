@@ -11,20 +11,17 @@ nextpos = 128
 current = time.clock()
 previous = 0
 # interval in seconds
-interval = 0.005
+interval = 0.05
 while(True):
-    if ser.inWaiting() and (ser.read(1) == 'n'):
-        ser.write(chr(xpos)+chr(128))
-        current = time.clock()
-        if((current - previous) >= interval):
-            previous = current
-            if xpos != nextpos:
-                if xpos < nextpos:
-                    xpos += speed
-                elif xpos > nextpos:
-                    xpos -= speed
-            elif xpos == nextpos:
-                nextpos = random.randint(0, 0xFF)
-            print("next: %s Current: %s" % (nextpos, xpos))
-    else:
-        ser.flush()
+    current = time.clock()
+    if((current - previous) >= interval):
+        ser.write(chr(xpos))
+        previous = current
+        if xpos != nextpos:
+            if xpos < nextpos:
+                xpos += speed
+            elif xpos > nextpos:
+                xpos -= speed
+        elif xpos == nextpos:
+            nextpos = random.randint(0, 0xFF)
+        print("next: %s Current: %s" % (nextpos, xpos))
