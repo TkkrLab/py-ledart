@@ -87,7 +87,8 @@ class ttyController(object):
         self.serial = serial
         port = "/dev/tty"+port+str(0)
         if not self.ser_port:
-            self.ser_port = self.serial.Serial(port, baud)
+            self.ser_port = self.serial.Serial(port, baud,
+                                               interCharTimeout=0.005)
         self.debug = debug
 
     def getPos(self, button):
