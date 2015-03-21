@@ -5,7 +5,7 @@ and conversion function(s)
 matrix_height = 17
 matrix_width = 10
 matrix_size = (matrix_height*matrix_width)
-COLOR_ORDER = [1, 3, 1]
+COLOR_ORDER = [2, 0, 1]
 
 
 def convertSnakeModes(pattern):
