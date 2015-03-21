@@ -1,8 +1,10 @@
 import sys
+
 try:
     from PygameController import *
-except Exception, e:
-    print "pygamecontroller>> "+e
+except Exception as e:
+    print("pygamecontroller>> " + e)
+
 
 def translate(value, leftmin, leftmax, rightmin, rightmax):
     leftspan = leftmax - leftmin
@@ -10,21 +12,26 @@ def translate(value, leftmin, leftmax, rightmin, rightmax):
     valuescaled = float(value-leftmin)/float(leftspan)
     return rightmin+(valuescaled*rightspan)
 
+
 class ControllerError(BaseException):
     def __init__(self, value):
         self.value = value
+
     def __str__(self):
         return repr(self.value)
+
 
 class DummyController(object):
     def __init__(self, plugged=0):
         self.value = 0
         self.increment = 50
+
     def getValue(self):
         if self.value >= 1023 or self.value < 0:
             self.increment *= -1
         self.value += self.increment
         return self.value
+
 
 class MegaController(object):
     JOY_X = 0
@@ -39,6 +46,7 @@ class MegaController(object):
     F6 = 5
     F7 = 6
     F8 = 7
+
 
 class XboxController(object):
     LEFT_TRIGGER = 3
@@ -69,19 +77,22 @@ class PongTtyController(object):
     POT1 = 0
     POT2 = 1
 
+
 class ttyController(object):
     import serial
     ser_port = None
-    pos = (0,0)
+    pos = (0, 0)
+
     def __init__(self, plugged=0, baud=115200, port="ACM", debug=False):
         port = "/dev/tty"+port+str(0)
         if not self.ser_port:
             self.ser_port = self.serial.Serial(port, baud)
         self.debug = debug
+
     def getPos(self, button):
         try:
             #ask for next two bytes.
-            self.ser_port.write('n');
+            self.ser_port.write('n')
             #look if anything in buffer.
             #if so extract values and return.
             if(self.ser_port.inWaiting()):
@@ -89,14 +100,14 @@ class ttyController(object):
                 #get values.
                 first, second = ord(first), ord(second)
                 if self.debug:
-                    print first, second
+                    print(first, second)
                 self.pos = (first, second)
             return self.pos[button]
         except Exception, e:
             print "sys.exit: "+str(e)
             sys.exit(0)
+
     def __del__(self):
         if self.ser_port:
             print "closing serial port"
             self.ser_port.close()
-
