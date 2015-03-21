@@ -58,6 +58,7 @@ class PongControllerAuto(ttyController, PongTtyController):
 #         print value
 #         return value
 
+
 class Paddle(object):
     def __init__(self, pos, color, controller, controller_in, graphics):
         self.pos = pos
@@ -135,15 +136,20 @@ class Ball(object):
         x,y = self.pos
         self.graphics.drawPixel(x,y,self.color)
 
-#pong game.
-class Pong(object):
-    def __init__(self, speed = matrix_height/2):
-        self.graphics = Graphics(matrix_width, matrix_height)
-        
-        #create a ball. multiple balls should be possible :) 
-        self.ball = Ball((self.graphics.width/2, self.graphics.height/2),GREEN, self.graphics)
 
-        #try to use the tty controller. but if it's not available use the automatic one.
+class Pong(object):
+    """
+    Pong game
+    """
+    def __init__(self, speed=matrix_height/2):
+        self.graphics = Graphics(matrix_width, matrix_height)
+
+        # create a ball. multiple balls should be possible :)
+        self.ball = Ball((self.graphics.width/2, self.graphics.height/2),
+                         GREEN, self.graphics)
+
+        # try to use the tty controller.
+        # but if it's not available use the automatic one.
         try:
             self.controller = PongController(plugged=0, baud=115200, port="ACM")
         except Exception, e:
