@@ -3,20 +3,24 @@ from Controllers import *
 from matrix import *
 import time
 
+
 #this controller class if for the wireless pong controllers.
 #with the 2.4 GHz nrf's inside.
 class PongController(ttyController, PongTtyController):
     def __init__(self, plugged=0, baud=115200, port="ACM"):
         ttyController.__init__(self, plugged, baud, port)
+
     def getPos(self, button):
         value = ttyController.getPos(self, button)
-        value = translate(value, 0, 255, 0, 10);
+        value = translate(value, 0, 255, 0, 10)
         return int(value)
+
 
 #this controller is really simple it plays against it's self.
 class PongControllerAuto(ttyController, PongTtyController):
     def __init__(self, plugged=0, ball=None):
         self.ball = ball
+
     def getPos(self, button):
         return self.ball.pos[0]
 

@@ -2,6 +2,7 @@ from Graphics import *
 from Life.life import *
 import random
 
+
 class RandomLife(object):
     def __init__(self):
         self.life = Life(matrix_width, matrix_height, 1, color=BLACK)
@@ -48,15 +49,17 @@ class BlueLife(object):
         self.draw()
         return self.graphics.getSurface()
 
-'''
-take the gray scales over every point and
-add or subtract depening on if lifing or not
-'''
+
 class GrayedLife(object):
+    '''
+    take the gray scales over every point and
+    add or subtract depening on if lifing or not
+    '''
     def __init__(self):
         pass
     def generate(self):
         pass
+
 
 class MixedLife(object):
     def __init__(self):
