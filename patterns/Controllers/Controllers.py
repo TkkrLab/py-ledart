@@ -101,10 +101,11 @@ class ttyController(object):
                 first, second = self.ser_port.read(2)
                 #get values.
                 first, second = ord(first), ord(second)
+                self.pos = (first, second)
+            else:
                 if self.debug:
                     print(first, second)
-                self.pos = (first, second)
-            return self.pos[button]
+                return self.pos[button]
         except Exception as e:
             print("sys.exit: "+str(e))
             sys.exit(0)
