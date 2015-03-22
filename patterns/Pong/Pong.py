@@ -151,10 +151,10 @@ class Pong(object):
         # try to use the tty controller.
         # but if it's not available use the automatic one.
         try:
-            self.controller = PongController(plugged=0, baud=115200, port="ACM", debug=True)
+            self.controller = PongController(plugged=0, baud=115200, port="ACM")
         except Exception, e:
             print "unable to find controllers playing on automatic\n>> "+str(e)
-            self.controller = PongControllerAuto(plugged=0, ball=self.ball, debug=True)
+            self.controller = PongControllerAuto(plugged=0, ball=self.ball)
         
         #create two paddles
         paddle1_pos = (0,0)
