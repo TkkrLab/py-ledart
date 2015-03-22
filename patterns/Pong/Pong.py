@@ -154,7 +154,7 @@ class Pong(object):
             self.controller = PongController(plugged=0, baud=115200, port="ACM", debug=True)
         except Exception, e:
             print "unable to find controllers playing on automatic\n>> "+str(e)
-            self.controller = PongControllerAuto(plugged=0, ball=self.ball)
+            self.controller = PongControllerAuto(plugged=0, ball=self.ball, debug=True)
         
         #create two paddles
         paddle1_pos = (0,0)
