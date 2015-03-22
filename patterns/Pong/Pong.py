@@ -7,8 +7,8 @@ import time
 #this controller class if for the wireless pong controllers.
 #with the 2.4 GHz nrf's inside.
 class PongController(ttyController, PongTtyController):
-    def __init__(self, plugged=0, baud=115200, port="ACM"):
-        ttyController.__init__(self, plugged, baud, port)
+    def __init__(self, plugged=0, baud=115200, port="ACM", debug=False):
+        ttyController.__init__(self, plugged, baud, port, debug)
 
     def getPos(self, button):
         value = ttyController.getPos(self, button)
