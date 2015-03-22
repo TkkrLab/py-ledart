@@ -102,10 +102,9 @@ class ttyController(object):
                 #get values.
                 first, second = ord(first), ord(second)
                 self.pos = (first, second)
-            else:
-                if self.debug:
-                    print(first, second)
-                return self.pos[button]
+            if self.debug:
+                print(first, second)
+            return self.pos[button]
         except Exception as e:
             print("sys.exit: "+str(e))
             sys.exit(0)
