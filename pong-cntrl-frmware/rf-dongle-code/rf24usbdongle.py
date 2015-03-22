@@ -5,7 +5,7 @@ import random
 import serial
 
 ser = serial.Serial("/dev/ttyACM1", 115200, interCharTimeout=0.009)
-speed = 6
+speed = 10
 xpos = 0
 nextpos = 128
 
