@@ -151,17 +151,19 @@ class Pong(object):
         # try to use the tty controller.
         # but if it's not available use the automatic one.
         try:
-            self.controller = PongController(plugged=0, baud=115200, port="ACM")
+            self.controller = PongController(plugged=0, baud=9600, port="ACM")
         except Exception, e:
             print "unable to find controllers playing on automatic\n>> "+str(e)
             self.controller = PongControllerAuto(plugged=0, ball=self.ball)
         
         #create two paddles
-        paddle1_pos = (0,0)
-        self.paddle1 = Paddle(paddle1_pos, BLUE, self.controller, self.controller.POT1, self.graphics)
+        paddle1_pos = (0, 0)
+        self.paddle1 = (Paddle(paddle1_pos, BLUE, self.controller,
+                        self.controller.POT1, self.graphics))
         paddle2_pos = (0, matrix_height-1)
-        self.paddle2 = Paddle(paddle2_pos, BLUE, self.controller, self.controller.POT2, self.graphics)
-        
+        self.paddle2 = (Paddle(paddle2_pos, BLUE, self.controller,
+                        self.controller.POT2, self.graphics))
+
         #timing variables used to controle the speed of the ball
         self.start_speed = speed
         self.speed = speed #speed = pixels/s
