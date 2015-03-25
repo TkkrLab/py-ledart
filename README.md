@@ -69,6 +69,10 @@ but ofcourse this would look right if you config file contains code for anything
 but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
+#### this software is used in a pixel matrix project:
+[https://www.tkkrlab.nl/wiki/Pixelmatrix PixelMatrix]
+
+
 #### dependencies:
 * pypng
 * pyserial
