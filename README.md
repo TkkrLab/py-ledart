@@ -69,6 +69,12 @@ but ofcourse this would look right if you config file contains code for anything
 but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
+#### dependencies:
+* pypng
+* pyserial
+* pygame
+
+
 #### usefull tools in art-net_C are:
 
 artmonitor <ip>		#tells a bit more info on the device like mac address and more.
