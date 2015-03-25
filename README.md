@@ -3,6 +3,7 @@ py-art-net
 
 Python art net interface. with patterns you can run for the ledpoles and the ledmatrix fridgefire made.
 
+or anything that has a network based artnet interface.
 
 I made it easier to config and run patters with python code.
 
@@ -35,18 +36,18 @@ as wel as multpile patterns like:
 Then to run the actual patterns you run from the command line:
 
 ```shell
-	:$ python runPatternJob.py --delay=<delay> --config=<config>
+	:$ python runPatternJob.py --fps=<fps> --config=<config>
 ```
 
 for example:
 
 ```shell
-	:$ python runpatternJob.py --delay=0.2 --config=myLamps_conf.py
+	:$ python runpatternJob.py --fps=25 --config=myLamps_conf.py
 ```
 
-both delay and config are optional,
+both fps and config are optional,
 
-the default delay is 15ms which is the delay that dictates how fast the refresh is ran.
+the default delay is 1/0.15ms which is the delay that dictates how fast the refresh is ran.
 
 and the default config is default_conf.py
 
@@ -58,19 +59,19 @@ if you want to run the code with the build in simulator just add --matrixSim=ena
 
 to the command line options and it will run localy on your screen.
 
-for exampe:
+for example:
 ```shell
-	:$ python runpatternJob.py --delay=0.2 --config=myLamps_conf.py --matrixSim=enabled
+	:$ python runpatternJob.py --fps=25 --config=myLamps_conf.py --matrixSim=enabled
 ```
 
 
-but ofcourse this would look right if you config file contains code for anything other than a matrix display.
+but ofcourse this wouldn't look right if you config file contains code for anything other than a matrix display.
 
 but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
 #### this software is used in a pixel matrix project:
-[https://www.tkkrlab.nl/wiki/Pixelmatrix PixelMatrix]
+[PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
 
 
 #### dependencies:
@@ -79,7 +80,12 @@ but you can view the display as a string of pixels though, cause basicly in real
 * pygame
 
 
-#### usefull tools in art-net_C are:
+#### usefull tools:
+compile:
+
+[artnet-c](https://github.com/ohm2013loc/art)
+
+run:
 
 artmonitor <ip>		#tells a bit more info on the device like mac address and more.
 
