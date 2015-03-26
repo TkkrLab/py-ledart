@@ -1,5 +1,6 @@
-from Graphics.Graphics import Graphics
+from Graphics.Graphics import Graphics, BLACK
 from Graphics.ConvertColors import HSVtoRGB
+from Graphics.RGBColorTools import ColorRGBOps
 from matrix import matrix_width, matrix_height
 from math import sin, cos, sqrt, pi, radians
 import time

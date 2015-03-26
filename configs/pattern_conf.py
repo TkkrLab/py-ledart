@@ -13,7 +13,7 @@ TARGETS = {
     # dest: BarberpolePattern(),
     # dest: OldTron(),
     # dest: Tron(),
-    dest: Snake(speed=17),
+    # dest: Snake(speed=17),
     # # MixedLife() doesn't work atm but will be fixed
     # dest: MixedLife(),
     # dest: RandomLife(),
@@ -28,7 +28,6 @@ TARGETS = {
     # # needs images. wip still.
     # dest: DisplayPng(),
     # dest: PlasmaFirst(),
-    # dest: PlasmaSecond(),
     # dest: PlasmaSecond(),
     # dest: PlasmaThird(),
     # dest: RainPattern(chance=0.2),

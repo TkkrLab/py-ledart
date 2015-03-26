@@ -1,4 +1,4 @@
-from Graphics.Graphics import Graphics, BLUE, BLACK, GREEN, RED
+from Graphics.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
 from Graphics.RGBColorTools import ColorRGBOps
 from matrix import matrix_width, matrix_height
 from Life.life import Life
@@ -28,8 +28,10 @@ class RandomLife(object):
                     self.graphics.drawPixel(x, y, color)
                 else:
                     self.graphics.drawPixel(x, y, BLACK)
+
     def draw(self):
         self.drawRandomColor()
+
     def generate(self):
         self.life.process()
         self.draw()
@@ -40,6 +42,7 @@ class BlueLife(object):
     def __init__(self):
         self.life = Life(matrix_width, matrix_height, 1, color=BLUE)
         self.graphics = Graphics(matrix_width, matrix_height)
+
     def draw(self):
         life_matrix = self.graphics.toMatrix(self.life.field, self.graphics.getSurfaceWidth())
         for y in self.graphics.heightRange:
@@ -48,7 +51,8 @@ class BlueLife(object):
                     color = BLUE
                 else:
                     color = BLACK
-                self.graphics.drawPixel(x,y,color)
+                self.graphics.drawPixel(x, y, color)
+
     def generate(self):
         self.life.process()
         self.draw()
@@ -62,6 +66,7 @@ class GrayedLife(object):
     '''
     def __init__(self):
         pass
+
     def generate(self):
         pass
 
@@ -75,7 +80,7 @@ class MixedLife(object):
         self.life1 = Life(matrix_width, matrix_height, 1, color=blue)
         self.life2 = Life(matrix_width, matrix_height, 1, color=green)
         self.life3 = Life(matrix_width, matrix_height, 1, color=red)
-        
+
         self.graphics = Graphics(matrix_width, matrix_height)
         self.index = 0
     """
@@ -110,6 +115,7 @@ class MixedLife(object):
         #   self.graphics.surface[index] = color
     def draw(self):
         self.drawThreeAdded()
+
     def generate(self):
         self.life1.process()
         self.life2.process()

@@ -1,6 +1,6 @@
-from Graphics.Graphics import Graphics, GREEN, BLUE
-from Controllers import ttyController, PongTtyController
-from matrix import *
+from Graphics.Graphics import Graphics, GREEN, BLUE, BLACK
+from Controllers import ttyController, PongTtyController, translate
+from matrix import matrix_width, matrix_height
 import time
 
 
