@@ -1,4 +1,4 @@
-from Graphics.Graphics import Graphics, BLUE
+from Graphics.Graphics import Graphics, BLUE, BLACK
 from matrix import matrix_width, matrix_height
 import random
 

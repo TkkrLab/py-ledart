@@ -1,5 +1,4 @@
 import sys
-from Controllers import ControllerError
 
 
 class PygameDummyController(object):
@@ -32,6 +31,7 @@ class PygameController(object):
             self.num_hats = self.joystick.get_numhats()
 
         except Exception:
+            print("no controllers found.")
             self.joystick = None
 
     def handleEvents(self):

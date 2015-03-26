@@ -4,7 +4,9 @@ import png
 def getPngPixelData(image):
     pngobj = png.Reader(image)
     data = pngobj.asRGBA8()
-    palette = data[3]['palette']
+    palette = []
+    for d in data[2]:
+        palette.append(d)
     size = data[3]['size']
     colordata = []
     for color in palette:

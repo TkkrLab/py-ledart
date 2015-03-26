@@ -1,6 +1,6 @@
-from Graphics.Graphics import Graphics, GREEN, BLUE, WHITE
+from Graphics.Graphics import Graphics, GREEN, BLUE, WHITE, BLACK
 from matrix import matrix_width, matrix_height
-from Controllers import PygameDummyController, XboxController
+from Controllers import PygameController, XboxController
 import random
 import time
 
@@ -26,9 +26,9 @@ import time
 #         return value
 
 
-class SnakeController(PygameDummyController, XboxController):
+class SnakeController(PygameController, XboxController):
     def __init__(self, plugged=0):
-        PygameDummyController.__init__(self, plugged)
+        PygameController.__init__(self, plugged)
     def getUp(self):
         return self.getButtons(self.UP_DPAD)
     def getDown(self):
@@ -37,7 +37,6 @@ class SnakeController(PygameDummyController, XboxController):
         return self.getButtons(self.LEFT_DPAD)
     def getRight(self):
         return self.getButtons(self.RIGHT_DPAD)
-
 
 
 class Food(object):
@@ -148,8 +147,9 @@ class Snake(object):
                 #draw our head a certain color
                 self.graphics.drawPixel(x,y, self.head_color)
             else:
-                #else just draw our body this color
-                self.graphics.drawPixel(x,y,Color.subtract(self.body_color, (int(255/(i+1)),)*3))
+                # else just draw our body this color
+                # self.graphics.drawPixel(x,y,Color.subtract(self.body_color, (int(255/(i+1)),)*3))
+                self.graphics.drawPixel(x, y, (255,255,255))
         self.food.draw()
     def generate(self):
         self.graphics.fill(BLACK)

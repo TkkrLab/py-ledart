@@ -3,7 +3,7 @@ import sys
 try:
     from PygameController import PygameController, PygameDummyController
 except Exception as e:
-    print("pygamecontroller>> " + e)
+    print("pygamecontroller>> " + str(e))
 
 
 def translate(value, leftmin, leftmax, rightmin, rightmax):
@@ -85,7 +85,7 @@ class ttyController(object):
         import serial
         self.serial = serial
         self.pos = (0, 0)
-        port = "/dev/tty"+port+str(0)
+        port = "/dev/tty" + port + str(plugged)
         if not self.ser_port:
             self.ser_port = self.serial.Serial(port, baud,
                                                interCharTimeout=0.009)
@@ -93,20 +93,20 @@ class ttyController(object):
 
     def getPos(self, button):
         try:
-            #ask for next two bytes.
+            # ask for next two bytes.
             self.ser_port.write('n')
-            #look if anything in buffer.
-            #if so extract values and return.
+            # look if anything in buffer.
+            # if so extract values and return.
             if(self.ser_port.inWaiting()):
                 first, second = self.ser_port.read(2)
-                #get values.
+                # get values.
                 first, second = ord(first), ord(second)
                 self.pos = (first, second)
             if self.debug:
                 print(first, second)
             return self.pos[button]
         except Exception as e:
-            print("sys.exit: "+str(e))
+            print("sys.exit: " + str(e))
             sys.exit(0)
 
     def __del__(self):

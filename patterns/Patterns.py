@@ -10,7 +10,7 @@ def debugprint(discr, exception):
     frame = callerframerecord[0]
     info = inspect.getframeinfo(frame)
     filename = info.filename.split('/')[-1]
-    fmt = (discr, info.function, filename, info.lineno, exception)
+    fmt = (discr, info.function, filename, info.lineno, str(exception))
     print("%s %s in %s at: %s %s" % fmt)
 
 
@@ -57,3 +57,9 @@ try:
     from Snake import *
 except Exception as e:
     debugprint("snake>>", e)
+
+# Graphics module has some tests in it too.
+try:
+    from Graphics.Graphics import *
+except Exception as e:
+    debugprint("graphics>>", e)
