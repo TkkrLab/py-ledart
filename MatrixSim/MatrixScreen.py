@@ -2,13 +2,13 @@ import sys
 import os
 import time
 
-#first things first make sure we are able to find the necesary files we need.
-wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
-sys.path.append(wd)
-sys.path.append(wd+"/patterns/Graphics/")
+# first things first make sure we are able to find the necesary files we need.
+# wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
+# sys.path.append(wd)
+# sys.path.append(wd + "/patterns/Graphics/")
 
 from Pixel import Pixel
-import Graphics
+import Graphics.Graphics as Graphics
 import matrix
 
 
