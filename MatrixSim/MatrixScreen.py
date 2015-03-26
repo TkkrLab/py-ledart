@@ -17,17 +17,17 @@ class MatrixScreen(object):
     fps = 0
     timed = False
 
-    def __init__(self, width, height, pixelSize, fullscreen=False):
+    def __init__(self, width, height, pixelsize, fullscreen=False):
         import pygame
         self.pygame = pygame
         self.width = width
         self.height = height
-        self.pixelSize = pixelSize
+        self.pixelSize = pixelsize
 
         self.pixels = []
 
-        self.window_width = height*pixelSize
-        self.window_height = width*pixelSize
+        self.window_width = height * pixelsize
+        self.window_height = width * pixelsize
 
         self.flags = self.pygame.DOUBLEBUF | self.pygame.HWSURFACE
         if fullscreen:
@@ -38,17 +38,17 @@ class MatrixScreen(object):
                                                    self.flags)
         self.pygame.display.set_caption("pygame artnet matrix simulator.")
 
-        widthRange = range(0, self.window_width, pixelSize)
+        widthrange = range(0, self.window_width, pixelsize)
         # reverse order because else the display is flipped.
-        heightRange = range(0, self.window_height, pixelSize)[::-1]
+        heightrange = range(0, self.window_height, pixelsize)[::-1]
 
-        #due to how the ledmatrix is displayed x, y are filled as is the
-        #window_width/height thing a bit above here.
-        for x in widthRange:
-            for y in heightRange:
+        # due to how the ledmatrix is displayed x, y are filled as is the
+        # window_width/height thing a bit above here.
+        for x in widthrange:
+            for y in heightrange:
                 pos = (x, y)
                 color = Graphics.BLUE
-                pixel = Pixel(pos, pixelSize, color)
+                pixel = Pixel(pos, pixelsize, color)
                 self.pixels.append(pixel)
 
     def handleInput(self):
@@ -57,37 +57,37 @@ class MatrixScreen(object):
             if event.type == self.pygame.QUIT:
                 sys.exit(0)
             if event.type == self.pygame.KEYDOWN:
-                lctrlPressed = (self.pygame.key.get_mods() &
+                lctrlpressed = (self.pygame.key.get_mods() &
                                 self.pygame.KMOD_LCTRL)
-                if event.key == self.pygame.K_c and lctrlPressed:
+                if event.key == self.pygame.K_c and lctrlpressed:
                     raise KeyboardInterrupt
-                #check if mouse in window then make invisible else visible
+                # check if mouse in window then make invisible else visible
                 if self.pygame.mouse.get_focused():
                         self.pygame.mouse.set_visible(False)
                 else:
                         self.pygame.mouse.set_visible(True)
 
     def draw(self, data):
-        #extract pixels and color from data
-        #get both a list index and the color data.
+        # extract pixels and color from data
+        # get both a list index and the color data.
         for i, color in enumerate(data):
             self.pixels[i].setColor(color)
 
-        #clear the pygame window
+        # clear the pygame window
         self.window.fill(Graphics.BLACK)
 
-        #display the pixels.
+        # display the pixels.
         for pixel in self.pixels:
             r = pixel.color[matrix.COLOR_ORDER[0]]
             g = pixel.color[matrix.COLOR_ORDER[1]]
             b = pixel.color[matrix.COLOR_ORDER[2]]
             color = (r, g, b)
             self.pygame.draw.rect(self.window, color, pixel.getRect())
-            #draw a nice little square around so it looks more like a pixel.
+            # draw a nice little square around so it looks more like a pixel.
             self.pygame.draw.rect(self.window, Graphics.BLACK,
                                   pixel.getRect(), 1)
 
-        #update the screen so our data show.
+        # update the screen so our data show.
         self.pygame.display.update()
 
     def process(self, data):
@@ -95,7 +95,7 @@ class MatrixScreen(object):
         if self.timed:
             self.timing = time.time()
         else:
-            self.fps = 1./(time.time()-self.timing)
+            self.fps = 1. / (time.time() - self.timing)
         self.pygame.display.set_caption("artnet matrix sim FPS:" +
                                         str(int(self.fps)))
         self.handleInput()
