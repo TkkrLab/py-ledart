@@ -1,10 +1,10 @@
-from Graphics import *
-from Controllers import *
-#import the library for pygame controllers with thier definitions.
-from Controllers.PygameController import *
+from Graphics.Graphics import Graphics, GREEN, BLUE, WHITE
+from matrix import matrix_width, matrix_height
+from Controllers import PygameDummyController, XboxController
+import random
 import time
 
-#for now the snakeController is a pygame controller.
+# for now the snakeController is a pygame controller.
 # class SnakeController(PygameController, XboxController):
 #     def __init__(self, plugged=0):
 #         PygameController.__init__(self, plugged)
@@ -24,6 +24,7 @@ import time
 #     def getRight(self):
 #         value = self.getButtons(self.RIGHT)
 #         return value
+
 
 class SnakeController(PygameDummyController, XboxController):
     def __init__(self, plugged=0):

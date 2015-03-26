@@ -1,7 +1,7 @@
 import sys
 
 try:
-    from PygameController import *
+    from PygameController import PygameController, PygameDummyController
 except Exception as e:
     print("pygamecontroller>> " + e)
 
@@ -9,8 +9,8 @@ except Exception as e:
 def translate(value, leftmin, leftmax, rightmin, rightmax):
     leftspan = leftmax - leftmin
     rightspan = rightmax - rightmin
-    valuescaled = float(value-leftmin)/float(leftspan)
-    return rightmin+(valuescaled*rightspan)
+    valuescaled = float(value - leftmin) / float(leftspan)
+    return rightmin + (valuescaled * rightspan)
 
 
 class ControllerError(BaseException):

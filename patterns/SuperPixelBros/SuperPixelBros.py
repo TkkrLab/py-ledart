@@ -1,5 +1,5 @@
 from Graphics.Graphics import Graphics, BLACK, RED, BLUE, GREEN
-from Controllers import PygameController, XboxController
+from Controllers.Controllers import PygameController, XboxController
 from matrix import matrix_width, matrix_height, matrix_size
 
 c = BLACK

@@ -1,11 +1,11 @@
-from Graphics import *
-from Controllers import *
+from Graphics.Graphics import Graphics, GREEN, BLUE
+from Controllers import ttyController, PongTtyController
 from matrix import *
 import time
 
 
-#this controller class if for the wireless pong controllers.
-#with the 2.4 GHz nrf's inside.
+# this controller class if for the wireless pong controllers.
+# with the 2.4 GHz nrf's inside.
 class PongController(ttyController, PongTtyController):
     def __init__(self, plugged=0, baud=115200, port="ACM", debug=False):
         ttyController.__init__(self, plugged, baud, port, debug)
@@ -16,7 +16,7 @@ class PongController(ttyController, PongTtyController):
         return int(value)
 
 
-#this controller is really simple it plays against it's self.
+# this controller is really simple it plays against it's self.
 class PongControllerAuto(ttyController, PongTtyController):
     def __init__(self, plugged=0, ball=None):
         self.ball = ball
@@ -39,7 +39,7 @@ class PongControllerAuto(ttyController, PongTtyController):
 #             #print self.pos
 #         return int(translate(self.pos, 0, 1023, 0, 10.1))
 
-#class PongController(PygameController, XboxController):
+# class PongController(PygameController, XboxController):
 #    def __init__(self, plugged = 0):
 #        PygameController.__init__(self, plugged)
 #    def getPos(self, button):
@@ -64,33 +64,34 @@ class Paddle(object):
         self.pos = pos
         self.paddle_width = 3
         self.side = pos[1]
-        
         self.score = 0
-        
         self.color = color
-        
         self.controller = controller
         self.controller_in = controller_in
-        
         self.graphics = graphics
-        
         self.inputValue = 0
+
     def getPos(self):
         return self.pos
+
     def getWidth(self):
         return self.paddle_width
+
     def process(self):
-        x,y = self.pos
-        x = self.inputValue-1 #offset make it go a bit into the screen on one side
-        #boundery check make it only go one block in at the other end though.
-        if x >= self.graphics.width-2:
-            x = self.graphics.width-2
-        self.pos = x,self.side
+        x, y = self.pos
+        # offset make it go a bit into the screen on one side
+        x = self.inputValue - 1
+        # boundery check make it only go one block in at the other end though.
+        if x >= self.graphics.width - 2:
+            x = self.graphics.width - 2
+        self.pos = x, self.side
+
     def handleInput(self):
         self.inputValue = self.controller.getPos(self.controller_in)
+
     def draw(self):
-        x,y = self.pos
-        self.graphics.drawLine(x, y, x+self.paddle_width-1, y, self.color)
+        x, y = self.pos
+        self.graphics.drawLine(x, y, x + self.paddle_width - 1, y, self.color)
 
 class Ball(object):
     def __init__(self, pos, color, graphics):

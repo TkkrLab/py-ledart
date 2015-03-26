@@ -1,5 +1,4 @@
 import sys
-import os
 import time
 
 # first things first make sure we are able to find the necesary files we need.
