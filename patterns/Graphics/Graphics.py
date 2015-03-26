@@ -1,4 +1,4 @@
-from matrix import matrix_height, matrix_width
+from matrix import *
 import random
 
 BLACK = (0, 0, 0)
