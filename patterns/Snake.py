@@ -29,12 +29,16 @@ import time
 class SnakeController(PygameController, XboxController):
     def __init__(self, plugged=0):
         PygameController.__init__(self, plugged)
+
     def getUp(self):
         return self.getButtons(self.UP_DPAD)
+
     def getDown(self):
         return self.getButtons(self.DOWN_DPAD)
+
     def getLeft(self):
         return self.getButtons(self.LEFT_DPAD)
+
     def getRight(self):
         return self.getButtons(self.RIGHT_DPAD)
 
@@ -44,45 +48,52 @@ class Food(object):
         self.pos = pos
         self.graphics = graphics
         self.color = color
+
     def setPos(self, pos):
         self.pos = pos
+
     def randPos(self):
-        x = random.randint(0, matrix_width-1)
-        y = random.randint(0, matrix_height-1)
-        self.pos = x,y
+        x = random.randint(0, matrix_width - 1)
+        y = random.randint(0, matrix_height - 1)
+        self.pos = x, y
+
     def randColor(self):
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
-        self.color = (r,g,b)
+        self.color = (r, g, b)
+
     def draw(self):
-        x,y = self.pos
-        self.graphics.drawPixel(x,y, self.color)
+        x, y = self.pos
+        self.graphics.drawPixel(x, y, self.color)
 
 
 
 class Snake(object):
-    def __init__(self, speed=8, plugged = 0):
+    def __init__(self, speed=8, plugged=0):
         self.graphics = Graphics(matrix_width, matrix_height)
-        
+
         self.controller = SnakeController(plugged)
 
         self.body_color = GREEN
         self.head_color = BLUE
-        
-        self.pos = random.randint(1,matrix_width-1), random.randint(1,matrix_height-1)
+
+        x = random.randint(1, matrix_width - 1)
+        y = random.randint(1, matrix_height - 1)
+        self.pos = x, y
         self.original_speed = speed
         self.speed = speed
         self.previousTick = 0
-        self.deltax,self.deltay = 0,0
-        
+        self.deltax, self.deltay = 0, 0
+
         self.body = []
         self.tailLen = 0
-        self.food = Food((0,0), WHITE, self.graphics)
+        self.food = Food((0, 0), WHITE, self.graphics)
         self.food.randPos()
-        
-        #add our head to our body :)
+
+        # add our head to our body :)
         self.body.append(self.pos)
+
     def inputHandling(self):
         if self.controller.getUp() and self.deltax != -1:
             self.deltax = 1
@@ -149,7 +160,7 @@ class Snake(object):
             else:
                 # else just draw our body this color
                 # self.graphics.drawPixel(x,y,Color.subtract(self.body_color, (int(255/(i+1)),)*3))
-                self.graphics.drawPixel(x, y, (255,255,255))
+                self.graphics.drawPixel(x, y, (255, 255, 255))
         self.food.draw()
     def generate(self):
         self.graphics.fill(BLACK)
