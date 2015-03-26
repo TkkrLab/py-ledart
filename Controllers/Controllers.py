@@ -78,6 +78,31 @@ class PongTtyController(object):
     POT2 = 1
 
 
+class AudioController(object):
+    """
+    controller that is connected to sound input (microphone)
+    """
+    def __init__(self, channel=1, rate=8000, period=160):
+        import alsaaudio
+        self.audio = alsaaudio
+        import time
+        self.time = time
+        import audioop
+        self.audioop = audioop
+        self.inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
+        self.inp.setchannels(channel)
+        self.inp.setrate(rate)
+        self.inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
+        self.inp.setperiodsize(period)
+
+    def getinput(self):
+        l, data = self.inp.read()
+        if l:
+            return self.audioop.max(data, 2)
+        else:
+            return None
+
+
 class ttyController(object):
     ser_port = None
 
