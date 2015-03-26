@@ -10,10 +10,10 @@ broadcast = "10.42.255.255"
 dest = pixelMatrix
 
 TARGETS = {
-    dest: BarberpolePattern(),
+    # dest: BarberpolePattern(),
     # dest: OldTron(),
     # dest: Tron(),
-    # dest: Snake(speed=17),
+    dest: Snake(speed=17),
     # # MixedLife() doesn't work atm but will be fixed
     # dest: MixedLife(),
     # dest: RandomLife(),
