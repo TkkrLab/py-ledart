@@ -1,4 +1,4 @@
-from patterns.Graphics import Graphics
+from Graphics import Graphics
 from Controllers import *
 from matrix import *
 from time import time
