@@ -2,6 +2,18 @@
 import patters here if they are in a different file.
 """
 
+
+def debugprint(discr, exception):
+    import inspect
+    callerframerecord = inspect.stack()[1]
+
+    frame = callerframerecord[0]
+    info = inspect.getframeinfo(frame)
+    filename = info.filename.split('/')[-1]
+    fmt = (discr, info.function, filename, info.lineno, exception)
+    print("%s %s in %s at: %s %s" % fmt)
+
+
 """#ohm led poles."""
 from PolicePattern import PolicePattern
 from BarberpolePattern import BarberpolePattern
@@ -17,31 +29,31 @@ from PixelLife import *
 from Plasma import *
 from sven import *
 
-#uses pygame for testing.
+# uses pygame for testing.
 try:
-    from SuperPixelBros import *
-except Exception, e:
-    print("PixelBros>>"+str(e))
+    from SuperPixelBros import SuperPixelBros
+except Exception as e:
+    debugprint("PixelBros>>", e)
 
-#this one uses a library png so try to load.
-#but if not installed pass.
+# this one uses a library png so try to load.
+# but if not installed pass.
 try:
     from DisplayPng import *
-except Exception, e:
-    print("DisplayPng>>"+str(e))
+except Exception as e:
+    debugprint("DisplayPng>>", e)
 
-#patterns that do use pygame
+# patterns that do use pygame
 try:
     from Pong import *
-except Exception, e:
-    print("Pong>>"+str(e))
+except Exception as e:
+    debugprint("Pong>>", e)
 
 try:
     from Tron import *
-except Exception, e:
-    print("Tron>>"+str(e))
+except Exception as e:
+    debugprint("Tron>>", e)
 
 try:
     from Snake import *
-except Exception, e:
-    print("snake>>"+str(e))
+except Exception as e:
+    debugprint("snake>>", e)
