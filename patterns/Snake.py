@@ -68,7 +68,6 @@ class Food(object):
         self.graphics.drawPixel(x, y, self.color)
 
 
-
 class Snake(object):
     def __init__(self, speed=8, plugged=0):
         self.graphics = Graphics(matrix_width, matrix_height)
@@ -109,59 +108,60 @@ class Snake(object):
             self.deltay = 1
 
     def update(self):
-        x,y = self.pos
-        #update position certain amount per second.
-        if( (time.time()-self.previousTick) >= 1./self.speed ):
+        x, y = self.pos
+        # update position certain amount per second.
+        if((time.time() - self.previousTick) >= 1. / self.speed):
             self.previousTick = time.time()
             x += self.deltax
             y += self.deltay
-            #if the snake goes offscreen it appears on the other side.
+            # if the snake goes offscreen it appears on the other side.
             if x >= matrix_width:
                 x = 0
-                self.pos = x,y
+                self.pos = x, y
             elif x < 0:
-                x = matrix_width-1
-                self.pos = x,y
+                x = matrix_width - 1
+                self.pos = x, y
             elif y >= matrix_height:
                 y = 0
-                self.pos = x,y
+                self.pos = x, y
             elif y < 0:
-                y = matrix_height-1
-                self.pos = x,y
+                y = matrix_height - 1
+                self.pos = x, y
             else:
-                self.pos = x,y
+                self.pos = x, y
 
             if len(self.body) > self.tailLen:
                 del self.body[0]
             self.body.append(self.pos)
-            #and if we hit food increase tail length
-            #also increase our speed
+            # and if we hit food increase tail length
+            # also increase our speed
             if self.food.pos == self.pos:
                 self.speed += 0.5
                 while self.food.pos in self.body:
                     self.food.randPos()
                 self.food.randColor()
                 self.tailLen += 1
-            #look if our "tail is in the way" and only if we have a tail.
+            # look if our "tail is in the way" and only if we have a tail.
             if len(self.body) > 2:
-                #check if head colides with body
+                # check if head colides with body
                 if len(self.body) != len(set(self.body)):
                     self.body = [self.pos]
                     self.tailLen = 0
                     self.speed = self.original_speed
                     self.deltax = 0
                     self.deltay = 0
-        
+
     def draw(self):
-        for i,(x,y) in enumerate(self.body):
+        for i, (x, y) in enumerate(self.body):
             if i == self.tailLen:
-                #draw our head a certain color
-                self.graphics.drawPixel(x,y, self.head_color)
+                # draw our head a certain color
+                self.graphics.drawPixel(x, y, self.head_color)
             else:
                 # else just draw our body this color
                 # self.graphics.drawPixel(x,y,Color.subtract(self.body_color, (int(255/(i+1)),)*3))
                 self.graphics.drawPixel(x, y, (255, 255, 255))
         self.food.draw()
+
     def generate(self):
         self.graphics.fill(BLACK)
         self.inputHandling()
