@@ -81,6 +81,7 @@ class PongTtyController(object):
 class AudioController(object):
     """
     controller that is connected to sound input (microphone)
+    the lower the period and the higher the rate. the faster the sampeling.
     """
     def __init__(self, channel=1, rate=8000, period=160):
         import alsaaudio

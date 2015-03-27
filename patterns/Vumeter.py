@@ -6,7 +6,7 @@ from Controllers.Controllers import AudioController, translate
 class VUmetertwo(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
-        self.controller = AudioController(channel=1, rate=32000, period=64)
+        self.controller = AudioController(channel=1, rate=128000, period=64)
         self.inputlength = matrix_height
         self.inputs = []
         self.offset = 100
