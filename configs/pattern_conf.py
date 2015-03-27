@@ -10,6 +10,7 @@ broadcast = "10.42.255.255"
 dest = pixelMatrix
 
 TARGETS = {
+    # dest: Sven()
     # dest: BarberpolePattern(),
     # dest: OldTron(),
     # dest: Tron(),
@@ -30,10 +31,11 @@ TARGETS = {
     # dest: PlasmaFirst(),
     # dest: PlasmaSecond(),
     # dest: PlasmaThird(),
-    # dest: RainPattern(chance=0.2),
+    # dest: RainPattern(chance=2),
     # dest: GraphicsCircleTest(),
     # dest: GraphicsRectTest(),
     # dest: GraphicsLineTest(),
     # dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
+    # dest: VUmeterone()
 }

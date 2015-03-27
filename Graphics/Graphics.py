@@ -25,13 +25,22 @@ class Graphics(object):
         self.width = width
         self.height = height
         self.size = self.width * self.height
-        self.fill(BLACK)
+        self.widthRange = range(0, self.width)
+        self.heightRange = range(0, self.height)
+        self.surface = self.generatesurface()
 
-        self.widthRange = xrange(0, self.width)
-        self.heightRange = xrange(0, self.height)
+    def generatesurface(self):
+        surface = []
+        templist = []
+        for y in self.heightRange:
+            for x in self.widthRange:
+                templist.append(())
+            surface.append(templist)
+            templist = []
+        return surface
 
     def toMatrix(self, l, n):
-        return [l[i:i + n] for i in xrange(0, len(l), n)]
+        return [l[i:i + n] for i in range(0, len(l), n)]
 
     def writePixel(self, x, y, color):
         if x >= self.width or y >= self.height:
@@ -53,7 +62,9 @@ class Graphics(object):
         return ((y * self.width) + x)
 
     def fill(self, color):
-        self.surface = [[BLACK] * self.width for x in range(self.height)]
+        for x in range(0, self.width):
+            for y in range(0, self.height):
+                self.drawPixel(x, y, color)
 
     def getSurfaceSize(self):
         return self.size

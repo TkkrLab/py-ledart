@@ -12,6 +12,7 @@ try:
     from MatrixSim.MatrixScreen import MatrixScreen
 except Exception as e:
     print(e)
+
 UDP_PORT = 6454
 
 parser = argparse.ArgumentParser()
@@ -35,6 +36,11 @@ fp, path, description = imp.find_module(package)
 fp, path, description = imp.find_module(str(args.config)[:-3], [path])
 config = imp.load_module("configuration", fp, path, description)
 TARGETS = config.TARGETS
+
+# check if there is anything configured.
+if not len(TARGETS):
+    print("nothing is configured in %s" % args.config)
+    sys.exit(1)
 # ---------
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

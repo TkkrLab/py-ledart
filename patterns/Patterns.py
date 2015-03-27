@@ -63,3 +63,8 @@ try:
     from Graphics.Graphics import *
 except Exception as e:
     debugprint("graphics>>", e)
+
+try:
+    from Vumeter import *
+except Exception as e:
+    debugprint("vumeter>>", e)
