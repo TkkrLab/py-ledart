@@ -38,4 +38,5 @@ TARGETS = {
     # dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
     # dest: VUmeterone()
+    dest: VUmetertwo()
 }
