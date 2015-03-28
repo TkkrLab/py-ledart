@@ -3,6 +3,19 @@ from Graphics.Graphics import Graphics, BLUE, BLACK
 from Controllers.Controllers import AudioController, translate
 
 
+def getaverageof(number, controller):
+        averages = []
+        for i in range(0, number):
+            data = controller.getinput()
+            while(data is None):
+                data = controller.getinput()
+            averages.append(data)
+        sums = 0
+        for num in averages:
+            sums += num
+        return int(sums / len(averages))
+
+
 class VUmeterThree(object):
     def __init__(self):
         pass
@@ -19,9 +32,9 @@ class VUmetertwo(object):
         self.inputlength = matrix_height
         self.inputs = []
         self.offset = 13
-        self.max = 1500
+        self.max = 1250
         self.lim = self.max
-        self.rate = 2
+        self.rate = 10
 
     def getaverageof(self, number):
         averages = []
@@ -56,13 +69,25 @@ class VUmetertwo(object):
                 else:
                     self.max -= int((self.max - self.lim) / self.rate)
             length = int(translate(average, 0, self.max, 0, matrix_height))
-            data = int(translate(line, 0, self.max, 0, length))
+            data = int(translate(line, 0, average, 0, length))
             if data > 0xff:
                 self.data = 0xff
             if data > self.max:
                 self.max = data
-            print(data)
             self.graphics.drawLine(0, i, data - self.offset, i, self.color)
+        return self.graphics.getSurface()
+
+
+class VUmeterThree(object):
+    def __init__(self):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.controller = AudioController(channel=1, rate=96000, period=64)
+
+    def generate(self):
+        data = getaverageof(5, self.controller)
+        self.graphics.fill(BLACK)
+        for i in range(0, 15):
+            self.graphics.drawLine(0, i, data - 5, 0, BLUE)
         return self.graphics.getSurface()
 
 
@@ -75,9 +100,9 @@ class VUmeterone(object):
         self.averagelength = 10
 
     def generate(self):
-        data = self.controller.getinput()
+        data = getaverageof(5, self.controller)
         if data:
-            data = int(translate(data, 0, 500, 0, 10))
+            data = int(translate(data, 0, 600, 0, 10))
             self.graphics.fill(BLACK)
             self.graphics.drawLine(0, 0, data - 5, 0, BLUE)
         return self.graphics.getSurface()

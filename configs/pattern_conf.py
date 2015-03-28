@@ -31,12 +31,12 @@ TARGETS = {
     # dest: PlasmaFirst(),
     # dest: PlasmaSecond(),
     # dest: PlasmaThird(),
-    # dest: RainPattern(chance=2),
+    # dest: RainPattern(chance=0.5),
     # dest: GraphicsCircleTest(),
     # dest: GraphicsRectTest(),
     # dest: GraphicsLineTest(),
     # dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
-    # dest: VUmeterone()
-    dest: VUmetertwo()
+    dest: VUmeterone()
+    # dest: VUmetertwo()
 }
