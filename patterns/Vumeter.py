@@ -16,14 +16,6 @@ def getaverageof(number, controller):
         return int(sums / len(averages))
 
 
-class VUmeterThree(object):
-    def __init__(self):
-        pass
-
-    def generate(self):
-        pass
-
-
 class VUmetertwo(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
@@ -82,27 +74,32 @@ class VUmeterThree(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
         self.controller = AudioController(channel=1, rate=96000, period=64)
+        self.max = 1
 
     def generate(self):
-        data = getaverageof(5, self.controller)
         self.graphics.fill(BLACK)
-        for i in range(0, 15):
-            self.graphics.drawLine(0, i, data - 5, 0, BLUE)
+        data = getaverageof(10, self.controller)
+        data = int(translate(data, 0, self.max, 0, matrix_height))
+        if data > self.max:
+            self.max = data
+            print(data)
+        for i in range(0, 17):
+            self.graphics.drawLine(0, i, data, 0, BLUE)
         return self.graphics.getSurface()
 
 
 class VUmeterone(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
-        self.controller = AudioController(channel=1, rate=8000, period=90)
+        self.controller = AudioController(channel=1, rate=8000, period=128)
         self.average = []
         self.averaged = 1
         self.averagelength = 10
 
     def generate(self):
-        data = getaverageof(5, self.controller)
+        data = getaverageof(10, self.controller)
         if data:
-            data = int(translate(data, 0, 600, 0, 10))
+            data = int(translate(data, 0, 700, 0, 8))
             self.graphics.fill(BLACK)
-            self.graphics.drawLine(0, 0, data - 5, 0, BLUE)
+            self.graphics.drawLine(0, 0, data - 10, 0, BLUE)
         return self.graphics.getSurface()
