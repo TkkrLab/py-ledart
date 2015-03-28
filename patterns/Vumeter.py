@@ -73,18 +73,15 @@ class VUmetertwo(object):
 class VUmeterThree(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
-        self.controller = AudioController(channel=1, rate=96000, period=64)
+        self.controller = AudioController(channel=1, rate=16000, period=64)
         self.max = 1
 
     def generate(self):
         self.graphics.fill(BLACK)
         data = getaverageof(10, self.controller)
-        data = int(translate(data, 0, self.max, 0, matrix_height))
-        if data > self.max:
-            self.max = data
-            print(data)
+        data = int(translate(data, 0, 700, 0, 8))
         for i in range(0, 17):
-            self.graphics.drawLine(0, i, data, 0, BLUE)
+            self.graphics.drawLine(0, i, data - 10, 0, BLUE)
         return self.graphics.getSurface()
 
 

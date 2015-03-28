@@ -29,7 +29,7 @@ TARGETS = {
     # # needs images. wip still.
     # dest: DisplayPng(),
     # dest: PlasmaFirst(),
-    # dest: PlasmaSecond(),
+    dest: PlasmaSecond(),
     # dest: PlasmaThird(),
     # dest: RainPattern(chance=0.5),
     # dest: GraphicsCircleTest(),
@@ -37,6 +37,5 @@ TARGETS = {
     # dest: GraphicsLineTest(),
     # dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
-    dest: VUmeterone()
     # dest: VUmeterThree()
 }

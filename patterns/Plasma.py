@@ -90,16 +90,16 @@ class PlasmaSecond(object):
         self.generatePlasmaSurface()
     def generatePalette(self):
         self.palette = []
-        for x in xrange(0, (2**8), 1):
+        for x in xrange(0, (2**16), 1):
             r = 30#int(128.0 +128*sin(pi*x/40.))
-            g = int(128.0 +128*sin(pi*x/80.))
-            b = int(128.0 +128*sin(pi*x/40.))
+            g = int(128.0 +128*sin(pi*x/160.))
+            b = int(128.0 +128*sin(pi*x/80.))
             colorRGB = (r,g,b)
             self.palette.append(colorRGB)
     def generatePlasmaSurface(self):
         self.angle = self.time/self.speed
-        x_offset = matrix_width*sin(radians(self.angle))+matrix_width
-        y_offset = matrix_height*cos(radians(self.angle))+matrix_height
+        x_offset = matrix_width*sin(radians(self.angle))+matrix_width*sin(radians(self.angle))
+        y_offset = matrix_height*cos(radians(self.angle))+matrix_height*cos(radians(self.angle))
         for y in self.y_range:
             for x in self.x_range:
                 c = int(
@@ -112,7 +112,7 @@ class PlasmaSecond(object):
                 self.plasma.drawPixel(x,y,color)
         return list(self.plasma.getSurface())
     def process(self):
-        millis = round(round(time.time()*1000))
+        millis = round(time.time()*1000)
         if((millis-self.previousTick) >= self.interval):
             self.previousTick = time.time()
             self.time+=1
@@ -122,13 +122,13 @@ class PlasmaSecond(object):
         for y in self.y_range:
             for x in self.x_range:
                 plasma_color = self.plasma.readPixel(x,y)
-                color_shift = self.palette[paletteShift%256]
+                color_shift = self.palette[paletteShift%len(self.palette)]
                 r = (plasma_color[0]+color_shift[0])%256
                 g = (plasma_color[1]+color_shift[1])%256
                 b = (plasma_color[2]+color_shift[2])%256
                 color = (r,g,b,)
                 #darken the color to create a better contrast
-                color = ColorRGBOps.darken(color, 100)
+                color = ColorRGBOps.darken(color, 50)
                 self.graphics.drawPixel(x,y, color)
     def generate(self):
         self.graphics.fill(BLACK)
