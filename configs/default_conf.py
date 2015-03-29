@@ -14,7 +14,7 @@ TARGETS = {
     # local_host:RandomLife(),
     # local_host:BlueLife(),
     # raspberrypi:BlueLife(),
-    local_host: sven(),
+    local_host: Sven(),
     # local_host:SuperPixelBros(),
     # local_host:Pong(speed=5),
     # pixelMatrix:Pong(speed=3),

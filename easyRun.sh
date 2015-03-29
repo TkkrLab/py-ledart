@@ -1,1 +1,1 @@
-python runPatternJob.py --snakeMode=enabled --fps=10 --config=pattern_conf.py --matrixSim=disabled
+python runPatternJob.py --fps=0 --matrixSim=enabled --netSilent=enabled
