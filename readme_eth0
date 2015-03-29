@@ -1,5 +1,0 @@
-run: 
-killall python; python runPatternJob.py --snakeMode enabled --fps 20 --config default_conf.py
-
-config in config/default_conf.py
-
