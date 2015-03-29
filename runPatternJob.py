@@ -24,6 +24,8 @@ parser.add_argument("--pixelSize",  help="sets the pixel size for the matrix sim
 parser.add_argument("--netSilent",  help="if enabled won't send out udp packets anywhere",      metavar="<enabled>",        nargs="?", default=None,                type=str)
 parser.add_argument("--showFps",    help="prints out the actuall fps the program runs at",      metavar="<enabled>",        nargs="?", default=None,                type=str)
 parser.add_argument("--fullscreen", help="makes matrixsim go fullscreen (hides mouse pointer)", metavar="<enabled>",        nargs="?", default=False,               type=str)
+parser.add_argument("--gui",        help="enabled the graphical interface.",                    metavar="<enabled>",        nargs="?", default=False,               type=str)
+
 # parser.add_argument("--matrixSize", help="set the width and hight of matrix
 # for exampel: --matrixSize=10,17", nargs="+", type=int)
 args = parser.parse_args()
