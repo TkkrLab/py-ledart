@@ -12,6 +12,9 @@ class Base(object):
         self.window.set_tooltip_text("This is my Gui\nAnother line.")
         self.window.set_title("My Gui")
 
+        self.about_button = gtk.Button("About")
+        self.about_button.connect("clicked", self.about_win)
+
         self.button1 = gtk.Button("Exit")
         self.button1.connect("clicked", self.destroy)
         self.button1.set_tooltip_text("Click to Exit")
@@ -49,6 +52,7 @@ class Base(object):
         self.box1.pack_start(self.button3)
         self.box1.pack_start(self.button4)
         self.box1.pack_start(self.button5)
+        self.box1.pack_start(self.about_button)
 
         self.box2.pack_start(self.box1)
         self.box2.pack_start(self.textbox)
@@ -59,15 +63,34 @@ class Base(object):
         self.box3.pack_start(self.button6)
 
         dialog = gtk.FileChooserDialog("Load Image", None,
-                                        )
+                                        gtk.FILE_CHOOSER_ACTION_OPEN,
+                                        (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                         gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 
-        self.pix = gtk.gdk.pixbuf_new_from_file("/home/robert/py-art-net/hacked.png")
-        self.pix = self.pix.scale_simple(100, 100, gtk.gdk.INTERP_BILINEAR)
-        self.image = gtk.image_new_from_pixbuf(self.pix)
-        self.image.set_from_pixbuf(self.pix)
+        dialog.set_default_response(gtk.RESPONSE_OK)
+        filter = gtk.FileFilter()
+        filter.set_name("Images")
+        filter.add_mime_type("image/png")
+        filter.add_mime_type("image/jpeg")
+        filter.add_mime_type("image/bmp")
+        filter.add_pattern("*.png")
+        filter.add_pattern("*.jpg")
+        filter.add_pattern("*.jpeg")
+        dialog.add_filter(filter)
+
+        response = dialog.run()
+        if response == gtk.RESPONSE_OK:
+            self.pix = gtk.gdk.pixbuf_new_from_file(dialog.get_filename())
+            self.pix = self.pix.scale_simple(100, 100, gtk.gdk.INTERP_BILINEAR)
+            self.image = gtk.image_new_from_pixbuf(self.pix)
+            self.image.set_from_pixbuf(self.pix)
+            self.box4.pack_start(self.image)
+        elif response == gtk.RESPONSE_CANCEL:
+            print("no file selected")
+
+        dialog.destroy()
 
         self.box4.pack_start(self.box3)
-        self.box4.pack_start(self.image)
 
         self.window.add(self.box4)
         self.window.show_all()
@@ -75,6 +98,16 @@ class Base(object):
 
     def main(self):
         gtk.main()
+
+    def about_win(self, widget):
+        about = gtk.AboutDialog()
+        about.set_program_name("My Guid")
+        about.set_version("0.1")
+        about.set_copyright("Duality")
+        about.set_comments("this is a gtk program in python")
+        about.set_website("http://www.github.com/tkkrlab/py-art-net/")
+        about.run()
+        about.destroy()
 
     def clicked(self, widget):
         print("clicked")
