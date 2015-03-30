@@ -1,17 +1,16 @@
 import pygtk
-pygtk.require('2.0')
 import gtk
+pygtk.require('2.0')
 
-class Base(object):
-	def __init__(self):
-		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-		self.window.show()
+dialog = gtk.FileChooserDialog("Load File",
+                                None,
+                                gtk.FILE_CHOOSER_ACTION_OPEN,
+                                (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 
-	def main(self):
-		gtk.main()
+dialog.set_default_response(gtk.RESPONSE_OK)
 
-
-if __name__ == '__main__':
-	base = Base()
-	base.main()
-
+filter = gtk.FileFilter()
+filter.set_name("All files")
+filter.add_pattern("*")
+dialog.add_filter(filter)
