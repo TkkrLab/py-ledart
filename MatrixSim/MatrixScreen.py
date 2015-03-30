@@ -11,11 +11,29 @@ import Graphics.Graphics as Graphics
 import matrix
 
 
-class MatrixScreen(object):
-    timing = 0
-    fps = 0
-    timed = False
+class PygameInterface(object):
+    def __init__(self, width, height, blocksize, fullscreen=False):
+        import pygame
+        self.pygame = pygame
+        self.flags = self.pygame.DOUBLEBUFF | self.pygame.HWSURFACE
+        if fullscreen:
+            self.flags |= self.pygame.FULLSCREEN
+        self.width = width
+        self.height = height
+        self.blocksize = blocksize
+        self.window = self.pygame.display.set_mode((self.width, self.height),
+                                                   self.flags)
 
+    def handleInput(self):
+        pass
+
+
+class MatrixScreen(object):
+    """
+    this module/class is a matrix simulator (led)
+    it draws blocks in a array the size of the pixels is
+    defined in matrix.py
+    """
     def __init__(self, width, height, pixelsize, fullscreen=False):
         import pygame
         self.pygame = pygame
@@ -50,8 +68,12 @@ class MatrixScreen(object):
                 pixel = Pixel(pos, pixelsize, color)
                 self.pixels.append(pixel)
 
+        # for keeping fps
+        self.previous = 1
+        self.time = 1
+        self.fps = 0
+
     def handleInput(self):
-        self.pygame.event.pump()
         for event in self.pygame.event.get():
             if event.type == self.pygame.QUIT:
                 sys.exit(0)
@@ -60,11 +82,11 @@ class MatrixScreen(object):
                                 self.pygame.KMOD_LCTRL)
                 if event.key == self.pygame.K_c and lctrlpressed:
                     raise KeyboardInterrupt
-                # check if mouse in window then make invisible else visible
-                if self.pygame.mouse.get_focused():
-                        self.pygame.mouse.set_visible(False)
-                else:
-                        self.pygame.mouse.set_visible(True)
+            # check if mouse in window then make invisible else visible
+            if self.pygame.mouse.get_focused():
+                    self.pygame.mouse.set_visible(False)
+            else:
+                    self.pygame.mouse.set_visible(True)
 
     def draw(self, data):
         # extract pixels and color from data
@@ -90,11 +112,9 @@ class MatrixScreen(object):
         self.pygame.display.update()
 
     def process(self, data):
-        self.timed = not self.timed
-        if self.timed:
-            self.timing = time.time()
-        else:
-            self.fps = 1. / (time.time() - self.timing)
+        self.time = time.time()
+        self.fps = 1. / (self.time - self.previous)
+        self.previous = self.time
         self.pygame.display.set_caption("artnet matrix sim FPS:" +
                                         str(int(self.fps)))
         self.handleInput()

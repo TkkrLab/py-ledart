@@ -2,8 +2,10 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 
+
 class Base(object):
     itteration = 0
+
     def __init__(self):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
@@ -71,6 +73,7 @@ class Base(object):
         self.window.add(self.box4)
         self.window.show_all()
         self.window.connect("destroy", self.destroy)
+        self.imagedir = "home/robert/py-art-net/hacked.png"
 
     def main(self):
         gtk.main()
@@ -78,9 +81,9 @@ class Base(object):
     def openimage(self, widget):
 
         dialog = gtk.FileChooserDialog("Load Image", None,
-                                        gtk.FILE_CHOOSER_ACTION_OPEN,
-                                        (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                         gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+                                       gtk.FILE_CHOOSER_ACTION_OPEN,
+                                       (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                        gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 
         dialog.set_default_response(gtk.RESPONSE_OK)
         filter = gtk.FileFilter()
@@ -117,7 +120,7 @@ class Base(object):
         about.set_copyright("Duality")
         about.set_comments("this is a gtk program in python")
         about.set_website("http://www.github.com/tkkrlab/py-art-net/")
-        about.set_logo(gtk.gdk.pixbuf_new_from_file("/home/robert/py-art-net/hacked.png"))
+        about.set_logo(gtk.gdk.pixbuf_new_from_file(self.imagedir))
         about.run()
         about.destroy()
 
@@ -144,11 +147,16 @@ class Base(object):
 
     def relabel(self, widget):
         self.label1.set_text(str(self.itteration))
-        self.itteration+=1
+        self.itteration += 1
 
     def destroy(self, widget, data=None):
         print("Quiting")
         gtk.main_quit()
+
+
+def main():
+    base = Base()
+    base.main()
 
 if __name__ == '__main__':
     base = Base()
