@@ -15,6 +15,9 @@ class Base(object):
         self.about_button = gtk.Button("About")
         self.about_button.connect("clicked", self.about_win)
 
+        self.open_image = gtk.Button("Open Image")
+        self.open_image.connect("clicked", self.openimage)
+
         self.button1 = gtk.Button("Exit")
         self.button1.connect("clicked", self.destroy)
         self.button1.set_tooltip_text("Click to Exit")
@@ -52,6 +55,7 @@ class Base(object):
         self.box1.pack_start(self.button3)
         self.box1.pack_start(self.button4)
         self.box1.pack_start(self.button5)
+        self.box1.pack_start(self.open_image)
         self.box1.pack_start(self.about_button)
 
         self.box2.pack_start(self.box1)
@@ -61,6 +65,17 @@ class Base(object):
 
         self.box3.pack_start(self.box2)
         self.box3.pack_start(self.button6)
+
+        self.box4.pack_start(self.box3)
+
+        self.window.add(self.box4)
+        self.window.show_all()
+        self.window.connect("destroy", self.destroy)
+
+    def main(self):
+        gtk.main()
+
+    def openimage(self, widget):
 
         dialog = gtk.FileChooserDialog("Load Image", None,
                                         gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -87,17 +102,13 @@ class Base(object):
             self.box4.pack_start(self.image)
         elif response == gtk.RESPONSE_CANCEL:
             print("no file selected")
-
-        dialog.destroy()
-
-        self.box4.pack_start(self.box3)
-
-        self.window.add(self.box4)
+            em = gtk.MessageDialog(None, gtk.DIALOG_DESTROY_WITH_PARENT,
+                                   gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                   "File Not Loaded\nWindow looks different")
+            em.run()
+            em.destroy()
         self.window.show_all()
-        self.window.connect("destroy", self.destroy)
-
-    def main(self):
-        gtk.main()
+        dialog.destroy()
 
     def about_win(self, widget):
         about = gtk.AboutDialog()
@@ -106,6 +117,7 @@ class Base(object):
         about.set_copyright("Duality")
         about.set_comments("this is a gtk program in python")
         about.set_website("http://www.github.com/tkkrlab/py-art-net/")
+        about.set_logo(gtk.gdk.pixbuf_new_from_file("/home/robert/py-art-net/hacked.png"))
         about.run()
         about.destroy()
 
