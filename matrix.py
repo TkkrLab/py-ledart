@@ -2,6 +2,7 @@
 matrix dimensions and color order for simulator.
 and conversion function(s)
 """
+
 matrix_height = 17
 matrix_width = 10
 matrix_size = (matrix_height * matrix_width)

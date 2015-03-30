@@ -10,20 +10,67 @@ import Graphics.Graphics as Graphics
 import matrix
 
 
-class PygameInterface(object):
+class Interface(object):
+    """
+    the basic drawing interface api
+    """
+    def __init__(self, width, height, blocksize):
+        """ Initialize the interface. it know how big the screen is."""
+        # due to physical matrix layout these are switched.
+        self.width = height * blocksize
+        self.height = width * blocksize
+
+    def handleinput(self):
+        """
+        this function handles the inputs. basic q/esc for quit or
+        ctrl-z for quiting. and checking mouse focus.
+        """
+        pass
+
+    def setcaption(self, caption):
+        """ sets the title/caption of the window for the simulator."""
+        pass
+
+    def fill(self, color):
+        """ fills the window with a color."""
+        pass
+
+    def drawblock(self, rect, color, bordercolor, borderwidth=1):
+        """ draws the blocks that are the pixels."""
+        pass
+
+    def update(self):
+        """ updates the interface window. """
+        pass
+
+    def quit(self):
+        """ called when quiting the program."""
+        pass
+
+
+class GtkInterface(Interface):
+    """
+    abstract darwing interface that uses gtk.
+    """
     def __init__(self, width, height, blocksize, fullscreen=False):
+        Interface.__init__(self, width, height, blocksize)
+
+
+class PygameInterface(Interface):
+    """
+    a abstract drawing interface that uses pygame.
+    """
+    def __init__(self, width, height, blocksize, fullscreen=False):
+        Interface.__init__(self, width, height, blocksize)
         import pygame
         self.pygame = pygame
         self.flags = self.pygame.DOUBLEBUF | self.pygame.HWSURFACE
         if fullscreen:
             self.flags |= self.pygame.FULLSCREEN
-        # due to physical matrix layout these are switched.
-        self.width = height * blocksize
-        self.height = width * blocksize
         self.window = self.pygame.display.set_mode((self.width, self.height),
                                                    self.flags)
 
-    def handleInput(self):
+    def handleinput(self):
         for event in self.pygame.event.get():
             if event.type == self.pygame.QUIT:
                 raise SystemExit
@@ -48,7 +95,7 @@ class PygameInterface(object):
     def fill(self, color):
         self.window.fill(color)
 
-    def drawBlock(self, rect, color, bordercolor, borderwidth=1):
+    def drawblock(self, rect, color, bordercolor, borderwidth=1):
         self.pygame.draw.rect(self.window, color, rect)
         # draw a nice little square around so it looks more like a pixel.
         self.pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
@@ -66,8 +113,9 @@ class MatrixScreen(object):
     it draws blocks in a array the size of the pixels is
     defined in matrix.py
     """
-    def __init__(self, width, height, pixelsize, fullscreen=False):
-        self.interface = PygameInterface(width, height, pixelsize, fullscreen)
+    def __init__(self, width, height, pixelsize, fullscreen=False,
+                 interface=PygameInterface):
+        self.interface = interface(width, height, pixelsize, fullscreen)
         self.width = width
         self.height = height
         self.pixelSize = pixelsize
@@ -97,8 +145,8 @@ class MatrixScreen(object):
         self.time = 1
         self.fps = 0
 
-    def handleInput(self):
-        self.interface.handleInput()
+    def handleinput(self):
+        self.interface.handleinput()
 
     def draw(self, data):
         # extract pixels and color from data
@@ -117,7 +165,7 @@ class MatrixScreen(object):
             color = (r, g, b)
             # for a nice litle border that makes the pixels stand out.
             bordercolor = Graphics.BLACK
-            self.interface.drawBlock(pixel.getRect(), color, bordercolor)
+            self.interface.drawblock(pixel.getRect(), color, bordercolor)
 
         # update the screen so our data show.
         self.interface.update()
@@ -128,7 +176,7 @@ class MatrixScreen(object):
         self.previous = self.time
         self.interface.setcaption("artnet matrix sim FPS:" +
                                   str(int(self.fps)))
-        self.handleInput()
+        self.handleinput()
         self.draw(data)
 
     def __del__(self):
