@@ -70,7 +70,8 @@ else:
             fullscreen = True
         else:
             fullscreen = False
-        matrixscreen = MatrixScreen(matrix_width, matrix_height, args.pixelSize,
+        matrixscreen = MatrixScreen(matrix_width, matrix_height,
+                                    args.pixelSize,
                                     fullscreen)
 
     if args.fps > 0:
@@ -80,26 +81,29 @@ else:
         # sendout function that sends out data to the networked devices and
         # also to the matrix screen simulator if enabled.
         # or only to the matrix simulator if netSilent enabled.
-        for t in TARGETS:
-            pattern = TARGETS[t]
-            data = pattern.generate()
+        try:
+            for t in TARGETS:
+                pattern = TARGETS[t]
+                data = pattern.generate()
 
-            # make sure matrixSim always displays the data the right way.
-            if args.matrixSim == "enabled":
-                try:
-                    matrixscreen.process(data)
-                # matrix sim needs this because i am to lazy to press the x button.
-                except KeyboardInterrupt:
-                    signal_handler(None, None)
+                # make sure matrixSim always displays the data the right way.
+                if args.matrixSim == "enabled":
+                        matrixscreen.process(data)
 
-            # convert the data for the special matrix layout.
-            if args.snakeMode == "enabled":
-                data = convertSnakeModes(data)
+                # convert the data for the special matrix layout.
+                if args.snakeMode == "enabled":
+                    data = convertSnakeModes(data)
 
-            # if this is a simulation draw it to the matrixscreen else
-            # send it out over the network.
-            if not (args.netSilent == "enabled"):
-                sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+                # if this is a simulation draw it to the matrixscreen else
+                # send it out over the network.
+                if not (args.netSilent == "enabled"):
+                    sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+
+        # matrix sim needs this because i am to lazy to press the x button.
+        except KeyboardInterrupt:
+            signal_handler(None, None)
+        except SystemExit:
+            signal_handler(None, None)
 
     # hold values for time.
     current = 0

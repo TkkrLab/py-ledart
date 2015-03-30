@@ -1,4 +1,3 @@
-import sys
 import time
 
 # first things first make sure we are able to find the necesary files we need.
@@ -15,17 +14,50 @@ class PygameInterface(object):
     def __init__(self, width, height, blocksize, fullscreen=False):
         import pygame
         self.pygame = pygame
-        self.flags = self.pygame.DOUBLEBUFF | self.pygame.HWSURFACE
+        self.flags = self.pygame.DOUBLEBUF | self.pygame.HWSURFACE
         if fullscreen:
             self.flags |= self.pygame.FULLSCREEN
-        self.width = width
-        self.height = height
-        self.blocksize = blocksize
+        # due to physical matrix layout these are switched.
+        self.width = height * blocksize
+        self.height = width * blocksize
         self.window = self.pygame.display.set_mode((self.width, self.height),
                                                    self.flags)
 
     def handleInput(self):
-        pass
+        for event in self.pygame.event.get():
+            if event.type == self.pygame.QUIT:
+                raise SystemExit
+            if event.type == self.pygame.KEYDOWN:
+                # quit on ctrl-c as if it were in the terminal.
+                # to lazy to press x.
+                lctrlpressed = (self.pygame.key.get_mods() &
+                                self.pygame.KMDED_LCTRL)
+                if event.key == self.pygame.K_c and lctrlpressed:
+                    raise KeyboardInterrupt
+                if event.key == self.pygame.K_q or self.pygame.K_ESCAPE:
+                    raise KeyboardInterrupt
+
+            # check if the mouse pointer is on/in the window.
+            # and if so hide it.
+            focused = self.pygame.mouse.get_focused()
+            self.pygame.mouse.set_visible(not focused)
+
+    def setcaption(self, caption):
+        self.pygame.display.set_caption(caption)
+
+    def fill(self, color):
+        self.window.fill(color)
+
+    def drawBlock(self, rect, color, bordercolor, borderwidth=1):
+        self.pygame.draw.rect(self.window, color, rect)
+        # draw a nice little square around so it looks more like a pixel.
+        self.pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
+
+    def update(self):
+        self.pygame.display.update()
+
+    def quit(self):
+        self.pygame.quit()
 
 
 class MatrixScreen(object):
@@ -35,8 +67,7 @@ class MatrixScreen(object):
     defined in matrix.py
     """
     def __init__(self, width, height, pixelsize, fullscreen=False):
-        import pygame
-        self.pygame = pygame
+        self.interface = PygameInterface(width, height, pixelsize, fullscreen)
         self.width = width
         self.height = height
         self.pixelSize = pixelsize
@@ -46,14 +77,7 @@ class MatrixScreen(object):
         self.window_width = height * pixelsize
         self.window_height = width * pixelsize
 
-        self.flags = self.pygame.DOUBLEBUF | self.pygame.HWSURFACE
-        if fullscreen:
-            self.flags |= self.pygame.FULLSCREEN
-
-        self.window = self.pygame.display.set_mode((self.window_width,
-                                                    self.window_height),
-                                                   self.flags)
-        self.pygame.display.set_caption("pygame artnet matrix simulator.")
+        self.interface.setcaption("pygame artnet matrix simulator.")
 
         widthrange = range(0, self.window_width, pixelsize)
         # reverse order because else the display is flipped.
@@ -74,19 +98,7 @@ class MatrixScreen(object):
         self.fps = 0
 
     def handleInput(self):
-        for event in self.pygame.event.get():
-            if event.type == self.pygame.QUIT:
-                sys.exit(0)
-            if event.type == self.pygame.KEYDOWN:
-                lctrlpressed = (self.pygame.key.get_mods() &
-                                self.pygame.KMOD_LCTRL)
-                if event.key == self.pygame.K_c and lctrlpressed:
-                    raise KeyboardInterrupt
-            # check if mouse in window then make invisible else visible
-            if self.pygame.mouse.get_focused():
-                    self.pygame.mouse.set_visible(False)
-            else:
-                    self.pygame.mouse.set_visible(True)
+        self.interface.handleInput()
 
     def draw(self, data):
         # extract pixels and color from data
@@ -95,7 +107,7 @@ class MatrixScreen(object):
             self.pixels[i].setColor(color)
 
         # clear the pygame window
-        self.window.fill(Graphics.BLACK)
+        self.interface.fill(Graphics.BLACK)
 
         # display the pixels.
         for pixel in self.pixels:
@@ -103,22 +115,21 @@ class MatrixScreen(object):
             g = pixel.color[matrix.COLOR_ORDER[1]]
             b = pixel.color[matrix.COLOR_ORDER[2]]
             color = (r, g, b)
-            self.pygame.draw.rect(self.window, color, pixel.getRect())
-            # draw a nice little square around so it looks more like a pixel.
-            self.pygame.draw.rect(self.window, Graphics.BLACK,
-                                  pixel.getRect(), 1)
+            # for a nice litle border that makes the pixels stand out.
+            bordercolor = Graphics.BLACK
+            self.interface.drawBlock(pixel.getRect(), color, bordercolor)
 
         # update the screen so our data show.
-        self.pygame.display.update()
+        self.interface.update()
 
     def process(self, data):
         self.time = time.time()
         self.fps = 1. / (self.time - self.previous)
         self.previous = self.time
-        self.pygame.display.set_caption("artnet matrix sim FPS:" +
-                                        str(int(self.fps)))
+        self.interface.setcaption("artnet matrix sim FPS:" +
+                                  str(int(self.fps)))
         self.handleInput()
         self.draw(data)
 
     def __del__(self):
-        self.pygame.quit()
+        self.interface.quit()
