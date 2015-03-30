@@ -1,4 +1,5 @@
 import time
+import sys
 
 # first things first make sure we are able to find the necesary files we need.
 # wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
@@ -82,6 +83,9 @@ class MatrixScreen(object):
                                   str(int(self.fps)))
         self.handleinput()
         self.draw(data)
+
+    def printfps(self):
+        sys.stdout.write("%s      \r" % self.fps)
 
     def __del__(self):
         self.interface.quit()

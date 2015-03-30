@@ -39,9 +39,21 @@ class Interface(object):
         pass
 
 
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
+
+
 class OpenGlInterface(Interface):
     def __init__(self, width, height, pixelsize, fullscreen):
         Interface.__init__(self, width, height, pixelsize)
+        glutInit()
+        glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
+        glutInitWindowSize(self.width, self.height)
+        glutInitWindowPosition(self.width, self.height)
+        self.window = glutCreateWindow("matrix Sim")
+        glutMainLoopEvent()
+
 
 
 class PygameInterface(Interface):
