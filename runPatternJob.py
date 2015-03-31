@@ -13,8 +13,6 @@ try:
 except Exception as e:
     print(e)
 
-import Gui.Gui as Gui
-
 
 UDP_PORT = 6454
 
@@ -37,6 +35,7 @@ args = parser.parse_args()
 # if gui selected start that else start the headless code.
 if args.gui:
     try:
+        import Gui.Gui as Gui
         Gui.main()
         sys.exit(0)
     except Exception as e:
