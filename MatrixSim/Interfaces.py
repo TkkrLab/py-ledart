@@ -1,4 +1,3 @@
-import sys
 
 
 class Interface(object):
@@ -22,7 +21,7 @@ class Interface(object):
         """ sets the title/caption of the window for the simulator."""
         pass
 
-    def fill(self, color):
+    def clear(self, color):
         """ fills the window with a color."""
         pass
 
@@ -54,6 +53,26 @@ class OpenGlInterface(Interface):
         self.window = glutCreateWindow("matrix Sim")
         glutMainLoopEvent()
 
+    def handleinput(self):
+        pass
+
+    def setcaption(self, caption):
+        glutSetWindowTitle(caption)
+
+    def clear(self, color):
+        glViewport(0, 0, self.width, self.height)
+        glMatrixMode(GL_PROJECTION)
+        glLoadIdentity()
+        glOrtho(0.0, self.width, 0.0, self.height, 0.0, 1.0)
+
+    def drawblock(self, rect, color, bordercolor, borderwidth=1):
+        pass
+
+    def update(self):
+        pass
+
+    def quit(self):
+        raise SystemExit
 
 
 class PygameInterface(Interface):
@@ -92,7 +111,7 @@ class PygameInterface(Interface):
     def setcaption(self, caption):
         self.pygame.display.set_caption(caption)
 
-    def fill(self, color):
+    def clear(self, color):
         self.window.fill(color)
 
     def drawblock(self, rect, color, bordercolor, borderwidth=1):

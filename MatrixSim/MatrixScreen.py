@@ -60,7 +60,7 @@ class MatrixScreen(object):
             self.pixels[i].setColor(color)
 
         # clear the pygame window
-        self.interface.fill(Graphics.BLACK)
+        self.interface.clear(Graphics.GREEN)
 
         # display the pixels.
         for pixel in self.pixels:

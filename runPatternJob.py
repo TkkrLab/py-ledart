@@ -36,8 +36,11 @@ args = parser.parse_args()
 
 # if gui selected start that else start the headless code.
 if args.gui:
-    Gui.main()
-    sys.exit(0)
+    try:
+        Gui.main()
+        sys.exit(0)
+    except Exception as e:
+        print(e)
 else:
     # the bit below here allows loading of the config files specified by
     # --config written by Duality
