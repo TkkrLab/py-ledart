@@ -50,10 +50,38 @@ class GtkInterface(Interface):
         Interface.__init__(self, width, height, pixelsize)
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.resize(self.width, self.height)
+        self.window.set_position(gtk.WIN_POS_CENTER)
         self.window.set_title("testy")
         self.window.connect("destroy", self.exit)
+        self.window.connect("key_press_event", self.keyboardinput)
+        self.window.set_events(gtk.gdk.KEY_PRESS_MASK)
+
+        self.darea = gtk.DrawingArea()
+        self.darea.connect("expose-event", self.expose)
+        self.window.add(self.darea)
+
+        self.darea.show()
         self.window.show()
         self.handle_events()
+
+    def expose(self, widget, event):
+        print(widget == self.darea)
+        cr = widget.window.cairo_create()
+        cr.set_line_width(9)
+        cr.set_source_rgb(0.7, 0.2, 0.0)
+
+        w = self.window.allocation.width
+        h = self.window.allocation.height
+
+        cr.translate(w / 2, h / 2)
+        cr.arc(0, 0, 50, 0, 2 * 3.15)
+        cr.stroke_preserve()
+
+        cr.set_source_rgb(0.3, 0.4, 0.6)
+        cr.fill()
+
+    def clear(self, color):
+        pass
 
     def update(self):
         self.handle_events()
@@ -64,6 +92,12 @@ class GtkInterface(Interface):
     def handle_events(self):
         while gtk.events_pending():
             gtk.main_iteration()
+
+    def keyboardinput(self, widget, data=None):
+        if data.keyval == ord('q') or data.keyval == 65307:
+            raise SystemExit
+        else:
+            print(data.keyval)
 
     def exit(self, widget):
         raise SystemExit
