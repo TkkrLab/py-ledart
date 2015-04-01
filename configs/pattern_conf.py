@@ -11,14 +11,14 @@ dest = pixelMatrix
 
 TARGETS = {
     # dest: Sven()
-    # dest: BarberpolePattern(),
+    dest: BarberpolePattern(),
     # dest: OldTron(),
     # dest: Tron(),
     # dest: Snake(speed=17),
     # # MixedLife() doesn't work atm but will be fixed
     # dest: MixedLife(),
     # dest: RandomLife(),
-    dest: BlueLife(),
+    # dest: BlueLife(),
     # dest: BlueLife(),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
