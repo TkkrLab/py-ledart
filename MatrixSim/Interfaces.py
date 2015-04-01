@@ -66,19 +66,19 @@ class GtkInterface(Interface):
 
     def expose(self, widget, event):
         print(widget == self.darea)
-        cr = widget.window.cairo_create()
-        cr.set_line_width(9)
-        cr.set_source_rgb(0.7, 0.2, 0.0)
+        # cr = widget.window.cairo_create()
+        # cr.set_line_width(9)
+        # cr.set_source_rgb(0.7, 0.2, 0.0)
 
-        w = self.window.allocation.width
-        h = self.window.allocation.height
+        # w = self.window.allocation.width
+        # h = self.window.allocation.height
 
-        cr.translate(w / 2, h / 2)
-        cr.arc(0, 0, 50, 0, 2 * 3.15)
-        cr.stroke_preserve()
+        # cr.translate(w / 2, h / 2)
+        # cr.arc(0, 0, 50, 0, 2 * 3.15)
+        # cr.stroke_preserve()
 
-        cr.set_source_rgb(0.3, 0.4, 0.6)
-        cr.fill()
+        # cr.set_source_rgb(0.3, 0.4, 0.6)
+        # cr.fill()
 
     def clear(self, color):
         pass
