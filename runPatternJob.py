@@ -13,6 +13,11 @@ try:
 except Exception as e:
     print(e)
 
+<<<<<<< HEAD
+import Gui.Gui as Gui
+
+=======
+>>>>>>> 9700fbc03bc12091541ea7d35e3b2918f70f56a1
 
 UDP_PORT = 6454
 
@@ -34,12 +39,17 @@ args = parser.parse_args()
 
 # if gui selected start that else start the headless code.
 if args.gui:
+<<<<<<< HEAD
+    Gui.main()
+    sys.exit(0)
+=======
     try:
         import Gui.Gui as Gui
         Gui.main()
         sys.exit(0)
     except Exception as e:
         print(e)
+>>>>>>> 9700fbc03bc12091541ea7d35e3b2918f70f56a1
 else:
     # the bit below here allows loading of the config files specified by
     # --config written by Duality

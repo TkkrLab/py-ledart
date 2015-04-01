@@ -153,11 +153,6 @@ class Base(object):
         print("Quiting")
         gtk.main_quit()
 
-
 def main():
-    base = Base()
-    base.main()
-
-if __name__ == '__main__':
     base = Base()
     base.main()
