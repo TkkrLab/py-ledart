@@ -11,6 +11,7 @@ interface_opts = {
     "opengl": OpenGlInterface
 }
 
+
 class MatrixScreen(object):
     """
     this module/class is a matrix simulator (led)
