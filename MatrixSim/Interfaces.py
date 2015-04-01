@@ -1,3 +1,9 @@
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+
+import pygtk
+pygtk.require('2.0')
+import gtk
 
 
 class Interface(object):
@@ -39,9 +45,28 @@ class Interface(object):
         pass
 
 
-from OpenGL.GL import *
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
+class GtkInterface(Interface):
+    def __init__(self, width, height, pixelsize, fullscreen):
+        Interface.__init__(self, width, height, pixelsize)
+        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window.resize(self.width, self.height)
+        self.window.set_title("testy")
+        self.window.connect("destroy", self.exit)
+        self.window.show()
+        self.handle_events()
+
+    def update(self):
+        self.handle_events()
+
+    def setcaption(self, caption):
+        self.window.set_title(caption + " (gtk)")
+
+    def handle_events(self):
+        while gtk.events_pending():
+            gtk.main_iteration()
+
+    def exit(self, widget):
+        raise SystemExit
 
 
 class OpenGlInterface(Interface):
@@ -55,7 +80,6 @@ class OpenGlInterface(Interface):
         glutKeyboardFunc(self.keyboardinput)
         if fullscreen:
             glutFullScreen()
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
         glViewport(0, 0, self.width, self.height)
@@ -75,7 +99,7 @@ class OpenGlInterface(Interface):
             raise SystemExit
 
     def setcaption(self, caption):
-        glutSetWindowTitle(caption+" (opengl)")
+        glutSetWindowTitle(caption + " (opengl)")
 
     def clear(self, color):
         self.draw_rect((0, 0, self.width, self.height), color)
@@ -143,7 +167,7 @@ class PygameInterface(Interface):
             self.pygame.mouse.set_visible(not focused)
 
     def setcaption(self, caption):
-        self.pygame.display.set_caption(caption+" (pygame)")
+        self.pygame.display.set_caption(caption + " (pygame)")
 
     def clear(self, color):
         self.window.fill(color)
