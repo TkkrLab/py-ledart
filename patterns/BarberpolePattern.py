@@ -1,7 +1,7 @@
 # Barberpole pattern was originally made in C by Duality
 class BarberpolePattern:
 	# Rotating stripes of certain colors, default red/white
-	def __init__(self, backwards=False, color1=(255, 0, 0), color2=(255, 255, 255)):
+	def __init__(self, backwards=False, color1=(0, 0, 255), color2=(0, 0, 0)):
 		self.backwards = backwards
 		self.color1 = color1
 		self.color2 = color2

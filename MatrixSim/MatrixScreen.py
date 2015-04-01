@@ -19,7 +19,7 @@ class MatrixScreen(object):
     defined in matrix.py
     """
     def __init__(self, width, height, pixelsize, fullscreen=False,
-                 interface=PygameInterface):
+                 interface=OpenGlInterface):
         self.interface = interface(width, height, pixelsize, fullscreen)
         self.width = width
         self.height = height

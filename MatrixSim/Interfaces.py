@@ -48,7 +48,7 @@ class OpenGlInterface(Interface):
     def __init__(self, width, height, pixelsize, fullscreen):
         Interface.__init__(self, width, height, pixelsize)
         glutInit()
-        glutInitDisplayMode(GLUT_RGB)
+        glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
         glutInitWindowSize(self.width, self.height)
         glutInitWindowPosition(self.width, self.height)
         self.window = glutCreateWindow("matrix Sim")
@@ -70,6 +70,8 @@ class OpenGlInterface(Interface):
     def keyboardinput(self, *args):
         """ special way of input handling."""
         if(args[0] == 'q' or args[0] == '\x1b'):
+            raise SystemExit
+        if(args[0] == '\x03'):
             raise SystemExit
 
     def setcaption(self, caption):
