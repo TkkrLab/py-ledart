@@ -1,64 +1,15 @@
 import time
-
-# first things first make sure we are able to find the necesary files we need.
-# wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
-# sys.path.append(wd)
-# sys.path.append(wd + "/patterns/Graphics/")
+import sys
 
 from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
+from Interfaces import OpenGlInterface, PygameInterface
 
-
-class PygameInterface(object):
-    def __init__(self, width, height, blocksize, fullscreen=False):
-        import pygame
-        self.pygame = pygame
-        self.flags = self.pygame.DOUBLEBUF | self.pygame.HWSURFACE
-        if fullscreen:
-            self.flags |= self.pygame.FULLSCREEN
-        # due to physical matrix layout these are switched.
-        self.width = height * blocksize
-        self.height = width * blocksize
-        self.window = self.pygame.display.set_mode((self.width, self.height),
-                                                   self.flags)
-
-    def handleInput(self):
-        for event in self.pygame.event.get():
-            if event.type == self.pygame.QUIT:
-                raise SystemExit
-            if event.type == self.pygame.KEYDOWN:
-                # quit on ctrl-c as if it were in the terminal.
-                # to lazy to press x.
-                lctrlpressed = (self.pygame.key.get_mods() &
-                                self.pygame.KMDED_LCTRL)
-                if event.key == self.pygame.K_c and lctrlpressed:
-                    raise KeyboardInterrupt
-                if event.key == self.pygame.K_q or self.pygame.K_ESCAPE:
-                    raise KeyboardInterrupt
-
-            # check if the mouse pointer is on/in the window.
-            # and if so hide it.
-            focused = self.pygame.mouse.get_focused()
-            self.pygame.mouse.set_visible(not focused)
-
-    def setcaption(self, caption):
-        self.pygame.display.set_caption(caption)
-
-    def fill(self, color):
-        self.window.fill(color)
-
-    def drawBlock(self, rect, color, bordercolor, borderwidth=1):
-        self.pygame.draw.rect(self.window, color, rect)
-        # draw a nice little square around so it looks more like a pixel.
-        self.pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
-
-    def update(self):
-        self.pygame.display.update()
-
-    def quit(self):
-        self.pygame.quit()
-
+interface_opts = {
+    "pygame": PygameInterface,
+    "opengl": OpenGlInterface
+}
 
 class MatrixScreen(object):
     """
@@ -66,8 +17,9 @@ class MatrixScreen(object):
     it draws blocks in a array the size of the pixels is
     defined in matrix.py
     """
-    def __init__(self, width, height, pixelsize, fullscreen=False):
-        self.interface = PygameInterface(width, height, pixelsize, fullscreen)
+    def __init__(self, width, height, pixelsize, fullscreen=False,
+                 interface=OpenGlInterface):
+        self.interface = interface(width, height, pixelsize, fullscreen)
         self.width = width
         self.height = height
         self.pixelSize = pixelsize
@@ -97,8 +49,8 @@ class MatrixScreen(object):
         self.time = 1
         self.fps = 0
 
-    def handleInput(self):
-        self.interface.handleInput()
+    def handleinput(self):
+        self.interface.handleinput()
 
     def draw(self, data):
         # extract pixels and color from data
@@ -107,7 +59,7 @@ class MatrixScreen(object):
             self.pixels[i].setColor(color)
 
         # clear the pygame window
-        self.interface.fill(Graphics.BLACK)
+        self.interface.clear(Graphics.GREEN)
 
         # display the pixels.
         for pixel in self.pixels:
@@ -117,7 +69,7 @@ class MatrixScreen(object):
             color = (r, g, b)
             # for a nice litle border that makes the pixels stand out.
             bordercolor = Graphics.BLACK
-            self.interface.drawBlock(pixel.getRect(), color, bordercolor)
+            self.interface.drawblock(pixel.getRect(), color, bordercolor)
 
         # update the screen so our data show.
         self.interface.update()
@@ -128,8 +80,11 @@ class MatrixScreen(object):
         self.previous = self.time
         self.interface.setcaption("artnet matrix sim FPS:" +
                                   str(int(self.fps)))
-        self.handleInput()
+        self.handleinput()
         self.draw(data)
+
+    def printfps(self):
+        sys.stdout.write("%s      \r" % self.fps)
 
     def __del__(self):
         self.interface.quit()
