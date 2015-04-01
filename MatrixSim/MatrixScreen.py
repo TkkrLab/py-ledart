@@ -1,16 +1,15 @@
 import time
 import sys
 
-# first things first make sure we are able to find the necesary files we need.
-# wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
-# sys.path.append(wd)
-# sys.path.append(wd + "/patterns/Graphics/")
-
 from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
 from Interfaces import OpenGlInterface, PygameInterface
 
+interface_opts = {
+    "pygame": PygameInterface,
+    "opengl": OpenGlInterface
+}
 
 class MatrixScreen(object):
     """

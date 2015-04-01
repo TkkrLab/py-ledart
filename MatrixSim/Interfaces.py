@@ -73,7 +73,7 @@ class OpenGlInterface(Interface):
             raise SystemExit
 
     def setcaption(self, caption):
-        glutSetWindowTitle(caption)
+        glutSetWindowTitle(caption+" (opengl)")
 
     def clear(self, color):
         self.draw_rect((0, 0, self.width, self.height), color)
@@ -141,7 +141,7 @@ class PygameInterface(Interface):
             self.pygame.mouse.set_visible(not focused)
 
     def setcaption(self, caption):
-        self.pygame.display.set_caption(caption)
+        self.pygame.display.set_caption(caption+" (pygame)")
 
     def clear(self, color):
         self.window.fill(color)
