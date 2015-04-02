@@ -1,19 +1,5 @@
 import argparse
-import socket
-import time
-import imp
-import signal
 import sys
-
-from artnet import buildPacket
-from matrix import matrix_width, matrix_height, convertSnakeModes
-
-try:
-    from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
-except Exception as e:
-    print(e)
-
-UDP_PORT = 6454
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--fps",          help="control flow speed. if 0 fps is fastest possible.",   metavar="<fps>",            nargs="?", default=15,                  type=float)
@@ -37,16 +23,34 @@ if args.gui:
         Gui.main(args)
         sys.exit(0)
     except Exception as e:
-        print(e)
+        print("gui >> " + str(e))
 else:
-    # the bit below here allows loading of the config files specified by
-    # --config written by Duality
-    # this will then also load patterns.
-    package = "configs"
-    fp, path, description = imp.find_module(package)
-    fp, path, description = imp.find_module(str(args.config)[:-3], [path])
-    config = imp.load_module("configuration", fp, path, description)
-    TARGETS = config.TARGETS
+    import socket
+    import time
+    import imp
+    import signal
+
+    from artnet import buildPacket
+    from matrix import matrix_width, matrix_height, convertSnakeModes
+
+    try:
+        from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
+    except Exception as e:
+        print(e)
+
+    UDP_PORT = 6454
+
+    def load_targets(configfile):
+        # the bit below here allows loading of the config files specified by
+        # --config written by Duality
+        # this will then also load patterns.
+        package = "configs"
+        fp, path, description = imp.find_module(package)
+        fp, path, description = imp.find_module(str(configfile)[:-3], [path])
+        config = imp.load_module("configuration", fp, path, description)
+        return config.TARGETS
+
+    TARGETS = load_targets(args.config)
 
     # check if there is anything configured.
     if not len(TARGETS):

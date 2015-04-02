@@ -3,18 +3,40 @@ pygtk.require('2.0')
 import gtk
 import gobject
 
+from MatrixSim.MatrixScreen import MatrixScreen
+from MatrixSim.Interfaces import Interface
+import matrix
+
+
+class MatrixSimWidget(gtk.Widget, MatrixScreen, Interface):
+    def __init__(self, width, height, pixelsize,
+                 fullscreen=False, interface=None):
+        gtk.Widget.__init__(self)
+        Interface.__init__(width, height, pixelsize)
+        MatrixScreen.__init__(width, height, pixelsize, Interface)
+
 
 class Gui(object):
     def __init__(self, args):
+        self.args = args
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
         self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
-        gobject.timeout_add(int(1000 / args.fps), self.idle)
+
+        self.matrix_widget = MatrixSimWidget(matrix.matrix_width,
+                                             matrix.matrix_height,
+                                             self.args.pixelsize)
+
+        if self.args.fps:
+            gobject.timeout_add(int(1000 / self.args.fps), self.run)
+        else:
+            gobject.timeout_add(0, self.run)
+
         self.window.show()
 
-    def idle(self):
-        print("fps")
+    def run(self):
+        return True
 
     def main(self):
         gtk.main()
