@@ -57,16 +57,15 @@ class GtkInterface(Interface):
         self.window.set_events(gtk.gdk.KEY_PRESS_MASK)
 
         self.darea = gtk.DrawingArea()
-        self.darea.connect("expose-event", self.expose)
         self.window.add(self.darea)
 
         self.darea.show()
         self.window.show()
         self.handle_events()
+        self.cr = self.darea.window.cairo_create()
 
     def expose(self, widget, event):
         print(widget == self.darea)
-        # cr = widget.window.cairo_create()
         # cr.set_line_width(9)
         # cr.set_source_rgb(0.7, 0.2, 0.0)
 
@@ -80,8 +79,32 @@ class GtkInterface(Interface):
         # cr.set_source_rgb(0.3, 0.4, 0.6)
         # cr.fill()
 
+    def colorconvertf(self, color, depth=8):
+        temp = []
+        for c in color:
+            if c:
+                temp.append((2 ** depth) / c)
+            else:
+                temp.append(c)
+        return tuple(temp)
+
+    def draw_rect(self, rect, color):
+        r, g, b = self.colorconvertf(color)
+        x, y, width, height = rect
+
+        self.cr.set_source_rgb(r, g, b)
+        self.cr.rectangle(x, y, width, height)
+        self.cr.fill()
+
+    def drawblock(self, rect, color, bordercolor, borderwidth=1):
+        self.draw_rect(rect, bordercolor)
+        x, y, width, height = rect
+        rect = (x + borderwidth, y + borderwidth,
+                width - borderwidth, height - borderwidth)
+        self.draw_rect(rect, color)
+
     def clear(self, color):
-        pass
+        self.draw_rect((0, 0, self.width, self.height), color)
 
     def update(self):
         self.handle_events()
@@ -141,8 +164,8 @@ class OpenGlInterface(Interface):
     def draw_rect(self, rect, color):
         r, g, b = color
         r /= float(0xff)
-        b /= float(0xff)
         g /= float(0xff)
+        b /= float(0xff)
         x, y, width, height = rect
         # the y direction is flipped but this fixes it :)
         y = self.height - y - height
