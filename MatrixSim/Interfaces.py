@@ -1,3 +1,9 @@
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+
+import pygtk
+pygtk.require('2.0')
+import gtk
 
 
 class Interface(object):
@@ -39,9 +45,72 @@ class Interface(object):
         pass
 
 
-from OpenGL.GL import *
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
+class GtkInterface(Interface):
+    def __init__(self, width, height, pixelsize, fullscreen):
+        Interface.__init__(self, width, height, pixelsize)
+        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window.resize(self.width, self.height)
+        self.window.set_position(gtk.WIN_POS_CENTER)
+        self.window.set_title("testy")
+        self.window.connect("destroy", self.exit)
+        self.window.connect("key_press_event", self.keyboardinput)
+        self.window.set_events(gtk.gdk.KEY_PRESS_MASK)
+
+        self.darea = gtk.DrawingArea()
+        self.window.add(self.darea)
+
+        self.darea.show()
+        self.window.show()
+        self.cr = self.darea.window.cairo_create()
+
+    def expose(self, widget, event):
+        print(widget == self.darea)
+
+    def colorconvertf(self, color, depth=8):
+        temp = []
+        for c in color:
+            if c:
+                temp.append((2 ** depth) / c)
+            else:
+                temp.append(c)
+        return tuple(temp)
+
+    def draw_rect(self, rect, color):
+        r, g, b = self.colorconvertf(color)
+        x, y, width, height = rect
+
+        self.cr.set_source_rgb(r, g, b)
+        self.cr.rectangle(x, y, width, height)
+        self.cr.fill()
+
+    def drawblock(self, rect, color, bordercolor, borderwidth=1):
+        self.draw_rect(rect, bordercolor)
+        x, y, width, height = rect
+        rect = (x + borderwidth, y + borderwidth,
+                width - borderwidth, height - borderwidth)
+        self.draw_rect(rect, color)
+
+    def clear(self, color):
+        self.draw_rect((0, 0, self.width, self.height), color)
+
+    def update(self):
+        self.handle_events()
+
+    def setcaption(self, caption):
+        self.window.set_title(caption + " (gtk)")
+
+    def handle_events(self):
+        if gtk.events_pending():
+            gtk.main_iteration()
+
+    def keyboardinput(self, widget, data=None):
+        if data.keyval == ord('q') or data.keyval == 65307:
+            raise SystemExit
+        else:
+            print(data.keyval)
+
+    def exit(self, widget):
+        raise SystemExit
 
 
 class OpenGlInterface(Interface):
@@ -55,7 +124,6 @@ class OpenGlInterface(Interface):
         glutKeyboardFunc(self.keyboardinput)
         if fullscreen:
             glutFullScreen()
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
         glViewport(0, 0, self.width, self.height)
@@ -75,7 +143,7 @@ class OpenGlInterface(Interface):
             raise SystemExit
 
     def setcaption(self, caption):
-        glutSetWindowTitle(caption)
+        glutSetWindowTitle(caption + " (opengl)")
 
     def clear(self, color):
         self.draw_rect((0, 0, self.width, self.height), color)
@@ -83,8 +151,8 @@ class OpenGlInterface(Interface):
     def draw_rect(self, rect, color):
         r, g, b = color
         r /= float(0xff)
-        b /= float(0xff)
         g /= float(0xff)
+        b /= float(0xff)
         x, y, width, height = rect
         # the y direction is flipped but this fixes it :)
         y = self.height - y - height
@@ -143,7 +211,7 @@ class PygameInterface(Interface):
             self.pygame.mouse.set_visible(not focused)
 
     def setcaption(self, caption):
-        self.pygame.display.set_caption(caption)
+        self.pygame.display.set_caption(caption + " (pygame)")
 
     def clear(self, color):
         self.window.fill(color)

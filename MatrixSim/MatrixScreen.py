@@ -1,15 +1,15 @@
 import time
 import sys
-
-# first things first make sure we are able to find the necesary files we need.
-# wd = os.path.join(os.path.dirname(__file__), os.path.pardir)
-# sys.path.append(wd)
-# sys.path.append(wd + "/patterns/Graphics/")
-
 from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
-from Interfaces import OpenGlInterface, PygameInterface
+from Interfaces import OpenGlInterface, PygameInterface, GtkInterface
+
+interface_opts = {
+    "pygame": PygameInterface,
+    "opengl": OpenGlInterface,
+    "gtk": GtkInterface,
+}
 
 
 class MatrixScreen(object):
@@ -58,10 +58,8 @@ class MatrixScreen(object):
         # get both a list index and the color data.
         for i, color in enumerate(data):
             self.pixels[i].setColor(color)
-
-        # clear the pygame window
-        self.interface.clear(Graphics.GREEN)
-
+        # clear the window
+        self.interface.clear(Graphics.BLACK)
         # display the pixels.
         for pixel in self.pixels:
             r = pixel.color[matrix.COLOR_ORDER[0]]
