@@ -61,23 +61,10 @@ class GtkInterface(Interface):
 
         self.darea.show()
         self.window.show()
-        self.handle_events()
         self.cr = self.darea.window.cairo_create()
 
     def expose(self, widget, event):
         print(widget == self.darea)
-        # cr.set_line_width(9)
-        # cr.set_source_rgb(0.7, 0.2, 0.0)
-
-        # w = self.window.allocation.width
-        # h = self.window.allocation.height
-
-        # cr.translate(w / 2, h / 2)
-        # cr.arc(0, 0, 50, 0, 2 * 3.15)
-        # cr.stroke_preserve()
-
-        # cr.set_source_rgb(0.3, 0.4, 0.6)
-        # cr.fill()
 
     def colorconvertf(self, color, depth=8):
         temp = []
@@ -113,7 +100,7 @@ class GtkInterface(Interface):
         self.window.set_title(caption + " (gtk)")
 
     def handle_events(self):
-        while gtk.events_pending():
+        if gtk.events_pending():
             gtk.main_iteration()
 
     def keyboardinput(self, widget, data=None):
