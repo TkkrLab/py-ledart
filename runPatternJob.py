@@ -34,7 +34,7 @@ args = parser.parse_args()
 if args.gui:
     try:
         import Gui.Gui as Gui
-        Gui.main()
+        Gui.main(args)
         sys.exit(0)
     except Exception as e:
         print(e)

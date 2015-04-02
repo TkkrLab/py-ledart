@@ -1,6 +1,23 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+import gobject
+
+
+class Gui(object):
+    def __init__(self, args):
+        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+        self.window.set_title("artnet-editor")
+        self.window.connect("destroy", gtk.main_quit)
+        gobject.timeout_add(int(1000 / args.fps), self.idle)
+        self.window.show()
+
+    def idle(self):
+        print("fps")
+
+    def main(self):
+        gtk.main()
 
 
 class Base(object):
@@ -153,6 +170,9 @@ class Base(object):
         print("Quiting")
         gtk.main_quit()
 
-def main():
-    base = Base()
+
+def main(args):
+    base = Gui(args)
     base.main()
+    # base = Base()
+    # base.main()
