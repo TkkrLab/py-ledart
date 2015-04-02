@@ -3,12 +3,11 @@ import sys
 from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
-from Interfaces import OpenGlInterface, PygameInterface, GtkInterface
+from Interfaces import OpenGlInterface, PygameInterface
 
 interface_opts = {
     "pygame": PygameInterface,
     "opengl": OpenGlInterface,
-    "gtk": GtkInterface,
 }
 
 
