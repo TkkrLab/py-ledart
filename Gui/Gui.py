@@ -73,9 +73,15 @@ class Gui(object):
         self.hbox = gtk.HBox()
         self.vbox = gtk.VBox()
 
+        self.text = []
+        with open("/home/robert/py-artnet/test.py", 'r') as thefile:
+            self.text.append(thefile.read())
+        print(len(self.text))
+
         # syntax highlighting.
         lang = SyntaxLoader("/home/robert/py-artnet/python")
         buff = CodeBuffer(lang=lang)
+        buff.set_text(self.text[0])
         # menu items
         mb = gtk.MenuBar()
 
