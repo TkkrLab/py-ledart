@@ -50,6 +50,12 @@ class MatrixScreen(object):
         self.time = 1
         self.fps = 0
 
+    def getpixels(self):
+        """
+            returns the internal list representation of the pixels
+        """
+        return self.pixels
+
     def handleinput(self):
         self.interface.handleinput()
 
