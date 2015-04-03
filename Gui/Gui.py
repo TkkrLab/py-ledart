@@ -2,12 +2,13 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import gobject
+import pango
+from gtkcodebuffer import CodeBuffer, SyntaxLoader
 
 from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
 from matrix import matrix_width, matrix_height
 from runPatternJob import load_targets
-from gtkcodebuffer import CodeBuffer, SyntaxLoader
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -16,7 +17,6 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
         Interface.__init__(self, matrix_width, matrix_height, args.pixelSize)
         self.par = parent
         self.target = self.par.TARGETS
-        self.set_size_request(-1, -1)
         self.connect("expose-event", self.expose)
 
         if args.fps:
@@ -27,6 +27,7 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
         interface = interface_opts["dummy"]
         self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
                                          args.pixelSize, interface)
+        gtk.DrawingArea.set_size_request(self, self.width, self.height)
 
     def color_convert_f(self, color, depth=8):
         temp = []
@@ -51,7 +52,7 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                 r, g, b = self.color_convert_f(pixelcolor)
                 cr.set_source_rgb(0.0, 0.0, 0.0)
                 cr.rectangle(x, y, width, height)
-                cr.fill()
+                cr.stroke()
                 cr.set_source_rgb(r, g, b)
                 cr.rectangle(x + 1, y + 1, width - 2, height - 2)
                 cr.fill()
@@ -69,9 +70,6 @@ class Gui(object):
         self.matrix_widget = MatrixSimWidget(self, self.args, self.TARGETS)
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
-
-        self.hbox = gtk.HBox()
-        self.vbox = gtk.VBox()
 
         self.text = []
         with open("/home/robert/py-artnet/test.py", 'r') as thefile:
@@ -96,13 +94,22 @@ class Gui(object):
         key, mod = gtk.accelerator_parse("<Control>N")
         newi.add_accelerator("activate", agr, key, mod,
                              gtk.ACCEL_VISIBLE)
+        newi.connect("activate", self.newfile)
         filemenu.append(newi)
 
         openm = gtk.ImageMenuItem(gtk.STOCK_OPEN, agr)
         key, mod = gtk.accelerator_parse("<Control>O")
         openm.add_accelerator("activate", agr, key, mod,
                               gtk.ACCEL_VISIBLE)
+        openm.connect("activate", self.openfile)
         filemenu.append(openm)
+
+        savem = gtk.ImageMenuItem(gtk.STOCK_SAVE, agr)
+        key, mod = gtk.accelerator_parse("<Control>S")
+        openm.add_accelerator("activate", agr, key, mod,
+                              gtk.ACCEL_VISIBLE)
+        savem.connect("activate", self.savefile)
+        filemenu.append(savem)
 
         sep = gtk.SeparatorMenuItem()
         filemenu.append(sep)
@@ -115,21 +122,58 @@ class Gui(object):
         filemenu.append(exit)
         mb.append(filem)
 
-        self.vbox.add(self.matrix_widget)
-        button = gtk.Button("button")
-        self.vbox.add(button)
-        self.hbox.add(self.vbox)
         textview = gtk.TextView(buff)
-        self.vbox1 = gtk.VBox()
-        self.vbox1.pack_start(mb, False, False, 0)
-        scr = gtk.ScrolledWindow()
-        scr.add(textview)
-        self.vbox1.add(scr)
-        self.hbox.add(self.vbox1)
-        self.vbox2 = gtk.VBox()
-        self.vbox2.add(self.hbox)
-        self.window.add(self.vbox2)
+        fontdesc = pango.FontDescription("monospace 9")
+        textview.modify_font(fontdesc)
+        scrolledwindow = gtk.ScrolledWindow()
+        scrolledwindow.add(textview)
+
+        self.hbox = gtk.HBox()
+        self.vbox = gtk.VBox()
+        self.vbox.pack_start(mb, False, False)
+        self.vbox.pack_start(scrolledwindow)
+        self.hbox.pack_start(self.vbox)
+        # this sets it so that the scrolledwindow follows matrix_widget
+        self.hbox.pack_start(self.matrix_widget, False, True)
+        self.window.add(self.hbox)
         self.window.show_all()
+        self.window.show_all()
+
+    def newfile(self, widget):
+        print("supposed to make a new empty file")
+
+    def openfile(self, widget):
+        # create a dialog window.
+        dialog = gtk.FileChooserDialog("Open..",
+                                       None,
+                                       gtk.FILE_CHOOSER_ACTION_OPEN,
+                                       (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                        gtk.STOCK_OPEN, gtk.RESPONSE_OK)
+                                       )
+        dialog.set_default_response(gtk.RESPONSE_OK)
+
+        filter = gtk.FileFilter()
+        filter.set_name("Python Files.")
+        filter.add_mime_type("python")
+        filter.add_pattern("*.py")
+        dialog.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name("All files")
+        filter.add_pattern("*")
+        dialog.add_filter(filter)
+
+        response = dialog.run()
+        if response == gtk.RESPONSE_OK:
+            print(dialog.get_filename(), 'selected')
+        elif response == gtk.RESPONSE_CANCEL:
+            print('None selected')
+        dialog.destroy()
+
+        print("supposed to be opening a file.")
+
+    def savefile(self, widget):
+        print("supposed to be saving")
 
     def main(self):
         gtk.main()
