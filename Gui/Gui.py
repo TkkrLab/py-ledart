@@ -43,11 +43,9 @@ class Gui(object):
         self.matrix_widget = MatrixSimWidget(self, self.args)
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
-        interface = interface_opts["dummy"]
-        matrixscreen = MatrixScreen(matrix_width, matrix_height,
-                                    args.pixelSize,
-                                    self.fullscreen,
-                                    interface)
+        interface = interface_opts[args.simInterface]
+        self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
+                                         args.pixelSize)
 
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)

@@ -52,7 +52,7 @@ class MatrixScreen(object):
 
     def getpixels(self):
         """
-            returns the internal list representation of the pixels
+        returns the internal list representation of the pixels
         """
         return self.pixels
 
