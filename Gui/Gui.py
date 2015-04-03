@@ -6,6 +6,7 @@ import gobject
 from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
 from matrix import matrix_width, matrix_height
+from runPatternJob import load_targets
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -43,9 +44,9 @@ class Gui(object):
         self.matrix_widget = MatrixSimWidget(self, self.args)
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
-        interface = interface_opts[args.simInterface]
+        interface = interface_opts["dummy"]
         self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
-                                         args.pixelSize)
+                                         args.pixelSize, interface)
 
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)
@@ -53,8 +54,10 @@ class Gui(object):
             gobject.timeout_add(0, self.run)
 
         self.window.add(self.matrix_widget)
-
         self.window.show_all()
+
+        self.TARGETS = load_targets(args.config)
+        print(self.TARGETS)
 
     def run(self):
         return True

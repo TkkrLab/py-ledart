@@ -59,11 +59,16 @@ class MatrixScreen(object):
     def handleinput(self):
         self.interface.handleinput()
 
-    def draw(self, data):
+    def set_pixels(self, data):
         # extract pixels and color from data
         # get both a list index and the color data.
         for i, color in enumerate(data):
             self.pixels[i].setColor(color)
+
+    def draw(self, data):
+        # set the pixels in the screen to the
+        # apropriate colors.
+        self.set_pixels(data)
         # clear the window
         self.interface.clear(Graphics.BLACK)
         # display the pixels.
