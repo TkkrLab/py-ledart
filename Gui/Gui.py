@@ -70,16 +70,13 @@ class Gui(object):
         self.matrix_widget = MatrixSimWidget(self, self.args, self.TARGETS)
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
-
-        self.text = []
-        with open("/home/robert/py-artnet/test.py", 'r') as thefile:
-            self.text.append(thefile.read())
-        print(len(self.text))
+        self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
+        self.textfilename = "/home/robert/py-artnet/test.py"
 
         # syntax highlighting.
-        lang = SyntaxLoader("/home/robert/py-artnet/python")
-        buff = CodeBuffer(lang=lang)
-        buff.set_text(self.text[0])
+        self.lang = SyntaxLoader(self.syntaxfile)
+        self.buff = CodeBuffer(lang=self.lang)
+        self.buff.set_text(self.loadfile(self.textfilename))
         # menu items
         mb = gtk.MenuBar()
 
@@ -122,7 +119,7 @@ class Gui(object):
         filemenu.append(exit)
         mb.append(filem)
 
-        textview = gtk.TextView(buff)
+        textview = gtk.TextView(self.buff)
         fontdesc = pango.FontDescription("monospace 9")
         textview.modify_font(fontdesc)
         scrolledwindow = gtk.ScrolledWindow()
@@ -138,6 +135,12 @@ class Gui(object):
         self.window.add(self.hbox)
         self.window.show_all()
         self.window.show_all()
+
+    def loadfile(self, file):
+        text = []
+        with open(file, 'r') as thefile:
+            text.append(thefile.read())
+        return text[0]
 
     def newfile(self, widget):
         print("supposed to make a new empty file")
@@ -165,12 +168,9 @@ class Gui(object):
 
         response = dialog.run()
         if response == gtk.RESPONSE_OK:
-            print(dialog.get_filename(), 'selected')
-        elif response == gtk.RESPONSE_CANCEL:
-            print('None selected')
+            self.textfilename = dialog.get_filename()
+            self.buff.set_text(self.loadfile(self.textfilename))
         dialog.destroy()
-
-        print("supposed to be opening a file.")
 
     def savefile(self, widget):
         print("supposed to be saving")
