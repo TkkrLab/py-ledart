@@ -5,7 +5,7 @@
 class BarberpolePattern:
     # Rotating stripes of certain colors, default red/white
     def __init__(self, backwards=False, color1=(0, 0, 255),
-                 color2=(128, 128, 128)):
+                 color2=(255, 255, 255)):
         self.backwards = backwards
         self.color1 = color1
         self.color2 = color2

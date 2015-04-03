@@ -50,7 +50,7 @@ class MatrixScreen(object):
         self.time = 1
         self.fps = 0
 
-    def getpixels(self):
+    def get_pixels(self):
         """
         returns the internal list representation of the pixels
         """
@@ -59,7 +59,7 @@ class MatrixScreen(object):
     def handleinput(self):
         self.interface.handleinput()
 
-    def set_pixels(self, data):
+    def process_pixels(self, data):
         # extract pixels and color from data
         # get both a list index and the color data.
         for i, color in enumerate(data):
@@ -68,7 +68,7 @@ class MatrixScreen(object):
     def draw(self, data):
         # set the pixels in the screen to the
         # apropriate colors.
-        self.set_pixels(data)
+        self.process_pixels(data)
         # clear the window
         self.interface.clear(Graphics.BLACK)
         # display the pixels.

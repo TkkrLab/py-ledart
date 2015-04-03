@@ -10,7 +10,7 @@ parser.add_argument("--netSilent",    help="if enabled won't send out udp packet
 parser.add_argument("--showFps",      help="prints out the actuall fps the program runs at",      metavar="<enabled>",              nargs="?", default="disabled",          type=str)
 parser.add_argument("--fullscreen",   help="makes matrixsim go fullscreen (hides mouse pointer)", metavar="<enabled>",              nargs="?", default="disabled",          type=str)
 parser.add_argument("--gui",          help="enables the graphical interface.",                    metavar="<enabled>",              nargs="?", default="disabled",          type=str)
-parser.add_argument("--simInterface", help="lets you choose the simulator drawing interface",     metavar="<pygame, opengl, dummy", nargs="?", default="dummy",             type=str)
+parser.add_argument("--simInterface", help="lets you choose the simulator drawing interface",     metavar="<pygame, opengl, dummy", nargs="?", default="pygame",             type=str)
 
 
 def get_args():

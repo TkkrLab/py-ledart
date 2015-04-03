@@ -5,7 +5,7 @@ import gobject
 
 from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
-from matrix import matrix_width, matrix_height
+from matrix import matrix_width, matrix_height, matrix_size
 from runPatternJob import load_targets
 
 
@@ -16,16 +16,24 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
         self.par = parent
         self.set_size_request(self.height, self.width)
         self.connect("expose-event", self.expose)
+        self.pixels = []
 
     def set_data(self, pixels):
         self.pixels = pixels
 
+    def color_convert_f(self, color, depth=8):
+        temp = []
+        for c in color:
+            temp.append(c / (2 ** depth))
+        return temp
+
     def expose(self, widget, event):
         cr = widget.window.cairo_create()
-        cr.set_line_width(0.8)
-        cr.set_source_rgb(0.25, 0.50, 0.75)
-        cr.rectangle(0, 0, self.width, self.height)
-        cr.fill()
+        if len(self.pixels):
+            for pixel in self.pixels:
+                x, y, width, height = pixel.getRect()
+                pixelColor = pixel.getColor()
+                print(pixelColor)
 
 
 class Gui(object):
@@ -57,9 +65,11 @@ class Gui(object):
         self.window.show_all()
 
         self.TARGETS = load_targets(args.config)
-        print(self.TARGETS)
 
     def run(self):
+        self.matrixscreen.process_pixels([(0, 0, 255) * matrix_size])
+        data = self.matrixscreen.get_pixels()
+        self.matrix_widget.set_data(data)
         return True
 
     def main(self):
