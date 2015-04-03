@@ -1,29 +1,27 @@
 import argparse
+import traceback
 import sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--fps",          help="control flow speed. if 0 fps is fastest possible.",   metavar="<fps>",            nargs="?", default=15,                  type=float)
-parser.add_argument("--config",       help="load config.",                                        metavar="<config_conf.py>", nargs="?", default="default_conf.py",   type=str)
-parser.add_argument("--snakeMode",    help="flips every x amount of data",                        metavar="<enabled>",        nargs="?", default=None,                type=str)
-parser.add_argument("--matrixSim",    help="turns on buildin matrix simulation",                  metavar="<enabled>",        nargs="?", default=None,                type=str)
-parser.add_argument("--pixelSize",    help="sets the pixel size for the matrix sim",              metavar="<PixelSize>",      nargs="?", default=30,                  type=int)
-parser.add_argument("--netSilent",    help="if enabled won't send out udp packets anywhere",      metavar="<enabled>",        nargs="?", default=None,                type=str)
-parser.add_argument("--showFps",      help="prints out the actuall fps the program runs at",      metavar="<enabled>",        nargs="?", default=None,                type=str)
-parser.add_argument("--fullscreen",   help="makes matrixsim go fullscreen (hides mouse pointer)", metavar="<enabled>",        nargs="?", default=False,               type=str)
-parser.add_argument("--gui",          help="enables the graphical interface.",                    metavar="<enabled>",        nargs="?", default=False,               type=str)
-parser.add_argument("--simInterface", help="lets you choose the simulator drawing interface",     metavar="<pygame, opengl",  nargs="?", default="pygame",            type=str)
+parser.add_argument("--fps",          help="control flow speed. if 0 fps is fastest possible.",   metavar="<fps>",                  nargs="?", default=15,                  type=float)
+parser.add_argument("--config",       help="load config.",                                        metavar="<config_conf.py>",       nargs="?", default="default_conf.py",   type=str)
+parser.add_argument("--snakeMode",    help="flips every x amount of data",                        metavar="<enabled>",              nargs="?", default=None,                type=str)
+parser.add_argument("--matrixSim",    help="turns on buildin matrix simulation",                  metavar="<enabled>",              nargs="?", default=None,                type=str)
+parser.add_argument("--pixelSize",    help="sets the pixel size for the matrix sim",              metavar="<PixelSize>",            nargs="?", default=30,                  type=int)
+parser.add_argument("--netSilent",    help="if enabled won't send out udp packets anywhere",      metavar="<enabled>",              nargs="?", default=None,                type=str)
+parser.add_argument("--showFps",      help="prints out the actuall fps the program runs at",      metavar="<enabled>",              nargs="?", default=None,                type=str)
+parser.add_argument("--fullscreen",   help="makes matrixsim go fullscreen (hides mouse pointer)", metavar="<enabled>",              nargs="?", default=False,               type=str)
+parser.add_argument("--gui",          help="enables the graphical interface.",                    metavar="<enabled>",              nargs="?", default=False,               type=str)
+parser.add_argument("--simInterface", help="lets you choose the simulator drawing interface",     metavar="<pygame, opengl, dummy", nargs="?", default="dummy",            type=str)
 # parser.add_argument("--matrixSize", help="set the width and hight of matrix
 # for exampel: --matrixSize=10,17", nargs="+", type=int)
 args = parser.parse_args()
 
 # if gui selected start that else start the headless code.
 if args.gui:
-    try:
-        import Gui.Gui as Gui
-        Gui.main(args)
-        sys.exit(0)
-    except Exception as e:
-        print("gui >> " + str(e))
+    import Gui.Gui as Gui
+    Gui.main(args)
+    sys.exit(0)
 else:
     import socket
     import time
@@ -36,14 +34,13 @@ else:
     try:
         from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
     except Exception as e:
-        print(e)
+        print("MatrixScreen>> " + str(e))
 
     UDP_PORT = 6454
 
     def load_targets(configfile):
-        # the bit below here allows loading of the config files specified by
-        # --config written by Duality
-        # this will then also load patterns.
+        # this function allows loading of the config files specified by
+        # --config/configfile and load patterns defined in there.
         package = "configs"
         fp, path, description = imp.find_module(package)
         fp, path, description = imp.find_module(str(configfile)[:-3], [path])

@@ -3,17 +3,28 @@ pygtk.require('2.0')
 import gtk
 import gobject
 
-from MatrixSim.MatrixScreen import MatrixScreen
+from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
-import matrix
+from matrix import matrix_width, matrix_height
 
 
-class MatrixSimWidget(gtk.Widget, MatrixScreen, Interface):
-    def __init__(self, width, height, pixelsize,
-                 fullscreen=False, interface=None):
-        gtk.Widget.__init__(self)
-        Interface.__init__(width, height, pixelsize)
-        MatrixScreen.__init__(width, height, pixelsize, Interface)
+class MatrixSimWidget(gtk.DrawingArea, Interface):
+    def __init__(self, parent, args):
+        gtk.DrawingArea.__init__(self)
+        Interface.__init__(self, matrix_width, matrix_height, args.pixelSize)
+        self.par = parent
+        self.set_size_request(self.height, self.width)
+        self.connect("expose-event", self.expose)
+
+    def set_data(self, pixels):
+        self.pixels = pixels
+
+    def expose(self, widget, event):
+        cr = widget.window.cairo_create()
+        cr.set_line_width(0.8)
+        cr.set_source_rgb(0.25, 0.50, 0.75)
+        cr.rectangle(0, 0, self.width, self.height)
+        cr.fill()
 
 
 class Gui(object):
@@ -24,16 +35,28 @@ class Gui(object):
         self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
 
-        self.matrix_widget = MatrixSimWidget(matrix.matrix_width,
-                                             matrix.matrix_height,
-                                             self.args.pixelsize)
+        if args.fullscreen == "enabled":
+            self.fullscreen = True
+        else:
+            self.fullscreen = False
+
+        self.matrix_widget = MatrixSimWidget(self, self.args)
+        width, height = self.matrix_widget.width, self.matrix_widget.height
+        self.window.resize(width * 2, height * 2)
+        interface = interface_opts["dummy"]
+        matrixscreen = MatrixScreen(matrix_width, matrix_height,
+                                    args.pixelSize,
+                                    self.fullscreen,
+                                    interface)
 
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)
         else:
             gobject.timeout_add(0, self.run)
 
-        self.window.show()
+        self.window.add(self.matrix_widget)
+
+        self.window.show_all()
 
     def run(self):
         return True

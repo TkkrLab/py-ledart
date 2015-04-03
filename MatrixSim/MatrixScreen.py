@@ -3,11 +3,12 @@ import sys
 from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
-from Interfaces import OpenGlInterface, PygameInterface
+from Interfaces import OpenGlInterface, PygameInterface, DummyInterface
 
 interface_opts = {
     "pygame": PygameInterface,
     "opengl": OpenGlInterface,
+    "dummy": DummyInterface
 }
 
 
@@ -18,7 +19,7 @@ class MatrixScreen(object):
     defined in matrix.py
     """
     def __init__(self, width, height, pixelsize, fullscreen=False,
-                 interface=OpenGlInterface):
+                 interface=DummyInterface):
         self.interface = interface(width, height, pixelsize, fullscreen)
         self.width = width
         self.height = height

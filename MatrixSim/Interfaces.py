@@ -10,12 +10,13 @@ class Interface(object):
     """
     the basic drawing interface api
     """
-    def __init__(self, width, height, blocksize):
+    def __init__(self, width, height, blocksize, fullscreen=False):
         """ Initialize the interface. it know how big the screen is."""
         # due to physical matrix layout these are switched.
         self.width = height * blocksize
         self.height = width * blocksize
         self.blocksize = blocksize
+        self.fullscreen = fullscreen
 
     def handleinput(self):
         """
@@ -43,6 +44,11 @@ class Interface(object):
     def quit(self):
         """ called when quiting the program."""
         pass
+
+
+class DummyInterface(Interface):
+    def __init__(self, width, height, blocksize, fullscreen=False):
+        Interface.__init__(self, width, height, blocksize, fullscreen)
 
 
 class OpenGlInterface(Interface):
