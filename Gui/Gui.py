@@ -71,21 +71,40 @@ class Gui(object):
 
         self.hbox = gtk.HBox()
         self.vbox = gtk.VBox()
-        self.toolbar = gtk.Toolbar()
-        self.toolbar.set_style(gtk.TOOLBAR_ICONS)
 
-        newtb = gtk.ToolButton(gtk.STOCK_NEW)
-        opentb = gtk.ToolButton(gtk.STOCK_OPEN)
-        savetb = gtk.ToolButton(gtk.STOCK_SAVE)
-        sep = gtk.SeparatorToolItem()
-        quittb = gtk.ToolButton(gtk.STOCK_QUIT)
-        self.toolbar.insert(newtb, 0)
-        self.toolbar.insert(opentb, 1)
-        self.toolbar.insert(savetb, 2)
-        self.toolbar.insert(sep, 3)
-        self.toolbar.insert(quittb, 4)
+        mb = gtk.MenuBar()
 
-        quittb.connect("clicked", gtk.main_quit)
+        filemenu = gtk.Menu()
+        filem = gtk.MenuItem("_File")
+        filem.set_submenu(filemenu)
+
+        agr = gtk.AccelGroup()
+        self.window.add_accel_group(agr)
+
+        newi = gtk.ImageMenuItem(gtk.STOCK_NEW, agr)
+        key, mod = gtk.accelerator_parse("<Control>N")
+        newi.add_accelerator("activate", agr, key, mod,
+                             gtk.ACCEL_VISIBLE)
+        filemenu.append(newi)
+
+        openm = gtk.ImageMenuItem(gtk.STOCK_OPEN, agr)
+        key, mod = gtk.accelerator_parse("<Control>O")
+        openm.add_accelerator("activate", agr, key, mod,
+                              gtk.ACCEL_VISIBLE)
+        filemenu.append(openm)
+
+        sep = gtk.SeparatorMenuItem()
+        filemenu.append(sep)
+
+        exit = gtk.ImageMenuItem(gtk.STOCK_QUIT, agr)
+        key, mod = gtk.accelerator_parse("<Control>Q")
+        exit.add_accelerator("activate", agr, key, mod,
+                             gtk.ACCEL_VISIBLE)
+        exit.connect("activate", gtk.main_quit)
+        filemenu.append(exit)
+        mb.append(filem)
+
+        mb.set_size_request(matrix_width, -1)
 
         self.vbox.add(self.matrix_widget)
         button = gtk.Button("button")
@@ -95,8 +114,7 @@ class Gui(object):
         textview = gtk.TextView()
         textview.set_size_request(matrix_width, matrix_height * 2)
         self.vbox1 = gtk.VBox()
-        self.toolbar.set_size_request(matrix_width, matrix_height)
-        self.vbox1.add(self.toolbar)
+        self.vbox1.pack_start(mb, False, False, 0)
         self.vbox1.add(textview)
         self.hbox.add(self.vbox1)
         self.vbox2 = gtk.VBox()
