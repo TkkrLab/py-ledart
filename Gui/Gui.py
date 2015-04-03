@@ -5,7 +5,7 @@ import gobject
 
 from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
-from matrix import matrix_width, matrix_height, matrix_size
+from matrix import matrix_width, matrix_height
 from runPatternJob import load_targets
 
 
