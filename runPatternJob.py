@@ -52,8 +52,9 @@ if __name__ == "__main__":
     args = get_args()
     # if gui selected start that else start the headless code.
     if args.gui == "enabled":
-        import Gui.Gui as Gui
-        Gui.main(args)
+        from Gui.Gui import Gui
+        editor = Gui(args)
+        editor.main()
         sys.exit(0)
     else:
         import time

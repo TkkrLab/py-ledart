@@ -15,7 +15,7 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
         Interface.__init__(self, matrix_width, matrix_height, args.pixelSize)
         self.par = parent
         self.target = self.par.TARGETS
-        self.set_size_request(self.height, self.width)
+        self.set_size_request(-1, -1)
         self.connect("expose-event", self.expose)
 
         if args.fps:
@@ -64,17 +64,44 @@ class Gui(object):
         self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
 
-        if args.fullscreen == "enabled":
-            self.fullscreen = True
-        else:
-            self.fullscreen = False
-
         self.TARGETS = load_targets(args.config)
         self.matrix_widget = MatrixSimWidget(self, self.args, self.TARGETS)
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
 
-        self.window.add(self.matrix_widget)
+        self.hbox = gtk.HBox()
+        self.vbox = gtk.VBox()
+        self.toolbar = gtk.Toolbar()
+        self.toolbar.set_style(gtk.TOOLBAR_ICONS)
+
+        newtb = gtk.ToolButton(gtk.STOCK_NEW)
+        opentb = gtk.ToolButton(gtk.STOCK_OPEN)
+        savetb = gtk.ToolButton(gtk.STOCK_SAVE)
+        sep = gtk.SeparatorToolItem()
+        quittb = gtk.ToolButton(gtk.STOCK_QUIT)
+        self.toolbar.insert(newtb, 0)
+        self.toolbar.insert(opentb, 1)
+        self.toolbar.insert(savetb, 2)
+        self.toolbar.insert(sep, 3)
+        self.toolbar.insert(quittb, 4)
+
+        quittb.connect("clicked", gtk.main_quit)
+
+        self.vbox.add(self.matrix_widget)
+        button = gtk.Button("button")
+        button.set_size_request(matrix_width, matrix_height)
+        self.vbox.add(button)
+        self.hbox.add(self.vbox)
+        textview = gtk.TextView()
+        textview.set_size_request(matrix_width, matrix_height * 2)
+        self.vbox1 = gtk.VBox()
+        self.toolbar.set_size_request(matrix_width, matrix_height)
+        self.vbox1.add(self.toolbar)
+        self.vbox1.add(textview)
+        self.hbox.add(self.vbox1)
+        self.vbox2 = gtk.VBox()
+        self.vbox2.add(self.hbox)
+        self.window.add(self.vbox2)
         self.window.show_all()
 
     def main(self):
