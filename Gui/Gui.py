@@ -10,30 +10,50 @@ from runPatternJob import load_targets
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
-    def __init__(self, parent, args):
+    def __init__(self, parent, args, target):
         gtk.DrawingArea.__init__(self)
         Interface.__init__(self, matrix_width, matrix_height, args.pixelSize)
         self.par = parent
+        self.target = target
         self.set_size_request(self.height, self.width)
         self.connect("expose-event", self.expose)
-        self.pixels = []
 
-    def set_data(self, pixels):
-        self.pixels = pixels
+        if args.fps:
+            gobject.timeout_add(int(1000 / args.fps), self.run)
+        else:
+            gobject.timeout_add(0, self.run)
+
+        interface = interface_opts["dummy"]
+        self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
+                                         args.pixelSize, interface)
 
     def color_convert_f(self, color, depth=8):
         temp = []
         for c in color:
-            temp.append(c / (2 ** depth))
-        return temp
+            temp.append(c / 255.)
+        return tuple(temp)
+
+    def run(self):
+        for dest in self.target:
+            data = self.target[dest].generate()
+        self.matrixscreen.process_pixels(data)
+        data = self.matrixscreen.get_pixels()
+        self.queue_draw()
+        return True
 
     def expose(self, widget, event):
         cr = widget.window.cairo_create()
-        if len(self.pixels):
-            for pixel in self.pixels:
+        if len(self.matrixscreen.pixels):
+            for pixel in self.matrixscreen.pixels:
                 x, y, width, height = pixel.getRect()
-                pixelColor = pixel.getColor()
-                print(pixelColor)
+                pixelcolor = pixel.getColor()
+                r, g, b = self.color_convert_f(pixelcolor)
+                cr.set_source_rgb(0.0, 0.0, 0.0)
+                cr.rectangle(x, y, width, height)
+                cr.fill()
+                cr.set_source_rgb(r, g, b)
+                cr.rectangle(x + 1, y + 1, width - 2, height - 2)
+                cr.fill()
 
 
 class Gui(object):
@@ -49,28 +69,13 @@ class Gui(object):
         else:
             self.fullscreen = False
 
-        self.matrix_widget = MatrixSimWidget(self, self.args)
+        self.TARGETS = load_targets(args.config)
+        self.matrix_widget = MatrixSimWidget(self, self.args, self.TARGETS)
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
-        interface = interface_opts["dummy"]
-        self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
-                                         args.pixelSize, interface)
-
-        if self.args.fps:
-            gobject.timeout_add(int(1000 / self.args.fps), self.run)
-        else:
-            gobject.timeout_add(0, self.run)
 
         self.window.add(self.matrix_widget)
         self.window.show_all()
-
-        self.TARGETS = load_targets(args.config)
-
-    def run(self):
-        self.matrixscreen.process_pixels([(0, 0, 255) * matrix_size])
-        data = self.matrixscreen.get_pixels()
-        self.matrix_widget.set_data(data)
-        return True
 
     def main(self):
         gtk.main()
