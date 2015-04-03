@@ -119,11 +119,11 @@ class Gui(object):
         filemenu.append(exit)
         mb.append(filem)
 
-        textview = gtk.TextView(self.buff)
+        self.textview = gtk.TextView(self.buff)
         fontdesc = pango.FontDescription("monospace 9")
-        textview.modify_font(fontdesc)
+        self.textview.modify_font(fontdesc)
         scrolledwindow = gtk.ScrolledWindow()
-        scrolledwindow.add(textview)
+        scrolledwindow.add(self.textview)
 
         self.hbox = gtk.HBox()
         self.vbox = gtk.VBox()
@@ -141,6 +141,14 @@ class Gui(object):
         with open(file, 'r') as thefile:
             text.append(thefile.read())
         return text[0]
+
+    def savefile(self, widget):
+        filename = self.textfilename
+        start_iter = self.textview.get_buffer().get_start_iter()
+        end_iter = self.textview.get_buffer().get_end_iter()
+        text = self.textview.get_buffer().get_text(start_iter, end_iter, True)
+        with open(filename + "test", 'w') as thefile:
+            thefile.write(text)
 
     def newfile(self, widget):
         print("supposed to make a new empty file")
@@ -171,9 +179,6 @@ class Gui(object):
             self.textfilename = dialog.get_filename()
             self.buff.set_text(self.loadfile(self.textfilename))
         dialog.destroy()
-
-    def savefile(self, widget):
-        print("supposed to be saving")
 
     def main(self):
         gtk.main()
