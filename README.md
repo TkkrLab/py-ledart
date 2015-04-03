@@ -8,6 +8,13 @@ or anything that has a network based artnet interface.
 I made it easier to config and run patters with python code.
 
 
+#### Dependencies.
+* python opengl bindings
+* pygame
+* pygtk. version above 2.0
+* pyserial
+
+
 #### what to do if you want to run it ?
 
 make you pattern, import it into patterns.py
