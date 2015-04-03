@@ -7,6 +7,7 @@ from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
 from matrix import matrix_width, matrix_height
 from runPatternJob import load_targets
+from gtkcodebuffer import CodeBuffer, SyntaxLoader
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -72,6 +73,10 @@ class Gui(object):
         self.hbox = gtk.HBox()
         self.vbox = gtk.VBox()
 
+        # syntax highlighting.
+        lang = SyntaxLoader("/home/robert/py-artnet/python")
+        buff = CodeBuffer(lang=lang)
+        # menu items
         mb = gtk.MenuBar()
 
         filemenu = gtk.Menu()
@@ -104,18 +109,16 @@ class Gui(object):
         filemenu.append(exit)
         mb.append(filem)
 
-        mb.set_size_request(matrix_width, -1)
-
         self.vbox.add(self.matrix_widget)
         button = gtk.Button("button")
-        button.set_size_request(matrix_width, matrix_height)
         self.vbox.add(button)
         self.hbox.add(self.vbox)
-        textview = gtk.TextView()
-        textview.set_size_request(matrix_width, matrix_height * 2)
+        textview = gtk.TextView(buff)
         self.vbox1 = gtk.VBox()
         self.vbox1.pack_start(mb, False, False, 0)
-        self.vbox1.add(textview)
+        scr = gtk.ScrolledWindow()
+        scr.add(textview)
+        self.vbox1.add(scr)
         self.hbox.add(self.vbox1)
         self.vbox2 = gtk.VBox()
         self.vbox2.add(self.hbox)
