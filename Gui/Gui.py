@@ -6,6 +6,7 @@ import pango
 from gtkcodebuffer import CodeBuffer, SyntaxLoader
 import py_compile
 import sys
+import string
 
 from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
@@ -75,8 +76,10 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
 class Gui(object):
     def __init__(self, args):
         self.args = args
+        # tabwidth in spaces
+        self.tabwidth = 4
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.window.maximize()
+        # self.window.maximize()
         self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
         self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
@@ -138,6 +141,9 @@ class Gui(object):
         self.textview = gtk.TextView(self.buff)
         fontdesc = pango.FontDescription("monospace 9")
         self.textview.modify_font(fontdesc)
+        tabs = pango.TabArray(1, True)
+        tabs.set_tab(0, pango.TAB_LEFT, 32)
+        self.textview.set_tabs(tabs)
         scrolledwindow = gtk.ScrolledWindow()
         scrolledwindow.add(self.textview)
 
@@ -150,14 +156,20 @@ class Gui(object):
         self.hbox.pack_start(self.matrix_widget, False, True)
         self.window.add(self.hbox)
         self.buff.connect("changed", self.text_change)
+        self.buff.connect("insert_text", self.inserted)
         self.window.show_all()
 
         # do this once and we can import our compiled code.
         self.modpath = '/'.join(self.intermediatefilename.split('/')[:-1])
         sys.path.insert(0, self.modpath)
 
-    def text_change(self, widget, data=None):
+    def inserted(self, buffer, text_iter, char, num):
+        if char == '\t':
+            pass
+
+    def text_change(self, widget):
         text = self.get_text()
+
         # save and compile the text in the text widget on change.
         self.storefile(self.intermediatefilename, text)
         py_compile.compile(self.intermediatefilename)

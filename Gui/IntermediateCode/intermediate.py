@@ -1,9 +1,9 @@
-from Graphics.Graphics import Graphics, WHITE, GREEN, BLUE, BLACK, RED
+from Graphics.Graphics import Graphics, GREEN, BLUE, BLACK
 from Controllers import ttyController, PongTtyController, translate
 from matrix import matrix_width, matrix_height
 import time
 import random
-
+										      cdsaxcvb
 # this controller class if for the wireless pong controllers.
 # with the 2.4 GHz nrf's inside.
 class PongController(ttyController, PongTtyController):
@@ -149,12 +149,12 @@ class Pong(object):
     """
     Pong game
     """
-    def __init__(self, speed=matrix_width/2, debug=False):
+    def __init__(self, speed=matrix_height / 2):
         self.graphics = Graphics(matrix_width, matrix_height)
 
         # create a ball. multiple balls should be possible :)
         self.ball = Ball((self.graphics.width / 2, self.graphics.height / 2),
-                         WHITE, self.graphics)
+                         GREEN, self.graphics)
 
         # try to use the tty controller.
         # but if it's not available use the automatic one.
@@ -163,16 +163,15 @@ class Pong(object):
         except Exception as e:
             fmt = (e, )
             fmtstr = "unable to find controllers playing on automatic\n>> %s"
-	    if debug:
-            	print(fmtstr % fmt)
+            print(fmtstr % fmt)
             self.controller = PongControllerAuto(plugged=0, ball=self.ball)
 
         # create two paddles
         paddle1_pos = (0, 0)
-        self.paddle1 = (Paddle(paddle1_pos, RED, self.controller,
+        self.paddle1 = (Paddle(paddle1_pos, BLUE, self.controller,
                         self.controller.POT1, self.graphics))
         paddle2_pos = (0, matrix_height - 1)
-        self.paddle2 = (Paddle(paddle2_pos, GREEN, self.controller,
+        self.paddle2 = (Paddle(paddle2_pos, BLUE, self.controller,
                         self.controller.POT2, self.graphics))
 
         # timing variables used to controle the speed of the ball
