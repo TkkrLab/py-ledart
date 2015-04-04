@@ -4,19 +4,21 @@ import gtk
 import gobject
 import pango
 from gtkcodebuffer import CodeBuffer, SyntaxLoader
+import py_compile
+import sys
 
 from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
 from matrix import matrix_width, matrix_height
-from runPatternJob import load_targets
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
-    def __init__(self, parent, args, target):
+    def __init__(self, parent, args):
         gtk.DrawingArea.__init__(self)
         Interface.__init__(self, matrix_width, matrix_height, args.pixelSize)
+        self.args = args
         self.par = parent
-        self.target = self.par.TARGETS
+        self.pattern = None
         self.connect("expose-event", self.expose)
 
         if args.fps:
@@ -29,18 +31,30 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                                          args.pixelSize, interface)
         gtk.DrawingArea.set_size_request(self, self.width, self.height)
 
+    def get_pattern(self):
+        return self.pattern
+
+    def set_pattern(self, pattern):
+        self.pattern = pattern
+
     def color_convert_f(self, color, depth=8):
         temp = []
         for c in color:
             temp.append(c / 255.)
         return tuple(temp)
 
+    def get_target(self):
+        return self.target
+
+    def set_target(self, target):
+        return self.target
+
     def run(self):
-        for dest in self.target:
-            data = self.target[dest].generate()
-        self.matrixscreen.process_pixels(data)
-        data = self.matrixscreen.get_pixels()
-        self.queue_draw()
+        if self.pattern:
+            data = self.pattern.generate()
+            self.matrixscreen.process_pixels(data)
+            data = self.matrixscreen.get_pixels()
+            self.queue_draw()
         return True
 
     def expose(self, widget, event):
@@ -62,16 +76,18 @@ class Gui(object):
     def __init__(self, args):
         self.args = args
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window.maximize()
         self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
         self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
 
-        self.TARGETS = load_targets(args.config)
-        self.matrix_widget = MatrixSimWidget(self, self.args, self.TARGETS)
+        self.matrix_widget = MatrixSimWidget(self, self.args)
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
         self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
-        self.textfilename = "/home/robert/py-artnet/test.py"
+        self.textfilename = "/home/robert/py-artnet/patterns/Pong/Pong.py"
+        self.intermediatefilename = "/home/robert/py-artnet/Gui/"\
+                                    "IntermediateCode/intermediate.py"
 
         # syntax highlighting.
         self.lang = SyntaxLoader(self.syntaxfile)
@@ -133,8 +149,36 @@ class Gui(object):
         # this sets it so that the scrolledwindow follows matrix_widget
         self.hbox.pack_start(self.matrix_widget, False, True)
         self.window.add(self.hbox)
+        self.buff.connect("changed", self.text_change)
         self.window.show_all()
-        self.window.show_all()
+
+        # do this once and we can import our compiled code.
+        self.modpath = '/'.join(self.intermediatefilename.split('/')[:-1])
+        sys.path.insert(0, self.modpath)
+
+    def text_change(self, widget, data=None):
+        # self.matrix_widget.reload_targets()
+        text = self.get_text()
+        self.storefile(self.intermediatefilename, text)
+        py_compile.compile(self.intermediatefilename)
+        # always get the latest itteration of the compiled code.
+        intermediate = __import__("intermediate")
+        intermediate = reload(intermediate)
+
+        # a verry verry complicated loop
+        for thing in intermediate.__dict__:
+            if isinstance(thing, object) and thing == "Pong":
+                thedict = intermediate.__dict__[thing].__dict__
+                if(thedict['generate']):
+                    pattern = intermediate.__dict__[thing]()
+                    self.matrix_widget.set_pattern(pattern)
+            # print("%s: %s" % (thing, intermediate.__dict__[thing]))
+
+    def get_text(self):
+        start_iter = self.buff.get_start_iter()
+        end_iter = self.buff.get_end_iter()
+        text = self.buff.get_text(start_iter, end_iter, True)
+        return text
 
     def loadfile(self, file):
         text = []
@@ -142,12 +186,14 @@ class Gui(object):
             text.append(thefile.read())
         return text[0]
 
+    def storefile(self, filename, text):
+        with open(filename, 'w') as thefile:
+            thefile.write(text)
+
     def savefile(self, widget):
         filename = self.textfilename
-        start_iter = self.textview.get_buffer().get_start_iter()
-        end_iter = self.textview.get_buffer().get_end_iter()
-        text = self.textview.get_buffer().get_text(start_iter, end_iter, True)
-        with open(filename + "test", 'w') as thefile:
+        text = self.get_text()
+        with open(filename, 'w') as thefile:
             thefile.write(text)
 
     def newfile(self, widget):
