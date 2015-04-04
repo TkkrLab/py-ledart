@@ -8,6 +8,13 @@ or anything that has a network based artnet interface.
 I made it easier to config and run patters with python code.
 
 
+#### Dependencies.
+* python opengl bindings
+* pygame
+* pygtk. version above 2.0
+* pyserial
+
+
 #### what to do if you want to run it ?
 
 make you pattern, import it into patterns.py
@@ -26,23 +33,23 @@ as wel as multpile patterns like:
 
 
 ```python
-	TARGETS {
-		target1_ip:pattern()
-		target2_ip:nextPattern()
-		target3_ip:anotherPattern()
-	}
+    TARGETS {
+        target1_ip:pattern()
+        target2_ip:nextPattern()
+        target3_ip:anotherPattern()
+    }
 ```
 
 Then to run the actual patterns you run from the command line:
 
 ```shell
-	:$ python runPatternJob.py --fps=<fps> --config=<config>
+    :$ python runPatternJob.py --fps=<fps> --config=<config>
 ```
 
 for example:
 
 ```shell
-	:$ python runpatternJob.py --fps=25 --config=myLamps_conf.py
+    :$ python runpatternJob.py --fps=25 --config=myLamps_conf.py
 ```
 
 both fps and config are optional,
@@ -61,7 +68,7 @@ to the command line options and it will run localy on your screen.
 
 for example:
 ```shell
-	:$ python runpatternJob.py --fps=25 --config=myLamps_conf.py --matrixSim=enabled
+    :$ python runpatternJob.py --fps=25 --config=myLamps_conf.py --matrixSim=enabled
 ```
 
 
@@ -87,11 +94,11 @@ compile:
 
 run:
 
-artmonitor <ip>		#tells a bit more info on the device like mac address and more.
+artmonitor <ip>     #tells a bit more info on the device like mac address and more.
 
-artpoll <broadcast> 	#finds all the devices on the network. writes that data to a file. make sure field-devices exist (file)
+artpoll <broadcast>     #finds all the devices on the network. writes that data to a file. make sure field-devices exist (file)
 
-artdmxtest <ip>		#runs a fading pattern, usefull for testing if the art-net device works.
+artdmxtest <ip>     #runs a fading pattern, usefull for testing if the art-net device works.
 
 
 
@@ -142,7 +149,3 @@ and yet another thing might be a network traffic monitor of kind.
 more a hardware todo is make firmware for the ESP8266 wifi module
 
 that does art net. no need for utp cables any more.
-
-
-
-
