@@ -157,22 +157,30 @@ class Gui(object):
         sys.path.insert(0, self.modpath)
 
     def text_change(self, widget, data=None):
-        # self.matrix_widget.reload_targets()
         text = self.get_text()
+        # save and compile the text in the text widget on change.
         self.storefile(self.intermediatefilename, text)
         py_compile.compile(self.intermediatefilename)
         # always get the latest itteration of the compiled code.
         intermediate = __import__("intermediate")
         intermediate = reload(intermediate)
 
-        # a verry verry complicated loop
-        for thing in intermediate.__dict__:
-            if isinstance(thing, object) and thing == "Pong":
-                thedict = intermediate.__dict__[thing].__dict__
-                if(thedict['generate']):
-                    pattern = intermediate.__dict__[thing]()
-                    self.matrix_widget.set_pattern(pattern)
-            # print("%s: %s" % (thing, intermediate.__dict__[thing]))
+        # check agains all the classes in intermediate code base.
+        for obj in intermediate.__dict__:
+            if isinstance(obj, object):
+                try:
+                    # for finding the methods of a class if class
+                    thedict = intermediate.__dict__[obj].__dict__
+                    # if the class has a generate method. it can make patterns.
+                    if(thedict['generate']):
+                        # make a instance of that pattern so we can run it
+                        # in the editor.
+                        pattern = intermediate.__dict__[obj]()
+                        # tell the matrix widget that we have a new pattern
+                        # to generate output.
+                        self.matrix_widget.set_pattern(pattern)
+                except:
+                    continue
 
     def get_text(self):
         start_iter = self.buff.get_start_iter()
