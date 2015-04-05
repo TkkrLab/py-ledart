@@ -91,7 +91,9 @@ but you can view the display as a string of pixels though, cause basicly in real
 * been working on a gui/editor to make patterns on the go, which features live code reloading, and a build in simulator
 * need to put downs some ideas soon like a line number ruler thing and indentation follow.
 * and more things like that.
-
+* create a few editeable settings like fps. and maybe a a live mode (sending out udp artnet to devices)
+* find ways to discover devices and display.
+* put some diagnostic output under the matrix simulator.
 
 #### usefull tools:
 compile:
