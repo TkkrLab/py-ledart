@@ -3,7 +3,7 @@ from Controllers import ttyController, PongTtyController, translate
 from matrix import matrix_width, matrix_height
 import time
 import random
-										      cdsaxcvb
+    
 # this controller class if for the wireless pong controllers.
 # with the 2.4 GHz nrf's inside.
 class PongController(ttyController, PongTtyController):

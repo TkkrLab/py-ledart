@@ -156,16 +156,22 @@ class Gui(object):
         self.hbox.pack_start(self.matrix_widget, False, True)
         self.window.add(self.hbox)
         self.buff.connect("changed", self.text_change)
-        self.buff.connect("insert_text", self.inserted)
+        self.insert_id = self.buff.connect("insert_text", self.inserted_cb)
         self.window.show_all()
 
         # do this once and we can import our compiled code.
         self.modpath = '/'.join(self.intermediatefilename.split('/')[:-1])
         sys.path.insert(0, self.modpath)
 
-    def inserted(self, buffer, text_iter, char, num):
+    def insert(self, widget):
+        widget.handler_block(self.insert_id)
+        widget.insert_at_cursor(" " * self.tabwidth)
+        widget.handler_unblock(self.insert_id)
+
+    def inserted_cb(self, widget, text_iter, char, num):
         if char == '\t':
-            pass
+            widget.stop_emission("insert_text")
+            gtk.idle_add(self.insert, widget)
 
     def text_change(self, widget):
         text = self.get_text()
