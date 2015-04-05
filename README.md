@@ -87,6 +87,12 @@ but you can view the display as a string of pixels though, cause basicly in real
 * pygame
 
 
+#### Art-Editor
+* been working on a gui/editor to make patterns on the go, which features live code reloading, and a build in simulator
+* need to put downs some ideas soon like a line number ruler thing and indentation follow.
+* and more things like that.
+
+
 #### usefull tools:
 compile:
 
