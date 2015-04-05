@@ -3,8 +3,8 @@ matrix dimensions and color order for simulator.
 and conversion function(s)
 """
 
-matrix_height = 17*3
-matrix_width = 10*3
+matrix_height = 17
+matrix_width = 10
 matrix_size = (matrix_height * matrix_width)
 COLOR_ORDER = [0, 1, 2]
 
