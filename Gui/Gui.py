@@ -172,6 +172,7 @@ class Gui(object):
         self.hbox.pack_start(self.matrix_widget, False, True)
         self.window.add(self.hbox)
         self.insert_id = self.buff.connect("insert_text", self.inserted_cb)
+        self.textview.connect("key-release-event", self.reload_code)
         self.window.show_all()
 
         # do this once and we can import our compiled code.
@@ -179,6 +180,7 @@ class Gui(object):
         sys.path.insert(0, self.modpath)
         # clear intermediate code.
         self.storefile(self.intermediatefilename, "")
+        self.storefile(self.intermediatefilename + 'c', "")
         # then load module
         self.intermediate = __import__("intermediate")
 
@@ -192,15 +194,14 @@ class Gui(object):
             widget.stop_emission("insert_text")
             gtk.idle_add(self.insert, widget)
 
-    def reload_code(self, widget):
+    def reload_code(self, widget, *args):
         # empty out the .pyc and .py file
         self.storefile(self.intermediatefilename + 'c', "")
-        self.storefile(self.intermediatefilename, "")
         text = self.get_text()
         # save and compile the text in the text widget on change.
-        self.storefile(self.intermediatefilename, text)
-        py_compile.compile(self.intermediatefilename)
         # always get the latest itteration of the compiled code.
+        self.storefile(self.intermediatefilename, self.get_text())
+        py_compile.compile(self.intermediatefilename)
         # check agains all the classes in intermediate code base.
         self.intermediate = reload(self.intermediate)
 
