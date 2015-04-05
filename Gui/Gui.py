@@ -6,6 +6,7 @@ from gtkcodebuffer import CodeBuffer, SyntaxLoader
 import py_compile
 import sys
 import string
+import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
