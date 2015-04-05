@@ -95,7 +95,7 @@ class Gui(object):
         # syntax highlighting.
         self.lang = SyntaxLoader(self.syntaxfile)
         self.buff = CodeBuffer(lang=self.lang)
-        self.buff.set_text(self.loadfile(self.textfilename))
+        self.buff.set_text("")
         # menu items
         mb = gtk.MenuBar()
 
@@ -106,6 +106,7 @@ class Gui(object):
         agr = gtk.AccelGroup()
         self.window.add_accel_group(agr)
 
+        # shortcut for creating a new file
         newi = gtk.ImageMenuItem(gtk.STOCK_NEW, agr)
         key, mod = gtk.accelerator_parse("<Control>N")
         newi.add_accelerator("activate", agr, key, mod,
@@ -113,6 +114,7 @@ class Gui(object):
         newi.connect("activate", self.newfile)
         filemenu.append(newi)
 
+        # shortcut for opening a file.
         openm = gtk.ImageMenuItem(gtk.STOCK_OPEN, agr)
         key, mod = gtk.accelerator_parse("<Control>O")
         openm.add_accelerator("activate", agr, key, mod,
@@ -120,6 +122,7 @@ class Gui(object):
         openm.connect("activate", self.openfile)
         filemenu.append(openm)
 
+        # shortcut for saving a file.
         savem = gtk.ImageMenuItem(gtk.STOCK_SAVE, agr)
         key, mod = gtk.accelerator_parse("<Control>S")
         openm.add_accelerator("activate", agr, key, mod,
@@ -127,9 +130,17 @@ class Gui(object):
         savem.connect("activate", self.savefile)
         filemenu.append(savem)
 
+        # shortcut for reloading
+        reloadm = gtk.ImageMenuItem(gtk.STOCK_REFRESH, agr)
+        key, mod = gtk.accelerator_parse("<Control>R")
+        reloadm.add_accelerator("activate", agr, key, mod,
+                                gtk.ACCEL_VISIBLE)
+        reloadm.connect("activate", self.reload_code)
+        filemenu.append(reloadm)
+
         sep = gtk.SeparatorMenuItem()
         filemenu.append(sep)
-
+        # shortcut for quiting
         exit = gtk.ImageMenuItem(gtk.STOCK_QUIT, agr)
         key, mod = gtk.accelerator_parse("<Control>Q")
         exit.add_accelerator("activate", agr, key, mod,
@@ -155,13 +166,16 @@ class Gui(object):
         # this sets it so that the scrolledwindow follows matrix_widget
         self.hbox.pack_start(self.matrix_widget, False, True)
         self.window.add(self.hbox)
-        self.buff.connect("changed", self.text_change)
         self.insert_id = self.buff.connect("insert_text", self.inserted_cb)
         self.window.show_all()
 
         # do this once and we can import our compiled code.
         self.modpath = '/'.join(self.intermediatefilename.split('/')[:-1])
         sys.path.insert(0, self.modpath)
+        # clear intermediate code.
+        self.storefile(self.intermediatefilename, "")
+        # then load module
+        self.intermediate = __import__("intermediate")
 
     def insert(self, widget):
         widget.handler_block(self.insert_id)
@@ -173,27 +187,28 @@ class Gui(object):
             widget.stop_emission("insert_text")
             gtk.idle_add(self.insert, widget)
 
-    def text_change(self, widget):
+    def reload_code(self, widget):
         text = self.get_text()
-
+        try:
+            self.intermediate = reload(self.intermediate)
+        except Exception as e:
+            print(e)
         # save and compile the text in the text widget on change.
         self.storefile(self.intermediatefilename, text)
         py_compile.compile(self.intermediatefilename)
         # always get the latest itteration of the compiled code.
-        intermediate = __import__("intermediate")
-        intermediate = reload(intermediate)
-
         # check agains all the classes in intermediate code base.
-        for obj in intermediate.__dict__:
+        for obj in self.intermediate.__dict__:
             if isinstance(obj, object):
                 try:
                     # for finding the methods of a class if class
-                    thedict = intermediate.__dict__[obj].__dict__
-                    # if the class has a generate method. it can make patterns.
+                    thedict = self.intermediate.__dict__[obj].__dict__
+                    # if the class has a generate method.
+                    # it can make patterns.
                     if(thedict['generate']):
                         # make a instance of that pattern so we can run it
                         # in the editor.
-                        pattern = intermediate.__dict__[obj]()
+                        pattern = self.intermediate.__dict__[obj]()
                         # tell the matrix widget that we have a new pattern
                         # to generate output.
                         self.matrix_widget.set_pattern(pattern)
