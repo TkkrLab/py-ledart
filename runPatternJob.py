@@ -1,12 +1,13 @@
+#!/usr/bin/env python
 import socket
 import signal
 import sys
+import imp
 
 
 def load_targets(configfile):
     # this function allows loading of the config files specified by
     # --config/configfile and load patterns defined in there.
-    import imp
     package = "configs"
     fp, path, description = imp.find_module(package)
     path = [path]

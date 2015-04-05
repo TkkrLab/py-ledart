@@ -1,5 +1,4 @@
 import pygtk
-pygtk.require('2.0')
 import gtk
 import gobject
 import pango
@@ -11,6 +10,8 @@ import string
 from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 from MatrixSim.Interfaces import Interface
 from matrix import matrix_width, matrix_height
+
+pygtk.require('2.0')
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -52,10 +53,14 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
 
     def run(self):
         if self.pattern:
-            data = self.pattern.generate()
-            self.matrixscreen.process_pixels(data)
-            data = self.matrixscreen.get_pixels()
-            self.queue_draw()
+            try:
+                data = self.pattern.generate()
+                self.matrixscreen.process_pixels(data)
+                data = self.matrixscreen.get_pixels()
+                self.queue_draw()
+            except Exception as e:
+                print(e)
+                print("Wrong data Generated.")
         return True
 
     def expose(self, widget, event):
@@ -88,9 +93,9 @@ class Gui(object):
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
         self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
-        self.textfilename = "/home/robert/py-artnet/patterns/Pong/Pong.py"
-        self.intermediatefilename = "/home/robert/py-artnet/Gui/"\
-                                    "IntermediateCode/intermediate.py"
+        self.textfilename = "/home/robert/py-artnet/Gui/new_file.py"
+        self.intermediatefilename = ("/home/robert/py-artnet/Gui/" +
+                                     "IntermediateCode/intermediate.py")
 
         # syntax highlighting.
         self.lang = SyntaxLoader(self.syntaxfile)
@@ -188,16 +193,17 @@ class Gui(object):
             gtk.idle_add(self.insert, widget)
 
     def reload_code(self, widget):
+        # empty out the .pyc and .py file
+        self.storefile(self.intermediatefilename + 'c', "")
+        self.storefile(self.intermediatefilename, "")
         text = self.get_text()
-        try:
-            self.intermediate = reload(self.intermediate)
-        except Exception as e:
-            print(e)
         # save and compile the text in the text widget on change.
         self.storefile(self.intermediatefilename, text)
         py_compile.compile(self.intermediatefilename)
         # always get the latest itteration of the compiled code.
         # check agains all the classes in intermediate code base.
+        self.intermediate = reload(self.intermediate)
+
         for obj in self.intermediate.__dict__:
             if isinstance(obj, object):
                 try:
@@ -232,10 +238,10 @@ class Gui(object):
             thefile.write(text)
 
     def savefile(self, widget):
-        filename = self.textfilename
-        text = self.get_text()
-        with open(filename, 'w') as thefile:
-            thefile.write(text)
+        fmt = (self.textfilename, )
+        fmtstr = "Saving into: %s" % fmt
+        print(fmtstr)
+        self.storefile(self.textfilename, self.get_text())
 
     def newfile(self, widget):
         print("supposed to make a new empty file")
