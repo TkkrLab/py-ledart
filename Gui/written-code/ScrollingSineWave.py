@@ -1,6 +1,6 @@
 from Graphics.Graphics import Graphics, RED, GREEN, BLACK, randColor
 from matrix import matrix_width, matrix_height, matrix_size
-from Controllers.Controllers import translate, AudioController
+from Controllers.Controllers import translate
 from Timing import Timer
 import math
             
@@ -10,23 +10,19 @@ class Test(object):
         self.x = 0
         self.y = 0
         self.color = GREEN
-        self.phase = 0
-        self.timer = Timer(0)
-        self.wave_range = 2
+        self.phase = 1
+        self.timer = Timer(1/15.)
+        self.wave_range = 3
         self.wave_step = 1
-        self.amplitude = 5
-        self.offset = matrix_width/2
-        self.freq = 0.4
-        self.audiocontroller = AudioController(channel=1, rate=256000, period=64)
+        self.amplitude = 4
+        self.offset = matrix_width/2-1
+        self.freq = 1./matrix_height*8
     def generate(self):
         self.graphics.fill(BLACK)
-        input = self.audiocontroller.getinput()
-        if input:
-            print input    
-            self.freq = translate(input, 500, 3000, 0, 1)    
-        # print(self.audiocontroller.getinput())
+        if self.timer.valid():
+            self.phase+=1
         for i in range(0, self.wave_range, self.wave_step):
-            for self.y in range(0, matrix_height):
+            for self.y in range(0, matrix_height-1):
                 self.x = math.sin(self.y*self.freq+self.phase)*self.amplitude+self.offset + i
                 b = translate(i, 0, matrix_width, 0, 50)
                 g = translate(self.y, 0, matrix_height, 0, 80)

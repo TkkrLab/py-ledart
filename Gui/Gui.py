@@ -10,7 +10,7 @@ import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
 from MatrixSim.Interfaces import Interface
-from matrix import matrix_width, matrix_height
+from matrix import matrix_width, matrix_height, convertSnakeModes
 import artnet
 import socket
 
@@ -22,17 +22,12 @@ class SendPacketWidget(gtk.ToggleButton):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.port = port
         self.dest_ip = dest_ip
-        self.parent = parent
+        self.par = parent
         self.pattern = None
 
-    def sentout(self, data, dest):
-        self.socket.sendto(artnet.buildPacket(0, data), (dest, self.port))
-
-    def set_pattern(self, pattern):
-        self.pattern = pattern
-
-    def get_pattern(self):
-        return self.pattern
+    def sendout(self, data):
+        self.socket.sendto(artnet.buildPacket(0, data),
+                           (self.dest_ip, self.port))
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -46,13 +41,12 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                            self.args.pixelSize)
         self.connect("expose-event", self.expose)
 
-        if self.args.fps:
-            gobject.timeout_add(int(1000 / self.args.fps), self.run)
-        else:
-            gobject.timeout_add(0, self.run)
         self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
                                          self.args.pixelSize, self)
         gtk.DrawingArea.set_size_request(self, self.width, self.height)
+        # contains data from patterns in the form of a list of tuples of
+        # format (r, g, b) colors.
+        self.data = None
 
     def get_pattern(self):
         return self.pattern
@@ -72,12 +66,14 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
     def set_target(self, target):
         return self.target
 
-    def run(self):
+    def get_data(self):
+        return self.data
+
+    def process(self):
         if self.pattern:
             try:
-                data = self.pattern.generate()
-                self.matrixscreen.process_pixels(data)
-                data = self.matrixscreen.get_pixels()
+                self.data = self.pattern.generate()
+                self.matrixscreen.process_pixels(self.data)
                 self.queue_draw()
             except Exception as e:
                 print(e)
@@ -111,6 +107,13 @@ class Gui(object):
         self.window.connect("destroy", gtk.main_quit)
 
         self.matrix_widget = MatrixSimWidget(self)
+        self.send_packets = SendPacketWidget(self, 'pixelmatrix')
+
+        if self.args.fps:
+            gobject.timeout_add(int(1000 / self.args.fps), self.run)
+        else:
+            gobject.timeout_add(0, self.run)
+
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
         self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
@@ -161,7 +164,7 @@ class Gui(object):
         key, mod = gtk.accelerator_parse("<Control>R")
         reloadm.add_accelerator("activate", agr, key, mod,
                                 gtk.ACCEL_VISIBLE)
-        reloadm.connect("activate", self.reload_code)
+        reloadm.connect("activate", self.reload_code_on_shortcut)
         filemenu.append(reloadm)
 
         sep = gtk.SeparatorMenuItem()
@@ -193,7 +196,10 @@ class Gui(object):
         self.hbox.pack_start(self.matrix_widget, False, True)
         self.window.add(self.hbox)
         self.insert_id = self.buff.connect("insert_text", self.inserted_cb)
-        self.textview.connect("key-release-event", self.reload_code)
+
+        cb = self.reload_code_on_keyrelease
+        self.keyrelease_id = self.textview.connect("key-release-event", cb)
+
         self.window.show_all()
 
         # do this once and we can import our compiled code.
@@ -205,6 +211,17 @@ class Gui(object):
         # then load module
         self.intermediate = __import__("intermediate")
 
+    def run(self):
+        try:
+            self.matrix_widget.process()
+            data = self.matrix_widget.get_data()
+            if data:
+                data = convertSnakeModes(data)
+                self.send_packets.sendout(data)
+            return True
+        except:
+            return True
+
     def insert(self, widget):
         widget.handler_block(self.insert_id)
         widget.insert_at_cursor(" " * self.tabwidth)
@@ -215,7 +232,15 @@ class Gui(object):
             widget.stop_emission("insert_text")
             gtk.idle_add(self.insert, widget)
 
-    def reload_code(self, widget, *args):
+    def reload_code_on_shortcut(self, widget):
+        self.reload_code()
+
+    def reload_code_on_keyrelease(self, widget, key):
+        if key.keyval != 114 and key.keyval != 65507:
+            self.reload_code()
+
+    def reload_code(self):
+        print("Reloading")
         # empty out the .pyc and .py file
         self.storefile(self.intermediatefilename + 'c', "")
         text = self.get_text()
@@ -239,12 +264,12 @@ class Gui(object):
                         # make a instance of that pattern so we can run it
                         # in the editor.
                         pattern = self.intermediate.__dict__[obj]()
+
+                        # tell the matrix widget that we have a new pattern
+                        # to generate output.
+                        self.matrix_widget.set_pattern(pattern)
                 except:
                     continue
-
-            # tell the matrix widget that we have a new pattern
-            # to generate output.
-            self.matrix_widget.set_pattern(pattern)
 
     def get_text(self):
         start_iter = self.buff.get_start_iter()
