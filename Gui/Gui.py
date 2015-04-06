@@ -5,7 +5,6 @@ import pango
 from gtkcodebuffer import CodeBuffer, SyntaxLoader
 import py_compile
 import sys
-import string
 import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
@@ -76,8 +75,7 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                 self.matrixscreen.process_pixels(self.data)
                 self.queue_draw()
             except Exception as e:
-                print(e)
-                print("Wrong data Generated.")
+                print("Wrong data Generated >> %s" % e)
         return True
 
     def expose(self, widget, event):
@@ -101,8 +99,7 @@ class Gui(object):
         # tabwidth in spaces
         self.tabwidth = 4
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        # self.window.maximize()
-        self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+
         self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
 
@@ -124,7 +121,7 @@ class Gui(object):
         # syntax highlighting.
         self.lang = SyntaxLoader(self.syntaxfile)
         self.buff = CodeBuffer(lang=self.lang)
-        self.buff.set_text("")
+        self.buff.set_text(self.loadfile(self.intermediatefilename))
         # menu items
         mb = gtk.MenuBar()
 
