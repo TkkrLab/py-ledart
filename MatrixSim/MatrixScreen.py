@@ -3,11 +3,12 @@ import sys
 from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
-from Interfaces import OpenGlInterface, PygameInterface
+from Interfaces import OpenGlInterface, PygameInterface, DummyInterface
 
 interface_opts = {
     "pygame": PygameInterface,
     "opengl": OpenGlInterface,
+    "dummy": DummyInterface
 }
 
 
@@ -18,7 +19,7 @@ class MatrixScreen(object):
     defined in matrix.py
     """
     def __init__(self, width, height, pixelsize, fullscreen=False,
-                 interface=OpenGlInterface):
+                 interface=DummyInterface):
         self.interface = interface(width, height, pixelsize, fullscreen)
         self.width = width
         self.height = height
@@ -49,14 +50,25 @@ class MatrixScreen(object):
         self.time = 1
         self.fps = 0
 
+    def get_pixels(self):
+        """
+        returns the internal list representation of the pixels
+        """
+        return self.pixels
+
     def handleinput(self):
         self.interface.handleinput()
 
-    def draw(self, data):
+    def process_pixels(self, data):
         # extract pixels and color from data
         # get both a list index and the color data.
         for i, color in enumerate(data):
             self.pixels[i].setColor(color)
+
+    def draw(self, data):
+        # set the pixels in the screen to the
+        # apropriate colors.
+        self.process_pixels(data)
         # clear the window
         self.interface.clear(Graphics.BLACK)
         # display the pixels.

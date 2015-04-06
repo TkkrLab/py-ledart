@@ -43,6 +43,7 @@ class Graphics(object):
         return [l[i:i + n] for i in range(0, len(l), n)]
 
     def writePixel(self, x, y, color):
+        x, y = int(x), int(y)
         if x >= self.width or y >= self.height:
             return 0
         elif x < 0 or y < 0:
@@ -51,6 +52,7 @@ class Graphics(object):
             self.surface[y][x] = color
 
     def readPixel(self, x, y):
+        x, y = int(x), int(y)
         if x >= self.width or y >= self.height:
             return BLACK
         elif x < 0 or y < 0:
@@ -59,6 +61,7 @@ class Graphics(object):
             return self.surface[y][x]
 
     def calcIndex(self, x, y):
+        x, y = int(x), int(y)
         return ((y * self.width) + x)
 
     def fill(self, color):
@@ -94,6 +97,8 @@ class Graphics(object):
 
 # wiki http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
     def drawLine(self, x1, y1, x2, y2, color):
+        x1, y1 = int(x1), int(y1)
+        x2, y2 = int(x2), int(y2)
         issteep = abs(y2 - y1) > abs(x2 - x1)
         if issteep:
             x1, y1 = y1, x1
@@ -125,6 +130,8 @@ class Graphics(object):
             self.surface.reverse()
 
     def drawRect(self, x, y, width, height, color):
+        x, y = int(x), int(y)
+        width, height = int(width), int(height)
         # because cordinate system starts at 0
         width, height = width - 1, height - 1
         self.drawLine(x, y, x + width, y, color)
@@ -133,6 +140,8 @@ class Graphics(object):
         self.drawLine(x + width, y, x + width, y + height, color)
 
     def drawCircle(self, x0, y0, radius, color):
+        x0, y0 = int(x0), int(y0)
+        radius = int(radius)
         # brensenham circle
         error = 1 - radius
         errory = 1

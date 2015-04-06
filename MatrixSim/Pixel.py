@@ -7,6 +7,9 @@ class Pixel(object):
     def setColor(self, color):
         self.color = color
 
+    def getColor(self):
+        return self.color
+
     def setPos(self, pos):
         self.pos = pos
 

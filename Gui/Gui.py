@@ -1,178 +1,279 @@
 import pygtk
-pygtk.require('2.0')
 import gtk
 import gobject
+import pango
+from gtkcodebuffer import CodeBuffer, SyntaxLoader
+import py_compile
+import sys
+import string
+import gtksourceview2 as gtksourceview
+
+from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
+from MatrixSim.Interfaces import Interface
+from matrix import matrix_width, matrix_height
+
+pygtk.require('2.0')
+
+
+class MatrixSimWidget(gtk.DrawingArea, Interface):
+    def __init__(self, parent, args):
+        gtk.DrawingArea.__init__(self)
+        Interface.__init__(self, matrix_width, matrix_height, args.pixelSize)
+        self.args = args
+        self.par = parent
+        self.pattern = None
+        self.connect("expose-event", self.expose)
+
+        if args.fps:
+            gobject.timeout_add(int(1000 / args.fps), self.run)
+        else:
+            gobject.timeout_add(0, self.run)
+
+        interface = interface_opts["dummy"]
+        self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
+                                         args.pixelSize, interface)
+        gtk.DrawingArea.set_size_request(self, self.width, self.height)
+
+    def get_pattern(self):
+        return self.pattern
+
+    def set_pattern(self, pattern):
+        self.pattern = pattern
+
+    def color_convert_f(self, color, depth=8):
+        temp = []
+        for c in color:
+            temp.append(c / 255.)
+        return tuple(temp)
+
+    def get_target(self):
+        return self.target
+
+    def set_target(self, target):
+        return self.target
+
+    def run(self):
+        if self.pattern:
+            try:
+                data = self.pattern.generate()
+                self.matrixscreen.process_pixels(data)
+                data = self.matrixscreen.get_pixels()
+                self.queue_draw()
+            except Exception as e:
+                print(e)
+                print("Wrong data Generated.")
+        return True
+
+    def expose(self, widget, event):
+        cr = widget.window.cairo_create()
+        if len(self.matrixscreen.pixels):
+            for pixel in self.matrixscreen.pixels:
+                x, y, width, height = pixel.getRect()
+                pixelcolor = pixel.getColor()
+                r, g, b = self.color_convert_f(pixelcolor)
+                cr.set_source_rgb(0.0, 0.0, 0.0)
+                cr.rectangle(x, y, width, height)
+                cr.stroke()
+                cr.set_source_rgb(r, g, b)
+                cr.rectangle(x + 1, y + 1, width - 2, height - 2)
+                cr.fill()
 
 
 class Gui(object):
     def __init__(self, args):
+        self.args = args
+        # tabwidth in spaces
+        self.tabwidth = 4
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        # self.window.maximize()
         self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
         self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
-        gobject.timeout_add(int(1000 / args.fps), self.idle)
-        self.window.show()
 
-    def idle(self):
-        print("fps")
+        self.matrix_widget = MatrixSimWidget(self, self.args)
+        width, height = self.matrix_widget.width, self.matrix_widget.height
+        self.window.resize(width * 2, height * 2)
+        self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
+        self.textfilename = "/home/robert/py-artnet/Gui/new_file.py"
+        self.intermediatefilename = ("/home/robert/py-artnet/Gui/" +
+                                     "IntermediateCode/intermediate.py")
 
-    def main(self):
-        gtk.main()
+        # syntax highlighting.
+        self.lang = SyntaxLoader(self.syntaxfile)
+        self.buff = CodeBuffer(lang=self.lang)
+        self.buff.set_text("")
+        # menu items
+        mb = gtk.MenuBar()
 
+        filemenu = gtk.Menu()
+        filem = gtk.MenuItem("_File")
+        filem.set_submenu(filemenu)
 
-class Base(object):
-    itteration = 0
+        agr = gtk.AccelGroup()
+        self.window.add_accel_group(agr)
 
-    def __init__(self):
-        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        # shortcut for creating a new file
+        newi = gtk.ImageMenuItem(gtk.STOCK_NEW, agr)
+        key, mod = gtk.accelerator_parse("<Control>N")
+        newi.add_accelerator("activate", agr, key, mod,
+                             gtk.ACCEL_VISIBLE)
+        newi.connect("activate", self.newfile)
+        filemenu.append(newi)
 
-        self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
-        self.window.set_size_request(800, 600)
-        self.window.set_tooltip_text("This is my Gui\nAnother line.")
-        self.window.set_title("My Gui")
+        # shortcut for opening a file.
+        openm = gtk.ImageMenuItem(gtk.STOCK_OPEN, agr)
+        key, mod = gtk.accelerator_parse("<Control>O")
+        openm.add_accelerator("activate", agr, key, mod,
+                              gtk.ACCEL_VISIBLE)
+        openm.connect("activate", self.openfile)
+        filemenu.append(openm)
 
-        self.about_button = gtk.Button("About")
-        self.about_button.connect("clicked", self.about_win)
+        # shortcut for saving a file.
+        savem = gtk.ImageMenuItem(gtk.STOCK_SAVE, agr)
+        key, mod = gtk.accelerator_parse("<Control>S")
+        openm.add_accelerator("activate", agr, key, mod,
+                              gtk.ACCEL_VISIBLE)
+        savem.connect("activate", self.savefile)
+        filemenu.append(savem)
 
-        self.open_image = gtk.Button("Open Image")
-        self.open_image.connect("clicked", self.openimage)
+        # shortcut for reloading
+        reloadm = gtk.ImageMenuItem(gtk.STOCK_REFRESH, agr)
+        key, mod = gtk.accelerator_parse("<Control>R")
+        reloadm.add_accelerator("activate", agr, key, mod,
+                                gtk.ACCEL_VISIBLE)
+        reloadm.connect("activate", self.reload_code)
+        filemenu.append(reloadm)
 
-        self.button1 = gtk.Button("Exit")
-        self.button1.connect("clicked", self.destroy)
-        self.button1.set_tooltip_text("Click to Exit")
+        sep = gtk.SeparatorMenuItem()
+        filemenu.append(sep)
+        # shortcut for quiting
+        exit = gtk.ImageMenuItem(gtk.STOCK_QUIT, agr)
+        key, mod = gtk.accelerator_parse("<Control>Q")
+        exit.add_accelerator("activate", agr, key, mod,
+                             gtk.ACCEL_VISIBLE)
+        exit.connect("activate", gtk.main_quit)
+        filemenu.append(exit)
+        mb.append(filem)
 
-        self.button2 = gtk.Button("Hide")
-        self.button2.connect("clicked", self.myhide)
+        self.textview = gtk.TextView(self.buff)
+        fontdesc = pango.FontDescription("monospace 9")
+        self.textview.modify_font(fontdesc)
+        tabs = pango.TabArray(1, True)
+        tabs.set_tab(0, pango.TAB_LEFT, 32)
+        self.textview.set_tabs(tabs)
+        scrolledwindow = gtk.ScrolledWindow()
+        scrolledwindow.add(self.textview)
 
-        self.button3 = gtk.Button("Show")
-        self.button3.connect("clicked", self.myshow)
-
-        self.button4 = gtk.Button("relabel label")
-        self.button4.connect("clicked", self.relabel)
-
-        self.button5 = gtk.Button("clear text")
-        self.button5.connect("clicked", self.cleartext)
-
-        self.button6 = gtk.Button("add to combo")
-        self.button6.connect("clicked", self.addcombotext)
-
-        self.label1 = gtk.Label("label")
-        self.textbox = gtk.Entry()
-        self.textbox.connect("changed", self.textchange)
-
-        self.combo = gtk.combo_box_entry_new_text()
-        self.combo.connect("changed", self.combotext)
-        self.combo.append_text("this is some text")
-        self.combo.append_text("this is option 2")
-
-        self.box1 = gtk.HBox()
-        self.box2 = gtk.VBox()
-        self.box3 = gtk.HBox()
-        self.box4 = gtk.VBox()
-        self.box1.pack_start(self.button1)
-        self.box1.pack_start(self.button2)
-        self.box1.pack_start(self.button3)
-        self.box1.pack_start(self.button4)
-        self.box1.pack_start(self.button5)
-        self.box1.pack_start(self.open_image)
-        self.box1.pack_start(self.about_button)
-
-        self.box2.pack_start(self.box1)
-        self.box2.pack_start(self.textbox)
-        self.box2.pack_start(self.label1)
-        self.box2.pack_start(self.combo)
-
-        self.box3.pack_start(self.box2)
-        self.box3.pack_start(self.button6)
-
-        self.box4.pack_start(self.box3)
-
-        self.window.add(self.box4)
+        self.hbox = gtk.HBox()
+        self.vbox = gtk.VBox()
+        self.vbox.pack_start(mb, False, False)
+        self.vbox.pack_start(scrolledwindow)
+        self.hbox.pack_start(self.vbox)
+        # this sets it so that the scrolledwindow follows matrix_widget
+        self.hbox.pack_start(self.matrix_widget, False, True)
+        self.window.add(self.hbox)
+        self.insert_id = self.buff.connect("insert_text", self.inserted_cb)
+        self.textview.connect("key-release-event", self.reload_code)
         self.window.show_all()
-        self.window.connect("destroy", self.destroy)
-        self.imagedir = "home/robert/py-art-net/hacked.png"
 
-    def main(self):
-        gtk.main()
+        # do this once and we can import our compiled code.
+        self.modpath = '/'.join(self.intermediatefilename.split('/')[:-1])
+        sys.path.insert(0, self.modpath)
+        # clear intermediate code.
+        self.storefile(self.intermediatefilename, "")
+        self.storefile(self.intermediatefilename + 'c', "")
+        # then load module
+        self.intermediate = __import__("intermediate")
 
-    def openimage(self, widget):
+    def insert(self, widget):
+        widget.handler_block(self.insert_id)
+        widget.insert_at_cursor(" " * self.tabwidth)
+        widget.handler_unblock(self.insert_id)
 
-        dialog = gtk.FileChooserDialog("Load Image", None,
+    def inserted_cb(self, widget, text_iter, char, num):
+        if char == '\t':
+            widget.stop_emission("insert_text")
+            gtk.idle_add(self.insert, widget)
+
+    def reload_code(self, widget, *args):
+        # empty out the .pyc and .py file
+        self.storefile(self.intermediatefilename + 'c', "")
+        text = self.get_text()
+        # save and compile the text in the text widget on change.
+        # always get the latest itteration of the compiled code.
+        self.storefile(self.intermediatefilename, self.get_text())
+        py_compile.compile(self.intermediatefilename)
+        # check agains all the classes in intermediate code base.
+        self.intermediate = reload(self.intermediate)
+
+        for obj in self.intermediate.__dict__:
+            if isinstance(obj, object):
+                try:
+                    # for finding the methods of a class if class
+                    thedict = self.intermediate.__dict__[obj].__dict__
+                    # if the class has a generate method.
+                    # it can make patterns.
+                    if(thedict['generate']):
+                        # make a instance of that pattern so we can run it
+                        # in the editor.
+                        pattern = self.intermediate.__dict__[obj]()
+                        # tell the matrix widget that we have a new pattern
+                        # to generate output.
+                        self.matrix_widget.set_pattern(pattern)
+                except:
+                    continue
+
+    def get_text(self):
+        start_iter = self.buff.get_start_iter()
+        end_iter = self.buff.get_end_iter()
+        text = self.buff.get_text(start_iter, end_iter, True)
+        return text
+
+    def loadfile(self, file):
+        text = []
+        with open(file, 'r') as thefile:
+            text.append(thefile.read())
+        return text[0]
+
+    def storefile(self, filename, text):
+        with open(filename, 'w') as thefile:
+            thefile.write(text)
+
+    def savefile(self, widget):
+        fmt = (self.textfilename, )
+        fmtstr = "Saving into: %s" % fmt
+        print(fmtstr)
+        self.storefile(self.textfilename, self.get_text())
+
+    def newfile(self, widget):
+        print("supposed to make a new empty file")
+
+    def openfile(self, widget):
+        # create a dialog window.
+        dialog = gtk.FileChooserDialog("Open..",
+                                       None,
                                        gtk.FILE_CHOOSER_ACTION_OPEN,
                                        (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                        gtk.STOCK_OPEN, gtk.RESPONSE_OK))
-
+                                        gtk.STOCK_OPEN, gtk.RESPONSE_OK)
+                                       )
         dialog.set_default_response(gtk.RESPONSE_OK)
+
         filter = gtk.FileFilter()
-        filter.set_name("Images")
-        filter.add_mime_type("image/png")
-        filter.add_mime_type("image/jpeg")
-        filter.add_mime_type("image/bmp")
-        filter.add_pattern("*.png")
-        filter.add_pattern("*.jpg")
-        filter.add_pattern("*.jpeg")
+        filter.set_name("Python Files.")
+        filter.add_mime_type("python")
+        filter.add_pattern("*.py")
+        dialog.add_filter(filter)
+
+        filter = gtk.FileFilter()
+        filter.set_name("All files")
+        filter.add_pattern("*")
         dialog.add_filter(filter)
 
         response = dialog.run()
         if response == gtk.RESPONSE_OK:
-            self.pix = gtk.gdk.pixbuf_new_from_file(dialog.get_filename())
-            self.pix = self.pix.scale_simple(100, 100, gtk.gdk.INTERP_BILINEAR)
-            self.image = gtk.image_new_from_pixbuf(self.pix)
-            self.image.set_from_pixbuf(self.pix)
-            self.box4.pack_start(self.image)
-        elif response == gtk.RESPONSE_CANCEL:
-            print("no file selected")
-            em = gtk.MessageDialog(None, gtk.DIALOG_DESTROY_WITH_PARENT,
-                                   gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                   "File Not Loaded\nWindow looks different")
-            em.run()
-            em.destroy()
-        self.window.show_all()
+            self.textfilename = dialog.get_filename()
+            self.buff.set_text(self.loadfile(self.textfilename))
         dialog.destroy()
 
-    def about_win(self, widget):
-        about = gtk.AboutDialog()
-        about.set_program_name("My Guid")
-        about.set_version("0.1")
-        about.set_copyright("Duality")
-        about.set_comments("this is a gtk program in python")
-        about.set_website("http://www.github.com/tkkrlab/py-art-net/")
-        about.set_logo(gtk.gdk.pixbuf_new_from_file(self.imagedir))
-        about.run()
-        about.destroy()
-
-    def clicked(self, widget):
-        print("clicked")
-
-    def addcombotext(self, widget):
-        self.combo.append_text(self.textbox.get_text())
-
-    def combotext(self, widget):
-        self.textbox.set_text(widget.get_active_text())
-
-    def cleartext(self, widget):
-        self.textbox.set_text("")
-
-    def textchange(self, widget):
-        self.label1.set_text(widget.get_text())
-
-    def myhide(self, widget):
-        self.button1.hide()
-
-    def myshow(self, widget):
-        self.button1.show()
-
-    def relabel(self, widget):
-        self.label1.set_text(str(self.itteration))
-        self.itteration += 1
-
-    def destroy(self, widget, data=None):
-        print("Quiting")
-        gtk.main_quit()
-
-
-def main(args):
-    base = Gui(args)
-    base.main()
-    # base = Base()
-    # base.main()
+    def main(self):
+        gtk.main()
