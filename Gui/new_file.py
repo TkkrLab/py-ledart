@@ -32,16 +32,24 @@ class Test(object):
         self.x_offset = matrix_width / 2
         self.y_offset = matrix_height / 2
         self.angle = 0
-        self.radius = 5
-        self.timer = Timer(0.1)
-    def generate(self):
-        self.graphics.fill(BLACK)
+        self.radius = matrix_width / 2 - 1
+        self.timer = Timer(1)
+        self.show = False
+    def drawCircle(self):
         for i in range(0, 360):
             self.x = math.sin(math.radians(i)) * self.radius + self.x_offset
             self.y = math.cos(math.radians(i)) * self.radius + self.y_offset
             self.graphics.drawPixel(self.x, self.y, self.color)
-        #if self.timer.valid():
-        #    self.angle += 1
-        #    if self.angle > 360:
-        #        self.angle = 0
+    def drawCircleTwo(self):
+        self.graphics.drawCircle(self.x_offset, self.y_offset, self.radius, self.color)
+    def generate(self):
+        self.graphics.fill(BLACK)
+        timerstatus = self.timer.valid()
+        if timerstatus:
+            self.show = not self.show
+
+        if self.show:
+            self.drawCircleTwo()
+        else:
+            self.drawCircle()
         return self.graphics.getSurface()
