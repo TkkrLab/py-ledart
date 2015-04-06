@@ -8,30 +8,50 @@ import sys
 import string
 import gtksourceview2 as gtksourceview
 
-from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
+from MatrixSim.MatrixScreen import MatrixScreen
 from MatrixSim.Interfaces import Interface
 from matrix import matrix_width, matrix_height
+import artnet
+import socket
 
 pygtk.require('2.0')
 
 
+class SendPacketWidget(gtk.ToggleButton):
+    def __init__(self, parent, dest_ip='localhost', port=6454):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.port = port
+        self.dest_ip = dest_ip
+        self.parent = parent
+        self.pattern = None
+
+    def sentout(self, data, dest):
+        self.socket.sendto(artnet.buildPacket(0, data), (dest, self.port))
+
+    def set_pattern(self, pattern):
+        self.pattern = pattern
+
+    def get_pattern(self):
+        return self.pattern
+
+
 class MatrixSimWidget(gtk.DrawingArea, Interface):
-    def __init__(self, parent, args):
-        gtk.DrawingArea.__init__(self)
-        Interface.__init__(self, matrix_width, matrix_height, args.pixelSize)
-        self.args = args
+    def __init__(self, parent):
+        self.args = parent.args
         self.par = parent
         self.pattern = None
+
+        gtk.DrawingArea.__init__(self)
+        Interface.__init__(self, matrix_width, matrix_height,
+                           self.args.pixelSize)
         self.connect("expose-event", self.expose)
 
-        if args.fps:
-            gobject.timeout_add(int(1000 / args.fps), self.run)
+        if self.args.fps:
+            gobject.timeout_add(int(1000 / self.args.fps), self.run)
         else:
             gobject.timeout_add(0, self.run)
-
-        interface = interface_opts["dummy"]
         self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
-                                         args.pixelSize, interface)
+                                         self.args.pixelSize, self)
         gtk.DrawingArea.set_size_request(self, self.width, self.height)
 
     def get_pattern(self):
@@ -90,7 +110,7 @@ class Gui(object):
         self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
 
-        self.matrix_widget = MatrixSimWidget(self, self.args)
+        self.matrix_widget = MatrixSimWidget(self)
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
         self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
@@ -201,10 +221,12 @@ class Gui(object):
         text = self.get_text()
         # save and compile the text in the text widget on change.
         # always get the latest itteration of the compiled code.
-        self.storefile(self.intermediatefilename, self.get_text())
+        self.storefile(self.intermediatefilename, text)
         py_compile.compile(self.intermediatefilename)
         # check agains all the classes in intermediate code base.
         self.intermediate = reload(self.intermediate)
+
+        pattern = None
 
         for obj in self.intermediate.__dict__:
             if isinstance(obj, object):
@@ -217,11 +239,12 @@ class Gui(object):
                         # make a instance of that pattern so we can run it
                         # in the editor.
                         pattern = self.intermediate.__dict__[obj]()
-                        # tell the matrix widget that we have a new pattern
-                        # to generate output.
-                        self.matrix_widget.set_pattern(pattern)
                 except:
                     continue
+
+            # tell the matrix widget that we have a new pattern
+            # to generate output.
+            self.matrix_widget.set_pattern(pattern)
 
     def get_text(self):
         start_iter = self.buff.get_start_iter()

@@ -32,7 +32,7 @@ class Test(object):
         self.x_offset = matrix_width / 2
         self.y_offset = matrix_height / 2
         self.angle = 0
-        self.radius = (matrix_width/2)-5
+        self.radius = 5
         self.timer = Timer(0.1)
     def generate(self):
         self.graphics.fill(BLACK)
