@@ -12,6 +12,7 @@ I made it easier to config and run patters with python code.
 * python opengl bindings
 * pygame
 * pygtk. version above 2.0
+* pypng
 * pyserial
 
 
@@ -34,9 +35,9 @@ as wel as multpile patterns like:
 
 ```python
     TARGETS {
-        target1_ip:pattern()
-        target2_ip:nextPattern()
-        target3_ip:anotherPattern()
+        target1_ip:pattern(),
+        target2_ip:nextPattern(),
+        target3_ip:anotherPattern(),
     }
 ```
 
@@ -79,13 +80,6 @@ but you can view the display as a string of pixels though, cause basicly in real
 
 #### this software is used in a pixel matrix project:
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
-
-
-#### dependencies:
-* pypng
-* pyserial
-* pygame
-
 
 # Art-Editor
 #### how to run the editor forexample:
