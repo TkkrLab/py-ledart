@@ -176,7 +176,7 @@ class Gui(object):
         mb.append(filem)
 
         self.textview = gtk.TextView(self.buff)
-        fontdesc = pango.FontDescription("monospace 9")
+        fontdesc = pango.FontDescription("monospace 8")
         self.textview.modify_font(fontdesc)
         tabs = pango.TabArray(1, True)
         tabs.set_tab(0, pango.TAB_LEFT, 32)
