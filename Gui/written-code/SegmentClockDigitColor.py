@@ -47,6 +47,7 @@ class SegmentClocked(object):
     def generate(self):
         self.graphics.fill(BLACK)
         current = time.time()
-        self.segmentdisp.drawnumbers(0, 0, int(1./(current - self.previous)), 4)
+        fps = int(1. / (current - self.previous))
+        self.segmentdisp.drawnumbers(0, 0, fps, 4)
         self.previous = time.time()
         return self.graphics.getSurface()

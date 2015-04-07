@@ -36,17 +36,3 @@ class SegmentClock(object):
         self.segmentdisp.drawnumbers(1, 0, hour, 2)
         self.segmentdisp.drawnumbers(1, matrix_height / 2 + 1, minutes, 2)
         return self.graphics.getSurface()
-
-
-class SegmentClocked(object):
-    def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
-        self.segmentdisp = SegmentDisplay(self.graphics)
-        self.previous = 1
-
-    def generate(self):
-        self.graphics.fill(BLACK)
-        current = time.time()
-        self.segmentdisp.drawnumbers(0, 0, int(1./(current - self.previous)), 4)
-        self.previous = time.time()
-        return self.graphics.getSurface()
