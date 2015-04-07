@@ -236,6 +236,27 @@ class Gui(object):
         if key.keyval != 114 and key.keyval != 65507:
             self.reload_code()
 
+    def get_pattern_classes(self, module):
+        # holds the patterns that are found
+        patterns = []
+        # look into the modules dictionary for the things in there
+        for obj in module.__dict__:
+            # if we find objects
+            if isinstance(obj, object):
+                try:
+                    # we try and get that objects dictionary.
+                    # if it's a class it will contain methods and more.
+                    thedict = module.__dict__[obj].__dict__
+                    # and if it contains the 'generate' method
+                    if(thedict['generate']):
+                        # the class is appended to the list.
+                        patterns.append(module.__dict__[obj])
+                except:
+                    # continue if we try and read something we can't.
+                    continue
+        # return a list of classes that have a generate function in them
+        return patterns
+
     def reload_code(self):
         print("Reloading")
         # empty out the .pyc and .py file
@@ -247,7 +268,7 @@ class Gui(object):
         py_compile.compile(self.intermediatefilename)
         # check agains all the classes in intermediate code base.
         self.intermediate = reload(self.intermediate)
-
+        print(self.get_pattern_classes(self.intermediate))
         pattern = None
 
         for obj in self.intermediate.__dict__:
@@ -265,6 +286,7 @@ class Gui(object):
                         # tell the matrix widget that we have a new pattern
                         # to generate output.
                         self.matrix_widget.set_pattern(pattern)
+                        break
                 except:
                     continue
 
