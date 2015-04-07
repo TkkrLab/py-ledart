@@ -127,8 +127,11 @@ class Gui(object):
                                      "IntermediateCode/intermediate.py")
 
         # syntax highlighting.
-        self.lang = SyntaxLoader(self.syntaxfile)
-        self.buff = CodeBuffer(lang=self.lang)
+        # self.lang = SyntaxLoader(self.syntaxfile)
+        # self.buff = CodeBuffer(lang=self.lang)
+        lm = gtksourceview.LanguageManager()
+        self.buff = gtksourceview.Buffer()
+        self.buff.set_data('languages-manager', lm)
         self.buff.set_text(self.loadfile(self.intermediatefilename))
         # menu items
         mb = gtk.MenuBar()
@@ -183,7 +186,9 @@ class Gui(object):
         filemenu.append(exit)
         mb.append(filem)
 
-        self.textview = gtk.TextView(self.buff)
+        self.textview = gtksourceview.View(self.buff)
+        self.textview.set_show_line_numbers(True)
+        self.textview.set_show_line_markers(True)
         fontdesc = pango.FontDescription("monospace 8")
         self.textview.modify_font(fontdesc)
         tabs = pango.TabArray(1, True)
