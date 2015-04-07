@@ -5,6 +5,7 @@ import pango
 from gtkcodebuffer import CodeBuffer, SyntaxLoader
 import py_compile
 import sys
+import traceback
 import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
@@ -25,8 +26,11 @@ class SendPacketWidget(gtk.ToggleButton):
         self.pattern = None
 
     def sendout(self, data):
-        self.socket.sendto(artnet.buildPacket(0, data),
-                           (self.dest_ip, self.port))
+        try:
+            self.socket.sendto(artnet.buildPacket(0, data),
+                               (self.dest_ip, self.port))
+        except Exception as e:
+            print >>self.par, e
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -46,6 +50,8 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
         # contains data from patterns in the form of a list of tuples of
         # format (r, g, b) colors.
         self.data = None
+        # debug printing only once.
+        self.hasprinted = False
 
     def get_pattern(self):
         return self.pattern
@@ -75,7 +81,9 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                 self.matrixscreen.process_pixels(self.data)
                 self.queue_draw()
             except Exception as e:
-                print("Wrong data Generated >> %s" % e)
+                if not self.hasprinted:
+                    print >>self.par, ("Wrong data Generated >> %s" % e)
+                self.hasprinted = True
         return True
 
     def expose(self, widget, event):
@@ -104,7 +112,7 @@ class Gui(object):
         self.window.connect("destroy", gtk.main_quit)
 
         self.matrix_widget = MatrixSimWidget(self)
-        self.send_packets = SendPacketWidget(self, 'pixelmatrix')
+        self.send_packets = SendPacketWidget(self, 'localhost')
 
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)
@@ -190,7 +198,17 @@ class Gui(object):
         self.vbox.pack_start(scrolledwindow)
         self.hbox.pack_start(self.vbox)
         # this sets it so that the scrolledwindow follows matrix_widget
-        self.hbox.pack_start(self.matrix_widget, False, True)
+        self.vbox2 = gtk.VBox()
+        self.vbox2.pack_start(self.matrix_widget)
+        self.poutputbuff = gtk.TextBuffer()
+        self.poutput = gtk.TextView(self.poutputbuff)
+        self.poutput.connect("size_allocate", self.treeview_changed)
+        self.pscrolledwindow = gtk.ScrolledWindow()
+        self.pscrolledwindow.set_policy(gtk.POLICY_AUTOMATIC,
+                                        gtk.POLICY_AUTOMATIC)
+        self.pscrolledwindow.add(self.poutput)
+        self.vbox2.pack_start(self.pscrolledwindow)
+        self.hbox.pack_start(self.vbox2, False, True)
         self.window.add(self.hbox)
         self.insert_id = self.buff.connect("insert_text", self.inserted_cb)
 
@@ -207,6 +225,10 @@ class Gui(object):
         self.storefile(self.intermediatefilename + 'c', "")
         # then load module
         self.intermediate = __import__("intermediate")
+
+    def treeview_changed(self, widget, event, data=None):
+        adj = self.pscrolledwindow.get_vadjustment()
+        adj.set_value(adj.upper - adj.page_size)
 
     def run(self):
         try:
@@ -257,8 +279,12 @@ class Gui(object):
         # return a list of classes that have a generate function in them
         return patterns
 
+    def write(self, string):
+        end_iter = self.poutputbuff.get_end_iter()
+        self.poutputbuff.insert(end_iter, string)
+
     def reload_code(self):
-        print("Reloading")
+        print >>self, ("Reloading")
         # empty out the .pyc and .py file
         self.storefile(self.intermediatefilename + 'c', "")
         text = self.get_text()
@@ -267,28 +293,18 @@ class Gui(object):
         self.storefile(self.intermediatefilename, text)
         py_compile.compile(self.intermediatefilename)
         # check agains all the classes in intermediate code base.
-        self.intermediate = reload(self.intermediate)
-        print(self.get_pattern_classes(self.intermediate))
-        pattern = None
-
-        for obj in self.intermediate.__dict__:
-            if isinstance(obj, object):
-                try:
-                    # for finding the methods of a class if class
-                    thedict = self.intermediate.__dict__[obj].__dict__
-                    # if the class has a generate method.
-                    # it can make patterns.
-                    if(thedict['generate']):
-                        # make a instance of that pattern so we can run it
-                        # in the editor.
-                        pattern = self.intermediate.__dict__[obj]()
-
-                        # tell the matrix widget that we have a new pattern
-                        # to generate output.
-                        self.matrix_widget.set_pattern(pattern)
-                        break
-                except:
-                    continue
+        try:
+            self.intermediate = reload(self.intermediate)
+        except Exception as e:
+            print >>self, e
+        if len(self.get_pattern_classes(self.intermediate)):
+            print >>self, (self.get_pattern_classes(self.intermediate))
+        patterns = self.get_pattern_classes(self.intermediate)
+        pattern = patterns[0]()
+        self.matrix_widget.set_pattern(pattern)
+        # reset hasprinted in matrix_widget, cause now it might work.
+        if self.matrix_widget.hasprinted:
+            self.matrix_widget.hasprinted = False
 
     def get_text(self):
         start_iter = self.buff.get_start_iter()
@@ -309,11 +325,11 @@ class Gui(object):
     def savefile(self, widget):
         fmt = (self.textfilename, )
         fmtstr = "Saving into: %s" % fmt
-        print(fmtstr)
+        print >>self, (fmtstr)
         self.storefile(self.textfilename, self.get_text())
 
     def newfile(self, widget):
-        print("supposed to make a new empty file")
+        print >>self, ("supposed to make a new empty file")
 
     def openfile(self, widget):
         # create a dialog window.
