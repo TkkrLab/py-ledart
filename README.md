@@ -14,6 +14,8 @@ I made it easier to config and run patters with python code.
 * pygtk. version above 2.0
 * pyserial
 
+#### Hard to find docs hu.
+http://soc.if.usp.br/manual/python-gtksourceview2/html/
 
 #### what to do if you want to run it ?
 
