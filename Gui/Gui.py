@@ -132,7 +132,10 @@ class Gui(object):
         lm = gtksourceview.LanguageManager()
         self.buff = gtksourceview.Buffer()
         self.buff.set_data('languages-manager', lm)
+        self.language = lm.guess_language(self.intermediatefilename)
         self.buff.set_text(self.loadfile(self.intermediatefilename))
+        self.buff.set_highlight_syntax(True)
+        self.buff.set_language(self.language)
         # menu items
         mb = gtk.MenuBar()
 
@@ -188,7 +191,11 @@ class Gui(object):
 
         self.textview = gtksourceview.View(self.buff)
         self.textview.set_show_line_numbers(True)
-        self.textview.set_show_line_markers(True)
+        self.textview.set_show_line_marks(True)
+        self.textview.set_show_right_margin(True)
+        self.textview.set_auto_indent(True)
+        self.textview.set_insert_spaces_instead_of_tabs(True)
+        self.textview.set_tab_width(self.tabwidth)
         fontdesc = pango.FontDescription("monospace 8")
         self.textview.modify_font(fontdesc)
         tabs = pango.TabArray(1, True)
@@ -252,6 +259,7 @@ class Gui(object):
         widget.handler_unblock(self.insert_id)
 
     def inserted_cb(self, widget, text_iter, char, num):
+        return
         if char == '\t':
             widget.stop_emission("insert_text")
             gtk.idle_add(self.insert, widget)
