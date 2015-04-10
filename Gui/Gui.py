@@ -126,16 +126,6 @@ class Gui(object):
         self.intermediatefilename = ("/home/robert/py-artnet/Gui/" +
                                      "IntermediateCode/intermediate.py")
 
-        # syntax highlighting.
-        # self.lang = SyntaxLoader(self.syntaxfile)
-        # self.buff = CodeBuffer(lang=self.lang)
-        lm = gtksourceview.LanguageManager()
-        self.buff = gtksourceview.Buffer()
-        self.buff.set_data('languages-manager', lm)
-        self.language = lm.guess_language(self.intermediatefilename)
-        self.buff.set_text(self.loadfile(self.intermediatefilename))
-        self.buff.set_highlight_syntax(True)
-        self.buff.set_language(self.language)
         # menu items
         mb = gtk.MenuBar()
 
@@ -149,32 +139,28 @@ class Gui(object):
         # shortcut for creating a new file
         newi = gtk.ImageMenuItem(gtk.STOCK_NEW, agr)
         key, mod = gtk.accelerator_parse("<Control>N")
-        newi.add_accelerator("activate", agr, key, mod,
-                             gtk.ACCEL_VISIBLE)
+        newi.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
         newi.connect("activate", self.newfile)
         filemenu.append(newi)
 
         # shortcut for opening a file.
         openm = gtk.ImageMenuItem(gtk.STOCK_OPEN, agr)
         key, mod = gtk.accelerator_parse("<Control>O")
-        openm.add_accelerator("activate", agr, key, mod,
-                              gtk.ACCEL_VISIBLE)
+        openm.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
         openm.connect("activate", self.openfile)
         filemenu.append(openm)
 
         # shortcut for saving a file.
         savem = gtk.ImageMenuItem(gtk.STOCK_SAVE, agr)
         key, mod = gtk.accelerator_parse("<Control>S")
-        openm.add_accelerator("activate", agr, key, mod,
-                              gtk.ACCEL_VISIBLE)
+        openm.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
         savem.connect("activate", self.savefile)
         filemenu.append(savem)
 
         # shortcut for reloading
         reloadm = gtk.ImageMenuItem(gtk.STOCK_REFRESH, agr)
         key, mod = gtk.accelerator_parse("<Control>R")
-        reloadm.add_accelerator("activate", agr, key, mod,
-                                gtk.ACCEL_VISIBLE)
+        reloadm.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
         reloadm.connect("activate", self.reload_code_on_shortcut)
         filemenu.append(reloadm)
 
@@ -183,11 +169,41 @@ class Gui(object):
         # shortcut for quiting
         exit = gtk.ImageMenuItem(gtk.STOCK_QUIT, agr)
         key, mod = gtk.accelerator_parse("<Control>Q")
-        exit.add_accelerator("activate", agr, key, mod,
-                             gtk.ACCEL_VISIBLE)
+        exit.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
         exit.connect("activate", gtk.main_quit)
         filemenu.append(exit)
         mb.append(filem)
+
+        # the edit menu for all edit related things :)
+        editmenu = gtk.Menu()
+        editm = gtk.MenuItem("_Edit")
+        editm.set_submenu(editmenu)
+
+        # shortcut for undoing your change to the text.
+        undom = gtk.ImageMenuItem(gtk.STOCK_UNDO)
+        key, mod = gtk.accelerator_parse("<Control>Z")
+        undom.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
+        undom.connect("activate", self.undo_text_cb)
+        editmenu.append(undom)
+
+        # shortcut for redoing your text change
+        redom = gtk.ImageMenuItem(gtk.STOCK_REDO)
+        key, mod = gtk.accelerator_parse("<Control>Y")
+        redom.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
+        redom.connect("activate", self.redo_text_cb)
+        editmenu.append(redom)
+
+        mb.append(editm)
+
+        # syntax highlighting.
+        # self.lang = SyntaxLoader(self.syntaxfile)
+        # self.buff = CodeBuffer(lang=self.lang)
+        lm = gtksourceview.LanguageManager()
+        self.language = lm.get_language('python')
+        self.buff = gtksourceview.Buffer(language=self.language)
+        self.buff.set_text(self.loadfile(self.intermediatefilename))
+        self.buff.set_highlight_syntax(True)
+        self.buff.set_highlight_matching_brackets(True)
 
         self.textview = gtksourceview.View(self.buff)
         self.textview.set_show_line_numbers(True)
@@ -252,6 +268,12 @@ class Gui(object):
             return True
         except:
             return True
+
+    def redo_text_cb(self, widget):
+        self.buff.redo()
+
+    def undo_text_cb(self, widget):
+        self.buff.undo()
 
     def insert(self, widget):
         widget.handler_block(self.insert_id)
