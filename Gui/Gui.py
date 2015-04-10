@@ -231,26 +231,25 @@ class Gui(object):
         tabs = pango.TabArray(1, True)
         tabs.set_tab(0, pango.TAB_LEFT, 32)
         self.textview.set_tabs(tabs)
-        scrolledwindow = gtk.ScrolledWindow()
-        scrolledwindow.add(self.textview)
+        self.scrolledwindow = gtk.ScrolledWindow()
+        self.scrolledwindow.add(self.textview)
 
         self.hbox = gtk.HBox()
         self.vbox = gtk.VBox()
         self.vbox.pack_start(mb, False, False)
-        self.vbox.pack_start(scrolledwindow)
+        self.vbox.pack_start(self.scrolledwindow)
         self.hbox.pack_start(self.vbox)
         # this sets it so that the scrolledwindow follows matrix_widget
         self.vbox2 = gtk.VBox()
         self.vbox2.pack_start(self.matrix_widget)
         self.poutputbuff = gtk.TextBuffer()
         self.poutput = gtk.TextView(self.poutputbuff)
+        self.pscrolled = gtk.ScrolledWindow()
+        self.pscrolled.add(self.poutput)
         self.poutput.set_editable(False)
+        self.poutput.set_wrap_mode(gtk.WRAP_WORD)
         self.poutput.connect("size_allocate", self.treeview_changed)
-        self.pscrolledwindow = gtk.ScrolledWindow()
-        self.pscrolledwindow.set_policy(gtk.POLICY_AUTOMATIC,
-                                        gtk.POLICY_AUTOMATIC)
-        self.pscrolledwindow.add(self.poutput)
-        self.vbox2.pack_start(self.pscrolledwindow)
+        self.vbox2.pack_start(self.pscrolled)
         self.hbox.pack_start(self.vbox2, False, True)
         self.window.add(self.hbox)
 
@@ -348,7 +347,6 @@ class Gui(object):
         view.scroll_mark_onscreen(insert)
 
     def key_released(self, widget, key):
-        self.poutputbuff.set_text("")
         # reload except on ctrl-r
         if key.keyval != 114 and key.keyval != 65507:
             try:
@@ -359,7 +357,10 @@ class Gui(object):
 
     def treeview_changed(self, widget, event, data=None):
         # automaticly follow scrolling with the text
-        adj = self.pscrolledwindow.get_vadjustment()
+        adj = self.scrolledwindow.get_vadjustment()
+        adj.set_value(adj.upper - adj.page_size)
+
+        adj = self.pscrolled.get_vadjustment()
         adj.set_value(adj.upper - adj.page_size)
 
     def run(self):
@@ -428,7 +429,7 @@ class Gui(object):
             pattern = patterns[0]()
         except Exception as e:
             pattern = PatternDummy()
-            print >>self, "No valid Class with Generate funciton found!"
+            print >>self, "No valid Class with Generate function found!"
         self.matrix_widget.set_pattern(pattern)
         # reset hasprinted in matrix_widget, cause now it might work.
         if self.matrix_widget.hasprinted:
