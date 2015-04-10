@@ -1,20 +1,32 @@
 import pygtk
 import gtk
+import gtk.gdk as gdk
 import gobject
 import pango
-from gtkcodebuffer import CodeBuffer, SyntaxLoader
+# from gtkcodebuffer import CodeBuffer, SyntaxLoader
 import py_compile
 import sys
-import traceback
+# import traceback
 import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
 from MatrixSim.Interfaces import Interface
+from Graphics.Graphics import Graphics, BLACK
 from matrix import matrix_width, matrix_height, convertSnakeModes
 import artnet
 import socket
 
 pygtk.require('2.0')
+
+
+class PatternDummy(object):
+    def __init__(self):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.color = BLACK
+        self.graphics.fill(self.color)
+
+    def generate(self):
+        return self.graphics.getSurface()
 
 
 class SendPacketWidget(gtk.ToggleButton):
@@ -210,7 +222,9 @@ class Gui(object):
         self.textview.set_show_line_marks(True)
         self.textview.set_show_right_margin(True)
         self.textview.set_auto_indent(True)
+        self.textview.set_draw_spaces(gtksourceview.DRAW_SPACES_SPACE)
         self.textview.set_insert_spaces_instead_of_tabs(True)
+        self.textview.set_indent_on_tab(True)
         self.textview.set_tab_width(self.tabwidth)
         fontdesc = pango.FontDescription("monospace 8")
         self.textview.modify_font(fontdesc)
@@ -230,6 +244,7 @@ class Gui(object):
         self.vbox2.pack_start(self.matrix_widget)
         self.poutputbuff = gtk.TextBuffer()
         self.poutput = gtk.TextView(self.poutputbuff)
+        self.poutput.set_editable(False)
         self.poutput.connect("size_allocate", self.treeview_changed)
         self.pscrolledwindow = gtk.ScrolledWindow()
         self.pscrolledwindow.set_policy(gtk.POLICY_AUTOMATIC,
@@ -238,10 +253,11 @@ class Gui(object):
         self.vbox2.pack_start(self.pscrolledwindow)
         self.hbox.pack_start(self.vbox2, False, True)
         self.window.add(self.hbox)
-        self.insert_id = self.buff.connect("insert_text", self.inserted_cb)
 
-        cb = self.reload_code_on_keyrelease
+        cb = self.key_released
         self.keyrelease_id = self.textview.connect("key-release-event", cb)
+        cb = self.key_pressed
+        self.key_pressed_id = self.textview.connect("key-press-event", cb)
 
         self.window.show_all()
 
@@ -253,21 +269,106 @@ class Gui(object):
         self.storefile(self.intermediatefilename + 'c', "")
         # then load module
         self.intermediate = __import__("intermediate")
+        self.colonReleased = False
+
+    def key_pressed(self, widget, event):
+        """Check if the key press is 'Return' or 'Backspace' and indent or
+        un-indent accordingly.
+        """
+        buffer = self.buff
+        view = widget
+        key_name = gdk.keyval_name(event.keyval)
+        if key_name not in ('Return', 'Backspace') or \
+           len(buffer.get_selection_bounds()) != 0:
+            # If some text is selected we want the default behavior of Return
+            # and Backspace so we do nothing
+            return
+
+        if view.get_insert_spaces_instead_of_tabs():
+            self.indent = ' ' * view.props.tab_width
+        else:
+            self.indent = '\t'
+
+        if key_name == 'Return':
+            line = self._get_current_line(buffer)
+
+            if line.endswith(':'):
+                old_indent = line[:len(line) - len(line.lstrip())]
+                buffer.insert_at_cursor('\n' + old_indent + self.indent)
+                return True
+
+            else:
+                stripped_line = line.strip()
+                n = len(line) - len(line.lstrip())
+                starts_with_return = stripped_line.startswith('return')
+                starts_with_break = stripped_line.startswith('break')
+                starts_with_continue = stripped_line.startswith('continue')
+                starts_with_pass = stripped_line.startswith('pass')
+                con_check = (starts_with_return or starts_with_break or
+                             starts_with_continue or starts_with_pass)
+                if (con_check):
+                    n -= len(self.indent)
+
+                buffer.insert_at_cursor('\n' + line[:n])
+                self._scroll_to_cursor(buffer, view)
+                return True
+
+        if key_name == 'BackSpace':
+            line = self._get_current_line(buffer)
+
+            if line.strip() == '' and line != '':
+                length = len(self.indent)
+                nb_to_delete = len(line) % length or length
+                self._delete_before_cursor(buffer, nb_to_delete)
+                self._scroll_to_cursor(buffer, view)
+                return True
+
+    def _delete_before_cursor(self, buffer, nb_to_delete):
+        cursor_position = buffer.get_property('cursor-position')
+        iter_cursor = buffer.get_iter_at_offset(cursor_position)
+        iter_before = buffer.get_iter_at_offset(cursor_position - nb_to_delete)
+        buffer.delete(iter_before, iter_cursor)
+
+    def _get_current_line(self, buffer):
+        iter_cursor = self._get_iter_cursor(buffer)
+        iter_line = buffer.get_iter_at_line(iter_cursor.get_line())
+        return buffer.get_text(iter_line, iter_cursor)
+
+    def _get_current_line_nb(self, buffer):
+        iter_cursor = self._get_iter_cursor(buffer)
+        return iter_cursor.get_line()
+
+    def _get_iter_cursor(self, buffer):
+        cursor_position = buffer.get_property('cursor-position')
+        return buffer.get_iter_at_offset(cursor_position)
+
+    def _scroll_to_cursor(self, buffer, view):
+        # lineno = self._get_current_line_nb(buffer) + 1
+        insert = buffer.get_insert()
+        view.scroll_mark_onscreen(insert)
+
+    def key_released(self, widget, key):
+        self.poutputbuff.set_text("")
+        # reload except on ctrl-r
+        if key.keyval != 114 and key.keyval != 65507:
+            try:
+                self.reload_code()
+            except Exception as e:
+                print >>self, e
+        return
 
     def treeview_changed(self, widget, event, data=None):
+        # automaticly follow scrolling with the text
         adj = self.pscrolledwindow.get_vadjustment()
         adj.set_value(adj.upper - adj.page_size)
 
     def run(self):
-        try:
-            self.matrix_widget.process()
-            data = self.matrix_widget.get_data()
-            if data:
-                data = convertSnakeModes(data)
-                self.send_packets.sendout(data)
-            return True
-        except:
-            return True
+        self.matrix_widget.process()
+        data = self.matrix_widget.get_data()
+        if data:
+            data = convertSnakeModes(data)
+            self.send_packets.sendout(data)
+        return True
 
     def redo_text_cb(self, widget):
         self.buff.redo()
@@ -275,23 +376,11 @@ class Gui(object):
     def undo_text_cb(self, widget):
         self.buff.undo()
 
-    def insert(self, widget):
-        widget.handler_block(self.insert_id)
-        widget.insert_at_cursor(" " * self.tabwidth)
-        widget.handler_unblock(self.insert_id)
-
-    def inserted_cb(self, widget, text_iter, char, num):
-        return
-        if char == '\t':
-            widget.stop_emission("insert_text")
-            gtk.idle_add(self.insert, widget)
-
     def reload_code_on_shortcut(self, widget):
-        self.reload_code()
-
-    def reload_code_on_keyrelease(self, widget, key):
-        if key.keyval != 114 and key.keyval != 65507:
+        try:
             self.reload_code()
+        except Exception as e:
+            print >>self, e
 
     def get_pattern_classes(self, module):
         # holds the patterns that are found
@@ -331,11 +420,15 @@ class Gui(object):
         try:
             self.intermediate = reload(self.intermediate)
         except Exception as e:
-            print >>self, e
+            print >>self, "reload()>> " + str(e)
         if len(self.get_pattern_classes(self.intermediate)):
             print >>self, (self.get_pattern_classes(self.intermediate))
-        patterns = self.get_pattern_classes(self.intermediate)
-        pattern = patterns[0]()
+        try:
+            patterns = self.get_pattern_classes(self.intermediate)
+            pattern = patterns[0]()
+        except Exception as e:
+            pattern = PatternDummy()
+            print >>self, "No valid Class with Generate funciton found!"
         self.matrix_widget.set_pattern(pattern)
         # reset hasprinted in matrix_widget, cause now it might work.
         if self.matrix_widget.hasprinted:

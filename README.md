@@ -91,11 +91,27 @@ but you can view the display as a string of pixels though, cause basicly in real
 
 #### Art-Editor
 * been working on a gui/editor to make patterns on the go, which features live code reloading, and a build in simulator
-* need to put downs some ideas soon like a line number ruler thing and indentation follow.
+* need to put downs some ideas soon like a line number ruler thing and indentation follow.[line numbers implemented, syntaxhighlighting implemented, indentation follow implemented]
 * and more things like that.
 * create a few editeable settings like fps. and maybe a a live mode (sending out udp artnet to devices)
 * find ways to discover devices and display.
-* put some diagnostic output under the matrix simulator.
+* put some diagnostic output under the matrix simulator. [partialy implemented]
+
+## the editor supports:
+* auto indentation follows indentation level.
+* indentation after a : and unindent after break pass return continue.
+* basicly ported this to my code: http://osdir.com/ml/gnome.apps.gedit/2008-06/msg00027.html
+* it has syntax highlighting.
+* dynamic reloading triggerd on key-releases.
+* dynamic looking for generate function (has to be inside a class)
+* indenting in spaces, where spaces are show as spaces with dots in them to show the level
+* has some action that can be performed through the menu.
+* you can open files save them in a tempfile names new_file.py (Control - O, Control-S)
+* reload code with Control-R and menu item
+* Control-Q or quit through menu.
+* undo changes (Control-Z)
+* redo changes (Control-Y)
+* output for easy showing where errors are and what kind of errors are/were generated. (under the simulator)
 
 #### usefull tools:
 compile:
