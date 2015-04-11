@@ -276,12 +276,13 @@ class Gui(object):
         self.colonReleased = False
 
     def key_pressed(self, widget, event):
-        """Check if the key press is 'Return' or 'Backspace' and indent or
-        un-indent accordingly.
-        """
         buffer = self.buff
         view = widget
         key_name = gdk.keyval_name(event.keyval)
+
+        """Check if the key press is 'Return' or 'Backspace' and indent or
+        un-indent accordingly.
+        """
         if key_name not in ('Return', 'Backspace') or \
            len(buffer.get_selection_bounds()) != 0:
             # If some text is selected we want the default behavior of Return
@@ -351,15 +352,19 @@ class Gui(object):
         insert = buffer.get_insert()
         view.scroll_mark_onscreen(insert)
 
-    def key_released(self, widget, key):
-        if key.keyval != 65507:
-            self.poutputbuff.set_text("")
+    def key_released(self, widget, event):
+        key_name = gdk.keyval_name(event.keyval)
+
         # reload except on ctrl-r
-        if key.keyval != 114 and key.keyval != 65507:
+        if 'Control' not in key_name or 'r' not in key_name:
             try:
                 self.reload_code()
             except Exception as e:
                 print >>self, e
+        # only want to do this on keystrokes,
+        # that are numbers or letters.
+        elif key_name.isalnum():
+            self.poutputbuff.set_text("")
         return
 
     def treeview_changed(self, widget, event, data=None):
