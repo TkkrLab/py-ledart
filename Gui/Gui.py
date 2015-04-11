@@ -6,7 +6,7 @@ import pango
 # from gtkcodebuffer import CodeBuffer, SyntaxLoader
 import py_compile
 import sys
-# import traceback
+import inspect
 import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
@@ -17,6 +17,14 @@ import artnet
 import socket
 
 pygtk.require('2.0')
+
+
+def get_trace():
+    err_line = inspect.currentframe().f_back.f_lineno
+    err_file = __file__
+    fmt = (err_file, err_line)
+    fmtstr = "%s:%s" % fmt
+    return fmtstr
 
 
 class PatternDummy(object):
@@ -42,7 +50,7 @@ class SendPacketWidget(gtk.ToggleButton):
             self.socket.sendto(artnet.buildPacket(0, data),
                                (self.dest_ip, self.port))
         except Exception as e:
-            print >>self.par, ("sendPacket>> %s" % e)
+            print >>self.par, ("%s:sendPacket>> %s" % (get_trace(), e))
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -93,9 +101,9 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                 self.matrixscreen.process_pixels(self.data)
                 self.queue_draw()
             except Exception as e:
-                self.queue_draw()
                 if not self.hasprinted:
-                    print >>self.par, ("Wrong data Generated >> %s" % e)
+                    l = get_trace()
+                    print >>self.par, ("%s:Wrong data Generated>> %s" % (l, e))
                 self.hasprinted = True
         return True
 
@@ -114,7 +122,9 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                     cr.rectangle(x + 1, y + 1, width - 2, height - 2)
                     cr.fill()
         except Exception as e:
-            print >>self.par, e
+            if not self.hasprinted:
+                print >>self.par, "%s:%s" % (get_trace(), e)
+            self.hasprinted = True
             return
 
 
@@ -129,7 +139,8 @@ class Gui(object):
         self.window.connect("destroy", gtk.main_quit)
 
         self.matrix_widget = MatrixSimWidget(self)
-        self.send_packets = SendPacketWidget(self, 'localhost')
+        if self.args.netSilent == "disabled":
+            self.send_packets = SendPacketWidget(self, 'localhost')
 
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)
@@ -361,17 +372,9 @@ class Gui(object):
                 self.reload_code()
             except Exception as e:
                 print >>self, e
-        # only want to do this on keystrokes,
-        # that are numbers or letters.
-        elif key_name.isalnum():
-            self.poutputbuff.set_text("")
-        return
 
     def treeview_changed(self, widget, event, data=None):
         # automaticly follow scrolling with the text
-        adj = self.scrolledwindow.get_vadjustment()
-        adj.set_value(adj.upper - adj.page_size)
-
         adj = self.pscrolled.get_vadjustment()
         adj.set_value(adj.upper - adj.page_size)
 
@@ -381,7 +384,8 @@ class Gui(object):
             data = self.matrix_widget.get_data()
             if data:
                 data = convertSnakeModes(data)
-                self.send_packets.sendout(data)
+                if self.args.netSilent == "disabled":
+                    self.send_packets.sendout(data)
         except Exception as e:
             print >>self, e
         return True
@@ -419,31 +423,55 @@ class Gui(object):
         # return a list of classes that have a generate function in them
         return patterns
 
+    # def get_pattern_class_names(self, patterns):
+    #     names = []
+    #     for Class in patterns:
+    #         names.append
+
     def write(self, string):
         end_iter = self.poutputbuff.get_end_iter()
         self.poutputbuff.insert(end_iter, string)
 
     def reload_code(self):
         # empty out the .pyc and .py file
+        self.storefile(self.intermediatefilename, "")
         self.storefile(self.intermediatefilename + 'c', "")
+        self.intermediate = reload(self.intermediate)
         text = self.get_text()
         # save and compile the text in the text widget on change.
         # always get the latest itteration of the compiled code.
         self.storefile(self.intermediatefilename, text)
         py_compile.compile(self.intermediatefilename)
+
         # check agains all the classes in intermediate code base.
         try:
             self.intermediate = reload(self.intermediate)
         except Exception as e:
             print >>self, "reload()>> " + str(e)
-        if len(self.get_pattern_classes(self.intermediate)):
-            print >>self, (self.get_pattern_classes(self.intermediate))
+
+        selected = None
         try:
-            patterns = self.get_pattern_classes(self.intermediate)
-            pattern = patterns[0]()
+            if self.intermediate.select:
+                selected = self.intermediate.select
+        except:
+            pass
+
+        patterns = self.get_pattern_classes(self.intermediate)
+        try:
+            if selected:
+                for Object in patterns:
+                    if Object.__name__ == selected:
+                        pattern = Object()
+                        print >>self, "PatternSelected: %s" % Object.__name__
+            else:
+                pattern = patterns[0]()
+                print >>self, "PatternSelected: %s" % patterns[0].__name__
         except Exception as e:
             pattern = PatternDummy()
+            print >>self, "%s" % self.get_pattern_classes(self.intermediate)
             print >>self, "No valid Class with Generate function found!"
+            print >>self, "%s:%s" % (get_trace(), e)
+
         self.matrix_widget.set_pattern(pattern)
         # reset hasprinted in matrix_widget, cause now it might work.
         if self.matrix_widget.hasprinted:
