@@ -1,10 +1,6 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 
-import pygtk
-pygtk.require('2.0')
-import gtk
-
 
 class Interface(object):
     """
@@ -15,6 +11,7 @@ class Interface(object):
         # due to physical matrix layout these are switched.
         self.width = height * blocksize
         self.height = width * blocksize
+        self.size = self.width * self.height
         self.blocksize = blocksize
         self.fullscreen = fullscreen
 

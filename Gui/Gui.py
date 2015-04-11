@@ -42,7 +42,7 @@ class SendPacketWidget(gtk.ToggleButton):
             self.socket.sendto(artnet.buildPacket(0, data),
                                (self.dest_ip, self.port))
         except Exception as e:
-            print >>self.par, e
+            print >>self.par, ("sendPacket>> %s" % e)
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -93,24 +93,29 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                 self.matrixscreen.process_pixels(self.data)
                 self.queue_draw()
             except Exception as e:
+                self.queue_draw()
                 if not self.hasprinted:
                     print >>self.par, ("Wrong data Generated >> %s" % e)
                 self.hasprinted = True
         return True
 
     def expose(self, widget, event):
-        cr = widget.window.cairo_create()
-        if len(self.matrixscreen.pixels):
-            for pixel in self.matrixscreen.pixels:
-                x, y, width, height = pixel.getRect()
-                pixelcolor = pixel.getColor()
-                r, g, b = self.color_convert_f(pixelcolor)
-                cr.set_source_rgb(0.0, 0.0, 0.0)
-                cr.rectangle(x, y, width, height)
-                cr.stroke()
-                cr.set_source_rgb(r, g, b)
-                cr.rectangle(x + 1, y + 1, width - 2, height - 2)
-                cr.fill()
+        try:
+            cr = widget.window.cairo_create()
+            if len(self.matrixscreen.pixels):
+                for pixel in self.matrixscreen.pixels:
+                    x, y, width, height = pixel.getRect()
+                    pixelcolor = pixel.getColor()
+                    r, g, b = self.color_convert_f(pixelcolor)
+                    cr.set_source_rgb(0.0, 0.0, 0.0)
+                    cr.rectangle(x, y, width, height)
+                    cr.stroke()
+                    cr.set_source_rgb(r, g, b)
+                    cr.rectangle(x + 1, y + 1, width - 2, height - 2)
+                    cr.fill()
+        except Exception as e:
+            print >>self.par, e
+            return
 
 
 class Gui(object):
@@ -347,6 +352,8 @@ class Gui(object):
         view.scroll_mark_onscreen(insert)
 
     def key_released(self, widget, key):
+        if key.keyval != 65507:
+            self.poutputbuff.set_text("")
         # reload except on ctrl-r
         if key.keyval != 114 and key.keyval != 65507:
             try:
@@ -364,11 +371,14 @@ class Gui(object):
         adj.set_value(adj.upper - adj.page_size)
 
     def run(self):
-        self.matrix_widget.process()
-        data = self.matrix_widget.get_data()
-        if data:
-            data = convertSnakeModes(data)
-            self.send_packets.sendout(data)
+        try:
+            self.matrix_widget.process()
+            data = self.matrix_widget.get_data()
+            if data:
+                data = convertSnakeModes(data)
+                self.send_packets.sendout(data)
+        except Exception as e:
+            print >>self, e
         return True
 
     def redo_text_cb(self, widget):
@@ -409,7 +419,6 @@ class Gui(object):
         self.poutputbuff.insert(end_iter, string)
 
     def reload_code(self):
-        print >>self, ("Reloading")
         # empty out the .pyc and .py file
         self.storefile(self.intermediatefilename + 'c', "")
         text = self.get_text()
