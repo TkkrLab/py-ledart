@@ -1,54 +1,95 @@
-from Graphics.Graphics import Graphics, BLACK
+from Graphics.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
+# from Graphics.RGBColorTools import ColorRGBOps
 from matrix import matrix_width, matrix_height
-from NumberSegmentBitMap import numbers
-import time
+from patterns.Life.life import Life
+import random
 
-select = "SegmentClocked"
+select = "MixedLife"
 
-class SegmentDisplay(object):
-    def __init__(self, graphics, color=(0, 0, 0xff)):
-        self.graphics = graphics
-        self.letter_width = 4
-        self.letter_height = 7
-
-    def drawnumber(self, x_off, y_off, value, offset=0):
-        value %= 10
-        for x, row in enumerate(numbers[value]):
-            for y, pixel in enumerate(row):
-                color = (0 * pixel, 0 * pixel, 0xff * pixel)
-                new_x, new_y = 6 - x, y + (self.letter_width * offset)
-                self.graphics.drawPixel(new_x + x_off, new_y + y_off, color)
-
-    def drawnumbers(self, x, y, value, digits):
-        for i in range(digits - 1, -1, -1):
-            self.drawnumber(x, y, value, i)
-            value /= 10
-
-
-class SegmentClock(object):
+class RandomLife(object):
     def __init__(self):
+        self.life = Life(matrix_width, matrix_height, 1, color=BLACK)
         self.graphics = Graphics(matrix_width, matrix_height)
-        self.segmentdisp = SegmentDisplay(self.graphics)
+
+    def pickRandomColor(self):
+        color = random.randint(0, len(COLORS) - 1)
+        # make sure that that color isn't black
+        while(COLORS[color] == BLACK):
+            color = random.randint(0, len(COLORS) - 1)
+        return COLORS[color]
+
+    def drawRandomColor(self):
+        life_matrix = self.graphics.toMatrix(self.life.field,
+                                             self.graphics.getSurfaceWidth())
+        for y in self.graphics.heightRange:
+            for x in self.graphics.widthRange:
+                if life_matrix[y][x]:
+                    color = self.pickRandomColor()
+                    # give every lifing cell a random color
+                    self.graphics.drawPixel(x, y, color)
+                else:
+                    self.graphics.drawPixel(x, y, BLACK)
+
+    def draw(self):
+        self.drawRandomColor()
 
     def generate(self):
-        self.graphics.fill(BLACK)
-        hour = time.localtime().tm_hour
-        minutes = time.localtime().tm_min
-        self.segmentdisp.drawnumbers(1, 0, hour, 2)
-        self.segmentdisp.drawnumbers(1, matrix_height / 2 + 1, minutes, 2)
+        self.life.process()
+        self.draw()
         return self.graphics.getSurface()
 
 
-class SegmentClocked(object):
+class MixedLife(object):
     def __init__(self):
+        self.life = Life(matrix_width, matrix_height, 1, color=GREEN)
         self.graphics = Graphics(matrix_width, matrix_height)
-        self.segmentdisp = SegmentDisplay(self.graphics)
-        self.previous = 1
+        self.graphics.fill(BLACK)
+
+    def draw(self):
+        life_matrix = self.graphics.toMatrix(self.life.field, self.graphics.getSurfaceWidth())
+        for y in self.graphics.heightRange:
+            for x in self.graphics.widthRange:
+                if life_matrix[y][x]:
+                    color = GREEN
+                else:
+                    color = BLACK
+                self.graphics.drawPixel(x, y, color)
 
     def generate(self):
-        self.graphics.fill(BLACK)
-        current = time.time()
-        fps = int(1. / (current - self.previous))
-        self.segmentdisp.drawnumbers(0, 0, fps, 4)
-        self.previous = time.time()
+        self.life.process()
+        self.draw()
+        return self.graphics.getSurface()
+
+
+class BlueLife(object):
+    def __init__(self):
+        self.life = Life(matrix_width, matrix_height, 1, color=BLUE)
+        self.graphics = Graphics(matrix_width, matrix_height)
+
+    def draw(self):
+        life_matrix = self.graphics.toMatrix(self.life.field, self.graphics.getSurfaceWidth())
+        for y in self.graphics.heightRange:
+            for x in self.graphics.widthRange:
+                if life_matrix[y][x]:
+                    color = BLUE
+                else:
+                    color = BLACK
+                self.graphics.drawPixel(x, y, color)
+
+    def generate(self):
+        self.life.process()
+        self.draw()
+        return self.graphics.getSurface()
+
+
+class GrayedLife(object):
+    '''
+    take the gray scales over every point and
+    add or subtract depening on if alive or not
+    '''
+    def __init__(self):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.graphics.fill(BLUE)
+
+    def generate(self):
         return self.graphics.getSurface()
