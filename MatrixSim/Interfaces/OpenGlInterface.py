@@ -28,9 +28,10 @@ class OpenGlInterface(Interface):
     def keyboardinput(self, *args):
         """ special way of input handling."""
         ctrl_c = '\x1b'
+        escape = '\x03'
         if(args[0] == 'q' or args[0] == ctrl_c):
             raise SystemExit
-        if(args[0] == '\x03'):
+        if(args[0] == escape):
             raise SystemExit
 
     def setcaption(self, caption):
