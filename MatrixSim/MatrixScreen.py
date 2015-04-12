@@ -6,10 +6,26 @@ from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
 
+# setup interface options, if no interface possible
+# set to a dummy
 from Interfaces.DummyInterface import DummyInterface
 interface_opts = {
     "dummy": DummyInterface
 }
+
+try:
+    from Interfaces.PygameInterface import PygameInterface
+    interface_opts["pygame"] = PygameInterface
+except Exception as e:
+    print("module not installed, %s" % str(e))
+    interface_opts["pygame"] = DummyInterface
+
+try:
+    from Interfaces.OpenGlInterface import OpenGlInterface
+    interface_opts["opengl"] = OpenGlInterface
+except Exception as e:
+    print("Module not installed, %s" % str(e))
+    interface_opts["opengl"] = DummyInterface
 
 
 class MatrixScreen(object):
