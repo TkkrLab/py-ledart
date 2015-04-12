@@ -85,13 +85,19 @@ but you can view the display as a string of pixels though, cause basicly in real
 #### this software is used in a pixel matrix project:
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
 
-## Art-Editor
+# Art-Editor
 #### how to run the editor forexample:
 ```shell
     robert@Laptop:~/py-artnet$ python runPatternJob.py --gui=enabled
 ```
 ### ideas
 * been working on a gui/editor to make patterns on the go, which features live code reloading, and a build in simulator
+<<<<<<< HEAD
+* need to put downs some ideas soon like a line number ruler thing and indentation follow and more things like that.
+* create a few editeable settings like fps. and maybe a a live mode (sending out udp artnet to devices)
+* create/buildin support for artpoll to discover devices and display them.
+* put some diagnostic output under the matrix simulator.
+=======
 * need to put downs some ideas soon like a line number ruler thing and indentation follow.[line numbers implemented, syntaxhighlighting implemented, indentation follow implemented]
 * and more things like that.
 * create a few editeable settings like fps. and maybe a a live mode (sending out udp artnet to devices)
@@ -113,6 +119,7 @@ but you can view the display as a string of pixels though, cause basicly in real
 * undo changes (Control-Z)
 * redo changes (Control-Y)
 * output for easy showing where errors are and what kind of errors are/were generated. (under the simulator)
+>>>>>>> a40ddd1dc500a288bdbaeffcbe4fe6e412861466
 
 #### usefull tools:
 compile:
