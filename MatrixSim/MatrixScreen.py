@@ -1,13 +1,17 @@
 import time
 import sys
+
 from Pixel import Pixel
+
 import Graphics.Graphics as Graphics
 import matrix
+
 try:
     from Interfaces import OpenGlInterface
     from Interfaces import PygameInterface
 except Exception as e:
     print(e)
+
 from Interfaces import DummyInterface
 
 interface_opts = {
