@@ -5,7 +5,7 @@ import time
 import random
 
 
-# this controller class if for the wireless pong controllers.
+# this controller class is for the wireless pong controllers.
 # with the 2.4 GHz nrf's inside.
 class PongController(ttyController, PongTtyController):
     def __init__(self, plugged=0, baud=115200, port="ACM", debug=False):

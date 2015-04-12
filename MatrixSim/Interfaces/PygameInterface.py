@@ -1,5 +1,6 @@
 from Interface import Interface
 import pygame
+from pygame.locals import *
 
 
 class PygameInterface(Interface):
@@ -18,13 +19,15 @@ class PygameInterface(Interface):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 raise SystemExit
-            if event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 # quit on ctrl-c as if it were in the terminal.
                 # to lazy to press x.
-                lctrlpressed = (pygame.key.get_mods() & pygame.KMOD_LCTRL)
+                mods = event.mod
+                key_mod = pygame.KMOD_LCTRL
+                lctrlpressed = (mods & key_mod) == key_mod
                 if event.key == pygame.K_c and lctrlpressed:
                     raise KeyboardInterrupt
-                if event.key == pygame.K_q or pygame.K_ESCAPE:
+                elif event.key in (pygame.K_q, pygame.K_ESCAPE):
                     raise KeyboardInterrupt
 
             # check if the mouse pointer is on/in the window.

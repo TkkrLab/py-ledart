@@ -1,4 +1,5 @@
 import sys
+from Controllers import ControllerError
 
 
 class PygameDummyController(object):

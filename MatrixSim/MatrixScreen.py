@@ -46,7 +46,7 @@ class MatrixScreen(object):
         self.window_width = height * pixelsize
         self.window_height = width * pixelsize
 
-        self.interface.setcaption("pygame artnet matrix simulator.")
+        self.interface.setcaption("artnet matrix simulator.")
 
         widthrange = range(0, self.window_width, pixelsize)
         # reverse order because else the display is flipped.
