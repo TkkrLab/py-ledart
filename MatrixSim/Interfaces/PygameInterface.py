@@ -18,7 +18,7 @@ class PygameInterface(Interface):
     def handleinput(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                raise SystemExit
+                raise KeyboardInterrupt
             elif event.type == pygame.KEYDOWN:
                 # quit on ctrl-c as if it were in the terminal.
                 # to lazy to press x.
