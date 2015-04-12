@@ -8,6 +8,9 @@ import matrix
 
 try:
     from Interfaces import OpenGlInterface
+except Exception as e:
+    print(e)
+try:
     from Interfaces import PygameInterface
 except Exception as e:
     print(e)
