@@ -6,20 +6,8 @@ from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
 
-try:
-    from Interfaces import OpenGlInterface
-except Exception as e:
-    print(e)
-try:
-    from Interfaces import PygameInterface
-except Exception as e:
-    print(e)
-
-from Interfaces import DummyInterface
-
+from Interfaces.DummyInterface import DummyInterface
 interface_opts = {
-    "pygame": PygameInterface,
-    "opengl": OpenGlInterface,
     "dummy": DummyInterface
 }
 
