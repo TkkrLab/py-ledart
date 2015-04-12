@@ -17,9 +17,6 @@ I made it easier to config and run patters with python code.
 * pygtksourveiw2[source](http://packages.ubuntu.com/lucid-updates/python/python-gtksourceview2)
 * PyOpenGl	[source](https://pypi.python.org/pypi/PyOpenGL)
 
-#### Hard to find docs hu.
-http://soc.if.usp.br/manual/python-gtksourceview2/html/
-
 #### what to do if you want to run it ?
 
 make you pattern, import it into patterns.py
@@ -85,12 +82,14 @@ but you can view the display as a string of pixels though, cause basicly in real
 #### this software is used in a pixel matrix project:
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
 
-## Art-Editor
-#### how to run the editor forexample:
+#### Art-Editor
+## how to run the editor forexample:
 ```shell
     robert@Laptop:~/py-artnet$ python runPatternJob.py --gui=enabled
 ```
-### ideas
+## Hard to find docs hu.
+http://soc.if.usp.br/manual/python-gtksourceview2/html/
+## ideas
 * been working on a gui/editor to make patterns on the go, which features live code reloading, and a build in simulator
 * need to put downs some ideas soon like a line number ruler thing and indentation follow.[line numbers implemented, syntaxhighlighting implemented, indentation follow implemented]
 * and more things like that.
