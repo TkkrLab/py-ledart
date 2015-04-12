@@ -5,7 +5,7 @@ Python art net interface. with patterns you can run for the ledpoles and the led
 
 or anything that has a network based artnet interface.
 
-I made it easier to config and run patters with python code.
+I made it easier to config and run patterns with python code.
 
 
 #### Dependencies.
