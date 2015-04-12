@@ -79,16 +79,19 @@ but ofcourse this wouldn't look right if you config file contains code for anyth
 but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
-#### this software is used in a pixel matrix project:
+# this software is used in a pixel matrix project:
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
 
-#### Art-Editor
+# Art-Editor
+
 ## how to run the editor forexample:
 ```shell
     robert@Laptop:~/py-artnet$ python runPatternJob.py --gui=enabled
 ```
+
 ## Hard to find docs hu.
 http://soc.if.usp.br/manual/python-gtksourceview2/html/
+
 ## ideas
 * been working on a gui/editor to make patterns on the go, which features live code reloading, and a build in simulator
 * need to put downs some ideas soon like a line number ruler thing and indentation follow.[line numbers implemented, syntaxhighlighting implemented, indentation follow implemented]

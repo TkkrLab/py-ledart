@@ -56,7 +56,7 @@ for example:
 
 both fps and config are optional,
 
-the default delay is 1/0.15ms which is the delay that dictates how fast the refresh is ran.
+the default framerate is 15 Fps which is the delay that dictates how fast the refresh is ran, or packets are sendout.
 
 and the default config is default_conf.py
 
@@ -79,14 +79,16 @@ but ofcourse this wouldn't look right if you config file contains code for anyth
 but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
-#### this software is used in a pixel matrix project:
+# this software is used in a pixel matrix project:
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
 
-#### Art-Editor
+# Art-Editor
+
 ## how to run the editor forexample:
 ```shell
     robert@Laptop:~/py-artnet$ python runPatternJob.py --gui=enabled
 ```
+
 ## Hard to find docs hu.
 http://soc.if.usp.br/manual/python-gtksourceview2/html/
 ## ideas
