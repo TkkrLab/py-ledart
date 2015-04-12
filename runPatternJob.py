@@ -61,8 +61,9 @@ if __name__ == "__main__":
         import time
         from artnet import buildPacket
         from matrix import matrix_width, matrix_height, convertSnakeModes
+        from MatrixSim.MatrixScreen import interface_opts
         try:
-            from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
+            from MatrixSim.MatrixScreen import MatrixScreen
         except Exception as e:
             print("MatrixScreen>> " + str(e))
 
