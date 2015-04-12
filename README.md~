@@ -135,6 +135,8 @@ artdmxtest <ip>     #runs a fading pattern, usefull for testing if the art-net d
 
 * FallingStars [it is broken it worked it was done and now it doesn't even run. only half the code is there. probably a commit thing happend.]
 
+* implentation of pixelbros [W.I.P]
+
 * pong [Done]
 
 * snake [Done]

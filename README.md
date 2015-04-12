@@ -83,7 +83,6 @@ but you can view the display as a string of pixels though, cause basicly in real
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
 
 # Art-Editor
-
 ## how to run the editor forexample:
 ```shell
     robert@Laptop:~/py-artnet$ python runPatternJob.py --gui=enabled
