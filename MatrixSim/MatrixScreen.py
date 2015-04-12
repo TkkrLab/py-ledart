@@ -3,7 +3,12 @@ import sys
 from Pixel import Pixel
 import Graphics.Graphics as Graphics
 import matrix
-from Interfaces import OpenGlInterface, PygameInterface, DummyInterface
+try:
+    from Interfaces import OpenGlInterface
+    from Interfaces import PygameInterface
+except Exception:
+    raise Exception
+from Interfaces import DummyInterface
 
 interface_opts = {
     "pygame": PygameInterface,

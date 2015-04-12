@@ -1,11 +1,3 @@
-from OpenGL.GL import *
-from OpenGL.GLUT import *
-
-import pygtk
-pygtk.require('2.0')
-import gtk
-
-
 class Interface(object):
     """
     the basic drawing interface api
@@ -49,6 +41,9 @@ class Interface(object):
 class DummyInterface(Interface):
     def __init__(self, width, height, blocksize, fullscreen=False):
         Interface.__init__(self, width, height, blocksize, fullscreen)
+
+from OpenGL.GL import *
+from OpenGL.GLUT import *
 
 
 class OpenGlInterface(Interface):
@@ -114,6 +109,8 @@ class OpenGlInterface(Interface):
         glutSwapBuffers()
         glutMainLoopEvent()
 
+import pygame
+
 
 class PygameInterface(Interface):
     """
@@ -121,46 +118,44 @@ class PygameInterface(Interface):
     """
     def __init__(self, width, height, blocksize, fullscreen=False):
         Interface.__init__(self, width, height, blocksize)
-        import pygame
-        self.pygame = pygame
-        self.flags = pygame.DOUBLEBUF | self.pygame.HWSURFACE
+        self.flags = pygame.DOUBLEBUF | pygame.HWSURFACE
         if fullscreen:
-            self.flags |= self.pygame.FULLSCREEN
+            self.flags |= pygame.FULLSCREEN
         self.window = self.pygame.display.set_mode((self.width, self.height),
                                                    self.flags)
 
     def handleinput(self):
-        for event in self.pygame.event.get():
-            if event.type == self.pygame.QUIT:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 raise SystemExit
-            if event.type == self.pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 # quit on ctrl-c as if it were in the terminal.
                 # to lazy to press x.
-                lctrlpressed = (self.pygame.key.get_mods() &
-                                self.pygame.KMDED_LCTRL)
-                if event.key == self.pygame.K_c and lctrlpressed:
+                lctrlpressed = (pygame.key.get_mods() &
+                                pygame.KMDED_LCTRL)
+                if event.key == pygame.K_c and lctrlpressed:
                     raise KeyboardInterrupt
-                if event.key == self.pygame.K_q or self.pygame.K_ESCAPE:
+                if event.key == pygame.K_q or pygame.K_ESCAPE:
                     raise KeyboardInterrupt
 
             # check if the mouse pointer is on/in the window.
             # and if so hide it.
-            focused = self.pygame.mouse.get_focused()
-            self.pygame.mouse.set_visible(not focused)
+            focused = pygame.mouse.get_focused()
+            pygame.mouse.set_visible(not focused)
 
     def setcaption(self, caption):
-        self.pygame.display.set_caption(caption + " (pygame)")
+        pygame.display.set_caption(caption + " (pygame)")
 
     def clear(self, color):
-        self.window.fill(color)
+        window.fill(color)
 
     def drawblock(self, rect, color, bordercolor, borderwidth=1):
-        self.pygame.draw.rect(self.window, color, rect)
+        pygame.draw.rect(self.window, color, rect)
         # draw a nice little square around so it looks more like a pixel.
-        self.pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
+        pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
 
     def update(self):
-        self.pygame.display.update()
+        pygame.display.update()
 
     def quit(self):
-        self.pygame.quit()
+        pygame.quit()
