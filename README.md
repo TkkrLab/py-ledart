@@ -133,48 +133,43 @@ artdmxtest <ip>     #runs a fading pattern, usefull for testing if the art-net d
 
 #### on the todo list:
 
-*FallingStars [it is broken it worked it was done and now it doesn't even run. only half the code is there. probably a commit thing happend.]
+* FallingStars [it is broken it worked it was done and now it doesn't even run. only half the code is there. probably a commit thing happend.]
 
-*pong [Done]
+* implentation of pixelbros [W.I.P]
 
-*snake [Done]
+* pong [Done]
 
-*tron <W.I.P>
+* snake [Done]
 
-*tetris 
+* tron [W.I.P]
 
-*arcadia
+* tetris 
 
-*game of life (conway) [Done it's called PixelLife]
+* arcadia
 
-*VU meter
+* game of life (conway) [Done it's called PixelLife]
 
-*network monitor 
+* VU meter [partialy done, have a effect running]
 
-*make mario appear on the matrix or other mobs from the game or any other image from other games.
+* network monitor 
 
-*problem with pwm not being linear (the amount of power it gives per pulse)
+* make mario appear on the matrix or other mobs from the game or any other image from other games.
 
-*thus implement a scale which does make it linear. so fading is nice and even.
+* problem with pwm not being linear (the amount of power it gives per pulse)
 
-*link that gave me the Yes that's it! moment:
+thus implement a scale which does make it linear. so fading is nice and even.
 
-*http://forum.arduino.cc/index.php?PHPSESSID=fiq8nr1j9sstegstf2o6btdgq2&topic=286351.0
+* link that gave me the Yes that's it! moment:
+* http://forum.arduino.cc/index.php?PHPSESSID=fiq8nr1j9sstegstf2o6btdgq2&topic=286351.0
 
-break out patterns in patterns.py in to seperate files.
+* break out patterns in patterns.py in to seperate files. [done]
 
-I think it would be helpfull to implement a "Graphics" library [This is done the class is called Graphics]
+* I think it would be helpfull to implement a "Graphics" library [This is done the class is called Graphics]
 
 also implemented a color library, and classes for making color objects. handy for pallets and much more.
 
-everything with multiplayer or not ? [probably not]
-
-another thing that might be fun to make is a vu meter?
-
-and yet another thing might be a network traffic monitor of kind.
-
 #### other things that might be verry usefull to make or do:
-
 more a hardware todo is make firmware for the ESP8266 wifi module
 
 that does art net. no need for utp cables any more.
+

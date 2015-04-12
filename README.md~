@@ -91,6 +91,7 @@ but you can view the display as a string of pixels though, cause basicly in real
 
 ## Hard to find docs hu.
 http://soc.if.usp.br/manual/python-gtksourceview2/html/
+
 ## ideas
 * been working on a gui/editor to make patterns on the go, which features live code reloading, and a build in simulator
 * need to put downs some ideas soon like a line number ruler thing and indentation follow.[line numbers implemented, syntaxhighlighting implemented, indentation follow implemented]
@@ -132,48 +133,41 @@ artdmxtest <ip>     #runs a fading pattern, usefull for testing if the art-net d
 
 #### on the todo list:
 
-*FallingStars [it is broken it worked it was done and now it doesn't even run. only half the code is there. probably a commit thing happend.]
+* FallingStars [it is broken it worked it was done and now it doesn't even run. only half the code is there. probably a commit thing happend.]
 
-*pong [Done]
+* pong [Done]
 
-*snake [Done]
+* snake [Done]
 
-*tron <W.I.P>
+* tron [W.I.P]
 
-*tetris 
+* tetris 
 
-*arcadia
+* arcadia
 
-*game of life (conway) [Done it's called PixelLife]
+* game of life (conway) [Done it's called PixelLife]
 
-*VU meter
+* VU meter [partialy done, have a effect running]
 
-*network monitor 
+* network monitor 
 
-*make mario appear on the matrix or other mobs from the game or any other image from other games.
+* make mario appear on the matrix or other mobs from the game or any other image from other games.
 
-*problem with pwm not being linear (the amount of power it gives per pulse)
+* problem with pwm not being linear (the amount of power it gives per pulse)
 
-*thus implement a scale which does make it linear. so fading is nice and even.
+thus implement a scale which does make it linear. so fading is nice and even.
 
-*link that gave me the Yes that's it! moment:
+* link that gave me the Yes that's it! moment:
+* http://forum.arduino.cc/index.php?PHPSESSID=fiq8nr1j9sstegstf2o6btdgq2&topic=286351.0
 
-*http://forum.arduino.cc/index.php?PHPSESSID=fiq8nr1j9sstegstf2o6btdgq2&topic=286351.0
+* break out patterns in patterns.py in to seperate files. [done]
 
-break out patterns in patterns.py in to seperate files.
-
-I think it would be helpfull to implement a "Graphics" library [This is done the class is called Graphics]
+* I think it would be helpfull to implement a "Graphics" library [This is done the class is called Graphics]
 
 also implemented a color library, and classes for making color objects. handy for pallets and much more.
 
-everything with multiplayer or not ? [probably not]
-
-another thing that might be fun to make is a vu meter?
-
-and yet another thing might be a network traffic monitor of kind.
-
 #### other things that might be verry usefull to make or do:
-
 more a hardware todo is make firmware for the ESP8266 wifi module
 
 that does art net. no need for utp cables any more.
+
