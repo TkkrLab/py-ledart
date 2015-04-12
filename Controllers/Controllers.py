@@ -13,14 +13,6 @@ def translate(value, leftmin, leftmax, rightmin, rightmax):
     return rightmin + (valuescaled * rightspan)
 
 
-class ControllerError(BaseException):
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return repr(self.value)
-
-
 class DummyController(object):
     def __init__(self, plugged=0):
         self.value = 0
@@ -133,7 +125,7 @@ class ttyController(object):
             return self.pos[button]
         except Exception as e:
             print("sys.exit: " + str(e))
-            sys.exit(0)
+            raise KeyboardInterrupt
 
     def __del__(self):
         if self.ser_port:

@@ -1,3 +1,5 @@
 *.pyc
 config/*.pyc
 pattern/*.pyc
+Gui/IntermediateCode/intermediate.py*
+Gui/new_file.py*

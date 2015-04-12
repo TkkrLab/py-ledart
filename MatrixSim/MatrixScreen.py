@@ -1,15 +1,31 @@
 import time
 import sys
+
 from Pixel import Pixel
+
 import Graphics.Graphics as Graphics
 import matrix
-from Interfaces import OpenGlInterface, PygameInterface, DummyInterface
 
+# setup interface options, if no interface possible
+# set to a dummy
+from Interfaces.DummyInterface import DummyInterface
 interface_opts = {
-    "pygame": PygameInterface,
-    "opengl": OpenGlInterface,
     "dummy": DummyInterface
 }
+
+try:
+    from Interfaces.PygameInterface import PygameInterface
+    interface_opts["pygame"] = PygameInterface
+except Exception as e:
+    print("module not installed, %s" % str(e))
+    interface_opts["pygame"] = DummyInterface
+
+try:
+    from Interfaces.OpenGlInterface import OpenGlInterface
+    interface_opts["opengl"] = OpenGlInterface
+except Exception as e:
+    print("Module not installed, %s" % str(e))
+    interface_opts["opengl"] = DummyInterface
 
 
 class MatrixScreen(object):
@@ -30,7 +46,7 @@ class MatrixScreen(object):
         self.window_width = height * pixelsize
         self.window_height = width * pixelsize
 
-        self.interface.setcaption("pygame artnet matrix simulator.")
+        self.interface.setcaption("artnet matrix simulator.")
 
         widthrange = range(0, self.window_width, pixelsize)
         # reverse order because else the display is flipped.

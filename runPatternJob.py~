@@ -53,21 +53,16 @@ if __name__ == "__main__":
     args = get_args()
     # if gui selected start that else start the headless code.
     if args.gui == "enabled":
-        try:
-            from Gui.Gui import Gui
-            editor = Gui(args)
-            editor.main()
-        except Exception as e:
-            print(e)
-            signal_handler(None, None)
+        from Gui.Gui import Gui
+        editor = Gui(args)
+        editor.main()
         sys.exit(0)
     else:
         import time
         from artnet import buildPacket
         from matrix import matrix_width, matrix_height, convertSnakeModes
-        from MatrixSim.MatrixScreen import interface_opts
         try:
-            from MatrixSim.MatrixScreen import MatrixScreen
+            from MatrixSim.MatrixScreen import MatrixScreen, interface_opts
         except Exception as e:
             print("MatrixScreen>> " + str(e))
 
