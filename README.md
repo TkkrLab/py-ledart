@@ -56,7 +56,7 @@ for example:
 
 both fps and config are optional,
 
-the default delay is 1/0.15ms which is the delay that dictates how fast the refresh is ran.
+the default framerate is 15 Fps which is the delay that dictates how fast the refresh is ran, or packets are sendout.
 
 and the default config is default_conf.py
 
