@@ -6,8 +6,8 @@ import matrix
 try:
     from Interfaces import OpenGlInterface
     from Interfaces import PygameInterface
-except Exception:
-    raise Exception
+except Exception as e:
+    print(e)
 from Interfaces import DummyInterface
 
 interface_opts = {
