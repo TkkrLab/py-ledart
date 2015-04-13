@@ -11,10 +11,13 @@ install: "pip install -r .requirements --use-mirrors"
 before_install:
   - sudo apt-get update
   - sudo apt-get install python-pygame
+  - sudo apt-get install python-gtk2 python-gtk2-dev python-gtksourceview2
+  - sudo apt-get install python-serial
+  - sudo apt-get install python-opengl
 
 script:
-  - python testdog.py
-  - coverage run testdog.py
+  - python runPatternjob.py
+  - coverage run runPatetternjob.py
 
 virtualenv:
   system_site_packages: true
