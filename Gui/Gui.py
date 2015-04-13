@@ -203,9 +203,15 @@ class Gui(object):
         # shortcut for saving a file.
         savem = gtk.ImageMenuItem(gtk.STOCK_SAVE, agr)
         key, mod = gtk.accelerator_parse("<Control>S")
-        openm.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
+        savem.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
         savem.connect("activate", self.savefile)
         filemenu.append(savem)
+
+        saveam = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS, agr)
+        key, mod = gtk.accelerator_parse("<Control><Shift>S")
+        saveam.add_accelerator("activate", agr, key, mod, gtk.ACCEL_VISIBLE)
+        saveam.connect("activate", self.save_file_as)
+        filemenu.append(saveam)
 
         # shortcut for reloading
         reloadm = gtk.ImageMenuItem(gtk.STOCK_REFRESH, agr)
@@ -387,13 +393,14 @@ class Gui(object):
 
     def key_released(self, widget, event):
         key_name = gdk.keyval_name(event.keyval)
+        return key_name
 
         # reload except on ctrl-r
-        if 'Control' not in key_name or 'r' not in key_name:
-            try:
-                self.reload_code()
-            except Exception as e:
-                print >>self, e
+        # if 'Control' not in key_name or 'r' not in key_name:
+        #     try:
+        #         self.reload_code()
+        #     except Exception as e:
+        #         print >>self, e
 
     def treeview_changed(self, widget, event, data=None):
         # automaticly follow scrolling with the text
@@ -500,6 +507,9 @@ class Gui(object):
 
     def newfile(self, widget):
         print >>self, ("supposed to make a new empty file")
+
+    def save_file_as(self, widget):
+        print("saving file as you know")
 
     def openfile(self, widget):
         # create a dialog window.

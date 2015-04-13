@@ -7,7 +7,9 @@ import math
 import pylab
 import cmath
 
-audio_params = (pyaudio.paInt16, 1, 44100, True, True, 1024)
+audio_params = (pyaudio.paInt16, 1, 44100, True, False, 1024)
+
+select = "VuFlash"
 
 
 def rms(buff):
@@ -15,7 +17,44 @@ def rms(buff):
     return rms_val
 
 
-class VuOne(object):
+class VuFlash(object):
+    def __init__(self):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.graphics.fill(BLUE)
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=audio_params[0],
+                                  channels=audio_params[1],
+                                  rate=audio_params[2],
+                                  input=audio_params[3],
+                                  output=audio_params[4],
+                                  frames_per_buffer=audio_params[5])
+        self.color = BLUE
+        self.maxed = 1
+
+    def getaudio(self):
+        try:
+            raw = self.stream.read(audio_params[5])
+        except IOError as e:
+            if e[1] != pyaudio.paInputOverFlowed:
+                raise
+            else:
+                print("Warning: audio input buffer overflow")
+            raw = '\x00' * self.audio_params[5]
+        return np.array(np.frombuffer(raw, np.int16), dtype=np.float64)
+
+    def generate(self):
+        audio = self.getaudio()
+        rmsed = rms(audio / 1000)
+        if rmsed > self.maxed:
+            self.maxed = rmsed
+            print(self.maxed)
+        value = int(translate(rmsed, 0, self.maxed, 0, 0xff))
+        self.color = [value]*3
+        self.graphics.fill(self.color)
+        return self.graphics.getSurface()
+
+
+class VuBar(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
         self.graphics.fill(BLUE)
