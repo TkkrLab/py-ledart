@@ -173,8 +173,8 @@ class Gui(object):
         self.window.resize(width * 2, height * 2)
         self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
         self.textfilename = "/home/robert/py-artnet/Gui/new_file.py"
-        self.intermediatefilename = ("/home/robert/py-artnet/Gui/" +
-                                     "IntermediateCode/intermediate.py")
+        self.intermediatefilename = ("/home/robert/py-artnet/" +
+                                     "Gui/IntermediateCode/intermediate.py")
 
         # menu items
         mb = gtk.MenuBar()
@@ -432,12 +432,15 @@ class Gui(object):
         # empty out the .pyc and .py file
         self.storefile(self.intermediatefilename, "")
         self.storefile(self.intermediatefilename + 'c', "")
-        self.intermediate = reload(self.intermediate)
         text = self.get_text()
-        # save and compile the text in the text widget on change.
-        # always get the latest itteration of the compiled code.
-        self.storefile(self.intermediatefilename, text)
-        py_compile.compile(self.intermediatefilename)
+        try:
+            self.intermediate = reload(self.intermediate)
+            # save and compile the text in the text widget on change.
+            # always get the latest itteration of the compiled code.
+            self.storefile(self.intermediatefilename, text)
+            py_compile.compile(self.intermediatefilename)
+        except Exception as e:
+            print >>self, ("%s: %s" % (get_trace(), e))
 
         # check agains all the classes in intermediate code base.
         try:
@@ -452,7 +455,7 @@ class Gui(object):
         except:
             pass
 
-        patterns = self.get_pattern_classes(self.intermediate)
+        patterns = get_pattern_classes(self.intermediate)
         try:
             if selected:
                 for Object in patterns:
@@ -464,7 +467,7 @@ class Gui(object):
                 print >>self, "PatternSelected: %s" % patterns[0].__name__
         except Exception as e:
             pattern = PatternDummy()
-            print >>self, "%s" % self.get_pattern_classes(self.intermediate)
+            print >>self, "%s" % get_pattern_classes(self.intermediate)
             print >>self, "No valid Class with Generate function found!"
             print >>self, "%s:%s" % (get_trace(), e)
 

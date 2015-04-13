@@ -35,6 +35,7 @@ class Life(object):
                 else:
                     self.buffer[self.position] = 0
             else:
+                around = self.totalAround(self.field, self.position)
                 if(around == self.reproductiveNumber):
                     self.buffer[self.position] = 1
                 else:
