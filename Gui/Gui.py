@@ -6,6 +6,7 @@ import pango
 # from gtkcodebuffer import CodeBuffer, SyntaxLoader
 import py_compile
 import sys
+import os
 import inspect
 import gtksourceview2 as gtksourceview
 
@@ -157,7 +158,6 @@ class Gui(object):
         self.tabwidth = 4
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
-        self.window.set_title("artnet-editor")
         self.window.connect("destroy", gtk.main_quit)
 
         self.matrix_widget = MatrixSimWidget(self)
@@ -175,6 +175,8 @@ class Gui(object):
         self.textfilename = "/home/robert/py-artnet/Gui/new_file.py"
         self.intermediatefilename = ("/home/robert/py-artnet/" +
                                      "Gui/IntermediateCode/intermediate.py")
+        title = "artnet-editor (%s)" % self.textfilename
+        self.window.set_title(title)
 
         # menu items
         mb = gtk.MenuBar()
@@ -509,7 +511,28 @@ class Gui(object):
         print >>self, ("supposed to make a new empty file")
 
     def save_file_as(self, widget):
-        print("saving file as you know")
+        dialog = gtk.FileChooserDialog("Save File",
+                                       None,
+                                       gtk.FILE_CHOOSER_ACTION_SAVE,
+                                       (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                        gtk.STOCK_SAVE, gtk.RESPONSE_OK)
+                                       )
+        dialog.set_default_response(gtk.RESPONSE_OK)
+        dialog.set_current_folder(os.getcwd())
+
+        filter = gtk.FileFilter()
+        filter.set_name("Python Files")
+        filter.add_mime_type("python/source")
+        filter.add_pattern("*.py")
+        dialog.add_filter(filter)
+
+        response = dialog.run()
+        if response == gtk.RESPONSE_OK:
+            self.textfilename = dialog.get_filename()
+            print(self.textfilename)
+            title = "artnet-editor (%s)" % self.textfilename
+            self.window.set_title(title)
+        dialog.destroy()
 
     def openfile(self, widget):
         # create a dialog window.
@@ -520,6 +543,7 @@ class Gui(object):
                                         gtk.STOCK_OPEN, gtk.RESPONSE_OK)
                                        )
         dialog.set_default_response(gtk.RESPONSE_OK)
+        dialog.set_current_folder(os.getcwd())
 
         filter = gtk.FileFilter()
         filter.set_name("Python Files.")
