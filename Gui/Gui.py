@@ -529,7 +529,6 @@ class Gui(object):
         response = dialog.run()
         if response == gtk.RESPONSE_OK:
             self.textfilename = dialog.get_filename()
-            print(self.textfilename)
             title = "artnet-editor (%s)" % self.textfilename
             self.window.set_title(title)
         dialog.destroy()
