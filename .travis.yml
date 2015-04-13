@@ -1,0 +1,26 @@
+language: python
+
+python:
+  - "2.7"
+
+cache: apt
+
+# install: "pip install -r .requirements --use-mirrors"
+
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install python-pygame
+  - sudo apt-get install python-gtk2 python-gtk2-dev python-gtksourceview2
+  - sudo apt-get install python-serial
+  - sudo apt-get install python-opengl
+
+script:
+  - python runPatternJob.py
+  - coverage run runPatternJob.py
+
+virtualenv:
+  system_site_packages: true
+
+after_success:
+  - coveralls

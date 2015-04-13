@@ -59,7 +59,7 @@ if __name__ == "__main__":
             editor.main()
         except Exception as e:
             print(e)
-            signal_handler(None, None)
+        print("Exiting.")
         sys.exit(0)
     else:
         import time

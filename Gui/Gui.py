@@ -10,7 +10,7 @@ import inspect
 import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
-from MatrixSim.Interfaces import Interface
+from MatrixSim.Interfaces.Interface import Interface
 from Graphics.Graphics import Graphics, BLACK
 from matrix import matrix_width, matrix_height, convertSnakeModes
 import artnet
@@ -19,12 +19,35 @@ import socket
 pygtk.require('2.0')
 
 
+<<<<<<< HEAD
 def get_trace():
     err_line = inspect.currentframe().f_back.f_lineno
     err_file = __file__
     fmt = (err_file, err_line)
     fmtstr = "%s:%s" % fmt
     return fmtstr
+=======
+def get_pattern_classes(module):
+    # holds the patterns that are found
+    patterns = []
+    # look into the modules dictionary for the things in there
+    for obj in module.__dict__:
+        # if we find objects
+        if isinstance(obj, object):
+            try:
+                # we try and get that objects dictionary.
+                # if it's a class it will contain methods and more.
+                thedict = module.__dict__[obj].__dict__
+                # and if it contains the 'generate' method
+                if(thedict['generate']):
+                    # the class is appended to the list.
+                    patterns.append(module.__dict__[obj])
+            except:
+                # continue if we try and read something we can't.
+                continue
+    # return a list of classes that have a generate function in them
+    return patterns
+>>>>>>> 1dd2b3a49657ed6120eea05b0e1ba1effa3714d7
 
 
 class PatternDummy(object):
@@ -402,6 +425,7 @@ class Gui(object):
         except Exception as e:
             print >>self, e
 
+<<<<<<< HEAD
     def get_pattern_classes(self, module):
         # holds the patterns that are found
         patterns = []
@@ -428,6 +452,8 @@ class Gui(object):
     #     for Class in patterns:
     #         names.append
 
+=======
+>>>>>>> 1dd2b3a49657ed6120eea05b0e1ba1effa3714d7
     def write(self, string):
         end_iter = self.poutputbuff.get_end_iter()
         self.poutputbuff.insert(end_iter, string)
@@ -448,6 +474,7 @@ class Gui(object):
             self.intermediate = reload(self.intermediate)
         except Exception as e:
             print >>self, "reload()>> " + str(e)
+<<<<<<< HEAD
 
         selected = None
         try:
@@ -466,6 +493,13 @@ class Gui(object):
             else:
                 pattern = patterns[0]()
                 print >>self, "PatternSelected: %s" % patterns[0].__name__
+=======
+        if len(get_pattern_classes(self.intermediate)):
+            print >>self, (get_pattern_classes(self.intermediate))
+        try:
+            patterns = get_pattern_classes(self.intermediate)
+            pattern = patterns[0]()
+>>>>>>> 1dd2b3a49657ed6120eea05b0e1ba1effa3714d7
         except Exception as e:
             pattern = PatternDummy()
             print >>self, "%s" % self.get_pattern_classes(self.intermediate)
