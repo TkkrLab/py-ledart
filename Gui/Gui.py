@@ -19,14 +19,14 @@ import socket
 pygtk.require('2.0')
 
 
-<<<<<<< HEAD
 def get_trace():
     err_line = inspect.currentframe().f_back.f_lineno
     err_file = __file__
     fmt = (err_file, err_line)
     fmtstr = "%s:%s" % fmt
     return fmtstr
-=======
+
+
 def get_pattern_classes(module):
     # holds the patterns that are found
     patterns = []
@@ -47,7 +47,6 @@ def get_pattern_classes(module):
                 continue
     # return a list of classes that have a generate function in them
     return patterns
->>>>>>> 1dd2b3a49657ed6120eea05b0e1ba1effa3714d7
 
 
 class PatternDummy(object):
