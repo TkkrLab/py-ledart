@@ -17,7 +17,7 @@ before_install:
 
 script:
   - python runPatternjob.py
-  - coverage run runPatetternjob.py
+  - coverage run runPatternjob.py
 
 virtualenv:
   system_site_packages: true
