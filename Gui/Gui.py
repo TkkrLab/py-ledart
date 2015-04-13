@@ -10,13 +10,35 @@ import sys
 import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
-from MatrixSim.Interfaces import Interface
+from MatrixSim.Interfaces.Interface import Interface
 from Graphics.Graphics import Graphics, BLACK
 from matrix import matrix_width, matrix_height, convertSnakeModes
 import artnet
 import socket
 
 pygtk.require('2.0')
+
+
+def get_pattern_classes(module):
+    # holds the patterns that are found
+    patterns = []
+    # look into the modules dictionary for the things in there
+    for obj in module.__dict__:
+        # if we find objects
+        if isinstance(obj, object):
+            try:
+                # we try and get that objects dictionary.
+                # if it's a class it will contain methods and more.
+                thedict = module.__dict__[obj].__dict__
+                # and if it contains the 'generate' method
+                if(thedict['generate']):
+                    # the class is appended to the list.
+                    patterns.append(module.__dict__[obj])
+            except:
+                # continue if we try and read something we can't.
+                continue
+    # return a list of classes that have a generate function in them
+    return patterns
 
 
 class PatternDummy(object):
@@ -383,27 +405,6 @@ class Gui(object):
         except Exception as e:
             print >>self, e
 
-    def get_pattern_classes(self, module):
-        # holds the patterns that are found
-        patterns = []
-        # look into the modules dictionary for the things in there
-        for obj in module.__dict__:
-            # if we find objects
-            if isinstance(obj, object):
-                try:
-                    # we try and get that objects dictionary.
-                    # if it's a class it will contain methods and more.
-                    thedict = module.__dict__[obj].__dict__
-                    # and if it contains the 'generate' method
-                    if(thedict['generate']):
-                        # the class is appended to the list.
-                        patterns.append(module.__dict__[obj])
-                except:
-                    # continue if we try and read something we can't.
-                    continue
-        # return a list of classes that have a generate function in them
-        return patterns
-
     def write(self, string):
         end_iter = self.poutputbuff.get_end_iter()
         self.poutputbuff.insert(end_iter, string)
@@ -422,10 +423,10 @@ class Gui(object):
             self.intermediate = reload(self.intermediate)
         except Exception as e:
             print >>self, "reload()>> " + str(e)
-        if len(self.get_pattern_classes(self.intermediate)):
-            print >>self, (self.get_pattern_classes(self.intermediate))
+        if len(get_pattern_classes(self.intermediate)):
+            print >>self, (get_pattern_classes(self.intermediate))
         try:
-            patterns = self.get_pattern_classes(self.intermediate)
+            patterns = get_pattern_classes(self.intermediate)
             pattern = patterns[0]()
         except Exception as e:
             pattern = PatternDummy()
