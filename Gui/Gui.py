@@ -156,13 +156,27 @@ class Gui(object):
         self.args = args
         # tabwidth in spaces
         self.tabwidth = 4
-        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
+        self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
+        self.textfilename = "/home/robert/py-artnet/Gui/new_file.py"
+        self.intermediatefilename = ("/home/robert/py-artnet/" +
+                                     "Gui/IntermediateCode/intermediate.py")
+        title = "artnet-editor (%s)" % self.textfilename
+        # do this once and we can import our compiled code.
+        self.modpath = '/'.join(self.intermediatefilename.split('/')[:-1])
+        sys.path.insert(0, self.modpath)
+        self.storefile(self.intermediatefilename, '')
+        self.storefile(self.intermediatefilename + 'c', '')
+
+        # then load module
+        self.intermediate = __import__("intermediate")
+
+        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", gtk.main_quit)
 
         self.matrix_widget = MatrixSimWidget(self)
         if self.args.netSilent == "disabled":
-            self.send_packets = SendPacketWidget(self, 'localhost')
+            self.send_packets = SendPacketWidget(self, 'pixelmatrix')
 
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)
@@ -171,11 +185,6 @@ class Gui(object):
 
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
-        self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
-        self.textfilename = "/home/robert/py-artnet/Gui/new_file.py"
-        self.intermediatefilename = ("/home/robert/py-artnet/" +
-                                     "Gui/IntermediateCode/intermediate.py")
-        title = "artnet-editor (%s)" % self.textfilename
         self.window.set_title(title)
 
         # menu items
@@ -306,14 +315,6 @@ class Gui(object):
 
         self.window.show_all()
 
-        # do this once and we can import our compiled code.
-        self.modpath = '/'.join(self.intermediatefilename.split('/')[:-1])
-        sys.path.insert(0, self.modpath)
-        # clear intermediate code.
-        self.storefile(self.intermediatefilename, "")
-        self.storefile(self.intermediatefilename + 'c', "")
-        # then load module
-        self.intermediate = __import__("intermediate")
         self.colonReleased = False
 
     def key_pressed(self, widget, event):
@@ -461,6 +462,7 @@ class Gui(object):
         try:
             if self.intermediate.select:
                 selected = self.intermediate.select
+                print >>self, "select: %s" % selected
         except:
             pass
 
@@ -498,7 +500,7 @@ class Gui(object):
         return text[0]
 
     def storefile(self, filename, text):
-        with open(filename, 'w') as thefile:
+        with open(filename, 'w+') as thefile:
             thefile.write(text)
 
     def savefile(self, widget):
@@ -559,6 +561,8 @@ class Gui(object):
         if response == gtk.RESPONSE_OK:
             self.textfilename = dialog.get_filename()
             self.buff.set_text(self.loadfile(self.textfilename))
+            title = "artnet-editor (%s)" % self.textfilename
+            self.window.set_title(title)
         dialog.destroy()
 
     def main(self):
