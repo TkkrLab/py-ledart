@@ -77,6 +77,16 @@ def get_pattern_classes(module):
     return patterns
 
 
+def test_patterns(dir):
+    patterns = find_patterns_in_dir(dir)
+    for obj in patterns:
+        try:
+            pattern = obj()
+            print("%s >> %s" % (obj, len(pattern.generate())))
+        except Exception as e:
+            print("%s >> %s" % (obj, e))
+
+
 class PatternDummy(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)

@@ -16,7 +16,7 @@ def getPngPixelData(image):
 
 class DisplayPng(object):
     def __init__(self):
-        image = '/home/robert/py-art-net/hacked.png'
+        image = '/home/robert/py-artnet/hacked.png'
         self.data = getPngPixelData(image)
         self.pixeldata = self.data[0]
 
