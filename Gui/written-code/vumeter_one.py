@@ -9,7 +9,7 @@ import cmath
 
 audio_params = (pyaudio.paInt16, 1, 44100, True, False, 1024)
 
-select = "VuBar"
+select = "VuFlash"
 
 
 def rms(buff):
@@ -51,7 +51,6 @@ class VuFlash(object):
                                   frames_per_buffer=audio_params[5]
                                   )
         self.color = BLUE
-        self.maxed = 1
 
     def getaudio(self):
         try:
@@ -66,11 +65,7 @@ class VuFlash(object):
 
     def generate(self):
         audio = self.getaudio()
-        rmsed = rms(audio / 1000)
-        if rmsed > self.maxed:
-            self.maxed = rmsed
-            print(self.maxed)
-        value = int(translate(rmsed, 0, self.maxed, 0, 0xff))
+        rmsed = translate(rms(audio), 0, 0xffff/5, 0, matrix_height)
         self.color = interp_color(rms(audio/10000))
         self.color = color_convert(self.color)
         self.graphics.fill(self.color)
