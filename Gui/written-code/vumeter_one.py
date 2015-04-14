@@ -1,6 +1,7 @@
 from Graphics.Graphics import Graphics, BLUE, BLACK, WHITE, GREEN, RED
 from matrix import *
 from Controllers.Controllers import translate
+from scipy.signal import hilbert
 import numpy as np
 import pyaudio
 import math
@@ -9,7 +10,7 @@ import cmath
 
 audio_params = (pyaudio.paInt16, 1, 44100, True, False, 1024)
 
-select = "VuFlash"
+select = "Visualizer"
 
 
 def rms(buff):
@@ -111,6 +112,17 @@ class VuBar(object):
         
         return self.graphics.getSurface()
 
+class Slide_filter():
+    def __init__(self, a):
+        self.buffer = np.zeros(2, dtype='complex128')
+        self.a = a
+    def filter(self, input_buff):
+        b = np.zeros(len(input_buff), dtype='complex128')
+        for i in range(len(input_buff)):
+            self.buffer[1] = self.buffer[0]
+            self.buffer[0] = self.buffer[1] + ((input_buff[i]-self.buffer[1]) / self.a)
+            b[i] = self.buffer[0]
+        return b
 
 class Visualizer(object):
     def __init__(self):
@@ -124,6 +136,10 @@ class Visualizer(object):
                                   output=audio_params[4],
                                   frames_per_buffer=audio_params[5])
         self.color = BLUE
+        self.scale = 0.04
+        self.f = Slide_filter(50)
+        self.line_points = np.zeros(audio_params[5]*2)
+        self.wave_display = np.zeros(audio_params[5])
 
     def getaudio(self):
         try:
@@ -137,6 +153,22 @@ class Visualizer(object):
         return np.array(np.frombuffer(raw, np.int16), dtype=np.float64)
 
     def generate(self):
+        self.graphics.fill(BLACK)
+        self.width = matrix_width
+        self.height = matrix_height
+        audio = self.getaudio()
+        self.line_colour = interp_color(rms(audio/10000.))
+        shifted = hilbert(audio)*self.scale
+        shifted = np.add(shifted, self.width/2+(self.height/2)*1j)
+        shifted = self.f.filter(shifted)
+        for i, co_ord in enumerate(shifted):
+            self.line_points[2*i] = co_ord.real
+            self.line_points[(2*i)+1] = co_ord.imag
+        wave_offset_y = self.height*0.5*(1-math.sqrt(2)) # To account for the 200+200j added earlier
+        wave_offset_x = (self.width - len(shifted)/2)/2
+        for i, co_ord in enumerate(shifted[::2]):
+            self.wave_display[2*i] = i + wave_offset_x
+            self.wave_display[(2*i)+1] = abs(co_ord) + wave_offset_y
         return self.graphics.getSurface()
 
 
