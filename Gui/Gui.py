@@ -28,6 +28,33 @@ def get_trace():
     return fmtstr
 
 
+def find_patterns_in_dir(dir):
+    patterns = []
+    # get the current working directory so we.
+    # can join and find it.
+    dir = os.path.join(os.getcwd(), dir)
+    # see if dir is already in path. else add it.
+    if dir not in sys.path:
+        sys.path.append(dir)
+    else:
+        print("directory in path.")
+    # for everything in a directory.
+    for item in os.listdir(dir):
+        # if it is a source file.
+        if item.endswith("py"):
+            # extract the file name and import it.
+            sfile = item.split('.')[0]
+            mod = __import__(sfile)
+            # extract classes
+            classes = get_pattern_classes(mod)
+            # if any found:
+            if classes:
+                # append the object to patterns
+                patterns += classes
+    # return the patterns found
+    return patterns
+
+
 def get_pattern_classes(module):
     # holds the patterns that are found
     patterns = []

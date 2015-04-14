@@ -10,7 +10,7 @@ import cmath
 
 audio_params = (pyaudio.paInt16, 1, 44100, True, False, 1024)
 
-select = "Visualizer"
+select = "VuBarVerti"
 
 
 def rms(buff):
@@ -73,7 +73,7 @@ class VuFlash(object):
         return self.graphics.getSurface()
 
 
-class VuBar(object):
+class VuBarVerti(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
         self.graphics.fill(BLUE)
@@ -85,7 +85,6 @@ class VuBar(object):
                                   output=audio_params[4],
                                   frames_per_buffer=audio_params[5])
         self.color = BLUE
-        self.maxed = 1
 
     def getaudio(self):
         try:
@@ -100,16 +99,47 @@ class VuBar(object):
 
     def generate(self):
         self.graphics.fill(BLACK)
-        
         audio = self.getaudio()
-        rmsed = translate(rms(audio), 0, 0xffff/5, 0, matrix_height)
+        rmsed = translate(rms(audio), 0, ((2**16)/2)/2, 0, matrix_width*2)
         self.color = interp_color(rms(audio/10000))
         self.color = color_convert(self.color)
-        
+        for i in range(0, matrix_height):
+            self.graphics.drawLine(0, i, rmsed, i, self.color)
+        return self.graphics.getSurface()
+
+
+class VuBarHori(object):
+    def __init__(self):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.graphics.fill(BLUE)
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=audio_params[0],
+                                  channels=audio_params[1],
+                                  rate=audio_params[2],
+                                  input=audio_params[3],
+                                  output=audio_params[4],
+                                  frames_per_buffer=audio_params[5])
+        self.color = BLUE
+
+    def getaudio(self):
+        try:
+            raw = self.stream.read(audio_params[5])
+        except IOError as e:
+            if e[1] != pyaudio.paInputOverflowed:
+                raise
+            else:
+                print("Warning: audio input buffer overflow")
+            raw = '\x00' * self.audio_params[5]
+        return np.array(np.frombuffer(raw, np.int16), dtype=np.float64)
+
+    def generate(self):
+        self.graphics.fill(BLACK)
+        audio = self.getaudio()
+        rmsed = translate(rms(audio), 0, ((2**16)/2)/2, 0, matrix_height*2)
+        self.color = interp_color(rms(audio/10000))
+        self.color = color_convert(self.color)
         for i in range(0, matrix_width):
             self.graphics.drawLine(i, 0, i, rmsed, self.color)
-            # self.graphics.drawLine(0, i, rmsed, i, self.color)
-        
         return self.graphics.getSurface()
 
 class Slide_filter():
@@ -161,9 +191,6 @@ class Visualizer(object):
         shifted = hilbert(audio)*self.scale
         shifted = np.add(shifted, self.width/2+(self.height/2)*1j)
         shifted = self.f.filter(shifted)
-        for i, co_ord in enumerate(shifted):
-            self.line_points[2*i] = co_ord.real
-            self.line_points[(2*i)+1] = co_ord.imag
         wave_offset_y = self.height*0.5*(1-math.sqrt(2)) # To account for the 200+200j added earlier
         wave_offset_x = (self.width - len(shifted)/2)/2
         for i, co_ord in enumerate(shifted[::2]):
