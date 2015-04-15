@@ -236,7 +236,7 @@ class Visualizer(object):
         self.graphics.fill(BLUE)
         self.color = BLUE
         
-        self.timer = Timer(0.)
+        self.timer = Timer(1/25)
         
         self.chunk = 2**9
         self.scale = 14
@@ -291,7 +291,7 @@ class Visualizer(object):
         if self.timer.valid():
             self.graphics.fill(BLACK)
             audio = np.array(np.frombuffer(data, np.int16), dtype=np.float64)
-            self.color = color_convert(interp_color(rms(audio/10000)))
+            self.color = color_convert(interp_color(rms(audio/2500)))
             levels = self.calculate_levels(data, self.chunk, self.samplerate, matrix_height)
             for i, level in enumerate(levels):
                 level = max(min(level/self.scale, 1.0), 0.0)
