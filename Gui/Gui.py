@@ -7,84 +7,17 @@ import pango
 import py_compile
 import sys
 import os
-import inspect
 import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
 from MatrixSim.Interfaces.Interface import Interface
 from Graphics.Graphics import Graphics, BLACK
 from matrix import matrix_width, matrix_height, convertSnakeModes
+from runPatternJob import get_trace, get_pattern_classes
 import artnet
 import socket
 
 pygtk.require('2.0')
-
-
-def get_trace():
-    err_line = inspect.currentframe().f_back.f_lineno
-    err_file = __file__
-    fmt = (err_file, err_line)
-    fmtstr = "%s:%s" % fmt
-    return fmtstr
-
-
-def find_patterns_in_dir(dir):
-    patterns = []
-    # get the current working directory so we.
-    # can join and find it.
-    dir = os.path.join(os.getcwd(), dir)
-    # see if dir is already in path. else add it.
-    if dir not in sys.path:
-        sys.path.append(dir)
-    else:
-        print("directory in path.")
-    # for everything in a directory.
-    for item in os.listdir(dir):
-        # if it is a source file.
-        if item.endswith("py"):
-            # extract the file name and import it.
-            sfile = item.split('.')[0]
-            mod = __import__(sfile)
-            # extract classes
-            classes = get_pattern_classes(mod)
-            # if any found:
-            if classes:
-                # append the object to patterns
-                patterns += classes
-    # return the patterns found
-    return patterns
-
-
-def get_pattern_classes(module):
-    # holds the patterns that are found
-    patterns = []
-    # look into the modules dictionary for the things in there
-    for obj in module.__dict__:
-        # if we find objects
-        if isinstance(obj, object):
-            try:
-                # we try and get that objects dictionary.
-                # if it's a class it will contain methods and more.
-                thedict = module.__dict__[obj].__dict__
-                # and if it contains the 'generate' method
-                if(thedict['generate']):
-                    # the class is appended to the list.
-                    patterns.append(module.__dict__[obj])
-            except:
-                # continue if we try and read something we can't.
-                continue
-    # return a list of classes that have a generate function in them
-    return patterns
-
-
-def test_patterns(dir):
-    patterns = find_patterns_in_dir(dir)
-    for obj in patterns:
-        try:
-            pattern = obj()
-            print("%s >> %s" % (obj, len(pattern.generate())))
-        except Exception as e:
-            print("%s >> %s" % (obj, e))
 
 
 class PatternDummy(object):
@@ -191,6 +124,14 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
 class Gui(object):
     def __init__(self, args):
         self.args = args
+
+        # log output to self.
+        self.printout = True
+        self.stdout = sys.stdout
+        sys.stdout = self
+        self.stderr = sys.stderr
+        sys.stderr = self
+
         # tabwidth in spaces
         self.tabwidth = 4
 
@@ -318,32 +259,51 @@ class Gui(object):
         self.textview.set_insert_spaces_instead_of_tabs(True)
         self.textview.set_indent_on_tab(True)
         self.textview.set_tab_width(self.tabwidth)
+
         fontdesc = pango.FontDescription("monospace 8")
         self.textview.modify_font(fontdesc)
         tabs = pango.TabArray(1, True)
         tabs.set_tab(0, pango.TAB_LEFT, 32)
         self.textview.set_tabs(tabs)
+
         self.scrolledwindow = gtk.ScrolledWindow()
+        self.scrolledwindow.set_size_request(-1, -1)
         self.scrolledwindow.add(self.textview)
 
-        self.hbox = gtk.HBox()
-        self.vbox = gtk.VBox()
-        self.vbox.pack_start(mb, False, False)
-        self.vbox.pack_start(self.scrolledwindow)
-        self.hbox.pack_start(self.vbox)
-        # this sets it so that the scrolledwindow follows matrix_widget
-        self.vbox2 = gtk.VBox()
-        self.vbox2.pack_start(self.matrix_widget)
         self.poutputbuff = gtk.TextBuffer()
         self.poutput = gtk.TextView(self.poutputbuff)
         self.pscrolled = gtk.ScrolledWindow()
         self.pscrolled.add(self.poutput)
         self.poutput.set_editable(False)
         self.poutput.set_wrap_mode(gtk.WRAP_WORD)
+        self.poutput.set_size_request(self.matrix_widget.width, -1)
         self.poutput.connect("size_allocate", self.treeview_changed)
-        self.vbox2.pack_start(self.pscrolled)
-        self.hbox.pack_start(self.vbox2, False, True)
-        self.window.add(self.hbox)
+
+        separator = gtk.HSeparator()
+        separator.set_size_request(-1, 20)
+
+        vbox = gtk.VBox()
+        hboxup = gtk.HBox()
+        vboxdw = gtk.VBox()
+        hboxup.pack_start(self.matrix_widget, False, False)
+        hboxup.pack_start(self.pscrolled, False, False)
+        vboxdw.pack_start(self.scrolledwindow)
+        vbox.pack_start(mb, False, False)
+        vbox.pack_start(hboxup, False, False)
+        vbox.pack_start(separator, False, False)
+        vbox.pack_start(vboxdw)
+        self.window.add(vbox)
+        # self.hbox = gtk.HBox()
+        # self.vbox = gtk.VBox()
+        # self.vbox.pack_start(mb, False, False)
+        # self.vbox.pack_start(self.scrolledwindow)
+        # self.hbox.pack_start(self.vbox)
+        # # this sets it so that the scrolledwindow follows matrix_widget
+        # self.vbox2 = gtk.VBox()
+        # self.vbox2.pack_start(self.matrix_widget)
+        # self.vbox2.pack_start(self.pscrolled)
+        # self.hbox.pack_start(self.vbox2, False, True)
+        # self.window.add(self.hbox)
 
         cb = self.key_released
         self.keyrelease_id = self.textview.connect("key-release-event", cb)
@@ -474,6 +434,8 @@ class Gui(object):
     def write(self, string):
         end_iter = self.poutputbuff.get_end_iter()
         self.poutputbuff.insert(end_iter, string)
+        if self.printout:
+            self.stdout.write(string)
 
     def reload_code(self):
         # empty out the .pyc and .py file
@@ -514,6 +476,7 @@ class Gui(object):
                 pattern = patterns[0]()
                 print >>self, "PatternSelected: %s" % patterns[0].__name__
         except Exception as e:
+            print >>self, "generating from dummy for now"
             pattern = PatternDummy()
             print >>self, "%s" % get_pattern_classes(self.intermediate)
             print >>self, "No valid Class with Generate function found!"
@@ -601,6 +564,10 @@ class Gui(object):
             title = "artnet-editor (%s)" % self.textfilename
             self.window.set_title(title)
         dialog.destroy()
+
+    def __del__(self):
+        sys.stdout = self.stdout
+        sys.stderr = self.stderr
 
     def main(self):
         gtk.main()

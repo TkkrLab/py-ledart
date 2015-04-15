@@ -3,6 +3,75 @@ import socket
 import signal
 import sys
 import imp
+import os
+import time
+
+
+def get_trace():
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    fmt = (exc_type, fname, exc_tb.tb_lineno)
+    fmtstr = "%s:%s:%s" % fmt
+    return fmtstr
+
+
+def find_patterns_in_dir(dir):
+    patterns = []
+    # get the current working directory so we.
+    # can join and find it.
+    dir = os.path.join(os.getcwd(), dir)
+    # see if dir is already in path. else add it.
+    if dir not in sys.path:
+        sys.path.append(dir)
+    else:
+        print("directory in path.")
+    # for everything in a directory.
+    for item in os.listdir(dir):
+        # if it is a source file.
+        if item.endswith("py"):
+            # extract the file name and import it.
+            sfile = item.split('.')[0]
+            mod = __import__(sfile)
+            # extract classes
+            classes = get_pattern_classes(mod)
+            # if any found:
+            if classes:
+                # append the object to patterns
+                patterns += classes
+    # return the patterns found
+    return patterns
+
+
+def get_pattern_classes(module):
+    # holds the patterns that are found
+    patterns = []
+    # look into the modules dictionary for the things in there
+    for obj in module.__dict__:
+        # if we find objects
+        if isinstance(obj, object):
+            try:
+                # we try and get that objects dictionary.
+                # if it's a class it will contain methods and more.
+                thedict = module.__dict__[obj].__dict__
+                # and if it contains the 'generate' method
+                if(thedict['generate']):
+                    # the class is appended to the list.
+                    patterns.append(module.__dict__[obj])
+            except:
+                # continue if we try and read something we can't.
+                continue
+    # return a list of classes that have a generate function in them
+    return patterns
+
+
+def test_patterns(dir):
+    patterns = find_patterns_in_dir(dir)
+    for obj in patterns:
+        try:
+            pattern = obj()
+            print("%s >> %s" % (obj, len(pattern.generate())))
+        except Exception as e:
+            print("%s >> %s" % (obj, e))
 
 
 def load_targets(configfile):
@@ -62,7 +131,6 @@ if __name__ == "__main__":
         print("Exiting.")
         sys.exit(0)
     else:
-        import time
         from artnet import buildPacket
         from matrix import matrix_width, matrix_height, convertSnakeModes
         from MatrixSim.MatrixScreen import interface_opts
