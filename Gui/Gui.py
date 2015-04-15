@@ -88,16 +88,15 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
         return self.data
 
     def process(self):
-        if self.pattern:
-            try:
-                self.data = self.pattern.generate()
-                self.matrixscreen.process_pixels(self.data)
-                self.queue_draw()
-            except Exception as e:
-                if not self.hasprinted:
-                    l = get_trace()
-                    print >>self.par, ("%s:Wrong data Generated>> %s" % (l, e))
-                self.hasprinted = True
+        try:
+            self.data = self.pattern.generate()
+            self.matrixscreen.process_pixels(self.data)
+            self.queue_draw()
+        except Exception as e:
+            if not self.hasprinted:
+                l = get_trace()
+                print >>self.par, ("%s:Wrong data Generated>> %s" % (l, e))
+            self.hasprinted = True
         return True
 
     def expose(self, widget, event):

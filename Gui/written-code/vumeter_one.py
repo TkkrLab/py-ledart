@@ -10,7 +10,7 @@ import cmath
 
 audio_params = (pyaudio.paInt16, 1, 44100, True, False, 1024)
 
-select = "VuBarVerti"
+select = "VuBarHoriPir"
 
 
 def rms(buff):
@@ -73,7 +73,80 @@ class VuFlash(object):
         return self.graphics.getSurface()
 
 
+class VuBarVertiPir(object):
+    def __init__(self):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.graphics.fill(BLUE)
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=audio_params[0],
+                                  channels=audio_params[1],
+                                  rate=audio_params[2],
+                                  input=audio_params[3],
+                                  output=audio_params[4],
+                                  frames_per_buffer=audio_params[5])
+        self.color = BLUE
+        self.max = 0
+
+    def getaudio(self):
+        try:
+            raw = self.stream.read(audio_params[5])
+        except IOError as e:
+            if e[1] != pyaudio.paInputOverflowed:
+                raise
+            else:
+                print("Warning: audio input buffer overflow")
+            raw = '\x00' * self.audio_params[5]
+        return np.array(np.frombuffer(raw, np.int16), dtype=np.float64)
+
+    def generate(self):
+        self.graphics.fill(BLACK)
+        audio = self.getaudio()
+        # rmsed = translate(rms(audio), 0, ((2**16)/2), 0, matrix_width*10)
+        self.color = interp_color(rms(audio/10000))
+        self.color = color_convert(self.color)
+        for i in range(0, matrix_height):
+            rmsed = translate(rms(audio), 0, ((2**16)/2), 0, matrix_width*i)
+            self.graphics.drawLine(0, i, rmsed, i, self.color)
+        return self.graphics.getSurface()
+
+
 class VuBarVerti(object):
+    def __init__(self):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.graphics.fill(BLUE)
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=audio_params[0],
+                                  channels=audio_params[1],
+                                  rate=audio_params[2],
+                                  input=audio_params[3],
+                                  output=audio_params[4],
+                                  frames_per_buffer=audio_params[5])
+        self.color = BLUE
+        self.max = 0
+
+    def getaudio(self):
+        try:
+            raw = self.stream.read(audio_params[5])
+        except IOError as e:
+            if e[1] != pyaudio.paInputOverflowed:
+                raise
+            else:
+                print("Warning: audio input buffer overflow")
+            raw = '\x00' * self.audio_params[5]
+        return np.array(np.frombuffer(raw, np.int16), dtype=np.float64)
+
+    def generate(self):
+        self.graphics.fill(BLACK)
+        audio = self.getaudio()
+        rmsed = translate(rms(audio), 0, ((2**16)/2)/2, 0, matrix_width*2)
+        self.color = interp_color(rms(audio/10000))
+        self.color = color_convert(self.color)
+        for i in range(0, matrix_height):
+            self.graphics.drawLine(0, i, rmsed, i, self.color)
+        return self.graphics.getSurface()
+
+
+class VuBarHoriPir(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
         self.graphics.fill(BLUE)
@@ -100,11 +173,11 @@ class VuBarVerti(object):
     def generate(self):
         self.graphics.fill(BLACK)
         audio = self.getaudio()
-        rmsed = translate(rms(audio), 0, ((2**16)/2)/2, 0, matrix_width*2)
         self.color = interp_color(rms(audio/10000))
         self.color = color_convert(self.color)
-        for i in range(0, matrix_height):
-            self.graphics.drawLine(0, i, rmsed, i, self.color)
+        for i in range(0, matrix_width):
+            rmsed = translate(rms(audio), 0, ((2**16)/2)/2, 0, matrix_height*i)
+            self.graphics.drawLine(i, 0, i, rmsed, self.color)
         return self.graphics.getSurface()
 
 
