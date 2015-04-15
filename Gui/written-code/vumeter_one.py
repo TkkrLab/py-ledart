@@ -231,17 +231,21 @@ class Slide_filter():
 from Timing import Timer
 
 class Visualizer(object):
+    """
+    testing with this is cool:
+    https://www.youtube.com/watch?v=82Q6DRqf9H4
+    """
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
         self.graphics.fill(BLUE)
         self.color = BLUE
         
-        self.timer = Timer(1/25)
+        self.timer = Timer(0)
         
-        self.chunk = 2**9
-        self.scale = 14
-        self.exponent = 4.2
-        self.samplerate = 22050	
+        self.chunk = 1024
+        self.scale = 55
+        self.exponent = 2
+        self.samplerate = 44100	
         self.audio_params = (pyaudio.paInt16, 1, self.samplerate, True, self.chunk)
         self.p = pyaudio.PyAudio()
         self.stream = self.p.open(format=self.audio_params[0],
@@ -287,18 +291,15 @@ class Visualizer(object):
         return np.array(np.frombuffer(raw, np.int16), dtype=np.float64)
 
     def generate(self):
+        self.graphics.fill(BLACK)
         data = self.stream.read(self.chunk)
-        if self.timer.valid():
-            self.graphics.fill(BLACK)
-            audio = np.array(np.frombuffer(data, np.int16), dtype=np.float64)
-            self.color = color_convert(interp_color(rms(audio/2500)))
-            levels = self.calculate_levels(data, self.chunk, self.samplerate, matrix_height)
-            for i, level in enumerate(levels):
-                level = max(min(level/self.scale, 1.0), 0.0)
-                level = level**self.exponent
-                level = int(level*0xff)
-                height = level
-                self.graphics.drawLine(0, i, height, i, self.color)
+        levels = self.calculate_levels(data, self.chunk, self.samplerate, matrix_height)
+        for i, level in enumerate(levels):
+            self.color = color_convert(interp_color(level/max(levels)))
+            level = max(min(level/self.scale, 1.0), 0.0)
+            level = level**self.exponent
+            level = int(level*0xff)
+            self.graphics.drawLine(0, i, level, i, self.color)
         return self.graphics.getSurface()
 
     def __del__(self):
