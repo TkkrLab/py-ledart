@@ -29,6 +29,9 @@ class PatternDummy(object):
     def generate(self):
         return self.graphics.getSurface()
 
+    def __del__(self):
+        del self
+
 
 class SendPacketWidget(gtk.ToggleButton):
     def __init__(self, parent, dest_ip='localhost', port=6454):
@@ -125,7 +128,7 @@ class Gui(object):
         self.args = args
 
         # log output to self.
-        self.printout = True
+        self.printout = False
         self.stdout = sys.stdout
         sys.stdout = self
         self.stderr = sys.stderr
