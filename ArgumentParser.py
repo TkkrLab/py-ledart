@@ -11,6 +11,7 @@ parser.add_argument("--showFps",      help="prints out the actuall fps the progr
 parser.add_argument("--fullscreen",   help="makes matrixsim go fullscreen (hides mouse pointer)", metavar="<enabled>",               nargs="?", default="disabled",          type=str)
 parser.add_argument("--gui",          help="enables the graphical interface.",                    metavar="<enabled>",               nargs="?", default="disabled",          type=str)
 parser.add_argument("--simInterface", help="lets you choose the simulator drawing interface",     metavar="<pygame, opengl, dummy>", nargs="?", default="pygame",            type=str)
+parser.add_argument("--testing",      help="if enabled will run some tests and log to term",      metavar="<enabled>",               nargs="?", default="disabled",          type=str)
 
 
 def get_args():

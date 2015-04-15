@@ -120,6 +120,10 @@ if __name__ == "__main__":
     from ArgumentParser import get_args
     # get command line arguments:
     args = get_args()
+    if args.testing == "enabled":
+        test_patterns('patterns')
+        print("Done testing. ")
+        sys.exit()
     # if gui selected start that else start the headless code.
     if args.gui == "enabled":
         try:
