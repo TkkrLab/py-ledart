@@ -12,7 +12,7 @@ import struct
 
 audio_params = (pyaudio.paInt16, 1, 44100, True, False, 1024)
 
-select = "VisualizerVerti"
+select = "Visualizer"
 
 
 def rms(buff):
@@ -250,7 +250,9 @@ class Visualizer(object):
         self.graphics.fill(BLUE)
         self.color = BLUE
         
-        self.timer = Timer(0)
+        self.timer = Timer(1/25.)
+        
+        self.levels = []
         
         self.chunk = 1024
         self.scale = 55
@@ -305,13 +307,15 @@ class Visualizer(object):
         self.graphics.fill(BLACK)
         if self.stream.get_read_available():
             self.data = self.stream.read(self.chunk)
-        levels = self.calculate_levels(self.data, self.chunk, self.samplerate, matrix_height)
-        for i, level in enumerate(levels):
-            self.color = color_convert(interp_color(level/max(levels)))
-            level = max(min(level/self.scale, 1.0), 0.0)
-            level = level**self.exponent
-            level = int(level*0xff)
-            self.graphics.drawLine(0, i, level, i, self.color)
+        if self.timer.valid():
+            self.levels = self.calculate_levels(self.data, self.chunk, self.samplerate, matrix_height)
+        if len(self.levels):
+           for i, level in enumerate(self.levels):
+               self.color = color_convert(interp_color(level/max(self.levels)))
+               level = max(min(level/self.scale, 1.0), 0.0)
+               level = level**self.exponent
+               level = int(level*0xff)
+               self.graphics.drawLine(0, i, level, i, self.color)
         return self.graphics.getSurface()
 
     def __del__(self):
