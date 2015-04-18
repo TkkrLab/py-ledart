@@ -18,6 +18,7 @@ I made it easier to config and run patterns with python code.
 * PyOpenGl	[source](https://pypi.python.org/pypi/PyOpenGL)
 * SciPy     [source](http://www.scipy.org/)
 * NumPy     [source](http://www.numpy.org/)
+* PyAudio   [source](http://people.csail.mit.edu/hubert/pyaudio/)
 
 #### what to do if you want to run it ?
 
