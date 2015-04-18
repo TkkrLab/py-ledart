@@ -16,6 +16,8 @@ I made it easier to config and run patterns with python code.
 * pygtk 	[source](http://www.pygtk.org/downloads.html)
 * pygtksourveiw2[source](http://packages.ubuntu.com/lucid-updates/python/python-gtksourceview2)
 * PyOpenGl	[source](https://pypi.python.org/pypi/PyOpenGL)
+* SciPy     [source](http://www.scipy.org/)
+* NumPy     [source](http://www.numpy.org/)
 
 #### what to do if you want to run it ?
 
