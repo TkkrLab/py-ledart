@@ -29,6 +29,13 @@ from PixelLife import *
 from Plasma import *
 from sven import *
 
+
+try:
+    from VuOther import *
+except Exception as e:
+    debugprint("VuOther>>", e)
+
+
 # uses pygame for testing.
 try:
     from SuperPixelBros import SuperPixelBros
