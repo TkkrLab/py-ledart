@@ -250,7 +250,7 @@ class Visualizer(object):
         self.graphics.fill(BLUE)
         self.color = BLUE
         
-        self.timer = Timer(1/25.)
+        self.timer = Timer(0.1)
         
         self.levels = []
         
@@ -307,14 +307,15 @@ class Visualizer(object):
         self.graphics.fill(BLACK)
         if self.stream.get_read_available():
             self.data = self.stream.read(self.chunk)
-        if self.timer.valid():
-            self.levels = self.calculate_levels(self.data, self.chunk, self.samplerate, matrix_height)
+        self.levels = self.calculate_levels(self.data, self.chunk, self.samplerate, matrix_height)
+        # if self.timer.valid():
+            # print(self.levels)
         if len(self.levels):
            for i, level in enumerate(self.levels):
                self.color = color_convert(interp_color(level/max(self.levels)))
                level = max(min(level/self.scale, 1.0), 0.0)
                level = level**self.exponent
-               level = int(level*0xff)
+               level = int(level*10*matrix_width)
                self.graphics.drawLine(0, i, level, i, self.color)
         return self.graphics.getSurface()
 
