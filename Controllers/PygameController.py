@@ -39,7 +39,7 @@ class PygameController(object):
             self.num_hats = self.joystick.get_numhats()
 
         except Exception:
-            print("no controllers found.")
+            print("PygameController: no controllers found.")
             self.joystick = None
 
     def handleEvents(self):

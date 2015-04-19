@@ -35,7 +35,6 @@ class TilePixel(object):
         self.color = color
         self.graphics = graphics
         self.pos = (pos[1], pos[0])
-        print(self.pos)
 
     def draw(self):
         x, y = self.pos
@@ -74,7 +73,6 @@ class Player(TilePixel):
 
     def process(self):
         x, y = self.getPos()
-        print(self.dx, self.dy)
         y += self.dy
         x += self.dx
         pos = x, y

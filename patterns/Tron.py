@@ -80,6 +80,7 @@ class OldTron(object):
         self.player1.draw()
         pygame.init()
         self.window = pygame.display.set_mode((80, 60))
+        self.debug = False
 
     def inputHandling(self):
         pass
@@ -104,8 +105,9 @@ class OldTron(object):
             self.pos = x, y
         else:
             self.pos = x, y
-        print(self.deltax, self.deltay)
-        print(x, y)
+        if self.debug:
+            print(self.deltax, self.deltay)
+            print(x, y)
 
         # look if our "tail is in the way" and only if we have a tail.
         if len(self.body) > 2:
