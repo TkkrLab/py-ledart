@@ -39,7 +39,7 @@ def find_patterns_in_dir(dir):
                 # append the object to patterns
                 patterns += classes
     # return the patterns found but remove dupes
-    return set(patterns)
+    return patterns
 
 
 def get_pattern_classes(module):
@@ -101,6 +101,14 @@ def signal_handler(signal, frame):
     sys.exit(0)
 
 
+def debugprint(data):
+    from matrix import matrix_size, matrix_width
+    chunksize = matrix_width
+    for i in range(0, matrix_size, chunksize):
+        print(data[i:i + chunksize])
+    print("")
+
+
 def sendout(args):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
@@ -113,6 +121,7 @@ def sendout(args):
             # just don't send it out
             if(set(sendout.data) != set(data)):
                 sendout.data = data
+                # debugprint(data)
                 # make sure matrixSim always displays
                 # the data the right way.
                 if args.matrixSim == "enabled":
@@ -133,10 +142,9 @@ sendout.data = []
 
 
 def listpatterns():
-    patterns = find_patterns_in_dir('patterns')
+    patterns = set(find_patterns_in_dir('patterns'))
     for pat in patterns:
         print(pat.__name__)
-    sys.exit()
 
 
 if __name__ == "__main__":
@@ -145,6 +153,7 @@ if __name__ == "__main__":
     args = get_args()
     if args.list:
         listpatterns()
+        sys.exit()
     if args.testing:
         test_patterns('patterns', showpass=False)
         print("Done testing. ")
@@ -178,7 +187,6 @@ if __name__ == "__main__":
         # ---------
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.setblocking(False)
 
         signal.signal(signal.SIGINT, signal_handler)
 
