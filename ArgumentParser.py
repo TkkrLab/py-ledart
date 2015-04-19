@@ -12,6 +12,7 @@ parser.add_argument("--fullscreen",   help="makes matrixsim go fullscreen (hides
 parser.add_argument("--gui",          help="enables the graphical interface.",                    metavar="<enabled>",               nargs="?", default="disabled",          type=str)
 parser.add_argument("--simInterface", help="lets you choose the simulator drawing interface",     metavar="<pygame, opengl, dummy>", nargs="?", default="pygame",            type=str)
 parser.add_argument("--testing",      help="if enabled will run some tests and log to term",      metavar="<enabled>",               nargs="?", default="disabled",          type=str)
+parser.add_argument("--list",         help="lists patterns with generate functions",              action="store_true")
 
 
 def get_args():

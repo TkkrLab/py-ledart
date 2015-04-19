@@ -64,14 +64,44 @@ def get_pattern_classes(module):
     return patterns
 
 
+def testgenerated(generate, size, tsize, type, inrange):
+    fail = False
+    color_ints = True
+    generated = []
+    # for every color tuple in generated.
+    for t in generated:
+        # if length is 3
+        if len(t) == tsize:
+            # check if every color is a int in range of 0 - 0xff
+            for c in t:
+                # if not break and report with color_ints
+                if c != type or (c > inrange[0] or c < inrange[1]):
+                    color_ints = False
+                    break
+        # if length is not 3 we break and report with fail.
+        else:
+            fail = True
+            break
+    return (fail and color_ints) and (len(generated) == size)
+
+
 def test_patterns(dir):
+    from matrix import matrix_size
     patterns = find_patterns_in_dir(dir)
     for obj in patterns:
         try:
             pattern = obj()
-            print("%s >> %s" % (obj, len(pattern.generate())))
+            if len(pattern.generate()) == matrix_size:
+                fmt = (obj, len(pattern.generate()))
+                print("%s Passed: %s" % fmt)
+            else:
+                fmt = (obj, len(pattern.generate()))
+                print("%s Failed: %s" % fmt)
         except Exception as e:
+            print("\n-------------------")
             print("%s >> %s" % (obj, e))
+            print("-------------------\n")
+            continue
 
 
 def load_targets(configfile):
@@ -120,6 +150,8 @@ if __name__ == "__main__":
     from ArgumentParser import get_args
     # get command line arguments:
     args = get_args()
+    if args.list:
+        sys.exit()
     if args.testing == "enabled":
         test_patterns('patterns')
         print("Done testing. ")
