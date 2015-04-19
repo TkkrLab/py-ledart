@@ -109,22 +109,27 @@ def sendout(args):
         for t in TARGETS:
             pattern = TARGETS[t]
             data = pattern.generate()
-            # make sure matrixSim always displays
-            # the data the right way.
-            if args.matrixSim == "enabled":
-                    matrixscreen.process(data)
-            # convert the data for the special matrix layout.
-            if args.snakeMode == "enabled":
-                data = convertSnakeModes(data)
-            # if this is a simulation draw it to the matrixscreen else
-            # send it out over the network.
-            if not (args.netSilent == "enabled"):
-                sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+            # check if data generated is the same as before because then
+            # just don't send it out
+            if(set(sendout.data) != set(data)):
+                sendout.data = data
+                # make sure matrixSim always displays
+                # the data the right way.
+                if args.matrixSim == "enabled":
+                        matrixscreen.process(data)
+                # convert the data for the special matrix layout.
+                if args.snakeMode == "enabled":
+                    data = convertSnakeModes(data)
+                # if this is a simulation draw it to the matrixscreen else
+                # send it out over the network.
+                if not (args.netSilent == "enabled"):
+                    sock.sendto(buildPacket(0, data), (t, UDP_PORT))
     # matrix sim needs this because i am to lazy to press the x button.
     except KeyboardInterrupt:
         signal_handler(None, None)
     except SystemExit:
         signal_handler(None, None)
+sendout.data = []
 
 
 def listpatterns():
