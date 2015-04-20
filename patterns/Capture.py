@@ -1,4 +1,4 @@
-from Tools import Graphics
+from Tools.Graphics import Graphics
 from matrix import matrix_height, matrix_width
 
 
