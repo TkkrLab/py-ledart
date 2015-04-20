@@ -39,7 +39,7 @@ def find_patterns_in_dir(dir):
                 # append the object to patterns
                 patterns += classes
     # return the patterns
-    return patterns
+    return list(set(patterns))
 
 
 def get_pattern_classes(module):
@@ -117,11 +117,13 @@ def sendout(args):
         for t in TARGETS:
             pattern = TARGETS[t]
             data = pattern.generate()
+            # can't have the matrixsimulator hang because there is not change..
+            if args.matrixSim == "enabled":
+                matrixscreen.handleinput()
             # check if data generated is the same as before because then
             # just don't send it out
-            if(set(sendout.data) != set(data)):
+            if(sendout.data != data):
                 sendout.data = data
-                # debugprint(data)
                 # make sure matrixSim always displays
                 # the data the right way.
                 if args.matrixSim == "enabled":
@@ -142,7 +144,7 @@ sendout.data = []
 
 
 def listpatterns():
-    patterns = set(find_patterns_in_dir('patterns'))
+    patterns = find_patterns_in_dir('patterns')
     for pat in patterns:
         print(pat.__name__)
 

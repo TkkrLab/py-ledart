@@ -106,7 +106,6 @@ class MatrixScreen(object):
         self.previous = self.time
         self.interface.setcaption("artnet matrix sim FPS:" +
                                   str(int(self.fps)))
-        self.handleinput()
         self.draw(data)
 
     def printfps(self):
