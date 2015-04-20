@@ -38,8 +38,8 @@ def find_patterns_in_dir(dir):
             if classes:
                 # append the object to patterns
                 patterns += classes
-    # return the patterns found but remove dupes
-    return patterns
+    # return the patterns
+    return set(patterns)
 
 
 def get_pattern_classes(module):
@@ -142,7 +142,7 @@ sendout.data = []
 
 
 def listpatterns():
-    patterns = set(find_patterns_in_dir('patterns'))
+    patterns = find_patterns_in_dir('patterns')
     for pat in patterns:
         print(pat.__name__)
 
