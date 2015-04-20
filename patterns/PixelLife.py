@@ -1,5 +1,5 @@
-from Graphics.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
-from Graphics.RGBColorTools import ColorRGBOps
+from Tools.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
+from Tools.Graphics import ColorRGBOps
 from matrix import matrix_width, matrix_height
 from Life.life import Life
 import random

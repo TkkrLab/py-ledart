@@ -1,5 +1,5 @@
 from matrix import matrix_width, matrix_height
-from Graphics.Graphics import Graphics, BLUE, BLACK
+from Tools.Graphics import Graphics, BLUE, BLACK
 from Controllers.Controllers import AudioController, translate
 
 

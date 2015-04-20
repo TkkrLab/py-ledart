@@ -33,45 +33,45 @@ from sven import *
 try:
     from VuOther import *
 except Exception as e:
-    debugprint("VuOther>>", e)
+    debugprint("VuOther >>", e)
 
 
 # uses pygame for testing.
 try:
     from SuperPixelBros import SuperPixelBros
 except Exception as e:
-    debugprint("PixelBros>>", e)
+    debugprint("PixelBros >>", e)
 
 # this one uses a library png so try to load.
 # but if not installed pass.
 try:
     from DisplayPng import *
 except Exception as e:
-    debugprint("DisplayPng>>", e)
+    debugprint("DisplayPng >>", e)
 
 # patterns that do use pygame
 try:
     from Pong import *
 except Exception as e:
-    debugprint("Pong>>", e)
+    debugprint("Pong >>", e)
 
 try:
     from Tron import *
 except Exception as e:
-    debugprint("Tron>>", e)
+    debugprint("Tron >>", e)
 
 try:
     from Snake import *
 except Exception as e:
-    debugprint("snake>>", e)
+    debugprint("snake >>", e)
 
 # Graphics module has some tests in it too.
 try:
-    from Graphics.Graphics import *
+    from Tools import *
 except Exception as e:
-    debugprint("graphics>>", e)
+    debugprint("graphics >>", e)
 
 try:
     from Vumeter import *
 except Exception as e:
-    debugprint("vumeter>>", e)
+    debugprint("vumeter >>", e)

@@ -1,13 +1,11 @@
-from Graphics.Graphics import Graphics, BLUE, BLACK, WHITE, GREEN, RED
-from matrix import *
+from Tools.Graphics import Graphics, BLUE, BLACK
+from matrix import matrix_width, matrix_height
 from Controllers.Controllers import translate
-from scipy.signal import hilbert
+
 import numpy as np
 import numpy
 import pyaudio
 import math
-import pylab
-import cmath
 import struct
 
 audio_params = (pyaudio.paInt16, 1, 44100, True, False, 1024)

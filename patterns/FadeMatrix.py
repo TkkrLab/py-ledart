@@ -1,2 +1,1 @@
-
-#pattern with fading pixels.
+# pattern with fading pixels

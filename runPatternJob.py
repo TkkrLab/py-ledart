@@ -34,7 +34,7 @@ def find_patterns_in_dir(dir):
             try:
                 mod = __import__(sfile)
             except Exception as e:
-                print("couldn't import module cause: %s" % (e))
+                print("%s:Couldn't import module cause: %s" % (sfile, e))
                 continue
             # extract classes
             classes = get_pattern_classes(mod)

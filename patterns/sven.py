@@ -3,7 +3,7 @@ made by: sven
 Displays: random leds at random positions.
 """
 from matrix import matrix_width, matrix_height
-from Graphics.Graphics import Graphics, BLACK, randColor
+from Tools.Graphics import Graphics, BLACK, randColor
 import random
 
 
