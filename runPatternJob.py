@@ -31,7 +31,11 @@ def find_patterns_in_dir(dir):
         if item.endswith("py"):
             # extract the file name and import it.
             sfile = item.split('.')[0]
-            mod = __import__(sfile)
+            try:
+                mod = __import__(sfile)
+            except Exception as e:
+                print("couldn't import module cause: %s" % (e))
+                continue
             # extract classes
             classes = get_pattern_classes(mod)
             # if any found:
