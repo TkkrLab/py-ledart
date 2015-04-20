@@ -3,7 +3,7 @@ import sys
 
 from Pixel import Pixel
 
-import Graphics.Graphics as Graphics
+from Tools.Graphics import BLUE, BLACK
 import matrix
 
 # setup interface options, if no interface possible
@@ -57,7 +57,7 @@ class MatrixScreen(object):
         for x in widthrange:
             for y in heightrange:
                 pos = (x, y)
-                color = Graphics.BLUE
+                color = BLUE
                 pixel = Pixel(pos, pixelsize, color)
                 self.pixels.append(pixel)
 
@@ -86,7 +86,7 @@ class MatrixScreen(object):
         # apropriate colors.
         self.process_pixels(data)
         # clear the window
-        self.interface.clear(Graphics.BLACK)
+        self.interface.clear(BLACK)
         # display the pixels.
         for pixel in self.pixels:
             r = pixel.color[matrix.COLOR_ORDER[0]]
@@ -94,7 +94,7 @@ class MatrixScreen(object):
             b = pixel.color[matrix.COLOR_ORDER[2]]
             color = (r, g, b)
             # for a nice litle border that makes the pixels stand out.
-            bordercolor = Graphics.BLACK
+            bordercolor = BLACK
             self.interface.drawblock(pixel.getRect(), color, bordercolor)
 
         # update the screen so our data show.
