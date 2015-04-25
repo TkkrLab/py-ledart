@@ -1,13 +1,11 @@
-from Graphics.Graphics import Graphics, BLUE, BLACK, WHITE, GREEN, RED
-from matrix import *
+from Tools.Graphics import Graphics, BLUE, BLACK
+from Tools.Timing import Timer
+from matrix import matrix_width, matrix_height
 from Controllers.Controllers import translate
-from scipy.signal import hilbert
 import numpy as np
 import numpy
 import pyaudio
 import math
-import pylab
-import cmath
 import struct
 
 audio_params = (pyaudio.paInt16, 1, 44100, True, False, 1024)
@@ -228,8 +226,6 @@ class Slide_filter():
             b[i] = self.buffer[0]
         return b
 
-from Timing import Timer
-
 class Visualizer(object):
     """
     testing with this is cool:
@@ -250,7 +246,7 @@ class Visualizer(object):
         self.graphics.fill(BLUE)
         self.color = BLUE
         
-        self.timer = Timer(0.1)
+        self.timer = Timer(100)
         
         self.levels = []
         
@@ -288,7 +284,7 @@ class Visualizer(object):
         fourier = fourier[:len(fourier)/2]
         size = len(fourier)
          
-        # Add up for 6 lights
+        # Add up for x poinst amount of lights
         levels = [sum(fourier[i:(i+size/points)]) for i in xrange(0, size, size/points)][:points]
         return levels 
 
@@ -308,8 +304,6 @@ class Visualizer(object):
         if self.stream.get_read_available():
             self.data = self.stream.read(self.chunk)
         self.levels = self.calculate_levels(self.data, self.chunk, self.samplerate, matrix_height)
-        # if self.timer.valid():
-            # print(self.levels)
         if len(self.levels):
            for i, level in enumerate(self.levels):
                self.color = color_convert(interp_color(level/max(self.levels)))
@@ -317,6 +311,9 @@ class Visualizer(object):
                level = level**self.exponent
                level = int(level*10*matrix_width)
                self.graphics.drawLine(0, i, level, i, self.color)
+        if self.timer.valid():
+            surface = self.graphics.getSurface()
+            print(surface)
         return self.graphics.getSurface()
 
     def __del__(self):

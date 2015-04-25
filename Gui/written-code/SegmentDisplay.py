@@ -1,8 +1,9 @@
-from Graphics.Graphics import Graphics, BLACK
+from Tools.Graphics import Graphics, BLACK
 from matrix import matrix_width, matrix_height
-from Timing import Timer
-from NumberSegmentBitMap import numbers
+from Tools.Timing import Timer
+from Tools.NumberSegmentBitMap import numbers
 
+select = 'DrawSegmentNumber'
 
 class DrawSegmentNumber(object):
     def __init__(self):

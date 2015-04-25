@@ -1,10 +1,10 @@
-from Graphics.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
+from Tools.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
 # from Graphics.RGBColorTools import ColorRGBOps
 from matrix import matrix_width, matrix_height
 from patterns.Life.life import Life
 import random
 
-select = "MixedLife"
+select = "RandomLife"
 
 class RandomLife(object):
     def __init__(self):

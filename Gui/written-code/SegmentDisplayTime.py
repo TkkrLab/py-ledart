@@ -1,11 +1,12 @@
-from Graphics.Graphics import Graphics, BLACK, WHITE, RED, GREEN, BLUE
+from Tools.Graphics import Graphics, BLACK, WHITE, RED, GREEN, BLUE
 from matrix import matrix_width, matrix_height
-from NumberSegmentBitMap import numbers
+from Tools.NumberSegmentBitMap import numbers
 import time
 
 colors1 = [WHITE, GREEN]
 colors2 = [RED, BLUE]
 
+select = 'SegmentClock'
 
 class SegmentDisplay(object):
     def __init__(self, graphics):

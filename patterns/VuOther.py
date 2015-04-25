@@ -1,6 +1,7 @@
 from Tools.Graphics import Graphics, BLUE, BLACK
 from matrix import matrix_width, matrix_height
 from Controllers.Controllers import translate
+from Tools.Timing import Timer
 
 import numpy as np
 import numpy
@@ -226,8 +227,6 @@ class Slide_filter():
             b[i] = self.buffer[0]
         return b
 
-from Timing import Timer
-
 class Visualizer(object):
     """
     testing with this is cool:
@@ -301,8 +300,7 @@ class Visualizer(object):
 
     def generate(self):
         self.graphics.fill(BLACK)
-        if self.stream.get_read_available():
-            self.data = self.stream.read(self.chunk)
+        self.data = self.stream.read(self.chunk)
         levels = self.calculate_levels(self.data, self.chunk, self.samplerate, matrix_height)
         for i, level in enumerate(levels):
             self.color = color_convert(interp_color(level/max(levels)))

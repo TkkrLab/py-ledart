@@ -5,6 +5,7 @@ import sys
 import imp
 import os
 import time
+import collections
 
 
 def get_trace():
@@ -113,6 +114,13 @@ def debugprint(data):
     print("")
 
 
+def checkList(first, second):
+    for item1, item2 in zip(first, second):
+        if item1 != item2:
+            return False
+    return True
+
+
 def sendout(args):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
@@ -121,21 +129,21 @@ def sendout(args):
         for t in TARGETS:
             pattern = TARGETS[t]
             data = pattern.generate()
+            # make sure matrixSim always displays
+            # the data the right way.
             # can't have the matrixsimulator hang because there is not change..
             if args.matrixSim == "enabled":
                 matrixscreen.handleinput()
+            # if this is a simulation draw it to the matrixscreen
+            if args.matrixSim == "enabled":
+                    matrixscreen.process(data)
+            # convert the data for the special matrix layout.
+            if args.snakeMode == "enabled":
+                data = convertSnakeModes(data)
             # check if data generated is the same as before because then
             # just don't send it out
-            if(sendout.data != data):
+            if(collections.Counter(sendout.data) != collections.Counter(data)):
                 sendout.data = data
-                # make sure matrixSim always displays
-                # the data the right way.
-                if args.matrixSim == "enabled":
-                        matrixscreen.process(data)
-                # convert the data for the special matrix layout.
-                if args.snakeMode == "enabled":
-                    data = convertSnakeModes(data)
-                # if this is a simulation draw it to the matrixscreen else
                 # send it out over the network.
                 if not (args.netSilent == "enabled"):
                     sock.sendto(buildPacket(0, data), (t, UDP_PORT))

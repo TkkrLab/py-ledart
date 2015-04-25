@@ -4,6 +4,8 @@ from matrix import matrix_width, matrix_height
 from Life.life import Life
 import random
 
+selected = 'RandomLife'
+
 
 class RandomLife(object):
     def __init__(self):

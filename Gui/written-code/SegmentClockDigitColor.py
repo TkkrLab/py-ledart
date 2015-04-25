@@ -1,8 +1,9 @@
-from Graphics.Graphics import Graphics, BLACK
+from Tools.Graphics import Graphics, BLACK
 from matrix import matrix_width, matrix_height
-from NumberSegmentBitMap import numbers
+from Tools.NumberSegmentBitMap import numbers
 import time
 
+select = 'SegmentClocked'
 
 class SegmentDisplay(object):
     def __init__(self, graphics, color=(0, 0, 0xff)):

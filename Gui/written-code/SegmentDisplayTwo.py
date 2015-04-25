@@ -1,8 +1,9 @@
-from Graphics.Graphics import Graphics, BLACK
+from Tools.Graphics import Graphics, BLACK
 from matrix import matrix_width, matrix_height
-from Timing import Timer
-from NumberSegmentBitMap import numbers
+from Tools.Timing import Timer
+from Tools.NumberSegmentBitMap import numbers
 
+select = 'SegmentCounter'
 
 class SegmentDisplay(object):
     def __init__(self, graphics, color=(0, 0, 0xff)):
@@ -27,7 +28,7 @@ class SegmentDisplay(object):
 class SegmentCounter(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
-        self.timer = Timer(1 / 2.)
+        self.timer = Timer(1 / 30.)
         self.number = 0
         self.segmentdisp = SegmentDisplay(self.graphics)
 

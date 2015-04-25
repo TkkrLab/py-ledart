@@ -1,9 +1,11 @@
-from Graphics.Graphics import Graphics, RED, GREEN, BLACK, randColor
-from matrix import matrix_width, matrix_height, matrix_size
+from Tools.Graphics import Graphics, GREEN, BLACK
+from matrix import matrix_width, matrix_height
 from Controllers.Controllers import translate
-from Timing import Timer
+from Tools.Timing import Timer
 import math
-            
+
+select = 'Test'
+
 class Test(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)
@@ -11,12 +13,13 @@ class Test(object):
         self.y = 0
         self.color = GREEN
         self.phase = 1
-        self.timer = Timer(1/15.)
+        self.timer = Timer(1/30.)
         self.wave_range = 3
         self.wave_step = 1
         self.amplitude = 4
         self.offset = matrix_width/2-1
         self.freq = 1./matrix_height*8
+
     def generate(self):
         self.graphics.fill(BLACK)
         if self.timer.valid():

@@ -11,7 +11,7 @@ import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
 from MatrixSim.Interfaces.Interface import Interface
-from Graphics.Graphics import Graphics, BLACK
+from Tools.Graphics import Graphics, BLACK
 from matrix import matrix_width, matrix_height, convertSnakeModes
 from runPatternJob import get_trace, get_pattern_classes
 import artnet
@@ -40,13 +40,17 @@ class SendPacketWidget(gtk.ToggleButton):
         self.dest_ip = dest_ip
         self.par = parent
         self.pattern = None
+        self.sendoutData = []
 
     def sendout(self, data):
         try:
-            self.socket.sendto(artnet.buildPacket(0, data),
-                               (self.dest_ip, self.port))
+            if(self.sendoutData != data):
+                self.sendoutData = data
+                self.socket.sendto(artnet.buildPacket(0, data),
+                                   (self.dest_ip, self.port))
         except Exception as e:
-            print >>self.par, ("%s:sendPacket>> %s" % (get_trace(), e))
+            fmt = (get_trace(), e)
+            print >>self.par, ("pattern:%s:%s:sendPacket>> %s" % fmt)
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):

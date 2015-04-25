@@ -13,7 +13,7 @@ TARGETS = {
     # local_host: MixedLife(),
     # local_host: RandomLife(),
     'pixelmatrix': Visualizer(),
-    # raspberrypi: BlueLife(),
+    # 'pixelmatrix': BlueLife(),
     # local_host: Sven(),
     # local_host: SuperPixelBros(),
     # local_host: Pong(speed=5),
