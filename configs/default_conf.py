@@ -4,6 +4,7 @@ from patterns.Patterns import *
 local_host = "localhost"
 
 TARGETS = {
+    '10.42.4.166': BlueLife(),
     # local_host: BarberpolePattern(),
     # local_host: OldTron(),
     # local_host: Tron(),
@@ -12,7 +13,7 @@ TARGETS = {
     # MixedLife() doesn't work atm but will be fixed
     # local_host: MixedLife(),
     # local_host: RandomLife(),
-    'pixelmatrix': Visualizer(),
+    # 'pixelmatrix': Visualizer(),
     # 'pixelmatrix': BlueLife(),
     # local_host: Sven(),
     # local_host: SuperPixelBros(),
