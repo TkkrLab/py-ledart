@@ -160,7 +160,7 @@ class Gui(object):
 
         self.matrix_widget = MatrixSimWidget(self)
         if self.args.netSilent == "disabled":
-            self.send_packets = SendPacketWidget(self, 'pixelmatrix')
+            self.send_packets = SendPacketWidget(self, 'lightpaper')
 
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)

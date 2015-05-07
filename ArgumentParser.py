@@ -13,7 +13,8 @@ parser.add_argument("--gui",          help="enables the graphical interface.",  
 parser.add_argument("--simInterface", help="lets you choose the simulator drawing interface",     metavar="<pygame, opengl, dummy>", nargs="?", default="pygame",            type=str)
 parser.add_argument("--testing",      help="if enabled will run some tests and log to term",      action="store_true")
 parser.add_argument("--list",         help="lists patterns with generate functions",              action="store_true")
-
+parser.add_argument("--convertColor", help="select a color for conversions that use it",          metavar="<r=0, g=1, b=2>",         nargs="?", default=0,                   type=int)
+parser.add_argument("--byteMode",     help="select conversion to byte arrays for matrixes",       metavar="<enabled>",               nargs="?", default="disabled",          type=str)
 
 def get_args():
     return parser.parse_args()

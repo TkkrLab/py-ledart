@@ -3,17 +3,63 @@ matrix dimensions and color order for simulator.
 and conversion function(s)
 """
 
-matrix_height = 17
-matrix_width = 10
+# matrix_height = 17
+# matrix_width = 10
+
+matrix_height = 80
+matrix_width = 7
+
 matrix_size = (matrix_height * matrix_width)
 COLOR_ORDER = [0, 1, 2]
 
 
-def convertSnakeModes(pattern):
+def chunks(l, n):
+    for i in xrange(0, len(l), n):
+        yield l[i:i + n]
+
+
+def convertSnakeModes(data):
     for y in range(0, matrix_height, 2):
         templist = []
         for x in range(matrix_width - 1, -1, -1):
-            templist.append(pattern[y * matrix_width + x])
+            templist.append(data[y * matrix_width + x])
         for x in range(0, matrix_width):
-            pattern[y * matrix_width + x] = templist[x]
-    return pattern
+            data[y * matrix_width + x] = templist[x]
+    return data
+
+
+def convertByteMode(data, color):
+    templist = []
+    # extract the colors we want.
+    for c in data:
+        templist.append(c[color])
+
+    data = templist
+    templist = list()
+    # extract byte length list (8 or less you know depends on the setup.)
+    for c in chunks(data, 7):
+        templist.append(c)
+    data = templist
+    templist = list()
+    byteval = 0x00
+    # pack into bytes.
+    for byte in data:
+        for i in range(0, len(byte)):
+            if(byte[i]):
+                byteval |= (1 << i)
+            else:
+                byteval |= (0 << i)
+        templist.append(byteval)
+        byteval = 0x00
+    # pack the values into groups of three (that is what
+    # is needed for transmitting the data)
+    data = templist
+    templist = list()
+    for c in chunks(data, 3):
+        templist.append(tuple(c))
+    # make sure the 'packets', are three long always.
+    if len(templist[len(templist) - 1]) < 3:
+        c = list(templist[len(templist) - 1])
+        c.append(0)
+        templist[len(templist) - 1] = tuple(c)
+    return templist

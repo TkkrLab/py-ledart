@@ -107,6 +107,7 @@ def signal_handler(signal, frame):
 
 
 def debugprint(data):
+    """Function that prints into the stdout, in the shape of the matrix."""
     from matrix import matrix_size, matrix_width
     chunksize = matrix_width
     for i in range(0, matrix_size, chunksize):
@@ -140,6 +141,8 @@ def sendout(args):
             # convert the data for the special matrix layout.
             if args.snakeMode == "enabled":
                 data = convertSnakeModes(data)
+            if args.byteMode == "enabled":
+                data = convertByteMode(data, args.convertColor)
             # check if data generated is the same as before because then
             # just don't send it out
             if(collections.Counter(sendout.data) != collections.Counter(data)):
@@ -184,7 +187,8 @@ if __name__ == "__main__":
         sys.exit(0)
     else:
         from artnet import buildPacket
-        from matrix import matrix_width, matrix_height, convertSnakeModes
+        from matrix import matrix_width, matrix_height
+        from matrix import convertSnakeModes, convertByteMode
         from MatrixSim.MatrixScreen import interface_opts
         try:
             from MatrixSim.MatrixScreen import MatrixScreen
