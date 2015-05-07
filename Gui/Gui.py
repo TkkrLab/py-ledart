@@ -12,7 +12,8 @@ import gtksourceview2 as gtksourceview
 from MatrixSim.MatrixScreen import MatrixScreen
 from MatrixSim.Interfaces.Interface import Interface
 from Tools.Graphics import Graphics, BLACK
-from matrix import matrix_width, matrix_height, convertSnakeModes
+from matrix import matrix_width, matrix_height
+from matrix import convertSnakeModes, convertByteMode
 from runPatternJob import get_trace, get_pattern_classes
 import artnet
 import socket
@@ -299,17 +300,6 @@ class Gui(object):
         vbox.pack_start(separator, False, False)
         vbox.pack_start(vboxdw)
         self.window.add(vbox)
-        # self.hbox = gtk.HBox()
-        # self.vbox = gtk.VBox()
-        # self.vbox.pack_start(mb, False, False)
-        # self.vbox.pack_start(self.scrolledwindow)
-        # self.hbox.pack_start(self.vbox)
-        # # this sets it so that the scrolledwindow follows matrix_widget
-        # self.vbox2 = gtk.VBox()
-        # self.vbox2.pack_start(self.matrix_widget)
-        # self.vbox2.pack_start(self.pscrolled)
-        # self.hbox.pack_start(self.vbox2, False, True)
-        # self.window.add(self.hbox)
 
         cb = self.key_released
         self.keyrelease_id = self.textview.connect("key-release-event", cb)
@@ -401,13 +391,6 @@ class Gui(object):
         key_name = gdk.keyval_name(event.keyval)
         return key_name
 
-        # reload except on ctrl-r
-        # if 'Control' not in key_name or 'r' not in key_name:
-        #     try:
-        #         self.reload_code()
-        #     except Exception as e:
-        #         print >>self, e
-
     def treeview_changed(self, widget, event, data=None):
         # automaticly follow scrolling with the text
         adj = self.pscrolled.get_vadjustment()
@@ -418,7 +401,10 @@ class Gui(object):
             self.matrix_widget.process()
             data = self.matrix_widget.get_data()
             if data:
-                data = convertSnakeModes(data)
+                if self.args.snakeMode == "enabled":
+                    data = convertSnakeModes(data)
+                if self.args.byteMode == "enabled":
+                    data = convertByteMode(data, self.args.convertColor)
                 if self.args.netSilent == "disabled":
                     self.send_packets.sendout(data)
         except Exception as e:
