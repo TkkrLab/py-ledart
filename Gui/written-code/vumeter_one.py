@@ -341,13 +341,13 @@ class VisualizerMc(object):
         self.graphics.fill(BLUE)
         self.color = BLUE
         
-        self.timer = Timer(100)
+        self.timer = Timer(0.1)
         
         self.levels = []
         
         self.chunk = 1024
-        self.scale = 55
-        self.exponent = 2
+        self.scale = 1
+        self.exponent = 1
         self.samplerate = 44100	
         self.audio_params = (pyaudio.paInt16, 1, self.samplerate, True, self.chunk)
         self.p = pyaudio.PyAudio()
@@ -358,6 +358,7 @@ class VisualizerMc(object):
                                   frames_per_buffer=self.audio_params[4])
         self.data = self.stream.read(self.chunk)
         self.mc = MidiController()
+        self.points = []
 
     def calculate_levels(self, data, chunk, samplerate, points=6, maxi=0):
         # Use FFT to calculate volume for each frequency
@@ -397,9 +398,9 @@ class VisualizerMc(object):
 
     def generate(self):
         self.graphics.fill(BLACK)
-        self.exponent = self.mc.getButton(0, 0)
-        self.scale = self.mc.getButton(0, 1)*self.mc.getButton(0, 2) + 1
-        print(self.exponent, self.scale)
+        if self.timer.valid():
+            # print(self.exponent, self.scale)
+            pass
         if self.stream.get_read_available():
             self.data = self.stream.read(self.chunk)
         self.levels = self.calculate_levels(self.data, self.chunk, self.samplerate, matrix_height)
@@ -407,10 +408,12 @@ class VisualizerMc(object):
            for i, level in enumerate(self.levels):
                # self.color = color_convert(interp_color(level/max(self.levels)))
                self.color = (255, 0, 0)
-               level = max(min(level/self.scale, 1.0), 0.0)
+               level = max(min(level/self.scale*((self.mc.getButton(0, 3)/126.)*1/(0.5**(i*(self.mc.getButton(0, 4)/126.)))), 1.0), 0.0)
                level = level**self.exponent
                level = int(level*10*matrix_width)
-               self.graphics.drawLine(0, i, level, i, self.color)
+               self.points.append(level)
+           for i in range(0, len(self.points)-1):
+               self.graphics.drawLine(self.points[i], i, self.points[i+1], i+1, self.color)
         return self.graphics.getSurface()
 
     def __del__(self):

@@ -158,6 +158,7 @@ class Gui(object):
 
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", gtk.main_quit)
+        self.window.maximize()
 
         self.matrix_widget = MatrixSimWidget(self)
         if self.args.netSilent == "disabled":
@@ -292,11 +293,11 @@ class Gui(object):
         vbox = gtk.VBox()
         hboxup = gtk.HBox()
         vboxdw = gtk.VBox()
-        hboxup.pack_start(self.matrix_widget, False, False)
+        hboxup.pack_start(self.matrix_widget, True, True)
         hboxup.pack_start(self.pscrolled, False, False)
         vboxdw.pack_start(self.scrolledwindow)
         vbox.pack_start(mb, False, False)
-        vbox.pack_start(hboxup, False, False)
+        vbox.pack_start(hboxup, True, True)
         vbox.pack_start(separator, False, False)
         vbox.pack_start(vboxdw)
         self.window.add(vbox)
