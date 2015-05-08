@@ -4,8 +4,9 @@ from patterns.Patterns import *
 local_host = "localhost"
 
 TARGETS = {
-    'lightpaper': Visualizer(),
+    # 'lightpaper': Visualizer(),
     # 'lightpaper': RandomLife(),
+    'lightpaper': BlueLife(),
     # local_host: BarberpolePattern(),
     # local_host: OldTron(),
     # local_host: Tron(),
