@@ -60,7 +60,6 @@ def convertByteMode(data, color):
     # make sure the 'packets', are three long always.
     if len(templist[len(templist) - 1]) < 3:
         c = list(templist[len(templist) - 1])
-        c.append(0)
+        c.append(c[1])
         templist[len(templist) - 1] = tuple(c)
-    print(len(templist))
     return templist
