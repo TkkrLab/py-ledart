@@ -6,7 +6,7 @@ and conversion function(s)
 # matrix_height = 17
 # matrix_width = 10
 
-matrix_height = 81
+matrix_height = 80
 matrix_width = 7
 
 matrix_size = (matrix_height * matrix_width)
@@ -62,4 +62,5 @@ def convertByteMode(data, color):
         c = list(templist[len(templist) - 1])
         c.append(0)
         templist[len(templist) - 1] = tuple(c)
+    print(len(templist))
     return templist

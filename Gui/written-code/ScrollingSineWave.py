@@ -4,7 +4,6 @@ from Controllers.Controllers import translate, MidiController
 from Tools.Timing import Timer
 import math
 
-select = 'Test'
 
 class Test(object):
     def __init__(self):
