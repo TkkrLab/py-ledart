@@ -1,26 +1,10 @@
 language: python
-
 python:
   - "2.7"
 
-cache: apt
+install:
+  - "sudo apt-get install libasound2 libasound2-dev python2.7-dev"
+  - "sudo pip install pypng numpy pyserial pygtk pyopengl"
+  - "sudo apt-get install python-pygame python-gtk2 python-gtksourceview2 python-scipy python-pyaudio python-alsaaudio"
+  - "wget http://pp.com.mx/python/alsaseq/alsaseq-0.4.1.tar.gz; tar xf alsaseq-0.4.1.tar.gz; cd alsaseq-0.4.1/; python setup.py build; sudo python setup.py install; python -c 'import alsaseq, alsamidi';
 
-# install: "pip install -r .requirements --use-mirrors"
-
-
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install python-pygame
-  - sudo apt-get install python-gtk2 python-gtk2-dev python-gtksourceview2
-  - sudo apt-get install python-serial
-  - sudo apt-get install python-opengl
-
-script:
-  - python runPatternJob.py
-  - coverage run runPatternJob.py
-
-virtualenv:
-  system_site_packages: true
-
-after_success:
-  - coveralls
