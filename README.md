@@ -20,6 +20,7 @@ I made it easier to config and run patterns with python code.
 * NumPy     [source](http://www.numpy.org/)
 * PyAudio   [source](http://people.csail.mit.edu/hubert/pyaudio/)
 * alsaseq [source](http://pp.com.mx/python/alsaseq/)
+* alsaaudio [source](http://pyalsaaudio.sourceforge.net/)
 
 #### what to do if you want to run it ?
 
