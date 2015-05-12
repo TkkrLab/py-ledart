@@ -6,7 +6,9 @@ local_host = "localhost"
 TARGETS = {
     # 'lightpaper': Visualizer(),
     # 'lightpaper': RandomLife(),
-    'lightpaper': BlueLife(),
+    # 'lightpaper': BlueLife(),
+    # '10.42.4.62': BarberpolePattern(),
+    'pixelmatrix': BarberpolePattern(),
     # local_host: BarberpolePattern(),
     # local_host: OldTron(),
     # local_host: Tron(),

@@ -15,6 +15,7 @@ parser.add_argument("--testing",      help="if enabled will run some tests and l
 parser.add_argument("--list",         help="lists patterns with generate functions",              action="store_true")
 parser.add_argument("--convertColor", help="select a color for conversions that use it",          metavar="<r=0, g=1, b=2>",         nargs="?", default=0,                   type=int)
 parser.add_argument("--byteMode",     help="select conversion to byte arrays for matrixes",       metavar="<enabled>",               nargs="?", default="disabled",          type=str)
+parser.add_argument("--soc",          help="select sending on change.",                           metavar="<diabled>",               nargs="?", default="disabled",          type=str)
 
 def get_args():
     return parser.parse_args()

@@ -145,15 +145,20 @@ def sendout(args):
                 data = convertByteMode(data, args.convertColor)
             # check if data generated is the same as before because then
             # just don't send it out
-            if(collections.Counter(sendout.data) != collections.Counter(data)):
+            change = True
+            if args.soc == "enabled":
+                change = collections.Counter(sendout.data) != collections.Counter(data)
+            elif args.soc == "disabled":
+                change = True
+            if(change):
                 sendout.data = data
                 # send it out over the network.
                 if not (args.netSilent == "enabled"):
                     try:
                         sock.sendto(buildPacket(0, data), (t, UDP_PORT))
                     except Exception as e:
-			print("no good ip dest found: %s" % (t))
-			sys.exit(0)
+                        print("no good ip dest found: %s" % (t))
+                        sys.exit(0)
     # matrix sim needs this because i am to lazy to press the x button.
     except KeyboardInterrupt:
         signal_handler(None, None)
