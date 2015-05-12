@@ -10,4 +10,4 @@ install:
   - "apt-get install python-pygame python-gtk2 python-gtksourceview2 python-scipy python-pyaudio python-alsaaudio"
   - "wget http://pp.com.mx/python/alsaseq/alsaseq-0.4.1.tar.gz; tar xf alsaseq-0.4.1.tar.gz; cd alsaseq-0.4.1/; python setup.py build; sudo python setup.py install; python -c 'import alsaseq, alsamidi';
 
-script: python runPatternJob.py --testing
+script: "python runPatternJob.py --testing"
