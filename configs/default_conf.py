@@ -8,7 +8,7 @@ TARGETS = {
     # 'lightpaper': RandomLife(),
     # 'lightpaper': BlueLife(),
     # '10.42.4.62': BarberpolePattern(),
-    'pixelmatrix': BarberpolePattern(),
+    '10.42.4.62': BarberpolePattern(),
     # local_host: BarberpolePattern(),
     # local_host: OldTron(),
     # local_host: Tron(),
