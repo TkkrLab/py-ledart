@@ -149,7 +149,11 @@ def sendout(args):
                 sendout.data = data
                 # send it out over the network.
                 if not (args.netSilent == "enabled"):
-                    sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+                    try:
+                        sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+                    except Exception as e:
+			print("no good ip dest found: %s" % (t))
+			args.netSilent = "enabled"
     # matrix sim needs this because i am to lazy to press the x button.
     except KeyboardInterrupt:
         signal_handler(None, None)
