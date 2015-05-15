@@ -29,14 +29,13 @@ before_install:
   - sudo python setup.py install
   - python -c 'import alsaseq, alsamidi'
   - cd ../
-  - modprobe snd-dummy
 
 install:
   - "pip install pypng numpy pyserial pyopengl"
   - "pip install coveralls"
   - "pip install coverage"
 
-# before_script: "export AUDIODEV=null"
+before_script: "export AUDIODEV=null"
 
 script: nosetests
 
