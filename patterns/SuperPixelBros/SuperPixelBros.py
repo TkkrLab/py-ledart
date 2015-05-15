@@ -1,5 +1,5 @@
 from Tools.Graphics import Graphics, BLACK, RED, BLUE, GREEN
-from Controllers import PygameController, XboxController
+from Tools.Controllers import PygameController, XboxController
 from matrix import matrix_width, matrix_height, matrix_size
 
 c = BLACK
@@ -115,7 +115,7 @@ class SuperPixelBros(object):
         self.player.draw()
 
     def generate(self):
-        self.handleInput()
-        self.process()
-        self.draw()
+        # self.handleInput()
+        # self.process()
+        # self.draw()
         return self.graphics.getSurface()

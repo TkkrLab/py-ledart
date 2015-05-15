@@ -1,16 +1,43 @@
 language: python
 python:
-  - "2.7"
+  - "2.7_with_system_site_packages"
+
+cache:
+  - apt
+  - pip
+
+addons:
+  apt:
+    packages:
+      - python-alsaaudio
 
 before_install:
-  - "sudo apt-get update -qq"
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libasound2 libasound2-dev libc6 python-support libjs-jquery alsa-base alsa-tools mercurial python-dev
+  - sudo apt-get build-dep -qq python-pygame
+  - sudo apt-get install -qq python-pygame python-gtk2 python-gtksourceview2 python-scipy python-pyaudio python-numpy
+  - hg clone https://bitbucket.org/pygame/pygame
+  - cd pygame
+  - sudo apt-get install -qq libsdl-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsmpeg-dev libportmidi-dev libavformat-dev libswscale-dev
+  - python setup.py build
+  - sudo python setup.py install
+  - cd ../
+  - wget http://pp.com.mx/python/alsaseq/alsaseq-0.4.1.tar.gz
+  - tar xf alsaseq-0.4.1.tar.gz
+  - cd alsaseq-0.4.1/
+  - python setup.py build
+  - sudo python setup.py install
+  - python -c 'import alsaseq, alsamidi'
+  - cd ../
 
 install:
-  - "pip install ."
-  - "pip install -r requirments.txt"
-  - "apt-get install libasound2 libasound2-dev python2.7-dev"
   - "pip install pypng numpy pyserial pyopengl"
-  - "apt-get install python-pygame python-gtk2 python-gtksourceview2 python-scipy python-pyaudio python-alsaaudio"
-  - "wget http://pp.com.mx/python/alsaseq/alsaseq-0.4.1.tar.gz; tar xf alsaseq-0.4.1.tar.gz; cd alsaseq-0.4.1/; python setup.py build; sudo python setup.py install; python -c 'import alsaseq, alsamidi';
+  - "pip install coveralls"
+  - "pip install coverage"
 
-script: "python runPatternJob.py --testing"
+before_script: "export AUDIODEV=null"
+
+script: nosetests
+
+after_success:
+  coveralls

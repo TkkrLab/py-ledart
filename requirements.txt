@@ -1,4 +1,0 @@
-pypng
-numpy
-pyserial
-pyopengl

@@ -7,7 +7,6 @@ class TestPattern(object):
         self.graphics = Graphics(matrix_width, matrix_height)
     
     def generate(self):
-        c = (random.randint(0, 1), 0, 0)
-        self.graphics.fill(c)
+        self.graphics.fill(WHITE)
         return self.graphics.getSurface()
     

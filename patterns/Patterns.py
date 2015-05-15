@@ -15,9 +15,9 @@ def debugprint(discr, exception):
 
 
 """#ohm led poles."""
-from PolicePattern import PolicePattern
-from BarberpolePattern import BarberpolePattern
-from ColorFadePattern import ColorFadePattern
+# from PolicePattern import PolicePattern
+# from BarberpolePattern import BarberpolePattern
+# from ColorFadePattern import ColorFadePattern
 
 """
 or ledmatrix
@@ -28,12 +28,6 @@ from RainPattern import *
 from PixelLife import *
 from Plasma import *
 from sven import *
-
-
-try:
-    from VuOther import *
-except Exception as e:
-    debugprint("VuOther >>", e)
 
 
 # uses pygame for testing.
@@ -70,8 +64,3 @@ try:
     from Tools import *
 except Exception as e:
     debugprint("graphics >>", e)
-
-try:
-    from Vumeter import *
-except Exception as e:
-    debugprint("vumeter >>", e)

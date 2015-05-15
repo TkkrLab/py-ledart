@@ -67,10 +67,11 @@ class GrayedLife(object):
     add or subtract depening on if lifing or not
     '''
     def __init__(self):
-        pass
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.graphics.fill(BLACK)
 
     def generate(self):
-        pass
+        return self.graphics.getSurface()
 
 
 class MixedLife(object):

@@ -11,8 +11,8 @@ class BarberpolePattern:
         self.color2 = color2
         self.pos = 0
 
-        self.width = 10
-        self.height = 17
+        self.width = 7
+        self.height = 80
         self.size = self.width * self.height
 
     def generate(self):

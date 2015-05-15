@@ -69,7 +69,7 @@ def get_pattern_classes(module):
     return patterns
 
 
-def test_patterns(dir, showpass=True):
+def tst_patterns(dir, showpass=True):
     from matrix import matrix_size
     patterns = find_patterns_in_dir(dir)
     for pat in patterns:
@@ -77,7 +77,7 @@ def test_patterns(dir, showpass=True):
             pattern = pat()
             generate = len(pattern.generate())
             if generate != matrix_size:
-                raise Exception("len of generated: %s" % generate)
+                raise Exception("%s:len of generated: %s" % (pat, generate))
             elif showpass:
                 print("-----------------")
                 print("passed: %s" % pat)
@@ -181,7 +181,7 @@ if __name__ == "__main__":
         listpatterns()
         sys.exit()
     if args.testing:
-        test_patterns('patterns', showpass=False)
+        tst_patterns('patterns', showpass=False)
         print("Done testing. ")
         sys.exit()
     # if gui selected start that else start the headless code.

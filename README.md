@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Duality4Y/py-artnet.svg?branch=master)](https://travis-ci.org/Duality4Y/py-artnet)
+
 py-art-net
 ==========
 

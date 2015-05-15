@@ -1,5 +1,5 @@
 from Tools.Graphics import Graphics, GREEN, BLUE, BLACK
-from Controllers import ttyController, PongTtyController, translate
+from Tools.Controllers import ttyController, PongTtyController, translate
 from matrix import matrix_width, matrix_height
 import time
 import random

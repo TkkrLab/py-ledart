@@ -12,7 +12,9 @@
 #######################################
 
 import pygame
+import sys
 from pygame.locals import *
+
 
 class App:
     def __init__(self):
@@ -142,5 +144,8 @@ class App:
     def quit(self):
         pygame.display.quit()
 
-app = App()
-app.main()
+try:
+    app = App()
+    app.main()
+except Exception as e:
+    pass

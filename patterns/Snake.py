@@ -1,6 +1,6 @@
 from Tools.Graphics import Graphics, GREEN, BLUE, WHITE, BLACK
+from Tools.Controllers import PygameController, XboxController
 from matrix import matrix_width, matrix_height
-from Controllers import PygameController, XboxController
 import random
 import time
 

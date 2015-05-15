@@ -1,3 +1,5 @@
+from matrix import matrix_height, matrix_width
+from Tools.Graphics import Graphics, BLACK
 import png
 
 
@@ -16,9 +18,11 @@ def getPngPixelData(image):
 
 class DisplayPng(object):
     def __init__(self):
-        image = '/home/robert/py-artnet/hacked.png'
-        self.data = getPngPixelData(image)
-        self.pixeldata = self.data[0]
+        # image = '/home/robert/py-artnet/hacked.png'
+        # self.data = getPngPixelData(image)
+        # self.pixeldata = self.data[0]
+        self.graphics = Graphics(matrix_width, matrix_height)
 
     def generate(self):
-        return self.pixeldata
+        self.graphics.fill(BLACK)
+        return self.graphics.getSurface()
