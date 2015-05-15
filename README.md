@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/Duality4Y/py-artnet.svg?branch=master)](https://travis-ci.org/Duality4Y/py-artnet)
-
+[![Build Status](https://travis-ci.org/TkkrLab/py-artnet.svg?branch=master)](https://travis-ci.org/TkkrLab/py-artnet)
 py-art-net
 ==========
 
