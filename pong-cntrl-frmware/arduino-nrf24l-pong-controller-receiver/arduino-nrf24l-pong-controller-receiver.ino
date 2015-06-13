@@ -12,7 +12,7 @@
 #include "RF24.h"
 #include "printf.h"
 
-RF24 radio(7,8);
+RF24 radio(8,7);
 
 const uint64_t cntrl1 [2] = {0xABCDABCD71LL, 0x544d52687CLL};
 const uint64_t cntrl2 [2] = {0xABCDABCD72LL, 0x544d52687DLL};
