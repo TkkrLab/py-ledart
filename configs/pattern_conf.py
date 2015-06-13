@@ -6,12 +6,12 @@ raspberrypi = "192.168.2.42"
 michiel_laptop = "192.168.1.199"
 local_host = "127.0.0.1"
 broadcast = "10.42.255.255"
-
-dest = pixelMatrix
+matrix = "10.42.4.143"
+dest = matrix
 
 TARGETS = {
     # dest: Sven()
-    dest: BarberpolePattern(),
+    # dest: BarberpolePattern(),
     # dest: OldTron(),
     # dest: Tron(),
     # dest: Snake(speed=17),
@@ -22,7 +22,7 @@ TARGETS = {
     # dest: BlueLife(),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
-    # dest: Pong(speed=3),
+    dest: Pong(bcolor=(0,0,255), speed=3, port="USB", plugged=1),
     # dest: Pong(speed=8),
     # dest: Snake(),
     # dest: BlueLife(),

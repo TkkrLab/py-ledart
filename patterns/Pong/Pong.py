@@ -150,29 +150,29 @@ class Pong(object):
     """
     Pong game
     """
-    def __init__(self, speed=matrix_height / 2):
+    def __init__(self, bcolor=GREEN, pcolor=BLUE, speed=matrix_height / 2, port="ACM", plugged=0):
         self.graphics = Graphics(matrix_width, matrix_height)
 
         # create a ball. multiple balls should be possible :)
         self.ball = Ball((self.graphics.width / 2, self.graphics.height / 2),
-                         GREEN, self.graphics)
+                         bcolor, self.graphics)
 
         # try to use the tty controller.
         # but if it's not available use the automatic one.
         try:
-            self.controller = PongController(plugged=0, baud=9600, port="ACM")
+            self.controller = PongController(plugged=plugged, port=port)
         except Exception as e:
             fmt = (e, )
             fmtstr = "unable to find controllers playing on automatic\n>> %s"
             print(fmtstr % fmt)
-            self.controller = PongControllerAuto(plugged=0, ball=self.ball)
+            self.controller = PongControllerAuto(plugged=plugged, ball=self.ball)
 
         # create two paddles
         paddle1_pos = (0, 0)
-        self.paddle1 = (Paddle(paddle1_pos, BLUE, self.controller,
+        self.paddle1 = (Paddle(paddle1_pos, pcolor, self.controller,
                         self.controller.POT1, self.graphics))
         paddle2_pos = (0, matrix_height - 1)
-        self.paddle2 = (Paddle(paddle2_pos, BLUE, self.controller,
+        self.paddle2 = (Paddle(paddle2_pos, pcolor, self.controller,
                         self.controller.POT2, self.graphics))
 
         # timing variables used to controle the speed of the ball

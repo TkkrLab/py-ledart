@@ -6,7 +6,10 @@ and conversion function(s)
 # matrix_height = 17
 # matrix_width = 10
 
-matrix_height = 80
+# matrix_height = 80
+# matrix_width = 7
+
+matrix_height = 8
 matrix_width = 7
 
 matrix_size = (matrix_height * matrix_width)
