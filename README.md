@@ -183,5 +183,5 @@ also implemented a color library, and classes for making color objects. handy fo
 #### other things that might be verry usefull to make or do:
 more a hardware todo is make firmware for the ESP8266 wifi module
 that does artnet. no need for utp cables any more. [W.I.P ()]
-for example this [https://youtu.be/BJuSRD35P3M](video) is what i have been working on.
+for example this [video](https://youtu.be/BJuSRD35P3M) is what i have been working on.
 
