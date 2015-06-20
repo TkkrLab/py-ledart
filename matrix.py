@@ -32,9 +32,8 @@ def convertSnakeModes(data):
 
 
 def convertByteMode(data, color):
-    if color > 2:
-        print("wrong color choosen.")
-        raise TypeError
+    if color > 2 or color < 0:
+        raise Exception("error invalid color choosen.")
     templist = []
     # extract the colors we want.
     for c in data:
