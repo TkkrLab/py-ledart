@@ -10,7 +10,7 @@ and conversion function(s)
 # matrix_width = 7
 
 matrix_height = 8
-matrix_width = 7
+matrix_width = 8
 
 matrix_size = (matrix_height * matrix_width)
 COLOR_ORDER = [0, 1, 2]
@@ -32,6 +32,9 @@ def convertSnakeModes(data):
 
 
 def convertByteMode(data, color):
+    if color > 2:
+        print("wrong color choosen.")
+        raise TypeError
     templist = []
     # extract the colors we want.
     for c in data:
@@ -39,13 +42,13 @@ def convertByteMode(data, color):
 
     data = templist
     templist = list()
-    # extract byte length list (8 or less you know depends on the setup.)
-    for c in chunks(data, 7):
+    # extract WORD length list (chunksize depends on matrix width)
+    for c in chunks(data, matrix_width):
         templist.append(c)
     data = templist
     templist = list()
     byteval = 0x00
-    # pack into bytes.
+    # pack into WORDS.
     for byte in data:
         for i in range(0, len(byte)):
             if(byte[i]):
@@ -60,7 +63,7 @@ def convertByteMode(data, color):
     templist = list()
     for c in chunks(data, 3):
         templist.append(tuple(c))
-    # make sure the 'packets', are three long always.
+    # make sure the 'led data packets', are three long always.
     if len(templist[len(templist) - 1]) < 3:
         c = list(templist[len(templist) - 1])
         c.append(c[1])
