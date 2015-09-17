@@ -244,7 +244,7 @@ if __name__ == "__main__":
             # else send everything out as fast as possible
             else:
                 sendout(args)
-            # TODO: figure out how to dynamicly
-            # adjust time as to have a fixed fps.
-            time.sleep(fps)
+                # TODO: figure out how to dynamicly
+                # adjust time as to have a fixed fps.
+                time.sleep(fps)
         signal_handler(None, None)
