@@ -147,7 +147,9 @@ def sendout(args):
             # just don't send it out
             change = True
             if args.soc == "enabled":
-                change = collections.Counter(sendout.data) != collections.Counter(data)
+                previous_set = collections.Counter(sendout.data)
+                current_set = collections.Counter(data)
+                change = previous_set != current_set
             elif args.soc == "disabled":
                 change = True
             if(change):
@@ -156,7 +158,7 @@ def sendout(args):
                 if not (args.netSilent == "enabled"):
                     try:
                         sock.sendto(buildPacket(0, data), (t, UDP_PORT))
-                    except Exception as e:
+                    except Exception:
                         print("no good ip dest found: %s" % (t))
                         sys.exit(0)
     # matrix sim needs this because i am to lazy to press the x button.
@@ -232,17 +234,11 @@ if __name__ == "__main__":
         if args.fps > 0:
             fps = 1. / args.fps
 
-        # hold values for time.
-        current = 0
-        previous = 0
-
         while(True):
             # send patterns out in a timed fasion. if args.fps != 0
             if args.fps > 0:
-                current = time.time()
-                if (current - previous) >= fps:
-                    previous = time.time()
-                    sendout(args)
+                sendout(args)
+                time.sleep(fps)
             # else send everything out as fast as possible
             else:
                 sendout(args)
