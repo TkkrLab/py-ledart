@@ -2,13 +2,14 @@
 from patterns.Patterns import *
 
 local_host = "localhost"
+dest = "pixelmatrix"
 
 TARGETS = {
     # 'lightpaper': Visualizer(),
     # 'lightpaper': RandomLife(),
     # 'lightpaper': BlueLife(),
     # '10.42.4.62': BarberpolePattern(),
-    'lightpaper': BarberpolePattern(),
+    # 'lightpaper': BarberpolePattern(),
     # local_host: BarberpolePattern(),
     # local_host: OldTron(),
     # local_host: Tron(),
@@ -31,7 +32,7 @@ TARGETS = {
     # needs images. wip still.
     # local_host: DisplayPng(),
 
-    # local_host: PlasmaFirst(),
+    dest: PlasmaFirst(),
     # local_host: PlasmaSecond(),
     # michiel_laptop: PlasmaSecond(),
     # local_host: PlasmaThird(),

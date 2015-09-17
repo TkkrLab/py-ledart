@@ -18,7 +18,7 @@ TARGETS = {
     # # MixedLife() doesn't work atm but will be fixed
     # dest: MixedLife(),
     # dest: RandomLife(),
-    dest: BlueLife(),
+    # dest: BlueLife(),
     # dest: BlueLife(),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
@@ -28,7 +28,7 @@ TARGETS = {
     # dest: BlueLife(),
     # # needs images. wip still.
     # dest: DisplayPng(),
-    # dest: PlasmaFirst(),
+    dest: PlasmaFirst(),
     # dest: PlasmaSecond(),
     # dest: PlasmaThird(),
     # dest: RainPattern(chance=0.5),
