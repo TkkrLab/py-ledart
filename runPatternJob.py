@@ -234,6 +234,8 @@ if __name__ == "__main__":
         if args.fps > 0:
             fps = 1. / args.fps
 
+        previousTime = time.time()
+
         while(True):
             # send patterns out in a timed fasion. if args.fps != 0
             if args.fps > 0:
@@ -242,4 +244,6 @@ if __name__ == "__main__":
             # else send everything out as fast as possible
             else:
                 sendout(args)
+        currentTime = time.time()
+        print("fps: %d" % (1. / (currentTime - previousTime)))
         signal_handler(None, None)
