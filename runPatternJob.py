@@ -233,6 +233,7 @@ if __name__ == "__main__":
 
         if args.fps > 0:
             fps = 1. / args.fps
+        print("args.fps: %d" % args.fps)
 
         previousTime = time.time()
 
@@ -240,10 +241,20 @@ if __name__ == "__main__":
             # send patterns out in a timed fasion. if args.fps != 0
             if args.fps > 0:
                 sendout(args)
-                time.sleep(fps)
             # else send everything out as fast as possible
             else:
                 sendout(args)
-        currentTime = time.time()
-        print("fps: %d" % (1. / (currentTime - previousTime)))
+
+            # TODO: figure out how to dynamicly
+            # adjust time as to have a fixed fps.
+            currentTime = time.time()
+            realFps = (1. / (currentTime - previousTime))
+            previousTime = currentTime
+            if(realFps > args.fps):
+                fps += 0.001
+            elif(realFps < args.fps):
+                fps -= 0.001
+            else:
+                fps = 1. / args.fps
+            time.sleep(fps)
         signal_handler(None, None)
