@@ -244,17 +244,7 @@ if __name__ == "__main__":
             # else send everything out as fast as possible
             else:
                 sendout(args)
-
             # TODO: figure out how to dynamicly
             # adjust time as to have a fixed fps.
-            currentTime = time.time()
-            realFps = (1. / (currentTime - previousTime))
-            previousTime = currentTime
-            if(realFps > args.fps):
-                fps += 0.001
-            elif(realFps < args.fps):
-                fps -= 0.001
-            else:
-                fps = 1. / args.fps
             time.sleep(fps)
         signal_handler(None, None)
