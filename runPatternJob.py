@@ -233,7 +233,6 @@ if __name__ == "__main__":
 
         if args.fps > 0:
             fps = 1. / args.fps
-        print("args.fps: %d" % args.fps)
 
         previousTime = time.time()
 

@@ -32,8 +32,8 @@ TARGETS = {
     # needs images. wip still.
     # local_host: DisplayPng(),
 
-    dest: PlasmaFirst(),
-    # local_host: PlasmaSecond(),
+    # dest: PlasmaFirst(),
+    local_host: PlasmaSecond(),
     # michiel_laptop: PlasmaSecond(),
     # local_host: PlasmaThird(),
 
