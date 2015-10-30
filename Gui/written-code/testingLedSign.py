@@ -2,6 +2,8 @@ from Tools.Graphics import Graphics, WHITE, BLACK
 from matrix import matrix_width, matrix_height
 import random
 
+selected = "TestPattern"
+
 class TestPattern(object):
     def __init__(self):
         self.graphics = Graphics(matrix_width, matrix_height)

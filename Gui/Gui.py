@@ -17,6 +17,12 @@ from matrix import convertSnakeModes, convertByteMode
 from runPatternJob import get_trace, get_pattern_classes
 import artnet
 import socket
+import inspect
+
+
+def lineno():
+    """Returns the current line number in our program."""
+    return inspect.currentframe().f_back.f_lineno
 
 pygtk.require('2.0')
 
@@ -35,7 +41,7 @@ class PatternDummy(object):
 
 
 class SendPacketWidget(gtk.ToggleButton):
-    def __init__(self, parent, dest_ip='localhost', port=6454):
+    def __init__(self, parent, dest_ip='pixelmatrix', port=6454):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.port = port
         self.dest_ip = dest_ip
@@ -50,8 +56,8 @@ class SendPacketWidget(gtk.ToggleButton):
                 self.socket.sendto(artnet.buildPacket(0, data),
                                    (self.dest_ip, self.port))
         except Exception as e:
-            fmt = (get_trace(), e)
-            print >>self.par, ("pattern:%s:%s:sendPacket>> %s" % fmt)
+            fmt = (lineno(), get_trace(), e)
+            print >>self.par, ("%d:pattern:%s:%s:sendPacket>> %s" % fmt)
 
 
 class MatrixSimWidget(gtk.DrawingArea, Interface):
@@ -103,7 +109,8 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
         except Exception as e:
             if not self.hasprinted:
                 l = get_trace()
-                print >>self.par, ("%s:Wrong data Generated>> %s" % (l, e))
+                fmt = (lineno(), l, e)
+                print >>self.par, ("%d:%s:Wrong data Generated>> %s" % fmt)
             self.hasprinted = True
         return True
 
@@ -123,7 +130,8 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
                     cr.fill()
         except Exception as e:
             if not self.hasprinted:
-                print >>self.par, "%s:%s" % (get_trace(), e)
+                fmt = (lineno(), get_trace(), e)
+                print >>self.par, "%d:%s:%s" % fmt
             self.hasprinted = True
             return
 
@@ -142,9 +150,12 @@ class Gui(object):
         # tabwidth in spaces
         self.tabwidth = 4
 
-        self.syntaxfile = "/home/robert/py-artnet/Gui/syntax-highlight/python"
-        self.textfilename = "/home/robert/py-artnet/Gui/new_file.py"
-        self.intermediatefilename = ("/home/robert/py-artnet/" +
+        # usually py-artnet is under home dir.
+        self.codeDir = os.path.expanduser('~')
+        self.syntaxfile = (self.codeDir + "/py-artnet/" +
+                           "Gui/syntax-highlight/python")
+        self.textfilename = self.codeDir + "/py-artnet/Gui/new_file.py"
+        self.intermediatefilename = (self.codeDir + "/py-artnet/" +
                                      "Gui/IntermediateCode/intermediate.py")
         title = "artnet-editor (%s)" % self.textfilename
         # do this once and we can import our compiled code.
@@ -162,7 +173,7 @@ class Gui(object):
 
         self.matrix_widget = MatrixSimWidget(self)
         if self.args.netSilent == "disabled":
-            self.send_packets = SendPacketWidget(self, 'lightpaper')
+            self.send_packets = SendPacketWidget(self)
 
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)
@@ -249,15 +260,13 @@ class Gui(object):
         mb.append(editm)
 
         # syntax highlighting.
-        # self.lang = SyntaxLoader(self.syntaxfile)
-        # self.buff = CodeBuffer(lang=self.lang)
         lm = gtksourceview.LanguageManager()
         self.language = lm.get_language('python')
         self.buff = gtksourceview.Buffer(language=self.language)
         self.buff.set_text(self.loadfile(self.intermediatefilename))
         self.buff.set_highlight_syntax(True)
         self.buff.set_highlight_matching_brackets(True)
-
+        # textview
         self.textview = gtksourceview.View(self.buff)
         self.textview.set_show_line_numbers(True)
         self.textview.set_show_line_marks(True)
@@ -267,17 +276,17 @@ class Gui(object):
         self.textview.set_insert_spaces_instead_of_tabs(True)
         self.textview.set_indent_on_tab(True)
         self.textview.set_tab_width(self.tabwidth)
-
+        # font to use
         fontdesc = pango.FontDescription("monospace 8")
         self.textview.modify_font(fontdesc)
         tabs = pango.TabArray(1, True)
         tabs.set_tab(0, pango.TAB_LEFT, 32)
         self.textview.set_tabs(tabs)
-
+        # make it scrollable
         self.scrolledwindow = gtk.ScrolledWindow()
         self.scrolledwindow.set_size_request(-1, -1)
         self.scrolledwindow.add(self.textview)
-
+        # setup where text goes and other output.
         self.poutputbuff = gtk.TextBuffer()
         self.poutput = gtk.TextView(self.poutputbuff)
         self.pscrolled = gtk.ScrolledWindow()
@@ -290,17 +299,18 @@ class Gui(object):
         separator = gtk.HSeparator()
         separator.set_size_request(-1, 20)
 
-        vbox = gtk.VBox()
-        hboxup = gtk.HBox()
-        vboxdw = gtk.VBox()
-        hboxup.pack_start(self.matrix_widget, True, True)
-        hboxup.pack_start(self.pscrolled, False, False)
-        vboxdw.pack_start(self.scrolledwindow)
-        vbox.pack_start(mb, False, False)
-        vbox.pack_start(hboxup, True, True)
-        vbox.pack_start(separator, False, False)
-        vbox.pack_start(vboxdw)
-        self.window.add(vbox)
+        # imho this layout works best.
+        self.hbox = gtk.HBox()
+        self.vbox = gtk.VBox()
+        self.vbox.pack_start(mb, False, False)
+        self.vbox.pack_start(self.scrolledwindow)
+        self.hbox.pack_start(self.vbox)
+        # this sets it so that the scrolledwindow follows matrix_widget
+        self.vbox2 = gtk.VBox()
+        self.vbox2.pack_start(self.matrix_widget)
+        self.vbox2.pack_start(self.pscrolled)
+        self.hbox.pack_start(self.vbox2, False, True)
+        self.window.add(self.hbox)
 
         cb = self.key_released
         self.keyrelease_id = self.textview.connect("key-release-event", cb)
@@ -408,8 +418,10 @@ class Gui(object):
                     data = convertByteMode(data, self.args.convertColor)
                 if self.args.netSilent == "disabled":
                     self.send_packets.sendout(data)
-        except Exception as e:
-            print >>self, e
+        except:
+            pass
+            # fmt = (lineno(), str(e))
+            # print >>self, ("%d:%s" % fmt)
         return True
 
     def redo_text_cb(self, widget):
@@ -419,10 +431,12 @@ class Gui(object):
         self.buff.undo()
 
     def reload_code_on_shortcut(self, widget):
+        print("")
         try:
             self.reload_code()
         except Exception as e:
-            print >>self, e
+            fmt = (lineno(), e)
+            print >>self, ("%d:%s" % fmt)
 
     def write(self, string):
         end_iter = self.poutputbuff.get_end_iter()
@@ -442,19 +456,22 @@ class Gui(object):
             self.storefile(self.intermediatefilename, text)
             py_compile.compile(self.intermediatefilename)
         except Exception as e:
-            print >>self, ("%s: %s" % (get_trace(), e))
+            fmt = (lineno(), get_trace(), e)
+            print >>self, ("%d:%s: %s" % fmt)
 
         # check agains all the classes in intermediate code base.
         try:
             self.intermediate = reload(self.intermediate)
         except Exception as e:
-            print >>self, "reload()>> " + str(e)
+            fmt = (lineno(), e)
+            print >>self, ("%d:%s" % fmt)
 
         selected = None
         try:
             if self.intermediate.select:
                 selected = self.intermediate.select
-                print >>self, "select: %s" % selected
+                fmt = (lineno(), selected)
+                print >>self, ("%d:select: %s" % fmt)
         except:
             pass
 
@@ -464,14 +481,17 @@ class Gui(object):
                 for Object in patterns:
                     if Object.__name__ == selected:
                         pattern = Object()
-                        print >>self, "PatternSelected: %s" % Object.__name__
+                        fmt = (lineno(), Object.__name__)
+                        print >>self, ("%d:PatternSelected: %s" % fmt)
             else:
                 pattern = patterns[0]()
-                print >>self, "PatternSelected: %s" % patterns[0].__name__
+                fmt = (lineno(), patterns[0].__name__)
+                print >>self, ("%d:PatternSelected: %s" % fmt)
         except Exception as e:
             print >>self, "generating from dummy for now"
             pattern = PatternDummy()
-            print >>self, "%s" % get_pattern_classes(self.intermediate)
+            fmt = (lineno(), get_pattern_classes(self.intermediate))
+            print >>self, "%d:%s" % fmt
             print >>self, "No valid Class with Generate function found!"
             print >>self, "%s:%s" % (get_trace(), e)
 
@@ -503,7 +523,8 @@ class Gui(object):
         self.storefile(self.textfilename, self.get_text())
 
     def newfile(self, widget):
-        print >>self, ("supposed to make a new empty file")
+        fmt = (lineno())
+        print >>self, ("%d:supposed to make a new empty file" % fmt)
 
     def save_file_as(self, widget):
         dialog = gtk.FileChooserDialog("Save File",
