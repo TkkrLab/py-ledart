@@ -2,6 +2,8 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 
+edit = "edit"
+
 
 class Base(object):
     itteration = 0
