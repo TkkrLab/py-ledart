@@ -64,7 +64,7 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
     def __init__(self, parent):
         self.args = parent.args
         self.par = parent
-        self.pattern = None
+        self.pattern = PatternDummy()
 
         gtk.DrawingArea.__init__(self)
         Interface.__init__(self, matrix_width, matrix_height,
@@ -76,7 +76,7 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
         gtk.DrawingArea.set_size_request(self, self.width, self.height)
         # contains data from patterns in the form of a list of tuples of
         # format (r, g, b) colors.
-        self.data = None
+        self.data = self.pattern.generate()
         # debug printing only once.
         self.hasprinted = False
 
@@ -459,7 +459,7 @@ class Gui(object):
             fmt = (lineno(), get_trace(), e)
             print >>self, ("%d:%s: %s" % fmt)
 
-        # check agains all the classes in intermediate code base.
+        # check against all the classes in intermediate code base.
         try:
             self.intermediate = reload(self.intermediate)
         except Exception as e:
@@ -474,6 +474,9 @@ class Gui(object):
                 print >>self, ("%d:select: %s" % fmt)
         except:
             pass
+
+        # pass a guiobject
+        self.intermediate.__dict__['gui'] = self.window
 
         patterns = get_pattern_classes(self.intermediate)
         try:
