@@ -9,8 +9,10 @@ class GuiObj(object):
     def __init__(self):
         self.running = True
         
+        self.vscales = []
+        self.scalevalues = []
+        
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        # self.window.reparent(gui)
         self.window.connect("destroy", self.destroy)
         self.window.connect("delete-event", self.destroy)
         self.window.set_border_width(10)
@@ -19,33 +21,75 @@ class GuiObj(object):
         
         self.window.set_default_size(100, 250)
         
-        self.hbox = gtk.HBox()
-        self.window.add(self.hbox)
+        #setup the indexing of the boxes.
+        self.mainbox = gtk.VBox()
+        self.scalebox = gtk.HBox()
+        self.buttonbox = gtk.VBox()
+        self.radiobuttonbox = gtk.HBox()
+        self.checkbuttonbox = gtk.HBox()
+        self.mainbox.show()
+        self.scalebox.show()
+        self.buttonbox.show()
+        self.radiobuttonbox.show()
+        self.checkbuttonbox.show()
+        
+        self.mainbox.pack_start(self.scalebox, True, True, 0)
+        self.mainbox.pack_start(self.buttonbox, False, False, 0)
+        self.buttonbox.pack_start(self.radiobuttonbox, False, False, 0)
+        self.buttonbox.pack_start(self.checkbuttonbox, False, False, 0)
+        
+        self.window.add(self.mainbox)
+        
+        self.addTestButtons()
+        
         # make a box in the main window and set both,
         # the box and window to show up.
-        self.hbox.show()
         self.window.show()
-        
-        self.vscales = {}
-        self.scalevalues = []
 
-    def addScale(self):
+    def addTestButtons(self):
+        # test some buttons to add.
+        checkbutton = gtk.CheckButton()
+        self.checkbuttonbox.pack_start(checkbutton, False, False, 0)
+        checkbutton.show()
+        
+        radiobutton = gtk.RadioButton()
+        self.radiobuttonbox.pack_start(radiobutton, False, False, 0)
+        radiobutton.show()
+
+    def addScale(self, adj=None):
+        scale = []
         self.scalevalues.append(0)
         # create a adjustment
-        adj = gtk.Adjustment(0.0, 0.0, 0xff, 1, 1.0, 1.0)
+        if not adj:
+            adj = gtk.Adjustment(0.0, 0.0, 0xff, 1, 1.0, 1.0)
+        else:
+            vstart = adj[0]
+            minVal = adj[1]
+            maxVal = adj[2]
+            step = adj[3]
+            pageInc = 1.0
+            pageSize = 1.0
+            adj = gtk.Adjustmen(vstart, minVal, maxVal, step, pageInc, pageSize)
+        scale.append(adj)
         # connect a function to handle changing values.
         adj.connect("value_changed", self.valChangeScale)
         # keep track of the vscale references
-        self.vscales[adj] = gtk.VScale(adj)
+        vscale = gtk.VScale(adj)
+        vscale.set_draw_value(False)
+        scale.append(vscale)
+        self.vscales.append(scale)
         # add the newly created vscale to the main hbox.
-        self.hbox.pack_start(self.vscales[adj], True, False, 5)
+        self.scalebox.pack_start(vscale, True, False, 5)
         # make the vscale visible
-        self.vscales[adj].show()
+        vscale.show()
 
     def valChangeScale(self, widget, data=None):
-        for i, adj in enumerate(self.vscales):
-            if adj == widget:
-                self.scalevalues[i] = adj.get_value()
+        #for i, adj in enumerate(self.vscales):
+        #    if adj == widget:
+        #        self.scalevalues[i] = adj.get_value()
+        for i, scale in enumerate(self.vscales):
+            if scale[0] == widget:
+                self.scalevalues[i] = scale[0].get_value()
 
     def destroy(self, widget, data=None):
         pass
@@ -68,6 +112,5 @@ class TestGui(object):
     def generate(self):
         self.gui.process()
         value = self.gui.getScaleValue(0)
-        print(value)
         self.graphics.fill(BLUE)
         return self.graphics.getSurface()
