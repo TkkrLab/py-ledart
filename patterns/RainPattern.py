@@ -1,6 +1,8 @@
 from matrix import *
 import random
 
+select = "RainDrop"
+
 #raindrop by Duality
 class RainDrop(object):
     #color indexing in fridgefire's matrix is G B R

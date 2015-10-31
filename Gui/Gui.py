@@ -320,6 +320,7 @@ class Gui(object):
         self.window.show_all()
 
         self.colonReleased = False
+        self.pattern = None
 
     def key_pressed(self, widget, event):
         buffer = self.buff
@@ -477,28 +478,32 @@ class Gui(object):
 
         # pass a guiobject
         self.intermediate.__dict__['gui'] = self.window
+        # delete inital object.
+        if self.pattern:
+            print >>self, ("where the hell")
+            del self.pattern
 
         patterns = get_pattern_classes(self.intermediate)
         try:
             if selected:
                 for Object in patterns:
                     if Object.__name__ == selected:
-                        pattern = Object()
+                        self.pattern = Object()
                         fmt = (lineno(), Object.__name__)
                         print >>self, ("%d:PatternSelected: %s" % fmt)
             else:
-                pattern = patterns[0]()
+                self.pattern = patterns[0]()
                 fmt = (lineno(), patterns[0].__name__)
                 print >>self, ("%d:PatternSelected: %s" % fmt)
         except Exception as e:
             print >>self, "generating from dummy for now"
-            pattern = PatternDummy()
+            self.pattern = PatternDummy()
             fmt = (lineno(), get_pattern_classes(self.intermediate))
             print >>self, "%d:%s" % fmt
             print >>self, "No valid Class with Generate function found!"
             print >>self, "%s:%s" % (get_trace(), e)
 
-        self.matrix_widget.set_pattern(pattern)
+        self.matrix_widget.set_pattern(self.pattern)
         # reset hasprinted in matrix_widget, cause now it might work.
         if self.matrix_widget.hasprinted:
             self.matrix_widget.hasprinted = False
@@ -588,3 +593,6 @@ class Gui(object):
 
     def main(self):
         gtk.main()
+
+if __name__ == "__main__":
+    print("not running!")

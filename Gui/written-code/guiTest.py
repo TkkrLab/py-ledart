@@ -1,9 +1,15 @@
 from matrix import matrix_width, matrix_height
-from Tools.Graphics import Graphics, BLUE, BLACK
+from Tools.Graphics import Graphics, BLUE, BLACK, WHITE
+import time
 import gtk
 import pygtk
 
 select = "TestGui"
+
+class TurnSlider(gtk.Widget):
+    def __init__(self):
+        gtk.Widget.__init__(self)
+        print("hello")
 
 class GuiObj(object):
     def __init__(self):
@@ -14,7 +20,6 @@ class GuiObj(object):
         
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.destroy)
-        self.window.connect("delete-event", self.destroy)
         self.window.set_border_width(10)
         
         # self.adj = gtk.Adjustment(0.0, 0.0, 101.0, 0.1, 1.0, 1.0)
@@ -41,6 +46,9 @@ class GuiObj(object):
         self.window.add(self.mainbox)
         
         self.addTestButtons()
+        
+        self.turnslider = TurnSlider()
+        del self.turnslider
         
         # make a box in the main window and set both,
         # the box and window to show up.
@@ -84,16 +92,13 @@ class GuiObj(object):
         vscale.show()
 
     def valChangeScale(self, widget, data=None):
-        #for i, adj in enumerate(self.vscales):
-        #    if adj == widget:
-        #        self.scalevalues[i] = adj.get_value()
         for i, scale in enumerate(self.vscales):
             if scale[0] == widget:
                 self.scalevalues[i] = scale[0].get_value()
 
     def destroy(self, widget, data=None):
-        pass
-        # self.window.hide_all()
+        print("destroying")
+        self.window.destroy()
 
     def getScaleValue(self, slider):
         return self.scalevalues[slider]
@@ -112,5 +117,5 @@ class TestGui(object):
     def generate(self):
         self.gui.process()
         value = self.gui.getScaleValue(0)
-        self.graphics.fill(BLUE)
+        self.graphics.fill(BLACK)
         return self.graphics.getSurface()

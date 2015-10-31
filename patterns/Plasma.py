@@ -1,42 +1,52 @@
-from Tools.Graphics import Graphics, BLACK
+from Tools.Graphics import Graphics, BLACK, BLUE
 from Tools.Graphics.ConvertColors import HSVtoRGB
 from Tools.Graphics.RGBColorTools import ColorRGBOps
+from Tools.Palet import PaletGenerate
+from Tools.Timing import Timer
 from Controllers.Controllers import translate, MidiController
 from matrix import matrix_width, matrix_height
 from math import sin, cos, sqrt, pi, radians
 import time
 import random
 
-select = "PlasmaFifth"
+select = "RainbowEffect"
 
-class PaletGenerate(object):
-    def __init__(self):
-        self.cvalue = 0
-        self.cpledselect = 2
-        self.cledselect = 0
-        self.colors = [0, 0, 0]
-        self.colors[self.cpledselect] = 0xff
-        self.colors[self.cledselect] = 0
+class RainbowEffect(object):
+    def __init__(self, speed=5):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.graphics.fill(BLUE)
+        
+        self.palet = PaletGenerate()
+        self.offset = 0
+        self.speed = speed
+        
+        self.surfaceSize = self.graphics.getSurfaceSize()
+        self.timer = Timer(self.speed)
+        self.rainbow = self.palet.generateRainbow()
+    
+    def generate(self):
+        effect = []
+        for i in range(0, self.surfaceSize):
+            effect.append(self.rainbow[i+self.offset])
+        self.offset += self.speed
+        if (self.offset + self.surfaceSize) >= len(self.rainbow):
+            self.offset = -self.surfaceSize
+        self.graphics.setSurface(effect, 1)
+        return self.graphics.getSurface()
 
-    def colorFade(self):
-        self.cvalue += 1
-        if self.cvalue > 255:
-            self.cledselect += 1
-            self.cvalue = 1
-            if self.cledselect == 3:
-                self.cledselect = 0
-                self.cpledselect = 2
-            else:
-                self.cpledselect = self.cledselect - 1
-        self.colors[self.cpledselect] = 255 - self.cvalue
-        self.colors[self.cledselect] = self.cvalue
-        return tuple(self.colors)
-
-    def generateRainBow(self):
-        rainbow = []
-        for i in range(0, 0xff*3, 1):
-            rainbow.append(self.colorFade())
-        return rainbow
+class ColorFade(object):
+    def __init__(self, speed=4):
+        self.graphics = Graphics(matrix_width, matrix_height)
+        self.graphics.fill(BLUE)
+        self.palet = PaletGenerate()
+        self.speed = speed
+    
+    def generate(self):
+        # cycle a bit faster through the palet if we want.
+        for i in range(0, self.speed):
+            color = self.palet.colorFade()
+        self.graphics.fill(color)
+        return self.graphics.getSurface()
 
 class PlasmaFifth(object):
     def __init__(self, speed=1):
