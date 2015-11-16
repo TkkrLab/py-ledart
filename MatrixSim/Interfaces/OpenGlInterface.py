@@ -11,6 +11,7 @@ class OpenGlInterface(Interface):
         glutInitWindowSize(self.width, self.height)
         glutInitWindowPosition(self.width, self.height)
         self.window = glutCreateWindow("matrix Sim")
+        glutDisplayFunc(self.displayhandler)
         glutKeyboardFunc(self.keyboardinput)
         if fullscreen:
             glutFullScreen()
@@ -24,6 +25,10 @@ class OpenGlInterface(Interface):
         glLoadIdentity()
 
         glutMainLoopEvent()
+
+    def displayhandler(self):
+        self.update()
+        return None
 
     def keyboardinput(self, *args):
         """ special way of input handling."""
