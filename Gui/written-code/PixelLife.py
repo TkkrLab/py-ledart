@@ -4,7 +4,7 @@ from matrix import matrix_width, matrix_height
 from patterns.Life.life import Life
 import random
 
-select = "RandomLife"
+select = "BlueLife"
 
 class RandomLife(object):
     def __init__(self):

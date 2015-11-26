@@ -3,19 +3,20 @@ from matrix import matrix_width, matrix_height
 from Tools.NumberSegmentBitMap import numbers
 import time
 
-select = 'SegmentClocked'
+select = 'SegmentClock'
 
 class SegmentDisplay(object):
-    def __init__(self, graphics, color=(0, 0, 0xff)):
+    def __init__(self, graphics, color=(0xff, 0, 0)):
         self.graphics = graphics
         self.letter_width = 4
         self.letter_height = 7
 
-    def drawnumber(self, x_off, y_off, value, offset=0):
+    def drawnumber(self, x_off, y_off, value, offset=0, pixelmask=(0xff, 0, 0)):
         value %= 10
         for x, row in enumerate(numbers[value]):
             for y, pixel in enumerate(row):
-                color = (0 * pixel, 0 * pixel, 0xff * pixel)
+                mr, mg, mb = pixelmask
+                color = (mr * pixel, mg * pixel, mb * pixel)
                 new_x, new_y = 6 - x, y + (self.letter_width * offset)
                 self.graphics.drawPixel(new_x + x_off, new_y + y_off, color)
 
