@@ -3,7 +3,7 @@ from Tools.Graphics.ConvertColors import HSVtoRGB
 from Tools.Graphics.RGBColorTools import ColorRGBOps
 from Tools.Palet import PaletGenerate
 from Tools.Timing import Timer
-from Controllers.Controllers import translate, MidiController
+from Tools.Controllers import translate, MidiController
 from matrix import matrix_width, matrix_height
 from math import sin, cos, sqrt, pi, radians
 import time
@@ -11,54 +11,57 @@ import random
 
 select = "RainbowEffect"
 
-class RainbowEffect(object):
+
+class RainbowEffect(Graphics):
     def __init__(self, speed=5):
-        self.graphics = Graphics(matrix_width, matrix_height)
-        self.graphics.fill(BLUE)
-        
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.fill(BLUE)
+
         self.palet = PaletGenerate()
         self.offset = 0
         self.speed = speed
-        
-        self.surfaceSize = self.graphics.getSurfaceSize()
+
+        self.surfaceSize = len(self)
         self.timer = Timer(self.speed)
         self.rainbow = self.palet.generateRainbow()
-    
-    def generate(self):
-        effect = []
-        for i in range(0, self.surfaceSize):
-            effect.append(self.rainbow[i+self.offset])
-        self.offset += self.speed
-        if (self.offset + self.surfaceSize) >= len(self.rainbow):
-            self.offset = -self.surfaceSize
-        self.graphics.setSurface(effect, 1)
-        return self.graphics.getSurface()
 
-class ColorFade(object):
+    def generate(self):
+        # effect = []
+        # for i in range(0, self.surfaceSize):
+        #     effect.append(self.rainbow[i + self.offset])
+        # self.offset += self.speed
+        # if (self.offset + self.surfaceSize) >= len(self.rainbow):
+        #     self.offset = -self.surfaceSize
+        # self.setSurface(effect, 1)
+        # return self.getSurface()
+        pass
+
+
+class ColorFade(Graphics):
     def __init__(self, speed=4):
-        self.graphics = Graphics(matrix_width, matrix_height)
-        self.graphics.fill(BLUE)
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.fill(BLUE)
         self.palet = PaletGenerate()
         self.speed = speed
-    
+
     def generate(self):
         # cycle a bit faster through the palet if we want.
         for i in range(0, self.speed):
             color = self.palet.colorFade()
-        self.graphics.fill(color)
-        return self.graphics.getSurface()
+        self.fill(color)
 
-class PlasmaFifth(object):
+
+class PlasmaFifth(Graphics):
     def __init__(self, speed=1):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics(self, matrix_width, matrix_height)
         self.plasma = Graphics(matrix_width, matrix_height)
 
         self.x_range = xrange(0, matrix_width, 1)
         self.y_range = xrange(0, matrix_height, 1)
 
         self.speed = speed
-        self.interval = 1000/self.speed
-        self.time = random.randint(0,100)
+        self.interval = 1000 / self.speed
+        self.time = random.randint(0, 100)
         self.previousTick = 0
 
         self.angle = 0
@@ -66,15 +69,17 @@ class PlasmaFifth(object):
 
         self.generatePalette()
         self.generatePlasmaSurface()
+
     def generatePalette(self):
         self.palette = []
         pal = PaletGenerate()
-        for x in xrange(0, 0xff*3, 1):
+        for x in xrange(0, 0xff * 3, 1):
             color = pal.colorFade()
             r, g, b = color
-            colorRGB = (r,g,b)
+            colorRGB = (r, g, b)
             self.palette.append(colorRGB)
-        print self.palette[0], self.palette[len(self.palette)-1]
+        print self.palette[0], self.palette[len(self.palette) - 1]
+
     def generatePlasmaSurface(self):
         self.angle = self.time % 360
         p_size = len(self.palette)
@@ -106,14 +111,16 @@ class PlasmaFifth(object):
                     + offset + (offset * sin(sqrt(((x_offset + x) * (x_offset + x) + (y_offset + y) * (y_offset + y))) / size))
                     ) / fac
                 color = (abs(int(c)),)*3
-                self.plasma.drawPixel(x,y,color)
-        return list(self.plasma.getSurface())
+                self.plasma.draw_pixel(x,y,color)
+
     def process(self):
         millis = round(time.time()*1000)
         if((millis-self.previousTick) >= self.interval):
             self.previousTick = time.time()
             self.time+=1
+
     def draw(self):
+        self.fill(BLACK)
         paletteShift = self.time/self.speed
         self.generatePlasmaSurface()
         for y in self.y_range:
@@ -127,16 +134,16 @@ class PlasmaFifth(object):
                 #darken the color to create a better contrast
                 # also boundery checks make it more smooth in ColorRGBOps
                 color = ColorRGBOps.darken(color, 200)
-                self.graphics.drawPixel(x,y, color)
+                self.draw_pixel(x,y, color)
+
     def generate(self):
-        self.graphics.fill(BLACK)
         self.process()
         self.draw()
-        return self.graphics.getSurface()
 
-class PlasmaFourth(object):
+
+class PlasmaFourth(Graphics):
     def __init__(self, speed=1):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.plasma = Graphics(matrix_width, matrix_height)
 
         self.x_range = xrange(0, matrix_width, 1)
@@ -152,6 +159,7 @@ class PlasmaFourth(object):
 
         self.generatePalette()
         self.generatePlasmaSurface()
+
     def generatePalette(self):
         self.palette = []
         pal = PaletGenerate()
@@ -161,6 +169,7 @@ class PlasmaFourth(object):
             colorRGB = (r,g,b)
             self.palette.append(colorRGB)
         print self.palette[0], self.palette[len(self.palette)-1]
+
     def generatePlasmaSurface(self):
         self.angle = self.time
         x_offset = matrix_width*sin(radians(self.angle))+matrix_width
@@ -182,13 +191,14 @@ class PlasmaFourth(object):
                     +(plasma_set[3]*2*sin(sqrt(float((x+x_offset)*(x+x_offset)+(y+y_offset)*(y+y_offset)))/fac))
                     )/fac2
                 color = (int(abs(c)),)*3
-                self.plasma.drawPixel(x,y,color)
-        return list(self.plasma.getSurface())
+                self.plasma.draw_pixel(x,y,color)
+
     def process(self):
         millis = round(time.time()*1000)
         if((millis-self.previousTick) >= self.interval):
             self.previousTick = time.time()
             self.time+=1
+
     def draw(self):
         paletteShift = self.time/self.speed
         self.generatePlasmaSurface()
@@ -203,16 +213,17 @@ class PlasmaFourth(object):
                 #darken the color to create a better contrast
                 # also boundery checks make it more smooth in ColorRGBOps
                 color = ColorRGBOps.darken(color, 50)
-                self.graphics.drawPixel(x,y, color)
+                self.draw_pixel(x,y, color)
+
     def generate(self):
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         self.process()
         self.draw()
-        return self.graphics.getSurface()
 
-class RevolvingCircle(object):
+
+class RevolvingCircle(Graphics):
     def __init__(self, speed=1):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.plasma = Graphics(matrix_width, matrix_height)
 
         self.x_range = xrange(0, matrix_width, 1)
@@ -246,7 +257,7 @@ class RevolvingCircle(object):
                     +(0xff*sin(sqrt(float((x+x_offset)*(x+x_offset)+(y+y_offset)*(y+y_offset)))))
                     )
                 color = (abs(c),)*3
-                self.plasma.drawPixel(x,y,color)
+                self.plasma.draw_pixel(x,y,color)
     def process(self):
         millis = round(time.time()*1000)
         if((millis-self.previousTick) >= self.interval):
@@ -265,16 +276,15 @@ class RevolvingCircle(object):
                 color = (r,g,b,)
                 #darken the color to create a better contrast
                 color = ColorRGBOps.darken(color, 50)
-                self.graphics.drawPixel(x,y, color)
+                self.draw_pixel(x,y, color)
     def generate(self):
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         self.process()
         self.draw()
-        return self.graphics.getSurface()
 
-class PlasmaThird(object):
+class PlasmaThird(Graphics):
     def __init__(self, speed=10):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics(self, matrix_width, matrix_height)
         self.plasma = Graphics(matrix_width, matrix_height)
 
         self.x_range = xrange(0, matrix_width, 1)
@@ -310,8 +320,7 @@ class PlasmaThird(object):
                     +128+(128*sin(sqrt(float((x+x_offset)*(x+x_offset)+(y+y_offset)*(y+y_offset)))/2.0))
                     )/4
                 color = (c,)*3
-                self.plasma.drawPixel(x,y,color)
-        return list(self.plasma.getSurface())
+                self.plasma.draw_pixel(x,y,color)
     def process(self):
         if((time.time()-self.previousTick) >= 1./self.interval):
             self.previousTick = time.time()
@@ -329,16 +338,15 @@ class PlasmaThird(object):
                 color = (r,g,b,)
                 #darken the color to create a better contrast
                 color = ColorRGBOps.brighten(color, 20)
-                self.graphics.drawPixel(x,y, color)
+                self.draw_pixel(x,y, color)
     def generate(self):
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         self.process()
         self.draw()
-        return self.graphics.getSurface()
 
-class PlasmaSecond(object):
+class PlasmaSecond(Graphics):
     def __init__(self, speed=1):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.plasma = Graphics(matrix_width, matrix_height)
 
         self.x_range = xrange(0, matrix_width, 1)
@@ -374,8 +382,7 @@ class PlasmaSecond(object):
                     +128+(128*sin(sqrt(float((x+x_offset)*(x+x_offset)+(y+y_offset)*(y+y_offset)))/2.0))
                     )/4
                 color = (c,)*3
-                self.plasma.drawPixel(x,y,color)
-        return list(self.plasma.getSurface())
+                self.plasma.draw_pixel(x,y,color)
     def process(self):
         millis = round(time.time()*1000)
         if((millis-self.previousTick) >= self.interval):
@@ -394,16 +401,15 @@ class PlasmaSecond(object):
                 color = (r,g,b,)
                 #darken the color to create a better contrast
                 color = ColorRGBOps.darken(color, 50)
-                self.graphics.drawPixel(x,y, color)
+                self.draw_pixel(x,y, color)
     def generate(self):
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         self.process()
         self.draw()
-        return self.graphics.getSurface()
 
-class PlasmaFirst(object):
+class PlasmaFirst(Graphics):
     def __init__(self, speed=20):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.plasma = Graphics(matrix_width, matrix_height)
         
         self.x_range = xrange(0, matrix_width, 1)
@@ -429,8 +435,7 @@ class PlasmaFirst(object):
                     +128.0 + (128.0*cos(y/3.4))
                     )/2
                 color = (c,)*3
-                self.plasma.drawPixel(x,y,color)
-        return list(self.plasma.getSurface())
+                self.plasma.draw_pixel(x,y,color)
     def process(self):
         if( (time.time()-self.previousTick) >= self.interval ):
             self.previousTick = time.time()
@@ -445,11 +450,11 @@ class PlasmaFirst(object):
                 b = (plasma_color[2]+color_shift[2])%256
                 color = (r,g,b,)
                 color = ColorRGBOps.darken(color, 50)
-                self.graphics.drawPixel(x,y, color)
+                self.draw_pixel(x,y, color)
     def draw(self):
         pass
     def generate(self):
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         self.process()
         self.draw()
-        return self.graphics.getSurface()
+        return self.getSurface()

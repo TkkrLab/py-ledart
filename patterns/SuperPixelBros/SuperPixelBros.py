@@ -31,14 +31,14 @@ class PixelBrosController(PygameController, XboxController):
 
 class TilePixel(object):
     """Tile class holds info on individual Tiles"""
-    def __init__(self, pos, color, graphics):
+    def __init__(self, pos, color, game):
         self.color = color
-        self.graphics = graphics
+        self.game = game
         self.pos = (pos[1], pos[0])
 
     def draw(self):
         x, y = self.pos
-        self.graphics.drawPixel(self.graphics.width - x - 1, y, self.color)
+        self.game.draw_pixel(self.game.get_width() - x - 1, y, self.color)
 
     def setPos(self, pos):
         self.pos = (pos[1], pos[0])
@@ -49,8 +49,8 @@ class TilePixel(object):
 
 class Player(TilePixel):
     """Player class handles how to player acts."""
-    def __init__(self, pos, color, graphics, game):
-        TilePixel.__init__(self, pos, color, graphics)
+    def __init__(self, pos, color, game):
+        TilePixel.__init__(self, pos, color, game)
         self.controller = PixelBrosController(0)
         self.game = game
         self.dx = 0
@@ -79,7 +79,7 @@ class Player(TilePixel):
         self.setPos(pos)
 
 
-class SuperPixelBros(object):
+class SuperPixelBros(Graphics):
     """
     SuperPixelBros is a class that hanles function calling and processing.
     makes sure the level is generated.
@@ -87,10 +87,10 @@ class SuperPixelBros(object):
 
     """
     def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
 
         self.players = []
-        self.player = Player((9, 7), BLUE, self.graphics, self)
+        self.player = Player((9, 7), BLUE, self)
 
         self.level = level1
 
@@ -101,15 +101,15 @@ class SuperPixelBros(object):
         self.player.process()
 
     def draw(self):
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         # draw the map.
-        surfaceheight = self.graphics.getSurfaceHeight()
-        level_matrix = self.graphics.toMatrix(self.level, surfaceheight)
-        for y in self.graphics.heightRange:
-            for x in self.graphics.widthRange:
+        surfaceheight = self.get_height()
+        level_matrix = self.toMatrix(self.level, surfaceheight)
+        for y in range(0, self.get_height()):
+            for x in range(0, self.get_width()):
                 tile = level_matrix[x][y]
                 # draw the map flipped
-                self.graphics.drawPixel(self.graphics.width - x - 1, y, tile)
+                self.draw_pixel(self.get_width() - x - 1, y, tile)
 
         # draw the player.
         self.player.draw()
@@ -118,4 +118,4 @@ class SuperPixelBros(object):
         # self.handleInput()
         # self.process()
         # self.draw()
-        return self.graphics.getSurface()
+        pass

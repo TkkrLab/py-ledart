@@ -44,9 +44,9 @@ class SnakeController(PygameController, XboxController):
 
 
 class Food(object):
-    def __init__(self, pos, color, graphics):
+    def __init__(self, pos, color, game):
         self.pos = pos
-        self.graphics = graphics
+        self.game = game
         self.color = color
 
     def setPos(self, pos):
@@ -58,19 +58,19 @@ class Food(object):
         self.pos = x, y
 
     def randColor(self):
-        r = random.randint(0, 255)
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
+        r = random.randint(100, 255)
+        g = random.randint(100, 255)
+        b = random.randint(100, 255)
         self.color = (r, g, b)
 
     def draw(self):
         x, y = self.pos
-        self.graphics.drawPixel(x, y, self.color)
+        self.game.draw_pixel(x, y, self.color)
 
 
-class Snake(object):
+class Snake(Graphics):
     def __init__(self, speed=8, plugged=0):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
 
         self.controller = SnakeController(plugged)
 
@@ -87,7 +87,7 @@ class Snake(object):
 
         self.body = []
         self.tailLen = 0
-        self.food = Food((0, 0), WHITE, self.graphics)
+        self.food = Food((0, 0), WHITE, self)
         self.food.randPos()
 
         # add our head to our body :)
@@ -152,19 +152,18 @@ class Snake(object):
                     self.deltay = 0
 
     def draw(self):
+        self.fill(BLACK)
         for i, (x, y) in enumerate(self.body):
             if i == self.tailLen:
                 # draw our head a certain color
-                self.graphics.drawPixel(x, y, self.head_color)
+                self.draw_pixel(x, y, self.head_color)
             else:
                 # else just draw our body this color
-                # self.graphics.drawPixel(x,y,Color.subtract(self.body_color, (int(255/(i+1)),)*3))
-                self.graphics.drawPixel(x, y, (255, 255, 255))
+                # self.graphics.draw_pixel(x,y,Color.subtract(self.body_color, (int(255/(i+1)),)*3))
+                self.draw_pixel(x, y, (255, 255, 255))
         self.food.draw()
 
     def generate(self):
-        self.graphics.fill(BLACK)
         self.inputHandling()
         self.update()
         self.draw()
-        return self.graphics.getSurface()

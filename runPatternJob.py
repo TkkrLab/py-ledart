@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/python2.7 -B
 import socket
 import signal
 import sys
@@ -72,19 +72,20 @@ def get_pattern_classes(module):
 def tst_patterns(dir, showpass=True):
     from matrix import matrix_size
     patterns = find_patterns_in_dir(dir)
-    for pat in patterns:
+    for pattern in patterns:
         try:
-            pattern = pat()
-            generate = len(pattern.generate())
-            if generate != matrix_size:
-                raise Exception("%s:len of generated: %s" % (pat, generate))
+            pat = pattern()
+            pat.generate()
+            # generate = len(pattern.generate())
+            if len(pat) != matrix_size:
+                raise Exception("%s:len of generated: %s" % (pat, len(pat)))
             elif showpass:
                 print("-----------------")
                 print("passed: %s" % pat)
                 print("-----------------")
         except Exception as e:
             print("---------------------")
-            print("Pattern:%s Exception:%s" % (pat, e))
+            print("Pattern:%s Exception:%s" % (pattern, e))
             print("---------------------")
             continue
 

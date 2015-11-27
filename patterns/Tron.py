@@ -6,7 +6,7 @@ from pygame.locals import *
 import pygame
 
 
-class TronPlayer(object):
+class TronPlayer(Graphics):
     def __init__(self, color, game, pos=(5, 5)):
         self.game = game
         self.color = color
@@ -51,21 +51,21 @@ class TronPlayer(object):
 
     def draw(self):
         for x, y in self.body:
-            self.game.graphics.drawPixel(x, y, self.color)
+            self.game.draw_pixel(x, y, self.color)
 
 
-class Tron(object):
+class Tron(Graphics):
     def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics(self, matrix_width, matrix_height)
 
     def generate(self):
-        return self.graphics.getSurface()
+        pass
 
 
-class OldTron(object):
+class OldTron(Graphics):
     # version before creating players that handle processing on thier own.
     def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.color = BLUE
         x = random.randint(1, matrix_width - 1)
         y = random.randint(1, matrix_height - 1)
@@ -122,13 +122,12 @@ class OldTron(object):
             self.body.append(self.pos)
 
     def draw(self):
+        self.fill(BLACK)
         for x, y in self.body:
-            self.graphics.drawPixel(x, y, self.color)
+            self.draw_pixel(x, y, self.color)
 
     def generate(self):
-        self.graphics.fill(BLACK)
         self.inputHandling()
         self.update()
         self.draw()
         self.player1.draw()
-        return self.graphics.getSurface()

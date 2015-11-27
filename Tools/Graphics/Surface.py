@@ -1,13 +1,23 @@
 class Surface(object):
-    def __init__(self, surface=None, width=None, height=None):
+    def __init__(self, surface=None, **kwargs):
         if surface:
-            pass
-        if width and height:
-            self.width = width
-            self.height = height
+            self.width = int(surface.width)
+            self.height = int(surface.height)
+            self.size = int(surface.size)
+            self.color_rep = tuple(surface.color_rep)
+            self.color_depth = int(surface.color_depth)
+            self.indexes = list(surface.indexes)
+            self.surface = dict(surface.surface)
+        else:
+            self.width = kwargs.get('width', 1)
+            self.height = kwargs.get('height', 1)
             self.size = self.width * self.height
-            self.color_rep = (0, )
-            self.color_depth = 0x7f
+            # represent r, g, b can be set of needed.
+            self.color_rep = (0, 0, 0)
+            # represent the max value a color can be.
+            self.color_depth = 0xff
+            # represent the indexes as x, y. for x, y, z
+            # you could set the pos_rep to 3
             self.indexes = self.gen_indexes()
             self.surface = self.gen_surface()
 
@@ -38,6 +48,19 @@ class Surface(object):
                 indexes.append(pos)
         return indexes
 
+    """
+        getter method's.
+        for getting the surface atributes.
+    """
+    def get_size(self):
+        return self.size
+
+    def get_width(self):
+        return self.width
+
+    def get_height(self):
+        return self.height
+
     def get_list_rep(self):
         surface_list = []
         for index in self.indexes:
@@ -55,19 +78,3 @@ class Surface(object):
 
     def __len__(self):
         return len(self.indexes)
-
-
-def main():
-    from ledboard import netcon
-
-    ledboard_width, ledboard_height = 96, 48
-    ledboard = Surface(width=ledboard_width, height=ledboard_height)
-    for i in range(0, ledboard_height, 1):
-        pos = (i, i)
-        ledboard[pos] = (0x7f, )
-        pos = (i + ledboard_height, i)
-        ledboard[pos] = (0x7f, )
-    netcon.send_packet(ledboard)
-
-if __name__ == "__main__":
-    main()

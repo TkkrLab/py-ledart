@@ -83,8 +83,8 @@ class Paddle(object):
         # offset make it go a bit into the screen on one side
         x = self.inputValue - 1
         # boundery check make it only go one block in at the other end though.
-        if x >= self.graphics.width - 2:
-            x = self.graphics.width - 2
+        if x >= self.graphics.get_width() - 2:
+            x = self.graphics.get_width() - 2
         self.pos = x, self.side
 
     def handleInput(self):
@@ -92,7 +92,7 @@ class Paddle(object):
 
     def draw(self):
         x, y = self.pos
-        self.graphics.drawLine(x, y, x + self.paddle_width - 1, y, self.color)
+        self.graphics.draw_line(x, y, x + self.paddle_width - 1, y, self.color)
 
 
 class Ball(object):
@@ -122,8 +122,8 @@ class Ball(object):
     def process(self):
         x, y = self.pos
         # do boundery checking
-        if x >= self.graphics.width - 1:
-            x = self.graphics.width - 1
+        if x >= self.graphics.get_width() - 1:
+            x = self.graphics.get_width() - 1
             self.dx *= -1
         elif x <= 0:
             x = 0
@@ -143,7 +143,7 @@ class Ball(object):
 
     def draw(self):
         x, y = self.pos
-        self.graphics.drawPixel(x, y, self.color)
+        self.graphics.draw_pixel(x, y, self.color)
 
 
 class Pong(object):
@@ -154,7 +154,7 @@ class Pong(object):
         self.graphics = Graphics(matrix_width, matrix_height)
 
         # create a ball. multiple balls should be possible :)
-        self.ball = Ball((self.graphics.width / 2, self.graphics.height / 2),
+        self.ball = Ball((self.graphics.get_width() / 2, self.graphics.get_height() / 2),
                          bcolor, self.graphics)
 
         # try to use the tty controller.
@@ -233,16 +233,16 @@ class Pong(object):
         bx, by = self.ball.getPos()
         # so lim(it) pixel out of screen, it resets
         lim = 2
-        if by < -lim or by > self.graphics.height + lim:
+        if by < -lim or by > self.graphics.get_height() + lim:
             if by < -lim:
                 self.paddle1.score += 1
-            if by > self.graphics.height + lim:
+            if by > self.graphics.get_height() + lim:
                 self.paddle2.score += 1
             # print score shows it works!
             if self.print_score:
                 print("player1 score: %d" % (self.paddle1.score))
                 print("player2 score: %d" % (self.paddle2.score))
-            ballpos = (self.graphics.width / 2, self.graphics.height / 2)
+            ballpos = (self.graphics.get_width() / 2, self.graphics.get_height() / 2)
             self.ball.setPos(ballpos)
             self.ball.dx = self.getRandomDir()
             self.ball.dy = self.getRandomDir()
@@ -267,4 +267,3 @@ class Pong(object):
         self.handleInput()
         self.process()
         self.draw()
-        return self.graphics.getSurface()
