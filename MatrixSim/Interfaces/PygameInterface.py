@@ -47,7 +47,7 @@ class PygameInterface(Interface):
         pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
 
     def update(self):
-        pygame.display.update()
+        pygame.display.flip()
 
     def quit(self):
         pygame.quit()

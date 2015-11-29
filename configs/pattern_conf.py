@@ -7,7 +7,7 @@ michiel_laptop = "192.168.1.199"
 local_host = "127.0.0.1"
 broadcast = "10.42.255.255"
 matrix = "10.42.4.139"
-dest = pixelMatrix
+dest = local_host
 
 TARGETS = {
     # dest: Sven()
@@ -21,7 +21,7 @@ TARGETS = {
     # dest: BlueLife(),
     # dest: BlueLife(),
     # dest: SuperPixelBros(),
-    # dest: Pong(speed=5),
+    dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
     # dest: Snake(),
@@ -31,7 +31,7 @@ TARGETS = {
     # dest: PlasmaFirst(),
     # dest: PlasmaSecond(),
     # dest: PlasmaThird(),
-    dest: RainPattern(chance=0.5, color=(255, 255, 255)),
+    # dest: RainPattern(chance=0.5, color=(255, 255, 255)),
     # dest: GraphicsCircleTest(),
     # dest: GraphicsRectTest(),
     # dest: GraphicsLineTest(),

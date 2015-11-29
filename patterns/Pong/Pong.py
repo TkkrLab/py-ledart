@@ -61,7 +61,7 @@ class PongControllerAuto(ttyController, PongTtyController):
 
 
 class Paddle(object):
-    def __init__(self, pos, color, controller, controller_in, graphics):
+    def __init__(self, pos, color, controller, controller_in, game):
         self.pos = pos
         self.paddle_width = 3
         self.side = pos[1]
@@ -69,7 +69,7 @@ class Paddle(object):
         self.color = color
         self.controller = controller
         self.controller_in = controller_in
-        self.graphics = graphics
+        self.game = game
         self.inputValue = 0
 
     def getPos(self):
@@ -83,8 +83,8 @@ class Paddle(object):
         # offset make it go a bit into the screen on one side
         x = self.inputValue - 1
         # boundery check make it only go one block in at the other end though.
-        if x >= self.graphics.get_width() - 2:
-            x = self.graphics.get_width() - 2
+        if x >= self.game.get_width() - 2:
+            x = self.game.get_width() - 2
         self.pos = x, self.side
 
     def handleInput(self):
@@ -92,12 +92,12 @@ class Paddle(object):
 
     def draw(self):
         x, y = self.pos
-        self.graphics.draw_line(x, y, x + self.paddle_width - 1, y, self.color)
+        self.game.draw_line(x, y, x + self.paddle_width - 1, y, self.color)
 
 
 class Ball(object):
-    def __init__(self, pos, color, graphics):
-        self.graphics = graphics
+    def __init__(self, pos, color, game):
+        self.game = game
         self.pos = pos
         self.size = 1
         self.color = color
@@ -122,8 +122,8 @@ class Ball(object):
     def process(self):
         x, y = self.pos
         # do boundery checking
-        if x >= self.graphics.get_width() - 1:
-            x = self.graphics.get_width() - 1
+        if x >= self.game.get_width() - 1:
+            x = self.game.get_width() - 1
             self.dx *= -1
         elif x <= 0:
             x = 0
@@ -143,19 +143,21 @@ class Ball(object):
 
     def draw(self):
         x, y = self.pos
-        self.graphics.draw_pixel(x, y, self.color)
+        self.game.draw_pixel(x, y, self.color)
 
 
-class Pong(object):
+class Pong(Graphics):
     """
     Pong game
     """
-    def __init__(self, bcolor=GREEN, pcolor=BLUE, speed=matrix_height / 2, port="ACM", plugged=0):
-        self.graphics = Graphics(matrix_width, matrix_height)
+    def __init__(self, bcolor=GREEN, pcolor=BLUE,
+                 speed=matrix_height / 2, port="ACM", plugged=0):
+        Graphics.__init__(self, matrix_width, matrix_height)
 
         # create a ball. multiple balls should be possible :)
-        self.ball = Ball((self.graphics.get_width() / 2, self.graphics.get_height() / 2),
-                         bcolor, self.graphics)
+        self.ball = Ball((self.get_width() / 2,
+                          self.get_height() / 2),
+                         bcolor, self)
 
         # try to use the tty controller.
         # but if it's not available use the automatic one.
@@ -170,10 +172,10 @@ class Pong(object):
         # create two paddles
         paddle1_pos = (0, 0)
         self.paddle1 = (Paddle(paddle1_pos, pcolor, self.controller,
-                        self.controller.POT1, self.graphics))
+                        self.controller.POT1, self))
         paddle2_pos = (0, matrix_height - 1)
         self.paddle2 = (Paddle(paddle2_pos, pcolor, self.controller,
-                        self.controller.POT2, self.graphics))
+                        self.controller.POT2, self))
 
         # timing variables used to controle the speed of the ball
         self.start_speed = speed
@@ -233,16 +235,16 @@ class Pong(object):
         bx, by = self.ball.getPos()
         # so lim(it) pixel out of screen, it resets
         lim = 2
-        if by < -lim or by > self.graphics.get_height() + lim:
+        if by < -lim or by > self.get_height() + lim:
             if by < -lim:
                 self.paddle1.score += 1
-            if by > self.graphics.get_height() + lim:
+            if by > self.get_height() + lim:
                 self.paddle2.score += 1
             # print score shows it works!
             if self.print_score:
                 print("player1 score: %d" % (self.paddle1.score))
                 print("player2 score: %d" % (self.paddle2.score))
-            ballpos = (self.graphics.get_width() / 2, self.graphics.get_height() / 2)
+            ballpos = (self.get_width() / 2, self.get_height() / 2)
             self.ball.setPos(ballpos)
             self.ball.dx = self.getRandomDir()
             self.ball.dy = self.getRandomDir()
@@ -257,7 +259,7 @@ class Pong(object):
     def draw(self):
         # draw all the thing that need to be drawn.
         # draw the ball and paddles.
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         self.ball.draw()
         self.paddle1.draw()
         self.paddle2.draw()

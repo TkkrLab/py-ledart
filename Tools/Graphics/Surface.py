@@ -85,5 +85,5 @@ class Surface(object):
         for index in indexes:
             color = self.surface[index]
             for c in color:
-                data += chr(color[c])
+                data += chr(c)
         return data

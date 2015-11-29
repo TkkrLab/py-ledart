@@ -75,30 +75,22 @@ class MatrixScreen(object):
     def handleinput(self):
         self.interface.handleinput()
 
-    def process_pixels(self, data):
-        # extract pixels and color from data
-        # get both a list index and the color data.
-        for i, color in enumerate(data):
-            self.pixels[i].setColor(color)
-
     def draw(self, data):
-        # set the pixels in the screen to the
-        # apropriate colors.
-        self.process_pixels(data)
-        # clear the window
         self.interface.clear(BLACK)
-        # display the pixels.
-        for pixel in self.pixels:
-            r = pixel.color[matrix.COLOR_ORDER[0]]
-            g = pixel.color[matrix.COLOR_ORDER[1]]
-            b = pixel.color[matrix.COLOR_ORDER[2]]
-            color = (r, g, b)
-            # for a nice litle border that makes the pixels stand out.
+        # get the indexes of every pixel
+        indexes = data.indexes
+        # itterate of the colors of every pixel.
+        for i, index in enumerate(indexes):
+            # take the color
+            color = data[index]
+            if color == BLACK:
+                continue
+            # take the rect of where it should go
+            rect = self.pixels[i].getRect()
+            # give it a border.
             bordercolor = BLACK
-            self.interface.drawblock(pixel.getRect(), color, bordercolor)
-
-        # update the screen so our data show.
-        self.interface.update()
+            # draw the actual block
+            self.interface.drawblock(rect, color, bordercolor)
 
     def process(self, data):
         self.time = time.time()
@@ -107,6 +99,8 @@ class MatrixScreen(object):
         self.interface.setcaption("artnet matrix sim FPS:" +
                                   str(int(self.fps)))
         self.draw(data)
+        # update the screen so our data show.
+        self.interface.update()
 
     def printfps(self):
         sys.stdout.write("%s      \r" % self.fps)

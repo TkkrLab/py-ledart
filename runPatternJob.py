@@ -7,6 +7,17 @@ import os
 import time
 import collections
 
+import artnet
+import lmcp
+
+from matrix import matrix_width, matrix_height
+from matrix import convertSnakeModes, convertByteMode
+from MatrixSim.MatrixScreen import interface_opts
+try:
+    from MatrixSim.MatrixScreen import MatrixScreen
+except Exception as e:
+    print("MatrixScreen>> " + str(e))
+
 
 def get_trace():
     exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -101,12 +112,6 @@ def load_targets(configfile):
     return config.TARGETS
 
 
-def signal_handler(signal, frame):
-    print("\nExiting closing connections.")
-    sock.close()
-    sys.exit(0)
-
-
 def debugprint(data):
     """Function that prints into the stdout, in the shape of the matrix."""
     from matrix import matrix_size, matrix_width
@@ -123,45 +128,68 @@ def checkList(first, second):
     return True
 
 
-def sendout(args):
+def sendout(args, protocol):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
     # or only to the matrix simulator if netSilent enabled.
     try:
         for t in TARGETS:
             pattern = TARGETS[t]
-            data = pattern.generate()
-            # make sure matrixSim always displays
-            # the data the right way.
-            # can't have the matrixsimulator hang because there is not change..
+            # generate the next set of images to send.
+            pattern.generate()
             if args.matrixSim == "enabled":
                 matrixscreen.handleinput()
-            # if this is a simulation draw it to the matrixscreen
-            if args.matrixSim == "enabled":
-                    matrixscreen.process(data)
-            # convert the data for the special matrix layout.
+                matrixscreen.process(pattern)
             if args.snakeMode == "enabled":
-                data = convertSnakeModes(data)
+                pass
             if args.byteMode == "enabled":
-                data = convertByteMode(data, args.convertColor)
-            # check if data generated is the same as before because then
-            # just don't send it out
+                pass
             change = True
-            if args.soc == "enabled":
-                previous_set = collections.Counter(sendout.data)
-                current_set = collections.Counter(data)
-                change = previous_set != current_set
-            elif args.soc == "disabled":
+            if args.sendOnChange == "enabled":
+                pass
+            elif args.sendOnChange == "disabled":
                 change = True
-            if(change):
-                sendout.data = data
-                # send it out over the network.
+            if change:
                 if not (args.netSilent == "enabled"):
                     try:
-                        sock.sendto(buildPacket(0, data), (t, UDP_PORT))
-                    except Exception:
-                        print("no good ip dest found: %s" % (t))
+                        protocol.send(pattern, t)
+                    except Exception as e:
+                        print(e)
+                        print("no dest ip found: %s" % t)
                         sys.exit(0)
+            # pattern = TARGETS[t]
+            # data = pattern.generate()
+            # # make sure matrixSim always displays
+            # # the data the right way.
+            # # can't have the matrixsimulator hang because there is no change..
+            # if args.matrixSim == "enabled":
+            #     matrixscreen.handleinput()
+            # # if this is a simulation draw it to the matrixscreen
+            # if args.matrixSim == "enabled":
+            #         matrixscreen.process(data)
+            # # convert the data for the special matrix layout.
+            # if args.snakeMode == "enabled":
+            #     data = convertSnakeModes(data)
+            # if args.byteMode == "enabled":
+            #     data = convertByteMode(data, args.convertColor)
+            # # check if data generated is the same as before because then
+            # # just don't send it out
+            # change = True
+            # if args.soc == "enabled":
+            #     previous_set = collections.Counter(sendout.data)
+            #     current_set = collections.Counter(data)
+            #     change = previous_set != current_set
+            # elif args.soc == "disabled":
+            #     change = True
+            # if(change):
+            #     sendout.data = data
+            #     # send it out over the network.
+            #     if not (args.netSilent == "enabled"):
+            #         try:
+            #             sock.sendto(buildPacket(0, data), (t, UDP_PORT))
+            #         except Exception:
+            #             print("no good ip dest found: %s" % (t))
+            #             sys.exit(0)
     # matrix sim needs this because i am to lazy to press the x button.
     except KeyboardInterrupt:
         signal_handler(None, None)
@@ -174,6 +202,12 @@ def listpatterns():
     patterns = find_patterns_in_dir('patterns')
     for pat in patterns:
         print(pat.__name__)
+
+
+def signal_handler(signal, frame):
+    print("\nExiting closing connections.")
+    protocol.close()
+    sys.exit(0)
 
 
 if __name__ == "__main__":
@@ -198,16 +232,6 @@ if __name__ == "__main__":
         print("Exiting.")
         sys.exit(0)
     else:
-        from artnet import buildPacket
-        from matrix import matrix_width, matrix_height
-        from matrix import convertSnakeModes, convertByteMode
-        from MatrixSim.MatrixScreen import interface_opts
-        try:
-            from MatrixSim.MatrixScreen import MatrixScreen
-        except Exception as e:
-            print("MatrixScreen>> " + str(e))
-
-        UDP_PORT = 6454
         TARGETS = load_targets(args.config)
 
         # check if there is anything configured.
@@ -216,9 +240,14 @@ if __name__ == "__main__":
             sys.exit(1)
         # ---------
 
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
         signal.signal(signal.SIGINT, signal_handler)
+
+        # setup which protocol to use.
+        if args.netProtocol == "artnet":
+            protocol = artnet
+        elif args.netProtocol == "lmcp":
+            protocol = lmcp
+        protocol.open()
 
         # setup a screen if matrixSim argument was set.
         if args.matrixSim == "enabled":
@@ -246,5 +275,5 @@ if __name__ == "__main__":
                 time.sleep(fps)
             # else send everything out as fast as possible
             else:
-                sendout(args)
+                sendout(args, protocol)
         signal_handler(None, None)
