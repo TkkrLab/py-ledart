@@ -25,7 +25,7 @@ class Interface(object):
         """ fills the window with a color."""
         pass
 
-    def drawblock(self, rect, color, bordercolor, borderwidth=1):
+    def drawblock(self, rect, color, bordercolor=None, borderwidth=None):
         """ draws the blocks that are the pixels."""
         pass
 

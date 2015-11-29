@@ -62,12 +62,13 @@ class OpenGlInterface(Interface):
         glVertex2f(x, y + height)
         glEnd()
 
-    def drawblock(self, rect, color, bordercolor, borderwidth=1):
+    def drawblock(self, rect, color, bordercolor=None, borderwidth=None):
         self.draw_rect(rect, bordercolor)
-        x, y, width, height = rect
-        rect = (x + borderwidth, y + borderwidth,
-                width - borderwidth, height - borderwidth)
-        self.draw_rect(rect, color)
+        if bordercolor and borderwidth:
+            x, y, width, height = rect
+            rect = (x + borderwidth, y + borderwidth,
+                    width - borderwidth, height - borderwidth)
+            self.draw_rect(rect, color)
 
     def update(self):
         glutSwapBuffers()

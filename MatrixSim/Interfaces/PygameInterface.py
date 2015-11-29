@@ -41,10 +41,11 @@ class PygameInterface(Interface):
     def clear(self, color):
         self.window.fill(color)
 
-    def drawblock(self, rect, color, bordercolor, borderwidth=1):
+    def drawblock(self, rect, color, bordercolor=None, borderwidth=None):
         pygame.draw.rect(self.window, color, rect)
         # draw a nice little square around so it looks more like a pixel.
-        pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
+        if bordercolor and borderwidth:
+            pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
 
     def update(self):
         pygame.display.flip()

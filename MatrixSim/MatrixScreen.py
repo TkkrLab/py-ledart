@@ -90,7 +90,10 @@ class MatrixScreen(object):
             # give it a border.
             bordercolor = BLACK
             # draw the actual block
-            self.interface.drawblock(rect, color, bordercolor)
+            if(self.pixelSize <= 6):
+                self.interface.drawblock(rect, color)
+            else:
+                self.interface.drawblock(rect, color, bordercolor, 1)
 
     def process(self, data):
         self.time = time.time()
