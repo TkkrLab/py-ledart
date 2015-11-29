@@ -78,3 +78,12 @@ class Surface(object):
 
     def __len__(self):
         return len(self.indexes)
+
+    def __str__(self):
+        data = ''
+        indexes = self.gen_indexes()
+        for index in indexes:
+            color = self.surface[index]
+            for c in color:
+                data += chr(color[c])
+        return data
