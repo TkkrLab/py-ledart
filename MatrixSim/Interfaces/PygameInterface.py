@@ -14,6 +14,10 @@ class PygameInterface(Interface):
             self.flags |= pygame.FULLSCREEN
         self.window = pygame.display.set_mode((self.width, self.height),
                                               self.flags)
+        if blocksize <= 6:
+            self.pixelsurface = pygame.Surface((blocksize, blocksize))
+        else:
+            self.pixelsurface = pygame.Surface((blocksize - 2, blocksize - 2))
 
     def handleinput(self):
         for event in pygame.event.get():
@@ -41,11 +45,9 @@ class PygameInterface(Interface):
     def clear(self, color):
         self.window.fill(color)
 
-    def drawblock(self, rect, color, bordercolor=None, borderwidth=None):
-        pygame.draw.rect(self.window, color, rect)
-        # draw a nice little square around so it looks more like a pixel.
-        if bordercolor and borderwidth:
-            pygame.draw.rect(self.window, bordercolor, rect, borderwidth)
+    def drawblock(self, rect, color):
+        self.pixelsurface.fill(color)
+        self.window.blit(self.pixelsurface, rect)
 
     def update(self):
         pygame.display.flip()

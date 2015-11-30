@@ -269,7 +269,7 @@ if __name__ == "__main__":
         while(True):
             # send patterns out in a timed fasion. if args.fps != 0
             if args.fps > 0:
-                sendout(args)
+                sendout(args, protocol)
                 # TODO: figure out how to dynamicly
                 # adjust time as to have a fixed fps.
                 time.sleep(fps)

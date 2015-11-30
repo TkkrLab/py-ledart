@@ -4,7 +4,6 @@ import sys
 from Pixel import Pixel
 
 from Tools.Graphics import BLUE, BLACK
-import matrix
 
 # setup interface options, if no interface possible
 # set to a dummy
@@ -23,6 +22,7 @@ except Exception as e:
 try:
     from Interfaces.OpenGlInterface import OpenGlInterface
     interface_opts["opengl"] = OpenGlInterface
+    print(interface_opts)
 except Exception as e:
     print("Module not installed, %s" % str(e))
     interface_opts["opengl"] = DummyInterface
@@ -83,17 +83,13 @@ class MatrixScreen(object):
         for i, index in enumerate(indexes):
             # take the color
             color = data[index]
+            # skip drawing if it's a drawing a black pixel on a black surface.
             if color == BLACK:
                 continue
             # take the rect of where it should go
             rect = self.pixels[i].getRect()
-            # give it a border.
-            bordercolor = BLACK
             # draw the actual block
-            if(self.pixelSize <= 6):
-                self.interface.drawblock(rect, color)
-            else:
-                self.interface.drawblock(rect, color, bordercolor, 1)
+            self.interface.drawblock(rect, color)
 
     def process(self, data):
         self.time = time.time()
