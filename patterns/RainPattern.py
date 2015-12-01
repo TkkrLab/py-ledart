@@ -63,22 +63,22 @@ class RainPattern(Graphics):
             self.drops.append(raindrop)
 
 
-class RainPattern_original:
-    # Falling drops, default color white/blue-ish
-    def __init__(self, color=(100, 255, 100), chance=0.04):
-        # Init empty data list
-        self.color = color
-        self.chance = chance
-        self.data = []
-        for i in xrange(matrix_size):
-            self.data.insert(0, (0, 0, 0))  # black/off
+# class RainPattern_original:
+#     # Falling drops, default color white/blue-ish
+#     def __init__(self, color=(100, 255, 100), chance=0.04):
+#         # Init empty data list
+#         self.color = color
+#         self.chance = chance
+#         self.data = []
+#         for i in xrange(matrix_size):
+#             self.data.insert(0, (0, 0, 0))  # black/off
 
-    def generate(self):
-        # Pop 7 times to move one line down
-        for i in xrange(matrix_width):
-            self.data.pop()
-            if (random.random() < self.chance):  # random chance of raindrop
-                self.data.insert(0, self.color)
-            else:
-                self.data.insert(0, (0, 0, 0))  # black/off
-        return self.data
+#     def generate(self):
+#         # Pop 7 times to move one line down
+#         for i in xrange(matrix_width):
+#             self.data.pop()
+#             if (random.random() < self.chance):  # random chance of raindrop
+#                 self.data.insert(0, self.color)
+#             else:
+#                 self.data.insert(0, (0, 0, 0))  # black/off
+#         return self.data

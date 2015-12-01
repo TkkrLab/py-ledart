@@ -12,6 +12,7 @@ interface_opts = {
     "dummy": DummyInterface
 }
 
+# set an option for a pygame interface
 try:
     from Interfaces.PygameInterface import PygameInterface
     interface_opts["pygame"] = PygameInterface
@@ -19,10 +20,10 @@ except Exception as e:
     print("module not installed, %s" % str(e))
     interface_opts["pygame"] = DummyInterface
 
+# set an option for a opengl interface
 try:
     from Interfaces.OpenGlInterface import OpenGlInterface
     interface_opts["opengl"] = OpenGlInterface
-    print(interface_opts)
 except Exception as e:
     print("Module not installed, %s" % str(e))
     interface_opts["opengl"] = DummyInterface
@@ -52,8 +53,7 @@ class MatrixScreen(object):
         # reverse order because else the display is flipped.
         heightrange = range(0, self.window_height, pixelsize)[::-1]
 
-        # due to how the ledmatrix is displayed x, y are filled as is the
-        # window_width/height thing a bit above here.
+        # create pixels.
         for x in widthrange:
             for y in heightrange:
                 pos = (x, y)
@@ -98,7 +98,7 @@ class MatrixScreen(object):
         self.interface.setcaption("artnet matrix sim FPS:" +
                                   str(int(self.fps)))
         self.draw(data)
-        # update the screen so our data show.
+        # update the screen so our data is shown.
         self.interface.update()
 
     def printfps(self):

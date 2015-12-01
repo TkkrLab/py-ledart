@@ -1,6 +1,6 @@
 from Tools.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
 from Tools.Graphics import ColorRGBOps
-from matrix import matrix_width, matrix_height
+from matrix import matrix_width, matrix_height, to_matrix
 from Life.life import Life
 import random
 
@@ -9,8 +9,8 @@ selected = 'RandomLife'
 
 class RandomLife(Graphics):
     def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.life = Life(matrix_width, matrix_height, 1, color=BLACK)
-        Graphics(self, matrix_width, matrix_height)
 
     def pickRandomColor(self):
         color = random.randint(0, len(COLORS) - 1)
@@ -20,17 +20,12 @@ class RandomLife(Graphics):
         return COLORS[color]
 
     def drawRandomColor(self):
-        # life_matrix = self.graphics.toMatrix(self.life.field,
-        #                                      self.graphics.getSurfaceWidth())
-        # for y in self.graphics.heightRange:
-        #     for x in self.graphics.widthRange:
-        #         if life_matrix[y][x]:
-        #             color = self.pickRandomColor()
-        #             # give every lifing cell a random color
-        #             self.graphics.drawPixel(x, y, color)
-        #         else:
-        #             self.graphics.drawPixel(x, y, BLACK)
-        pass
+        self.fill(BLACK)
+        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        for point in self.get_points():
+                x, y = point
+                if life_matrix[y][x]:
+                    self.draw_pixel(x, y, self.pickRandomColor())
 
     def draw(self):
         self.drawRandomColor()
@@ -40,21 +35,57 @@ class RandomLife(Graphics):
         self.draw()
 
 
-class BlueLife(Graphics):
+class GreenLife(Graphics):
     def __init__(self):
-        self.life = Life(matrix_width, matrix_height, 1, color=BLUE)
-        Graphics(self, matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.life = Life(matrix_width, matrix_height, 1, color=GREEN)
 
     def draw(self):
-        # life_matrix = self.graphics.toMatrix(self.life.field, self.graphics.getSurfaceWidth())
-        # for y in self.graphics.heightRange:
-        #     for x in self.graphics.widthRange:
-        #         if life_matrix[y][x]:
-        #             color = BLUE
-        #         else:
-        #             color = BLACK
-        #         self.graphics.drawPixel(x, y, color)
-        pass
+        self.fill(BLACK)
+        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        for point in self.get_points():
+                x, y = point
+                if life_matrix[y][x]:
+                    color = GREEN
+                    self.draw_pixel(x, y, color)
+
+    def generate(self):
+        self.life.process()
+        self.draw()
+
+
+class BlueLife(Graphics):
+    def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.life = Life(matrix_width, matrix_height, 1, color=BLUE)
+
+    def draw(self):
+        self.fill(BLACK)
+        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        for point in self.get_points():
+                x, y = point
+                if life_matrix[y][x]:
+                    color = BLUE
+                    self.draw_pixel(x, y, color)
+
+    def generate(self):
+        self.life.process()
+        self.draw()
+
+
+class RedLife(Graphics):
+    def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.life = Life(matrix_width, matrix_height, 1, color=RED)
+
+    def draw(self):
+        self.fill(BLACK)
+        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        for point in self.get_points():
+                x, y = point
+                if life_matrix[y][x]:
+                    color = RED
+                    self.draw_pixel(x, y, color)
 
     def generate(self):
         self.life.process()
@@ -64,10 +95,10 @@ class BlueLife(Graphics):
 class GrayedLife(Graphics):
     '''
     take the gray scales over every point and
-    add or subtract depening on if lifing or not
+    add or subtract depening on if alive or not
     '''
     def __init__(self):
-        Graphics(self, matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.fill(BLACK)
 
     def generate(self):
@@ -76,6 +107,8 @@ class GrayedLife(Graphics):
 
 class MixedLife(Graphics):
     def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
+
         blue = ColorRGBOps.darken(BLUE, 128)
         green = ColorRGBOps.darken(GREEN, 128)
         red = ColorRGBOps.darken(RED, 128)
@@ -84,7 +117,6 @@ class MixedLife(Graphics):
         self.life2 = Life(matrix_width, matrix_height, 1, color=green)
         self.life3 = Life(matrix_width, matrix_height, 1, color=red)
 
-        Graphics(self, matrix_width, matrix_height)
         self.index = 0
     """
     this draw function manipulates the graphics surface directly.

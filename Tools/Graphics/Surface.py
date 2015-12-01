@@ -61,6 +61,9 @@ class Surface(object):
     def get_height(self):
         return self.height
 
+    def get_points(self):
+        return self.indexes
+
     def get_list_rep(self):
         surface_list = []
         for index in self.indexes:

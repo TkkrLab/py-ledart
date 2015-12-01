@@ -1,5 +1,5 @@
 """
-import patters here if they are in a different file.
+import patterns here if they are in a different file.
 """
 
 
@@ -28,6 +28,7 @@ from RainPattern import *
 from PixelLife import *
 from Plasma import *
 from sven import *
+from FillTest import *
 
 
 # uses pygame for testing.
@@ -60,7 +61,7 @@ except Exception as e:
     debugprint("snake >>", e)
 
 # Graphics module has some tests in it too.
-try:
-    from Tools import *
-except Exception as e:
-    debugprint("graphics >>", e)
+# try:
+#     from Tools import *
+# except Exception as e:
+#     debugprint("graphics >>", e)

@@ -1,13 +1,16 @@
 """
-matrix dimensions and color order for simulator.
+matrix dimensions and color order.
 and conversion function(s)
 """
 
 # matrix_height = 96
 # matrix_width = 48
 
-matrix_height = 34
-matrix_width = 20
+matrix_width = 32
+matrix_height = 32
+
+# matrix_height = 34
+# matrix_width = 20
 
 # matrix_height = 17
 # matrix_width = 10
@@ -18,6 +21,9 @@ matrix_width = 20
 # matrix_height = 8
 # matrix_width = 8
 
+# matrix_height = 12
+# matrix_width = 12
+
 matrix_size = (matrix_height * matrix_width)
 COLOR_ORDER = [0, 1, 2]
 
@@ -27,6 +33,11 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
+def to_matrix(l, n):
+    return [l[i:i + n] for i in range(0, len(l), n)]
+
+
+# inverts every other line in the y direction.
 def convertSnakeModes(data):
     for y in range(0, matrix_height, 2):
         templist = []
@@ -37,6 +48,10 @@ def convertSnakeModes(data):
     return data
 
 
+# this is a complicated function.
+# this basicly compresses a surface of colors
+# into a list of colors that are shifted into each other.
+# for some matrices use compression like that.
 def convertByteMode(data, color):
     if color > 2 or color < 0:
         raise Exception("error invalid color choosen.")

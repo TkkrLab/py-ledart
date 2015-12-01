@@ -9,10 +9,6 @@ def rand_color():
     return (r, g, b)
 
 
-def to_matrix(l, n):
-    return [l[i:i + n] for i in range(0, len(l), n)]
-
-
 class Graphics(Surface):
     def __init__(self, width, height):
         Surface.__init__(self, width=width, height=height)

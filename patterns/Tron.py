@@ -56,7 +56,8 @@ class TronPlayer(Graphics):
 
 class Tron(Graphics):
     def __init__(self):
-        Graphics(self, matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.fill(BLUE)
 
     def generate(self):
         pass
@@ -126,7 +127,7 @@ class OldTron(Graphics):
         for x, y in self.body:
             self.draw_pixel(x, y, self.color)
 
-    def generate(self):
+    def __generate(self):
         self.inputHandling()
         self.update()
         self.draw()

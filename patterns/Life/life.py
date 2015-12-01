@@ -22,7 +22,6 @@ class Life(object):
         self.resetCount = 0
         # holds the previous cell count.
         self.previousCount = 0
-        self.createRandomField()
 
     def process(self):
         for self.position, cell in enumerate(self.field):
@@ -51,6 +50,9 @@ class Life(object):
         for i in xrange(self.fieldSize):
             self.field[i] = random.randint(0, 1)
 
+    def insertImage(self, img):
+        pass
+
     def checkFieldState(self):
         count = 0
         for i in self.field:
@@ -66,8 +68,6 @@ class Life(object):
         self.previousCount = count
 
     def copy_buffer(self):
-        # for index in xrange(self.fieldSize):
-        #    self.field[index] = self.buffer[index]
         self.field = list(self.buffer)
 
     def checkUpper(self, field, position):
