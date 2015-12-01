@@ -1,12 +1,58 @@
 [![Build Status](https://travis-ci.org/TkkrLab/py-artnet.svg?branch=master)](https://travis-ci.org/TkkrLab/py-artnet)
-py-art-net
+py-ledart
 ==========
 
-Python art net interface. with patterns you can run for the ledpoles and the ledmatrix fridgefire made.
+what is py-ledart ?
 
-or anything that has a network based artnet interface.
+py-ledart is a few things,
 
-I made it easier to config and run patterns with python code.
+it is software that sends packets of data using protocols Like artnet,
+
+to your led device's that are connected to your network.
+
+how to send anything is somewhere below here.
+
+it has a few nice features like a live editor in which you can edit patterns and run them
+
+at the same time. and see the changes happen instantly.
+
+it also has a feature called a matrix simulation which is also in the editor.
+
+for a list of features run:
+```
+    :$ python2.7 runPatternJob.py --help
+```
+
+and for a list of available patterns run:
+```
+    :$ python2.7 runPatternJob.py --list
+```
+
+
+keep in mind most patterns might not work.
+
+for that I made a command line option --testing
+
+that shows disfunctional patters.
+
+there are a few patterns that don't do a thing!
+
+as I said or didn't this Software is a work in progress!
+
+this should give you something nice to look at though:
+```
+    :$ python2.7 runPatternJob.py --matrixSim=enabled --fps=20
+```
+
+this is spamming your localhost with packets. that is this program is made to send packets somewhere :)
+
+so if you don't want py-ledart to spam you computer with packets add:
+```
+    --netSilent=enabled.
+```
+
+most options are self explainatory but if they aren't you give me a call! like a issue or something :)
+
 
 
 #### Dependencies.
