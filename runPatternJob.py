@@ -87,7 +87,6 @@ def tst_patterns(dir, showpass=True):
         try:
             pat = pattern()
             pat.generate()
-            # generate = len(pattern.generate())
             if len(pat) != matrix_size:
                 raise Exception("%s:len of generated: %s" % (pat, len(pat)))
             elif showpass:
