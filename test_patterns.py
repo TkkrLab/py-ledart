@@ -7,7 +7,5 @@ def test():
     assert(len(patterns) != 0)
     for pattern in patterns:
         pat = pattern()
-        generated = pat.generate()
-        print(pat, type(generated))
-        print(generated)
-        assert(len(generated) == matrix_size)
+        pat.generate()
+        assert(len(pat) == matrix_size)
