@@ -16,13 +16,13 @@ def getPngPixelData(image):
     return (colordata, size,)
 
 
-class DisplayPng(object):
+class DisplayPng(Graphics):
     def __init__(self):
         # image = '/home/robert/py-artnet/hacked.png'
         # self.data = getPngPixelData(image)
         # self.pixeldata = self.data[0]
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.fill(BLACK)
 
     def generate(self):
-        self.graphics.fill(BLACK)
-        return self.graphics.getSurface()
+        pass
