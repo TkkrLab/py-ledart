@@ -1,3 +1,19 @@
+"""
+    author: Duality
+    protocol author: Jawsper
+    https://github.com/jawsper
+
+    this file describes a protocol that implements,
+    part of the documented lcmp protocol,
+    because only part is needed for the working of
+    py-ledart software.
+
+    notice though that sending packets to ledboard,
+    is slow. because we have to keep in mind,
+    that the ledboard has to process them.
+    thus sending is limited.
+
+"""
 import socket
 import time
 
@@ -9,7 +25,7 @@ writeout = chr(0x01)
 draw = chr(0x10)
 draw_image = chr(0x11)
 
-send_timeout = 0.00
+send_timeout = 0.002
 
 
 def compress(data):
