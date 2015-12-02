@@ -2,14 +2,16 @@
 from patterns.Patterns import *
 
 pixelMatrix = "pixelmatrix"
+ledboard = 'ledboard'
 raspberrypi = "192.168.2.42"
 michiel_laptop = "192.168.1.199"
 local_host = "127.0.0.1"
 broadcast = "10.42.255.255"
 matrix = "10.42.4.139"
-dest = local_host
+dest = ledboard
 
 TARGETS = {
+    dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
     # dest: FillTest(),
     # dest: Sven(),
     # dest: BarberpolePattern(),
@@ -29,7 +31,7 @@ TARGETS = {
     # # needs images. wip still.
     # dest: DisplayPng(),
 
-    dest: RainbowEffect(),
+    # dest: RainbowEffect(),
     # dest: ColorFade(),
     # dest: PlasmaFifth(),
     # dest: PlasmaFourth(),

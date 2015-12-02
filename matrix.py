@@ -3,11 +3,11 @@ matrix dimensions and color order.
 and conversion function(s)
 """
 
-# matrix_height = 96
-# matrix_width = 48
+matrix_height = 48
+matrix_width = 96
 
-matrix_width = 32
-matrix_height = 32
+#matrix_width = 10
+#matrix_height = 10
 
 # matrix_height = 34
 # matrix_width = 20
