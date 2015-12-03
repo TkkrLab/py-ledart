@@ -44,18 +44,18 @@ class MatrixScreen(object):
 
         self.pixels = []
 
-        self.window_width = height * pixelsize
-        self.window_height = width * pixelsize
+        self.window_width = width * pixelsize
+        self.window_height = height * pixelsize
 
         self.interface.setcaption("artnet matrix simulator.")
 
         widthrange = range(0, self.window_width, pixelsize)
         # reverse order because else the display is flipped.
-        heightrange = range(0, self.window_height, pixelsize)[::-1]
+        heightrange = range(0, self.window_height, pixelsize)
 
         # create pixels.
-        for x in widthrange:
-            for y in heightrange:
+        for y in heightrange:
+            for x in widthrange:
                 pos = (x, y)
                 color = BLUE
                 pixel = Pixel(pos, pixelsize, color)

@@ -5,8 +5,8 @@ class Interface(object):
     def __init__(self, width, height, blocksize, fullscreen=False):
         """ Initialize the interface. it know how big the screen is."""
         # due to physical matrix layout these are switched.
-        self.width = height * blocksize
-        self.height = width * blocksize
+        self.width = width * blocksize
+        self.height = height * blocksize
         self.blocksize = blocksize
         self.fullscreen = fullscreen
 

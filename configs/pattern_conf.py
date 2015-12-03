@@ -11,7 +11,7 @@ matrix = "10.42.4.139"
 dest = ledboard
 
 TARGETS = {
-    dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
+    # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
     # dest: FillTest(),
     # dest: Sven(),
     # dest: BarberpolePattern(),
@@ -29,7 +29,7 @@ TARGETS = {
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
     # # needs images. wip still.
-    # dest: DisplayPng(),
+    dest: DisplayPng(),
 
     # dest: RainbowEffect(),
     # dest: ColorFade(),

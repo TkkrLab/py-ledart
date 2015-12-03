@@ -3,6 +3,7 @@ class Surface(object):
         if surface:
             self.width = int(surface.width)
             self.height = int(surface.height)
+            self.d_offset = tuple(surface.d_offset)
             self.size = int(surface.size)
             self.color_rep = tuple(surface.color_rep)
             self.color_depth = int(surface.color_depth)
@@ -11,6 +12,7 @@ class Surface(object):
         else:
             self.width = kwargs.get('width', 1)
             self.height = kwargs.get('height', 1)
+            self.d_offset = kwargs.get('offset', (0, 0))
             self.size = self.width * self.height
             # represent r, g, b can be set of needed.
             self.color_rep = (0, 0, 0)

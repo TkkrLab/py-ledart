@@ -1,28 +1,30 @@
-from matrix import matrix_height, matrix_width
+from matrix import matrix_height, matrix_width, chunks
 from Tools.Graphics import Graphics, BLACK
-import png
-
-
-def getPngPixelData(image):
-    pngobj = png.Reader(image)
-    data = pngobj.asRGBA8()
-    palette = []
-    for d in data[2]:
-        palette.append(d)
-    size = data[3]['size']
-    colordata = []
-    for color in palette:
-        colordata.append(color[:3])
-    return (colordata, size,)
+from PIL import Image
 
 
 class DisplayPng(Graphics):
-    def __init__(self):
-        # image = '/home/robert/py-artnet/hacked.png'
-        # self.data = getPngPixelData(image)
-        # self.pixeldata = self.data[0]
-        Graphics.__init__(self, matrix_width, matrix_height)
+    def __init__(self, fname='Horseicon.thumbnail'):
+        Graphics.__init__(self, width=matrix_width, height=matrix_height)
         self.fill(BLACK)
+
+        image = Image.open(fname)
+        colors = self.get_image_colors(image)
+        p = 0
+        for y in xrange(0, image.height):
+            for x in xrange(0, image.width):
+                self.draw_pixel(x, y, colors[p])
+                p += 1
+
+    def get_image_colors(self, image):
+        image_colors = []
+        image = image.tobytes()
+        for data in chunks(image, 3):
+            color = []
+            for c in data:
+                color.append(ord(c))
+            image_colors.append(tuple(color))
+        return image_colors
 
     def generate(self):
         pass

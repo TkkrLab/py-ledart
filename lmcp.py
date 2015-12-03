@@ -16,6 +16,7 @@
 """
 import socket
 import time
+from matrix import matrix_size
 
 LMCP_PORT = 1337
 
@@ -60,18 +61,33 @@ def chunk_is_empty(chunk):
     return True
 
 
-def send_packet(data=None, pos=(0, 0), target=None):
-    x, y = pos
-    width = data.get_width()
-    # draw in chunks
-    for (i, chunk) in chunked(data, width):
-        packet = (draw_image + chr(x) + chr(y + i) +
-                  chr(width) + chr(0x01))
-        packet += compress(chunk)
-        lmcp_sock.sendto(packet, target)
+def _send_packet(data=None, target=None):
+        """ this function sends 8 vertical lines at ones."""
+        for (row, chunk) in chunked(data, data.get_width() * 8):
+            if not chunk_is_empty(chunk):
+                packet = draw + chr(row) + compress(chunk)
+                lmcp_sock.sendto(packet, target)
+                time.sleep(send_timeout)
         time.sleep(send_timeout)
-    time.sleep(send_timeout)
-    lmcp_sock.sendto(writeout, target)
+        lmcp_sock.sendto(writeout, target)
+
+
+def send_packet(data=None, pos=(0, 0), target=None):
+    """ this functon sends every vertical line. """
+    if data.get_size() == matrix_size:
+        _send_packet(data, target)
+    else:
+        x, y = pos
+        width = data.get_width()
+        # draw in chunks
+        for (i, chunk) in chunked(data, width):
+            packet = (draw_image + chr(x) + chr(y + i) +
+                      chr(width) + chr(0x01))
+            packet += compress(chunk)
+            lmcp_sock.sendto(packet, target)
+            time.sleep(send_timeout)
+        time.sleep(send_timeout)
+        lmcp_sock.sendto(writeout, target)
 
 
 def open():

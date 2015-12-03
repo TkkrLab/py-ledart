@@ -17,10 +17,24 @@ class Graphics(Surface):
         self.surface = self.gen_surface(default=color)
 
     def read_pixel(self, x, y):
+        if x < 0 or x >= self.get_width():
+            return
+        if y < 0 or y >= self.get_height():
+            return
         return self.surface[(x, y)]
 
     def draw_pixel(self, x, y, color):
+        if x < 0 or x >= self.get_width():
+            return
+        if y < 0 or y >= self.get_height():
+            return
         self.surface[(x, y)] = color
+
+    def convert():
+        pass
+
+    def blit(self, source_image, dest_rect):
+        pass
 
 # wiki http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
     def draw_line(self, x1, y1, x2, y2, color):
