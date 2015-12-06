@@ -61,10 +61,7 @@ class MatrixScreen(object):
                 pixel = Pixel(pos, pixelsize, color)
                 self.pixels.append(pixel)
 
-        # for keeping fps
-        self.previous = 1
-        self.time = 1
-        self.fps = 0
+        self.interface.setcaption("Matrix Simulator.")
 
     def get_pixels(self):
         """
@@ -92,11 +89,6 @@ class MatrixScreen(object):
             self.interface.drawblock(rect, color)
 
     def process(self, data):
-        self.time = time.time()
-        self.fps = 1. / (self.time - self.previous)
-        self.previous = self.time
-        self.interface.setcaption("artnet matrix sim FPS:" +
-                                  str(int(self.fps)))
         self.draw(data)
         # update the screen so our data is shown.
         self.interface.update()

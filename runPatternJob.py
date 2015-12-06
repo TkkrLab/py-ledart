@@ -263,10 +263,17 @@ if __name__ == "__main__":
         if args.fps > 0:
             fps = 1. / args.fps
 
-        previousTime = time.time()
+        previousTime = 0
+        currentTime = time.time()
 
         while(True):
             # send patterns out in a timed fasion. if args.fps != 0
+            # check if we want to print the fps to the terminal
+            if args.showFps == "enabled":
+                currentTime = time.time()
+                cfps = 1. / (currentTime - previousTime)
+                sys.stdout.write("fps: " + str(cfps) + "     \r")
+                sys.stdout.flush()
             if args.fps > 0:
                 sendout(args, protocol)
                 # TODO: figure out how to dynamicly
@@ -275,4 +282,5 @@ if __name__ == "__main__":
             # else send everything out as fast as possible
             else:
                 sendout(args, protocol)
+            previousTime = currentTime
         signal_handler(None, None)
