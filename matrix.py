@@ -3,8 +3,8 @@ matrix dimensions and color order.
 and conversion function(s)
 """
 
-# matrix_height = 48
-# matrix_width = 96
+matrix_height = 48
+matrix_width = 96
 
 # matrix_width = 10
 # matrix_height = 10
@@ -27,8 +27,8 @@ and conversion function(s)
 # matrix_height = 32
 # matrix_width = 32
 
-matrix_height = 8
-matrix_width = 8
+# matrix_height = 8
+# matrix_width = 8
 
 matrix_size = (matrix_height * matrix_width)
 

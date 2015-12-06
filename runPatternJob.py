@@ -274,6 +274,8 @@ if __name__ == "__main__":
                 currentTime = time.time()
                 cfps = 1. / (currentTime - previousTime)
                 measured.append(cfps)
+                if len(measured) > 100:
+                    measured.pop()
                 fmt = (cfps, sum(measured) / len(measured))
                 fmtstr = "current fps: %0.2f average: %0.2f            \r"
                 sys.stdout.write(fmtstr % fmt)
