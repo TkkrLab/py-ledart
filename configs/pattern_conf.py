@@ -28,8 +28,8 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    # # needs images. wip still.
-    dest: DisplayPng(),
+    dest: DisplayPng('images/sisters-sprite-min.png')
+    # dest: VideoPlay('images/videos/bad-apple/'),
 
     # dest: RainbowEffect(),
     # dest: ColorFade(),

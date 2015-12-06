@@ -1,13 +1,16 @@
-from matrix import matrix_height, matrix_width, chunks
-from Tools.Graphics import Surface, Graphics, BLACK
-from Tools.Graphics.RGBColorTools import ColorRGBOps
+from matrix import matrix_height, matrix_width
+from Tools.Graphics import Surface
 from PIL import Image
 
+import glob
+import natsort
 
-class ImageSurface(Graphics):
+
+class ImageSurface(Surface):
     def __init__(self, width, height, fname):
         if fname:
-            Graphics.__init__(self, width=width, height=height)
+            self.image = Image.open(fname)
+            Surface.__init__(self, width=self.image.width, height=self.image.height)
             self.load_png(fname)
         else:
             raise(Exception("unable to load png: %s" % (fname)))
@@ -24,51 +27,26 @@ class ImageSurface(Graphics):
                 else:
                     r, g, b, alpha = imdata[p]
                     color = (r, g, b)
-                color = ColorRGBOps.darken(color, 220)
                 self[point] = color
                 p += 1
         return dict(self.surface)
 
 
-# class DisplayPng(ImageSurface):
-#     def __init__(self, fname='images/hue_alpha-min.png'):
-#         ImageSurface.__init__(self, matrix_width, matrix_height, fname)
-
-#     def generate(self):
-#         pass
-
-import glob
-import natsort
-import sys
+def create_frames(location):
+    frames = {}
+    frame_files = glob.glob(location + '*.png')
+    frame_files = natsort.natsorted(frame_files)
+    for i in range(0, len(frame_files)):
+        frames[i] = frame_files[i]
+    return dict(frames)
 
 
-frames = {}
-frame_files = glob.glob('images/frames/*.png')
-frame_files = natsort.natsorted(frame_files)
-for i in range(0, len(frame_files)):
-    frames[i] = frame_files[i]
-num_frames = len(frame_files)
-
-
-# class DisplayPng(ImageSurface):
-#     def __init__(self):
-#         ImageSurface.__init__(self, matrix_width, matrix_height, frames[0])
-#         self.fcount = 0
-
-#     def generate(self):
-#         self.load_png(frames[self.fcount])
-#         self.fcount += 1
-
-class DisplayPng(ImageSurface):
-    def __init__(self):
-        ImageSurface.__init__(self, matrix_width, matrix_height, frames[0])
+class VideoPlay(ImageSurface):
+    def __init__(self, location):
+        self.frames = create_frames(location)
+        ImageSurface.__init__(self, matrix_width, matrix_height, self.frames[0])
         self.fcount = 0
-        self.frames = {}
-        print("loading frames.")
-        for i in range(0, num_frames):
-            self.frames[i] = self.load_png(frames[i])
-        print("done loading frames.")
 
     def generate(self):
-        self.surface = self.frames[self.fcount]
+        self.load_png(self.frames[self.fcount])
         self.fcount += 1
