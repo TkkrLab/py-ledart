@@ -265,6 +265,7 @@ if __name__ == "__main__":
 
         previousTime = 0
         currentTime = time.time()
+        measured = []
 
         while(True):
             # send patterns out in a timed fasion. if args.fps != 0
@@ -272,7 +273,10 @@ if __name__ == "__main__":
             if args.showFps == "enabled":
                 currentTime = time.time()
                 cfps = 1. / (currentTime - previousTime)
-                sys.stdout.write("fps: " + str(cfps) + "     \r")
+                measured.append(cfps)
+                fmt = (cfps, sum(measured) / len(measured))
+                fmtstr = "current fps: %0.2f average: %0.2f            \r"
+                sys.stdout.write(fmtstr % fmt)
                 sys.stdout.flush()
             if args.fps > 0:
                 sendout(args, protocol)

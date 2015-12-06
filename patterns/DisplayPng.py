@@ -7,7 +7,7 @@ import natsort
 
 
 class ImageSurface(Surface):
-    def __init__(self, width, height, fname):
+    def __init__(self, fname):
         if fname:
             self.image = Image.open(fname)
             Surface.__init__(self, width=self.image.width, height=self.image.height)
@@ -41,12 +41,22 @@ def create_frames(location):
     return dict(frames)
 
 
+class DisplayPng(ImageSurface):
+    def __init__(self, fname):
+        ImageSurface.__init__(self, fname)
+
+    def generate(self):
+        pass
+
+
 class VideoPlay(ImageSurface):
     def __init__(self, location):
         self.frames = create_frames(location)
-        ImageSurface.__init__(self, matrix_width, matrix_height, self.frames[0])
+        ImageSurface.__init__(self, self.frames[0])
         self.fcount = 0
 
     def generate(self):
         self.load_png(self.frames[self.fcount])
         self.fcount += 1
+        if(self.fcount == len(self.frames)):
+            raise(Exception("Done playing."))

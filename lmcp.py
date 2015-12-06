@@ -80,7 +80,7 @@ def send_packet(data=None, pos=(0, 0), target=None):
         x, y = pos
         width = data.get_width()
         # draw in chunks
-        chunkheight = 8
+        chunkheight = (data.width % data.height) / 2
         for (i, chunk) in chunked(data, width * chunkheight):
             packet = (draw_image + chr(x) + chr((y + i) * chunkheight) +
                       chr(width) + chr(0x01 * chunkheight))
