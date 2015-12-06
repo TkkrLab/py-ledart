@@ -1,30 +1,56 @@
 from matrix import matrix_height, matrix_width, chunks
-from Tools.Graphics import Graphics, BLACK
+from Tools.Graphics import Surface, Graphics, BLACK
 from PIL import Image
 
 
-class DisplayPng(Graphics):
-    def __init__(self, fname='Horseicon.thumbnail'):
-        Graphics.__init__(self, width=matrix_width, height=matrix_height)
-        self.fill(BLACK)
+class ImageSurface(Surface):
+    def __init__(self, width, height, fname):
+        Surface.__init__(self, width=width, height=height)
+        if fname:
+            self.image = Image.open(fname)
+            self.load_png()
 
-        image = Image.open(fname)
-        colors = self.get_image_colors(image)
+    def load_png(self):
+        imdata = self.image.getdata()
         p = 0
-        for y in xrange(0, image.height):
-            for x in xrange(0, image.width):
-                self.draw_pixel(x, y, colors[p])
+        for y in range(0, self.image.height):
+            for x in range(0, self.image.width):
+                point = (x, y)
+                if len(imdata[p]) == 3:
+                    color = imdata[p]
+                else:
+                    alpha = imdata[p][3]
+                    color = (imdata[p][0] & alpha,
+                             imdata[p][1] & alpha,
+                             imdata[p][2] & alpha)
+                self[point] = color
                 p += 1
 
-    def get_image_colors(self, image):
-        image_colors = []
-        image = image.tobytes()
-        for data in chunks(image, 3):
-            color = []
-            for c in data:
-                color.append(ord(c))
-            image_colors.append(tuple(color))
-        return image_colors
+
+# class DisplayPng(ImageSurface):
+#     def __init__(self, fname='images/hue_alpha-min.png'):
+#         ImageSurface.__init__(self, matrix_width, matrix_height, fname)
+
+#     def generate(self):
+#         pass
+
+import glob
+import natsort
+
+
+frames = {}
+frame_files = glob.glob('images/frames/*.png')
+frame_files = natsort.natsorted(frame_files)
+for i in range(0, len(frame_files)):
+    frames[i] = frame_files[i]
+
+
+class DisplayPng(ImageSurface):
+    def __init__(self):
+        ImageSurface.__init__(self, matrix_width, matrix_height, frames[100])
+        self.fcount = 0
 
     def generate(self):
-        pass
+        ImageSurface.__init__(self, matrix_width, matrix_height,
+                              frames[self.fcount])
+        self.fcount += 1

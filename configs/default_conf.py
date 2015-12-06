@@ -2,7 +2,8 @@
 from patterns.Patterns import *
 
 local_host = "localhost"
-dest = local_host
+ledboard = "ledboard"
+dest = ledboard
 
 TARGETS = {
     dest: BlueLife(),

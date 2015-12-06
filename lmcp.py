@@ -26,7 +26,7 @@ writeout = chr(0x01)
 draw = chr(0x10)
 draw_image = chr(0x11)
 
-send_timeout = 0.002
+send_timeout = 0.000
 
 
 def compress(data):
