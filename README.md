@@ -134,21 +134,6 @@ but you can view the display as a string of pixels though, cause basicly in real
 # this software is used in a pixel matrix project:
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
 
-# Art-Editor
-## how to run the editor forexample:
-```shell
-    robert@Laptop:~/py-artnet$ python runPatternJob.py --gui=enabled
-```
-
-what if you see a message like:
-'''shell
-    /usr/lib/python2.7/dist-packages/gtk-2.0/gtk/__init__.py:57: GtkWarning: could not open display warnings.warn(str(e), _gtk.Warning)
-'''
-
-that meens your version of pygtk is to old. you are required to have a version installed thats above 2.0
-
-## Hard to find docs hu.
-http://soc.if.usp.br/manual/python-gtksourceview2/html/
 
 ## converting video to images with ffmpeg for VideoPlay class.
 
@@ -197,6 +182,23 @@ to play the video all you'll have to do is point VideoPlay class to it in the co
 * undo changes (Control-Z)
 * redo changes (Control-Y)
 * output for easy showing where errors are and what kind of errors are/were generated. (under the simulator)
+
+
+# Art-Editor
+## how to run the editor forexample:
+```shell
+    robert@Laptop:~/py-artnet$ python runPatternJob.py --gui=enabled
+```
+
+what if you see a message like:
+'''shell
+    /usr/lib/python2.7/dist-packages/gtk-2.0/gtk/__init__.py:57: GtkWarning: could not open display warnings.warn(str(e), _gtk.Warning)
+'''
+
+that meens your version of pygtk is to old. you are required to have a version installed thats above 2.0
+
+## Hard to find docs hu.
+http://soc.if.usp.br/manual/python-gtksourceview2/html/
 
 #### usefull tools:
 compile:
