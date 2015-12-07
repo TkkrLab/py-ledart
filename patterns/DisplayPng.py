@@ -1,5 +1,6 @@
 from matrix import matrix_height, matrix_width
-from Tools.Graphics import Surface
+from Tools.Graphics import Surface, Graphics, WHITE
+from Tools.Graphics import ColorRGBOps
 from PIL import Image
 
 import glob
@@ -50,9 +51,11 @@ class DisplayPng(ImageSurface):
 
 
 class VideoPlay(ImageSurface):
-    def __init__(self, location):
+    def __init__(self, location, center=True):
         self.frames = create_frames(location)
         ImageSurface.__init__(self, self.frames[0])
+        if center:
+            self.set_d_offset((10, 0))
         self.fcount = 0
 
     def generate(self):
@@ -60,3 +63,12 @@ class VideoPlay(ImageSurface):
         self.fcount += 1
         if(self.fcount == len(self.frames)):
             raise(Exception("Done playing."))
+
+
+class RectTest(Graphics):
+    def __init__(self):
+        Graphics.__init__(self, 10, 10)
+        self.fill(WHITE)
+
+    def generate(self):
+        pass

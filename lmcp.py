@@ -26,7 +26,7 @@ writeout = chr(0x01)
 draw = chr(0x10)
 draw_image = chr(0x11)
 
-send_timeout = 0.010
+send_timeout = 0.011
 
 
 def compress(data):
@@ -79,8 +79,12 @@ def send_packet(data=None, pos=(0, 0), target=None):
     else:
         x, y = pos
         width = data.get_width()
-        # draw in chunks
-        chunkheight = (data.width % data.height) / 2
+        if data.height < 8:
+            chunkheight = data.height
+        elif not (data.height % 8) and not (data.width % 8):
+            chunkheight = 8
+        else:
+            chunkheight = data.height / 8
         for (i, chunk) in chunked(data, width * chunkheight):
             packet = (draw_image + chr(x) + chr((y + i) * chunkheight) +
                       chr(width) + chr(0x01 * chunkheight))

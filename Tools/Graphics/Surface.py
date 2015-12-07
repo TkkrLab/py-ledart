@@ -72,6 +72,9 @@ class Surface(object):
             surface_list.append(self.surface[index])
         return surface_list
 
+    def set_d_offset(self, pos):
+        self.d_offset = pos
+
     def __getitem__(self, key):
         if isinstance(key, slice):
             return self.get_list_rep()[key.start:key.stop:key.step]
@@ -92,3 +95,6 @@ class Surface(object):
             for c in color:
                 data += chr(c)
         return data
+
+    def __repr__(self):
+        return str(dict(self.surface))

@@ -29,7 +29,9 @@ TARGETS = {
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
     # dest: DisplayPng('images/sisters-sprites-min.png')
-    dest: VideoPlay('images/videos/bad-apple/'),
+    # dest: VideoPlay('images/videos/bad-apple/'),
+    dest: VideoPlay('images/videos/star-field/'),
+    # dest: RectTest(),
 
     # dest: RainbowEffect(),
     # dest: ColorFade(),
