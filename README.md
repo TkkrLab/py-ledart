@@ -168,11 +168,10 @@ you'll have to fill in your own ledboard width/height respectivly
 
 i choose -1:48 because that way ffmpeg won't stretch your image to fill your ledboard.
 
-to play the video all you'll have to do is point VideoPlay class to it for example:
+to play the video all you'll have to do is point VideoPlay class to it in the config file.
 ```python
     dest: VideoPlay('images/videos/star-field/')
 ```
-in the config file.
 
 
 ## ideas
