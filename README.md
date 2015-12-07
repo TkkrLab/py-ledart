@@ -150,6 +150,32 @@ that meens your version of pygtk is to old. you are required to have a version i
 ## Hard to find docs hu.
 http://soc.if.usp.br/manual/python-gtksourceview2/html/
 
+## converting video to images with ffmpeg for VideoPlay class.
+
+use this to slice the whole video in images that correspond to a certain fps.
+```
+    ]$ ffmpeg -i video.mp4 -vf fps=9.11 -vf scale=-1:48 frames/title-%d.png
+```
+
+while you could cut out a little piece (in the example 3 minutes) if video,
+is to long.
+```
+    ]$ ffmpeg -ss 00:00:00 -t 00:03:00 -i video.mp4 -vf fps=9.10 -vf scale=-1:48 frames/title-%d.png
+```
+
+notice scale=-1:48
+
+you'll have to fill in your own ledboard width/height respectivly
+
+i choose -1:48 because that way ffmpeg won't stretch your image to fill your ledboard.
+
+to play the video all you'll have to do is point VideoPlay class to it for example:
+```python
+    dest: VideoPlay('images/videos/star-field/')
+```
+in the config file.
+
+
 ## ideas
 * been working on a gui/editor to make patterns on the go, which features live code reloading, and a build in simulator
 * need to put downs some ideas soon like a line number ruler thing and indentation follow.[line numbers implemented, syntaxhighlighting implemented, indentation follow implemented]

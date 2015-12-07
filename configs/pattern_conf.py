@@ -22,7 +22,7 @@ TARGETS = {
     # dest: MixedLife(),
     # dest: RandomLife(),
     # dest: RedLife(),
-    # dest: BlueLife(),
+    dest: BlueLife(),
     # dest: GreenLife(),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
@@ -31,7 +31,7 @@ TARGETS = {
     # dest: DisplayPng('images/sisters-sprites-min.png'),
     # dest: VideoPlay('images/videos/bad-apple/'),
     # dest: VideoPlay('images/videos/star-field/'),
-    dest: RectTest(),
+    # dest: RectTest(),
 
     # dest: RainbowEffect(),
     # dest: ColorFade(),
