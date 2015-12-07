@@ -131,19 +131,20 @@ but ofcourse this wouldn't look right if you config file contains code for anyth
 but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
-# this software is used in a pixel matrix project:
+## Projects py-ledart is used in.
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
+[Ledboard with lmcp interface]()
 
 
 ## converting video to images with ffmpeg for VideoPlay class.
 
 use this to slice the whole video in images that correspond to a certain fps.
-```
+```shell
     ffmpeg -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
 ```
 
 while you could cut out a little piece (in the example 3 minutes) if the video is to long.
-```
+```shell
     ffmpeg -ss 00:00:00 -t 00:03:00 -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
 ```
 
