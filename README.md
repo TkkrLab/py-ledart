@@ -19,13 +19,13 @@ at the same time. and see the changes happen instantly.
 it also has a feature called a matrix simulation which is also in the editor.
 
 for a list of features run:
-```
-    :$ python2.7 runPatternJob.py --help
+```shell
+    python2.7 runPatternJob.py --help
 ```
 
 and for a list of available patterns run:
-```
-    :$ python2.7 runPatternJob.py --list
+```shell
+    python2.7 runPatternJob.py --list
 ```
 
 
@@ -40,14 +40,14 @@ there are a few patterns that don't do a thing!
 as I said or didn't this Software is a work in progress!
 
 this should give you something nice to look at though:
-```
-    :$ python2.7 runPatternJob.py --matrixSim=enabled --fps=20
+```shell
+    python2.7 runPatternJob.py --matrixSim=enabled --fps=20
 ```
 
 this is spamming your localhost with packets. that is this program is made to send packets somewhere :)
 
 so if you don't want py-ledart to spam you computer with packets add:
-```
+```shell
     --netSilent=enabled.
 ```
 
@@ -81,7 +81,7 @@ name_conf.py
 
 use a existing config as a template and follow it.
 
-you can run multiple devices from a signle config file.
+you can run multiple devices from a single config file.
 
 as wel as multpile patterns like:
 
@@ -97,13 +97,13 @@ as wel as multpile patterns like:
 Then to run the actual patterns you run from the command line:
 
 ```shell
-    :$ python runPatternJob.py --fps=<fps> --config=<config>
+    python runPatternJob.py --fps=<fps> --config=<config>
 ```
 
 for example:
 
 ```shell
-    :$ python runpatternJob.py --fps=25 --config=myLamps_conf.py
+    python runpatternJob.py --fps=25 --config=myLamps_conf.py
 ```
 
 both fps and config are optional,
@@ -122,7 +122,7 @@ to the command line options and it will run localy on your screen.
 
 for example:
 ```shell
-    :$ python runpatternJob.py --fps=25 --config=myLamps_conf.py --matrixSim=enabled
+    python runpatternJob.py --fps=25 --config=myLamps_conf.py --matrixSim=enabled
 ```
 
 
@@ -139,12 +139,12 @@ but you can view the display as a string of pixels though, cause basicly in real
 
 use this to slice the whole video in images that correspond to a certain fps.
 ```
-    ]$ ffmpeg -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
+    ffmpeg -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
 ```
 
 while you could cut out a little piece (in the example 3 minutes) if the video is to long.
 ```
-    ]$ ffmpeg -ss 00:00:00 -t 00:03:00 -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
+    ffmpeg -ss 00:00:00 -t 00:03:00 -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
 ```
 
 notice scale=-1:48
