@@ -33,7 +33,7 @@ keep in mind most patterns might not work.
 
 for that I made a command line option --testing
 
-that shows disfunctional patters.
+that shows disfunctional patterns.
 
 there are a few patterns that don't do a thing!
 
