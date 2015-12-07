@@ -62,7 +62,7 @@ def chunk_is_empty(chunk):
 
 
 def _send_packet(data=None, target=None):
-        """ this function sends 8 vertical lines at ones."""
+        """ send the whole surface in chunks of matrix_width * 8"""
         for (row, chunk) in chunked(data, data.get_width() * 8):
             # if not chunk_is_empty(chunk):
                 packet = draw + chr(row) + compress(chunk)
@@ -73,19 +73,33 @@ def _send_packet(data=None, target=None):
 
 
 def send_packet(data=None, target=None):
-    """ this functon sends every vertical line. """
+    """ if the surface is as big as the matrix we can send it all at once."""
     if data.get_size() == matrix_size:
         _send_packet(data, target)
     else:
         x, y = data.get_d_offset()
         width = data.get_width()
         height = data.get_height()
+        size = data.size
+        """ check if we can send it all at once."""
+        if size < 1020:
+            packet = (draw_image + chr(x) + chr(y) +
+                      chr(width) + chr(height))
+            packet += compress(data)
+            lmcp_sock.sendto(packet, target)
+            time.sleep(send_timeout)
+            lmcp_sock.sendto(writeout, target)
+            time.sleep(send_timeout)
+            return
+
+        """ else chunk it up and send in chunks."""
         if height < 8:
             chunkheight = height
         elif not (height % 8) and not (width % 8):
             chunkheight = 8
         else:
             chunkheight = height / 8
+
         for (i, chunk) in chunked(data, width * chunkheight):
             packet = (draw_image + chr(x) + chr((y + i) * chunkheight) +
                       chr(width) + chr(0x01 * chunkheight))

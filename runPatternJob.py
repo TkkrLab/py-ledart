@@ -1,15 +1,19 @@
 #!/usr/bin/python2.7 -B
-import socket
+
+# import some generaly used libraries
 import signal
 import sys
 import imp
 import os
 import time
 import collections
+import traceback
 
+# import protocols
 import artnet
 import lmcp
 
+# import matrix simulator and matrix specifics
 from matrix import matrix_width, matrix_height
 from matrix import convertSnakeModes, convertByteMode
 from MatrixSim.MatrixScreen import interface_opts
@@ -152,9 +156,12 @@ def sendout(args, protocol):
                 if not (args.netSilent == "enabled"):
                     try:
                         protocol.send(pattern, t)
-                    except Exception as e:
-                        print(e)
-                        print("no dest ip found: %s" % t)
+                    except Exception:
+                        print(pattern.surface)
+                        traceback.print_exc()
+                        print("pattern size, width, height: ",
+                              pattern.get_size(), pattern.get_width(),
+                              pattern.get_height())
                         sys.exit(0)
             # pattern = TARGETS[t]
             # data = pattern.generate()

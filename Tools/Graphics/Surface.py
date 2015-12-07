@@ -83,7 +83,10 @@ class Surface(object):
         return self.d_offset
 
     def __getitem__(self, key):
-        if isinstance(key, slice):
+        if type(key) == int:
+            point = self.indexes[key]
+            return self.surface[point]
+        elif isinstance(key, slice):
             return self.get_list_rep()[key.start:key.stop:key.step]
         else:
             return self.surface[key]
