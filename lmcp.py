@@ -72,19 +72,20 @@ def _send_packet(data=None, target=None):
         time.sleep(send_timeout)
 
 
-def send_packet(data=None, pos=(0, 0), target=None):
+def send_packet(data=None, target=None):
     """ this functon sends every vertical line. """
     if data.get_size() == matrix_size:
         _send_packet(data, target)
     else:
-        x, y = pos
+        x, y = data.get_d_offset()
         width = data.get_width()
-        if data.height < 8:
-            chunkheight = data.height
-        elif not (data.height % 8) and not (data.width % 8):
+        height = data.get_height()
+        if height < 8:
+            chunkheight = height
+        elif not (height % 8) and not (width % 8):
             chunkheight = 8
         else:
-            chunkheight = data.height / 8
+            chunkheight = height / 8
         for (i, chunk) in chunked(data, width * chunkheight):
             packet = (draw_image + chr(x) + chr((y + i) * chunkheight) +
                       chr(width) + chr(0x01 * chunkheight))
@@ -102,7 +103,7 @@ def open():
 def send(data, ip):
     if lmcp_sock is None:
         raise(Exception("Socket not created. "))
-    send_packet(data=data, pos=(0, 0), target=(ip, LMCP_PORT))
+    send_packet(data=data, target=(ip, LMCP_PORT))
 
 
 def set_port(port):

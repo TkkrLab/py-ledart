@@ -72,8 +72,15 @@ class Surface(object):
             surface_list.append(self.surface[index])
         return surface_list
 
+    """
+        setting and getting display offsets.
+        these are in surface because a surface can have a offset.
+    """
     def set_d_offset(self, pos):
         self.d_offset = pos
+
+    def get_d_offset(self):
+        return self.d_offset
 
     def __getitem__(self, key):
         if isinstance(key, slice):

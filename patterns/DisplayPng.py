@@ -11,7 +11,8 @@ class ImageSurface(Surface):
     def __init__(self, fname):
         if fname:
             self.image = Image.open(fname)
-            Surface.__init__(self, width=self.image.width, height=self.image.height)
+            Surface.__init__(self, width=self.image.width,
+                             height=self.image.height)
             self.load_png(fname)
         else:
             raise(Exception("unable to load png: %s" % (fname)))
@@ -55,7 +56,10 @@ class VideoPlay(ImageSurface):
         self.frames = create_frames(location)
         ImageSurface.__init__(self, self.frames[0])
         if center:
-            self.set_d_offset((10, 0))
+            imwidth = self.get_width()
+            left_over = matrix_width - imwidth
+            x_offset = left_over / 2
+            self.set_d_offset((x_offset, 0))
         self.fcount = 0
 
     def generate(self):
