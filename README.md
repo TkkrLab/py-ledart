@@ -154,13 +154,13 @@ http://soc.if.usp.br/manual/python-gtksourceview2/html/
 
 use this to slice the whole video in images that correspond to a certain fps.
 ```
-    ]$ ffmpeg -i video.mp4 -vf fps=9.11 -vf scale=-1:48 frames/title-%d.png
+    ]$ ffmpeg -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
 ```
 
 while you could cut out a little piece (in the example 3 minutes) if video,
 is to long.
 ```
-    ]$ ffmpeg -ss 00:00:00 -t 00:03:00 -i video.mp4 -vf fps=9.10 -vf scale=-1:48 frames/title-%d.png
+    ]$ ffmpeg -ss 00:00:00 -t 00:03:00 -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
 ```
 
 notice scale=-1:48
