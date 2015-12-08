@@ -1,7 +1,9 @@
 """
 matrix dimensions and color order.
-and conversion function(s)
+and conversion function(s) to apply to matrices
 """
+
+from Tools.Graphics import Surface
 
 matrix_height = 48
 matrix_width = 96
@@ -46,53 +48,13 @@ def to_matrix(l, n):
 
 # inverts every other line in the y direction.
 def convertSnakeModes(data):
-    for y in range(0, matrix_height, 2):
-        templist = []
-        for x in range(matrix_width - 1, -1, -1):
-            templist.append(data[y * matrix_width + x])
-        for x in range(0, matrix_width):
-            data[y * matrix_width + x] = templist[x]
-    return data
-
-
-# this is a complicated function.
-# this basicly compresses a surface of colors
-# into a list of colors that are shifted into each other.
-# for some matrices use compression like that.
-def convertByteMode(data, color):
-    if color > 2 or color < 0:
-        raise Exception("error invalid color choosen.")
-    templist = []
-    # extract the colors we want.
-    for c in data:
-        templist.append(c[color])
-
-    data = templist
-    templist = list()
-    # extract WORD length list (chunksize depends on matrix width)
-    for c in chunks(data, matrix_width):
-        templist.append(c)
-    data = templist
-    templist = list()
-    byteval = 0x00
-    # pack into WORDS.
-    for byte in data:
-        for i in range(0, len(byte)):
-            if(byte[i]):
-                byteval |= (1 << i)
-            else:
-                byteval |= (0 << i)
-        templist.append(byteval)
-        byteval = 0x00
-    # pack the values into groups of three (that is what
-    # is needed for transmitting the data)
-    data = templist
-    templist = list()
-    for c in chunks(data, 3):
-        templist.append(tuple(c))
-    # make sure the 'led data packets', are three long always.
-    if len(templist[len(templist) - 1]) < 3:
-        c = list(templist[len(templist) - 1])
-        c.append(c[1])
-        templist[len(templist) - 1] = tuple(c)
-    return templist
+    ndata = Surface(data)
+    points = ndata.get_points()
+    for point in points:
+        x, y = point
+        if not ((y + 1) % 2):
+            for x in range(0, matrix_width):
+                xi = matrix_width - 1 - x
+                pos = xi, y
+                ndata[(x, y)] = data[pos]
+    return ndata

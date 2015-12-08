@@ -15,7 +15,7 @@ import lmcp
 
 # import matrix simulator and matrix specifics
 from matrix import matrix_width, matrix_height
-from matrix import convertSnakeModes, convertByteMode
+from matrix import convertSnakeModes
 from MatrixSim.MatrixScreen import interface_opts
 try:
     from MatrixSim.MatrixScreen import MatrixScreen
@@ -144,9 +144,7 @@ def sendout(args, protocol):
                 matrixscreen.handleinput()
                 matrixscreen.process(pattern)
             if args.snakeMode == "enabled":
-                pass
-            if args.byteMode == "enabled":
-                pass
+                pattern = convertSnakeModes(pattern)
             change = True
             if args.sendOnChange == "enabled":
                 pass
@@ -253,6 +251,8 @@ if __name__ == "__main__":
             protocol = artnet
         elif args.netProtocol == "lmcp":
             protocol = lmcp
+        else:
+            raise(Exception("no protocol found/selected."))
         protocol.open()
 
         # setup a screen if matrixSim argument was set.

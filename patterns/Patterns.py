@@ -29,6 +29,7 @@ from PixelLife import *
 from Plasma import *
 from sven import *
 from FillTest import *
+from GraphicsTests import *
 
 
 # uses pygame for testing.

@@ -94,6 +94,17 @@ class Surface(object):
     def __setitem__(self, key, value):
         self.surface[key] = value
 
+    def __eq__(self, other):
+        if self.size != other.size:
+            return False
+        for index in self.indexes:
+            if other[index] != self.surface[index]:
+                return False
+        return True
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __len__(self):
         return len(self.indexes)
 

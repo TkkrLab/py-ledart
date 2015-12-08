@@ -83,8 +83,16 @@ class MatrixScreen(object):
             # skip drawing if it's a drawing a black pixel on a black surface.
             if color == BLACK:
                 continue
-            # take the rect of where it should go
-            rect = self.pixels[i].getRect()
+
+            # calculate position based on index, pixelsize, and data offset.
+            x, y = index
+            x, y = x * self.pixelSize, y * self.pixelSize
+            xo, yo = data.get_d_offset()
+            xo, yo = xo * self.pixelSize, yo * self.pixelSize
+            x, y = x + xo, y + yo
+            # create a rect based on calculated positions.
+            width, height = self.pixelSize, self.pixelSize
+            rect = (x, y, width, height)
             # draw the actual block
             self.interface.drawblock(rect, color)
 
