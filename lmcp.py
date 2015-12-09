@@ -26,7 +26,7 @@ writeout = chr(0x01)
 draw = chr(0x10)
 draw_image = chr(0x11)
 
-send_timeout = 0.011
+send_timeout = 0.0
 
 
 def compress(data):
@@ -67,9 +67,7 @@ def _send_packet(data=None, target=None):
             # if not chunk_is_empty(chunk):
                 packet = draw + chr(row) + compress(chunk)
                 lmcp_sock.sendto(packet, target)
-                time.sleep(send_timeout)
         lmcp_sock.sendto(writeout, target)
-        time.sleep(send_timeout)
 
 
 def send_packet(data=None, target=None):
@@ -105,7 +103,6 @@ def send_packet(data=None, target=None):
                       chr(width) + chr(0x01 * chunkheight))
             packet += compress(chunk)
             lmcp_sock.sendto(packet, target)
-            time.sleep(send_timeout)
         lmcp_sock.sendto(writeout, target)
 
 
