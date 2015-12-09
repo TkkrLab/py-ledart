@@ -22,6 +22,8 @@ class Life(object):
         self.resetCount = 0
         # holds the previous cell count.
         self.previousCount = 0
+        # always start with a random field.
+        self.createRandomField()
 
     def process(self):
         for self.position, cell in enumerate(self.field):

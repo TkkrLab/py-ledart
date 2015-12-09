@@ -6,7 +6,6 @@ import sys
 import imp
 import os
 import time
-import collections
 import traceback
 
 # import protocols
@@ -16,6 +15,7 @@ import lmcp
 # import matrix simulator and matrix specifics
 from matrix import matrix_width, matrix_height
 from matrix import convertSnakeModes
+from Tools.Graphics import Surface
 from MatrixSim.MatrixScreen import interface_opts
 try:
     from MatrixSim.MatrixScreen import MatrixScreen
@@ -145,12 +145,12 @@ def sendout(args, protocol):
                 matrixscreen.process(pattern)
             if args.snakeMode == "enabled":
                 pattern = convertSnakeModes(pattern)
-            change = True
             if args.sendOnChange == "enabled":
-                pass
-            elif args.sendOnChange == "disabled":
-                change = True
-            if change:
+                changed = (Surface(pattern) != Surface(sendout.previous))
+                sendout.previous = Surface(pattern)
+            else:
+                changed = True
+            if changed:
                 if not (args.netSilent == "enabled"):
                     try:
                         protocol.send(pattern, t)
@@ -199,7 +199,7 @@ def sendout(args, protocol):
         signal_handler(None, None)
     except SystemExit:
         signal_handler(None, None)
-sendout.data = []
+sendout.previous = Surface(width=10, height=10)
 
 
 def listpatterns():
