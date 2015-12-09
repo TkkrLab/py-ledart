@@ -21,7 +21,7 @@ TARGETS = {
     # # MixedLife() doesn't work atm but will be fixed
     # dest: MixedLife(),
     # dest: RandomLife(),
-    # dest: RedLife(),
+    dest: RedLife(),
     # dest: BlueLife(),
     # dest: GreenLife(),
     # dest: SuperPixelBros(),
@@ -29,7 +29,7 @@ TARGETS = {
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
     # dest: DisplayPng('images/sisters-sprites-min.png'),
-    dest: VideoPlay('images/videos/bad-apple/'),
+    # dest: VideoPlay('images/videos/bad-apple/'),
     # dest: VideoPlay('images/videos/star-field/'),
     # dest: VideoPlay('images/videos/j-tel-hawkeye-oview/'),
     # dest: RectTest(),

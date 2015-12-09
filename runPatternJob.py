@@ -8,10 +8,6 @@ import os
 import time
 import traceback
 
-# import protocols
-import artnet
-import lmcp
-
 # import matrix simulator and matrix specifics
 from matrix import matrix_width, matrix_height
 from matrix import convertSnakeModes
@@ -155,7 +151,6 @@ def sendout(args, protocol):
                     try:
                         protocol.send(pattern, t)
                     except Exception:
-                        print(pattern.surface)
                         traceback.print_exc()
                         print("pattern size, width, height: ",
                               pattern.get_size(), pattern.get_width(),
@@ -248,9 +243,11 @@ if __name__ == "__main__":
 
         # setup which protocol to use.
         if args.netProtocol == "artnet":
-            protocol = artnet
+            import Artnet
+            protocol = Artnet.Artnet(args)
         elif args.netProtocol == "lmcp":
-            protocol = lmcp
+            import Lmcp
+            protocol = Lmcp.Lmcp(args)
         else:
             raise(Exception("no protocol found/selected."))
         protocol.open()

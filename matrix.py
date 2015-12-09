@@ -29,9 +29,6 @@ matrix_width = 96
 # matrix_height = 32
 # matrix_width = 32
 
-# matrix_height = 8
-# matrix_width = 8
-
 matrix_size = (matrix_height * matrix_width)
 
 COLOR_ORDER = [0, 1, 2]

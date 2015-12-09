@@ -11,6 +11,11 @@ UNIVERSE = 0
 artnet_sock = None
 
 
+class Artnet(object):
+    def __init__(self, args):
+        self.args = args
+
+
 def buildPacket(universe, dmxdata):
     # Stolen from fire-ohmlogo.py by OHM2013
     size = len(dmxdata) * 3
