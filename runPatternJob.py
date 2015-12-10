@@ -268,18 +268,19 @@ if __name__ == "__main__":
             fps = 1. / args.fps
 
         previousTime = 0
+        adjust = 0
         currentTime = time.time()
         measured = []
 
         while(True):
             # send patterns out in a timed fasion. if args.fps != 0
             # check if we want to print the fps to the terminal
+            currentTime = time.time()
+            cfps = 1. / (currentTime - previousTime)
+            measured.append(cfps)
+            if len(measured) > 100:
+                del measured[0]
             if args.showFps == "enabled":
-                currentTime = time.time()
-                cfps = 1. / (currentTime - previousTime)
-                measured.append(cfps)
-                if len(measured) > 100:
-                    del measured[0]
                 fmt = (cfps, sum(measured) / len(measured))
                 fmtstr = "current fps: %0.2f average: %0.2f            \r"
                 sys.stdout.write(fmtstr % fmt)
@@ -288,7 +289,12 @@ if __name__ == "__main__":
                 sendout(args, protocol)
                 # TODO: figure out how to dynamicly
                 # adjust time as to have a fixed fps.
-                time.sleep(fps)
+                if len(measured) > 3:
+                    if args.fps > cfps:
+                        fps -= 0.001
+                    if args.fps < cfps:
+                        fps += 0.001
+                time.sleep(abs(fps))
             # else send everything out as fast as possible
             else:
                 sendout(args, protocol)
