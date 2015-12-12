@@ -19,18 +19,25 @@ def debugprint(discr, exception):
 # from BarberpolePattern import BarberpolePattern
 # from ColorFadePattern import ColorFadePattern
 
-"""
-or ledmatrix
-patterns that don't use pygame
-"""
+""" try to load patterns and see if anything goes wrong."""
 
-from RainPattern import *
-from PixelLife import *
-from Plasma import *
-from sven import *
-from FillTest import *
-from GraphicsTests import *
+try:
+    from RainPattern import *
+    from PixelLife import *
+    from Plasma import *
+    from sven import *
+    from FillTest import *
+    from GraphicsTests import *
+except Exception as e:
+    debugprint("Various patterns >>", e)
 
+
+""" these patterns can't standalone, they use supporting libraries."""
+# use pillow
+try:
+    from Capture import *
+except Exception as e:
+    debugprint("Capture >>", e)
 
 # uses pygame for testing.
 try:
@@ -38,8 +45,7 @@ try:
 except Exception as e:
     debugprint("PixelBros >>", e)
 
-# this one uses a library png so try to load.
-# but if not installed pass.
+# try and load with pillow
 try:
     from DisplayPng import *
 except Exception as e:

@@ -1,37 +1,10 @@
 from matrix import matrix_height, matrix_width
 from Tools.Graphics import Surface, Graphics, RED
 from Tools.Graphics import ColorRGBOps
-from PIL import Image
+from Tools.Graphics import ImageSurface
 
 import glob
 import natsort
-
-
-class ImageSurface(Surface):
-    def __init__(self, fname):
-        if fname:
-            self.image = Image.open(fname)
-            Surface.__init__(self, width=self.image.width,
-                             height=self.image.height)
-            self.load_png(fname)
-        else:
-            raise(Exception("unable to load png: %s" % (fname)))
-
-    def load_png(self, fname):
-        self.image = Image.open(fname)
-        imdata = self.image.getdata()
-        p = 0
-        for y in range(0, self.image.height):
-            for x in range(0, self.image.width):
-                point = (x, y)
-                if len(imdata[p]) == 3:
-                    color = imdata[p]
-                else:
-                    r, g, b, alpha = imdata[p]
-                    color = (r, g, b)
-                self[point] = color
-                p += 1
-        return dict(self.surface)
 
 
 def create_frames(location):
@@ -44,7 +17,7 @@ def create_frames(location):
 
 
 class DisplayPng(ImageSurface):
-    def __init__(self, fname):
+    def __init__(self, fname='images/sisters-sprites.png'):
         ImageSurface.__init__(self, fname)
 
     def generate(self):
@@ -52,7 +25,7 @@ class DisplayPng(ImageSurface):
 
 
 class VideoPlay(ImageSurface):
-    def __init__(self, location, center=True):
+    def __init__(self, location='images/videos/star-field/', center=True):
         self.frames = create_frames(location)
         ImageSurface.__init__(self, self.frames[0])
         if center:

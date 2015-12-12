@@ -87,9 +87,7 @@ def tst_patterns(dir, showpass=True):
         try:
             pat = pattern()
             pat.generate()
-            if len(pat) != matrix_size:
-                raise Exception("%s:len of generated: %s" % (pat, len(pat)))
-            elif showpass:
+            if showpass:
                 print("-----------------")
                 print("passed: %s" % pat)
                 print("-----------------")
@@ -150,45 +148,14 @@ def sendout(args, protocol):
                 if not (args.netSilent == "enabled"):
                     try:
                         protocol.send(pattern, t)
-                    except Exception:
-                        traceback.print_exc()
+                    except Exception as e:
+                        # traceback.print_exc()
+                        print("\r\ndest: %s" % (t))
                         print("pattern size, width, height: ",
                               pattern.get_size(), pattern.get_width(),
                               pattern.get_height())
+                        raise(e)
                         sys.exit(0)
-            # pattern = TARGETS[t]
-            # data = pattern.generate()
-            # # make sure matrixSim always displays
-            # # the data the right way.
-            # # can't have the matrixsimulator hang because there is no change..
-            # if args.matrixSim == "enabled":
-            #     matrixscreen.handleinput()
-            # # if this is a simulation draw it to the matrixscreen
-            # if args.matrixSim == "enabled":
-            #         matrixscreen.process(data)
-            # # convert the data for the special matrix layout.
-            # if args.snakeMode == "enabled":
-            #     data = convertSnakeModes(data)
-            # if args.byteMode == "enabled":
-            #     data = convertByteMode(data, args.convertColor)
-            # # check if data generated is the same as before because then
-            # # just don't send it out
-            # change = True
-            # if args.soc == "enabled":
-            #     previous_set = collections.Counter(sendout.data)
-            #     current_set = collections.Counter(data)
-            #     change = previous_set != current_set
-            # elif args.soc == "disabled":
-            #     change = True
-            # if(change):
-            #     sendout.data = data
-            #     # send it out over the network.
-            #     if not (args.netSilent == "enabled"):
-            #         try:
-            #             sock.sendto(buildPacket(0, data), (t, UDP_PORT))
-            #         except Exception:
-            #             print("no good ip dest found: %s" % (t))
-            #             sys.exit(0)
     # matrix sim needs this because i am to lazy to press the x button.
     except KeyboardInterrupt:
         signal_handler(None, None)
@@ -198,9 +165,13 @@ sendout.previous = Surface(width=10, height=10)
 
 
 def listpatterns():
-    patterns = find_patterns_in_dir('patterns')
-    for pat in patterns:
-        print(pat.__name__)
+    pattern_objects = find_patterns_in_dir('patterns')
+    patterns = []
+    for pattern in pattern_objects:
+        patterns.append(pattern.__name__)
+    # print a sorted list of patterns.
+    for pattern in sorted(patterns):
+        print(pattern)
 
 
 def signal_handler(signal, frame):

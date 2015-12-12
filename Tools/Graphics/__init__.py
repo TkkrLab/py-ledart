@@ -1,6 +1,6 @@
 # imports for graphics module and tools
 from Graphics import *
-from Surface import Surface
+from Surface import *
 from RGBColorTools import *
 from HSVColorTools import *
 from HSLColorTools import *

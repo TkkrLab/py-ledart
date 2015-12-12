@@ -5,10 +5,10 @@ pixelMatrix = "pixelmatrix"
 ledboard = 'ledboard'
 raspberrypi = "192.168.2.42"
 michiel_laptop = "192.168.1.199"
-local_host = "127.0.0.1"
+localhost = "127.0.0.1"
 broadcast = "10.42.255.255"
 matrix = "10.42.4.36"
-dest = ledboard
+dest = localhost
 
 TARGETS = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
@@ -28,8 +28,9 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
+    dest: Capture(),
     # dest: DisplayPng('images/sisters-sprites-min.png'),
-    dest: VideoPlay('images/videos/bad-apple/'),
+    # dest: VideoPlay('images/videos/bad-apple/'),
     # dest: VideoPlay('images/videos/star-field/'),
     # dest: VideoPlay('images/videos/j-tel-hawkeye-oview/'),
     # dest: RectTest(),

@@ -1,3 +1,10 @@
+"""
+    this file descibes surface types.
+"""
+
+from PIL import Image
+
+
 class Surface(object):
     def __init__(self, surface=None, **kwargs):
         if surface:
@@ -119,3 +126,35 @@ class Surface(object):
 
     def __repr__(self):
         return str(dict(self.surface))
+
+
+class ImageSurface(Surface):
+    def __init__(self, image):
+        if type(image) == str:
+            self.image = Image.open(image)
+        elif type(image) == Image._ImageCrop:
+            self.image = image
+        else:
+            raise(Exception("couldn't load image"))
+        Surface.__init__(self, width=self.image.width,
+                         height=self.image.height)
+        self.load_png(image)
+
+    def load_png(self, image):
+        if type(image) == str:
+            self.image = Image.open(image)
+        elif type(image) == Image._ImageCrop:
+            self.image = image
+        imdata = self.image.getdata()
+        p = 0
+        for y in range(0, self.image.height):
+            for x in range(0, self.image.width):
+                point = (x, y)
+                if len(imdata[p]) == 3:
+                    color = imdata[p]
+                else:
+                    r, g, b, alpha = imdata[p]
+                    color = (r, g, b)
+                self[point] = color
+                p += 1
+        return dict(self.surface)

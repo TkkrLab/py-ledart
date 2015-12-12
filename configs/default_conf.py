@@ -1,9 +1,9 @@
 # import all patterns availble for use.
 from patterns.Patterns import *
 
-local_host = "localhost"
+localhost = "localhost"
 ledboard = "ledboard"
-dest = ledboard
+dest = localhost
 
 TARGETS = {
     dest: BlueLife(),
