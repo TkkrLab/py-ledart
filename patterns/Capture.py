@@ -6,10 +6,11 @@ from matrix import matrix_height, matrix_width
 
 
 class Capture(ImageSurface):
-    def __init__(self, pos=None, size=None):
+    def __init__(self, invert=False, pos=None, size=None):
         im = ImageGrab.grab(bbox=(0, 0, matrix_width, matrix_height),
                             backend='wx')
         ImageSurface.__init__(self, im)
+        self.invert = invert
         self.mouse = PyMouse()
 
     def generate(self):
@@ -21,4 +22,4 @@ class Capture(ImageSurface):
         offset_y = y + matrix_height
         rect = (center_x, center_y, offset_x, offset_y)
         image = ImageGrab.grab(bbox=(rect), backend='wx')
-        self.load_png(image)
+        self.load_png(image, self.invert)

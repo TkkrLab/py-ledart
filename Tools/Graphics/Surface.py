@@ -140,7 +140,7 @@ class ImageSurface(Surface):
                          height=self.image.height)
         self.load_png(image)
 
-    def load_png(self, image):
+    def load_png(self, image, invert=False):
         if type(image) == str:
             self.image = Image.open(image)
         elif type(image) == Image._ImageCrop:
@@ -155,6 +155,9 @@ class ImageSurface(Surface):
                 else:
                     r, g, b, alpha = imdata[p]
                     color = (r, g, b)
+                if invert:
+                    r, g, b = color
+                    color = (0xff - r, 0xff - g, 0xff - b)
                 self[point] = color
                 p += 1
         return dict(self.surface)

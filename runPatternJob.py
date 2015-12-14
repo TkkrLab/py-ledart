@@ -81,7 +81,6 @@ def get_pattern_classes(module):
 
 
 def tst_patterns(dir, showpass=True):
-    from matrix import matrix_size
     patterns = find_patterns_in_dir(dir)
     for pattern in patterns:
         try:

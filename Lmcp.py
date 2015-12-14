@@ -46,7 +46,7 @@ class Lmcp(Interface):
             return
         else:
             (x, y), width, height = data.d_offset, data.width, data.height
-            if data.size < self.send_limit:
+            if data.size <= self.send_limit:
                 packet = (self.draw_image + chr(x) + chr(y) +
                           chr(width) + chr(height))
                 packet += self.compress(data)

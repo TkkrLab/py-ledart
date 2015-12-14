@@ -28,11 +28,12 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    dest: Capture(),
+    # dest: Capture(invert=False),
     # dest: DisplayPng('images/sisters-sprites-min.png'),
     # dest: VideoPlay('images/videos/bad-apple/'),
     # dest: VideoPlay('images/videos/star-field/'),
     # dest: VideoPlay('images/videos/j-tel-hawkeye-oview/'),
+    dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
     # dest: RectTest(),
 
     # dest: RainbowEffect(),
