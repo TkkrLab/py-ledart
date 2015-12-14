@@ -1,6 +1,5 @@
 from matrix import matrix_height, matrix_width
-from Tools.Graphics import Surface, Graphics, RED
-from Tools.Graphics import ColorRGBOps
+from Tools.Graphics import Graphics, RED, BLACK
 from Tools.Graphics import ImageSurface
 
 import glob
@@ -44,8 +43,8 @@ class VideoPlay(ImageSurface):
 
 class RectTest(Graphics):
     def __init__(self):
-        Graphics.__init__(self, 10, 10)
-        self.fill(RED)
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.fill(BLACK)
 
     def generate(self):
         pass

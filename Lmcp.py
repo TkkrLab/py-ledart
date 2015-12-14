@@ -52,20 +52,24 @@ class Lmcp(Interface):
         else:
             # figure out how many rows you can send withing the limit
             # and transmit that.
+            # print("data.width: ", data.width, " data.height: ", data.height,
+            #       " data.size: ", data.size)
             size = self.send_limit / data.width
             chunksize = size * data.width
             for i, chunk in chunked(data, chunksize):
+                print("i: ", i, " len: ", len(chunk))
                 packet = (self.draw_image + chr(x) + chr(y + size * i) +
                           chr(data.width) + chr(size))
                 packet += self.compress(chunk)
                 self.transmit(packet, ip)
             # then if any data remains over, transmit that to the last bit.
             remains = data.height % size
+            y = data.height - remains
+            chunksize = data.width * remains
             if remains:
-                size = remains * data.width
-                chunk = data[remains:]
+                chunk = data[-chunksize:]
                 packet = (self.draw_image + chr(x) +
-                          chr(y + (data.height - remains)) +
+                          chr(y) +
                           chr(data.width) + chr(remains))
                 packet += self.compress(chunk)
                 self.transmit(packet, ip)
