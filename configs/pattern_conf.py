@@ -8,7 +8,7 @@ michiel_laptop = "192.168.1.199"
 localhost = "127.0.0.1"
 broadcast = "10.42.255.255"
 matrix = "10.42.4.36"
-dest = localhost
+dest = ledboard
 
 TARGETS = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
@@ -22,13 +22,13 @@ TARGETS = {
     # dest: MixedLife(),
     # dest: RandomLife(),
     # dest: RedLife(),
-    # dest: BlueLife(),
+    dest: BlueLife(),
     # dest: GreenLife(),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    dest: Capture(),
+    # dest: Capture(),
     # dest: DisplayPng('images/sisters-sprites-min.png'),
     # dest: VideoPlay('images/videos/bad-apple/'),
     # dest: VideoPlay('images/videos/star-field/'),

@@ -23,9 +23,53 @@ def chunked(data, chunksize):
         it += 1
 
 
+import sys
+
+
 class Lmcp(Interface):
     def __init__(self, args, port=1337):
         Interface.__init__(self, args, port)
+        self.send_limit = 1024 - 5
+
+        self.writeout = chr(0x01)
+        self.draw = chr(0x10)
+        self.draw_image = chr(0x11)
+
+    def compress(self, data):
+        compressed = ''
+        for color in data:
+            compressed += chr(sum(color) / 3)
+        return compressed
+
+    def send(self, data, ip):
+        (x, y), width, height = data.d_offset, data.width, data.height
+        if data.size < self.send_limit:
+            packet = (self.draw_image + chr(x) + chr(y) +
+                      chr(width) + chr(height))
+            packet += self.compress(data)
+            self.transmit(packet, ip)
+            self.transmit(self.writeout, ip)
+        else:
+            # figure out how many rows you can send withing the limit
+            # and transmit that.
+            size = self.send_limit / data.width
+            chunksize = size * data.width
+            for i, chunk in chunked(data, chunksize):
+                packet = (self.draw_image + chr(x) + chr(y + size * i) +
+                          chr(data.width) + chr(size))
+                packet += self.compress(chunk)
+                self.transmit(packet, ip)
+            # then if any data remains over, transmit that to the last bit.
+            remains = data.height % size
+            if remains:
+                size = remains * data.width
+                chunk = data[remains:]
+                packet = (self.draw_image + chr(x) +
+                          chr(y + (data.height - remains)) +
+                          chr(data.width) + chr(remains))
+                packet += self.compress(chunk)
+                self.transmit(packet, ip)
+            self.transmit(self.writeout, ip)
 
 
 # class Lmcp(object):
