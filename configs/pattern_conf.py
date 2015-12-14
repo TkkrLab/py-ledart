@@ -30,9 +30,6 @@ TARGETS = {
     # dest: Pong(speed=8),
     # dest: Capture(invert=False),
     # dest: DisplayPng('images/sisters-sprites-min.png'),
-    # dest: VideoPlay('images/videos/bad-apple/'),
-    # dest: VideoPlay('images/videos/star-field/'),
-    # dest: VideoPlay('images/videos/j-tel-hawkeye-oview/'),
     dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
     # dest: RectTest(),
 
