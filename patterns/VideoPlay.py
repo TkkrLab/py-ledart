@@ -46,20 +46,40 @@ class VideoPlay(Surface):
 
 
 class ScreenCapture(Surface):
-    def __init__(self, fps=10, center=True):
+    def __init__(self, fullscreen=False, fps=10, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         ffmpeg = "ffmpeg"
-
-        command = [ffmpeg,
-                   '-loglevel', 'panic',
-                   '-video_size', '96x48',
-                   '-framerate', str(fps),
-                   '-follow_mouse', '1',
-                   '-f', 'x11grab',
-                   '-i', ':0.0',
-                   '-f', 'image2pipe',
-                   '-pix_fmt', 'rgb24',
-                   '-vcodec', 'rawvideo', '-']
+        # fmt = (self.width, self.height)
+        if fullscreen:
+            fmt = (1280, 800)
+            fmtstr = "%dx%d"
+            screensize = fmtstr % fmt
+            scale = "scale=%d:%d" % (self.width, self.height)
+            command = [ffmpeg,
+                       '-loglevel', 'panic',
+                       '-video_size', screensize,
+                       '-framerate', str(fps),
+                       '-f', 'x11grab',
+                       '-i', ':0.0',
+                       '-f', 'image2pipe',
+                       '-pix_fmt', 'rgb24',
+                       '-vcodec', 'rawvideo',
+                       '-vf', scale, '-']
+        else:
+            fmt = (self.width, self.height)
+            fmtstr = "%dx%d"
+            screensize = fmtstr % fmt
+            command = [ffmpeg,
+                       '-loglevel', 'panic',
+                       '-video_size', screensize,
+                       '-framerate', str(fps),
+                       '-follow_mouse', 'centered',
+                       '-draw_mouse', '0',
+                       '-f', 'x11grab',
+                       '-i', ':0.0',
+                       '-f', 'image2pipe',
+                       '-pix_fmt', 'rgb24',
+                       '-vcodec', 'rawvideo', '-']
 
         command = ' '.join(command)
         self.pipe = sp.Popen(command, shell=True, stdout=sp.PIPE,

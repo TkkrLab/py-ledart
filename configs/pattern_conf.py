@@ -1,7 +1,7 @@
 # import all patterns availble for use.
 from patterns.Patterns import *
 
-pixelMatrix = "pixelmatrix"
+pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
 raspberrypi = "192.168.2.42"
 michiel_laptop = "192.168.1.199"
@@ -28,13 +28,14 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    # dest: ScreenCapture(),
+    # dest: ScreenCapture(fullscreen=True),
+    # dest: ScreenCapture(fullscreen=False),
     # dest: DisplayImage('images/sisters-sprites.png'),
     # dest: DisplayImage('images/horse-2-xxl.png'),
     # dest: DisplayImage('images/horse-xxl.png'),
     # dest: DisplayImage('images/hue_alpha.png'),
-    dest: DisplayImage('images/tiger.jpg')
-    # dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
+    # dest: DisplayImage('images/tiger.jpg')
+    dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
     # dest: RectTest(),
 
     # dest: RainbowEffect(),

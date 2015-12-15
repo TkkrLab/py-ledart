@@ -136,8 +136,6 @@ def sendout(args, protocol):
             if args.matrixSim == "enabled":
                 matrixscreen.handleinput()
                 matrixscreen.process(pattern)
-            if args.snakeMode == "enabled":
-                pattern = convertSnakeModes(pattern)
             if args.sendOnChange == "enabled":
                 changed = (Surface(pattern) != Surface(sendout.previous))
                 sendout.previous = Surface(pattern)
@@ -218,6 +216,9 @@ if __name__ == "__main__":
         elif args.netProtocol == "lmcp":
             import Lmcp
             protocol = Lmcp.Lmcp(args)
+        elif args.netProtocol == "pixelmatrix":
+            import Artnet
+            protocol = Artnet.Pixelmatrix(args)
         else:
             raise(Exception("no protocol found/selected."))
         protocol.open()

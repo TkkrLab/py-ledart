@@ -129,15 +129,15 @@ class Surface(object):
 
 
 class ImageSurface(Surface):
-    def __init__(self, width, height, fname, thumbnail_it=False):
+    def __init__(self, width, height, fname, thumbnail=False):
         self.image = Image.open(fname)
         self.imtype = self.determine_type(fname)
         if self.imtype is None:
             raise(Exception("Couldn't load image."))
-        print(thumbnail_it)
+        print(thumbnail)
 
         if (self.image.width > width) or (self.image.height > height):
-            if thumbnail_it:
+            if thumbnail:
                 self.image.thumbnail((width, height))
             else:
                 self.image = self.image.resize((width, height))

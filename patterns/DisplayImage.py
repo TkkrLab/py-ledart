@@ -13,9 +13,9 @@ class DisplayImage(ImageSurface):
 
 class RectTest(Graphics):
     def __init__(self):
-        Graphics.__init__(self, 10, 10)
-        self.set_d_offset((56 - 10, 32 - 10))
-        self.fill(RED)
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.draw_pixel(0, 0, RED)
+        self.draw_pixel(1, 0, RED)
 
     def generate(self):
         pass

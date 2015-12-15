@@ -8,6 +8,8 @@
 
 
 from ProtocolInterface import Interface
+from matrix import convertSnakeModes, chunks
+from Tools.Graphics import Surface
 
 
 class Artnet(Interface):
@@ -32,5 +34,19 @@ class Artnet(Interface):
         return data
 
     def send(self, data, ip):
+        data = self.build_packet(self.universe, data)
+        self.transmit(data, ip)
+
+
+class Pixelmatrix(Artnet):
+    """
+        enable snake mode and flip x for pixelmatrix
+    """
+
+    def __init__(self, args, universe=0, port=6454):
+        Artnet.__init__(self, args, universe, port)
+
+    def send(self, data, ip):
+        data = convertSnakeModes(data)
         data = self.build_packet(self.universe, data)
         self.transmit(data, ip)
