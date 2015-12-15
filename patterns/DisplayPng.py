@@ -1,10 +1,12 @@
 from Tools.Graphics import Graphics, RED
 from Tools.Graphics import ImageSurface
+from matrix import matrix_width, matrix_height
 
 
-class DisplayPng(ImageSurface):
+class DisplayImage(ImageSurface):
     def __init__(self, fname='images/sisters-sprites.png'):
-        ImageSurface.__init__(self, fname)
+        ImageSurface.__init__(self, matrix_width, matrix_height, fname,
+                              thumbnail_it=True)
 
     def generate(self):
         pass

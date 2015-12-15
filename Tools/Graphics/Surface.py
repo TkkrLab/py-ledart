@@ -129,22 +129,52 @@ class Surface(object):
 
 
 class ImageSurface(Surface):
-    def __init__(self, image):
-        if type(image) == str:
-            self.image = Image.open(image)
-        elif type(image) == Image._ImageCrop:
-            self.image = image
-        else:
-            raise(Exception("couldn't load image"))
+    def __init__(self, width, height, fname, thumbnail_it=False):
+        self.image = Image.open(fname)
+        self.imtype = self.determine_type(fname)
+        if self.imtype is None:
+            raise(Exception("Couldn't load image."))
+        print(thumbnail_it)
+
+        if (self.image.width > width) or (self.image.height > height):
+            if thumbnail_it:
+                self.image.thumbnail((width, height))
+            else:
+                self.image = self.image.resize((width, height))
+
+        # create the surface to draw the image on.
         Surface.__init__(self, width=self.image.width,
                          height=self.image.height)
-        self.load_png(image)
+
+        if self.imtype == "png":
+            self.load_png(self.image)
+        elif self.imtype == "jpg":
+            self.load_jpg(self.image)
+
+    def determine_type(self, image):
+        png = ["png"]
+        jpg = ["jpg", "jpeg"]
+
+        imtype = None
+        for n in png:
+            if n in image.lower():
+                imtype = "png"
+        for n in jpg:
+            if n in image.lower():
+                imtype = "jpg"
+        return imtype
+
+    def load_jpg(self, image, invert=False):
+        imdata = self.image.getdata()
+
+        for i, point in enumerate(self.get_points()):
+            if len(imdata[i]) == 3:
+                color = imdata[i]
+            else:
+                raise(Exception("No valid image data found"))
+            self[point] = color
 
     def load_png(self, image, invert=False):
-        if type(image) == str:
-            self.image = Image.open(image)
-        elif type(image) == Image._ImageCrop:
-            self.image = image
         imdata = self.image.getdata()
         p = 0
         for y in range(0, self.image.height):
@@ -152,12 +182,12 @@ class ImageSurface(Surface):
                 point = (x, y)
                 if len(imdata[p]) == 3:
                     color = imdata[p]
-                else:
+                elif len(imdata[p]) == 4:
+                    pass
                     r, g, b, alpha = imdata[p]
-                    color = (r, g, b)
+                    color = (alpha, alpha, alpha)
                 if invert:
                     r, g, b = color
                     color = (0xff - r, 0xff - g, 0xff - b)
                 self[point] = color
                 p += 1
-        return dict(self.surface)

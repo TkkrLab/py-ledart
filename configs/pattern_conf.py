@@ -28,8 +28,12 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    dest: ScreenCapture(),
-    # dest: DisplayPng('images/sisters-sprites-min.png'),
+    # dest: ScreenCapture(),
+    # dest: DisplayImage('images/sisters-sprites.png'),
+    # dest: DisplayImage('images/horse-2-xxl.png'),
+    # dest: DisplayImage('images/horse-xxl.png'),
+    # dest: DisplayImage('images/hue_alpha.png'),
+    dest: DisplayImage('images/tiger.jpg')
     # dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
     # dest: RectTest(),
 

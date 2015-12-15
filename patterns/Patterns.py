@@ -53,7 +53,7 @@ except Exception as e:
 
 # try and load with pillow
 try:
-    from DisplayPng import *
+    from DisplayImage import *
 except Exception as e:
     debugprint("DisplayPng >>", e)
 
