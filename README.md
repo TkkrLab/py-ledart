@@ -68,10 +68,7 @@ most options are self explainatory but if they aren't you give me a call! like a
 * PyAudio           [source](http://people.csail.mit.edu/hubert/pyaudio/)
 * alsaseq           [source](http://pp.com.mx/python/alsaseq/)
 * alsaaudio         [source](http://pyalsaaudio.sourceforge.net/)
-* natsort           [source](https://pypi.python.org/pypi/natsort)
 * pillow            [source](https://pillow.readthedocs.org/en/3.0.x/)
-* PyUserInput       [source](https://github.com/SavinaRoja/PyUserInput)
-* wxpython          [source](http://www.wxpython.org/)
 
 #### what to do if you want to run it ?
 

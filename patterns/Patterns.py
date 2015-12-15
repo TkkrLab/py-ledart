@@ -39,6 +39,12 @@ try:
 except Exception as e:
     debugprint("Capture >>", e)
 
+# uses ffmpeg
+try:
+    from VideoPlay import *
+except Exception as e:
+    debugprint("VideoPlay >>", e)
+
 # uses pygame for testing.
 try:
     from SuperPixelBros import SuperPixelBros

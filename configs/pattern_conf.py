@@ -28,9 +28,9 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    # dest: Capture(invert=False),
+    dest: ScreenCapture(),
     # dest: DisplayPng('images/sisters-sprites-min.png'),
-    dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
+    # dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
     # dest: RectTest(),
 
     # dest: RainbowEffect(),
