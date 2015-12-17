@@ -11,11 +11,9 @@ import gtksourceview2 as gtksourceview
 
 from MatrixSim.MatrixScreen import MatrixScreen
 from MatrixSim.Interfaces.Interface import Interface
-from Tools.Graphics import Graphics, BLACK
+from Tools.Graphics import Surface
 from matrix import matrix_width, matrix_height
-from matrix import convertSnakeModes, convertByteMode
 from runPatternJob import get_trace, get_pattern_classes
-import artnet
 import socket
 import inspect
 
@@ -27,34 +25,43 @@ def lineno():
 pygtk.require('2.0')
 
 
-class PatternDummy(object):
+class PatternDummy(Surface):
     def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
-        self.color = BLACK
-        self.graphics.fill(self.color)
+        Surface.__init__(self, width=matrix_width, height=matrix_height)
 
     def generate(self):
-        return self.graphics.getSurface()
-
-    def __del__(self):
-        del self
+        pass
 
 
 class SendPacketWidget(gtk.ToggleButton):
-    def __init__(self, parent, dest_ip='pixelmatrix', port=6454):
+    def __init__(self, parent, dest_ip='pixelmatrix'):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.port = port
         self.dest_ip = dest_ip
         self.par = parent
         self.pattern = None
         self.sendoutData = []
 
+        args = parent.args
+
+        # setup which protocol to use.
+        if args.netProtocol == "artnet":
+            import Artnet
+            self.protocol = Artnet.Artnet(args)
+        elif args.netProtocol == "lmcp":
+            import Lmcp
+            self.protocol = Lmcp.Lmcp(args)
+        elif args.netProtocol == "pixelmatrix":
+            import Artnet
+            self.protocol = Artnet.Pixelmatrix(args)
+        else:
+            raise(Exception("no protocol found/selected."))
+        self.protocol.open()
+
     def sendout(self, data):
         try:
             if(self.sendoutData != data):
                 self.sendoutData = data
-                self.socket.sendto(artnet.buildPacket(0, data),
-                                   (self.dest_ip, self.port))
+                self.protocol.send(data, self.dest_ip)
         except Exception as e:
             fmt = (lineno(), get_trace(), e)
             print >>self.par, ("%d:pattern:%s:%s:sendPacket>> %s" % fmt)
@@ -73,10 +80,8 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
 
         self.matrixscreen = MatrixScreen(matrix_width, matrix_height,
                                          self.args.pixelSize, self)
+        self.pixelSize = self.args.pixelSize
         gtk.DrawingArea.set_size_request(self, self.width, self.height)
-        # contains data from patterns in the form of a list of tuples of
-        # format (r, g, b) colors.
-        self.data = self.pattern.generate()
         # debug printing only once.
         self.hasprinted = False
 
@@ -103,8 +108,7 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
 
     def process(self):
         try:
-            self.data = self.pattern.generate()
-            self.matrixscreen.process_pixels(self.data)
+            # self.matrixscreen.process(self.pattern)
             self.queue_draw()
         except Exception as e:
             if not self.hasprinted:
@@ -117,17 +121,24 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
     def expose(self, widget, event):
         try:
             cr = widget.window.cairo_create()
-            if len(self.matrixscreen.pixels):
-                for pixel in self.matrixscreen.pixels:
-                    x, y, width, height = pixel.getRect()
-                    pixelcolor = pixel.getColor()
-                    r, g, b = self.color_convert_f(pixelcolor)
-                    cr.set_source_rgb(0.0, 0.0, 0.0)
-                    cr.rectangle(x, y, width, height)
-                    cr.stroke()
-                    cr.set_source_rgb(r, g, b)
-                    cr.rectangle(x + 1, y + 1, width - 2, height - 2)
-                    cr.fill()
+            for point in self.pattern.get_points():
+                x, y = point
+                x, y = x * self.pixelSize, y * self.pixelSize
+                xo, yo = self.pattern.get_d_offset()
+                xo, yo = xo * self.pixelSize, yo * self.pixelSize
+                x, y = x + xo, y + yo
+                # create a rect based on calculated positions.
+                width, height = self.pixelSize, self.pixelSize
+
+                pixelcolor = self.pattern[point]
+
+                r, g, b = self.color_convert_f(pixelcolor)
+                cr.set_source_rgb(0.0, 0.0, 0.0)
+                cr.rectangle(x, y, width, height)
+                cr.stroke()
+                cr.set_source_rgb(r, g, b)
+                cr.rectangle(x + 1, y + 1, width - 2, height - 2)
+                cr.fill()
         except Exception as e:
             if not self.hasprinted:
                 fmt = (lineno(), get_trace(), e)
@@ -141,21 +152,21 @@ class Gui(object):
         self.args = args
 
         # log output to self.
-        self.printout = False
+        self.printout = True
         self.stdout = sys.stdout
-        sys.stdout = self
+        # sys.stdout = self
         self.stderr = sys.stderr
-        sys.stderr = self
+        # sys.stderr = self
 
         # tabwidth in spaces
         self.tabwidth = 4
 
-        # usually py-artnet is under home dir.
+        # usually py-ledart is under home dir.
         self.codeDir = os.path.expanduser('~')
-        self.syntaxfile = (self.codeDir + "/py-artnet/" +
+        self.syntaxfile = (self.codeDir + "/py-ledart/" +
                            "Gui/syntax-highlight/python")
-        self.textfilename = self.codeDir + "/py-artnet/Gui/new_file.py"
-        self.intermediatefilename = (self.codeDir + "/py-artnet/" +
+        self.textfilename = self.codeDir + "/py-ledart/Gui/new_file.py"
+        self.intermediatefilename = (self.codeDir + "/py-ledart/" +
                                      "Gui/IntermediateCode/intermediate.py")
         title = "artnet-editor (%s)" % self.textfilename
         # do this once and we can import our compiled code.
@@ -178,7 +189,7 @@ class Gui(object):
         if self.args.fps:
             gobject.timeout_add(int(1000 / self.args.fps), self.run)
         else:
-            gobject.timeout_add(0, self.run)
+            gobject.timeout_add(1000, self.run)
 
         width, height = self.matrix_widget.width, self.matrix_widget.height
         self.window.resize(width * 2, height * 2)
@@ -413,10 +424,6 @@ class Gui(object):
             self.matrix_widget.process()
             data = self.matrix_widget.get_data()
             if data:
-                if self.args.snakeMode == "enabled":
-                    data = convertSnakeModes(data)
-                if self.args.byteMode == "enabled":
-                    data = convertByteMode(data, self.args.convertColor)
                 if self.args.netSilent == "disabled":
                     self.send_packets.sendout(data)
         except:

@@ -1,6 +1,7 @@
 from Tools.Graphics import Surface
 from matrix import matrix_width, matrix_height, chunks
 import subprocess as sp
+import os
 
 
 def load_rgb24(data, surface):
@@ -14,7 +15,7 @@ def load_rgb24(data, surface):
 
 
 class VideoPlay(Surface):
-    def __init__(self, location=None, fps=18, center=True):
+    def __init__(self, location=None, fps=18.4, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
@@ -46,12 +47,14 @@ class VideoPlay(Surface):
 
 
 class ScreenCapture(Surface):
-    def __init__(self, fullscreen=False, fps=10, center=True):
+    def __init__(self, screen_resolution=(1280, 800), fullscreen=False, fps=10,
+                 center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         ffmpeg = "ffmpeg"
         # fmt = (self.width, self.height)
+        display = os.getenv("DISPLAY")
         if fullscreen:
-            fmt = (1280, 800)
+            fmt = screen_resolution
             fmtstr = "%dx%d"
             screensize = fmtstr % fmt
             scale = "scale=%d:%d" % (self.width, self.height)
@@ -60,7 +63,7 @@ class ScreenCapture(Surface):
                        '-video_size', screensize,
                        '-framerate', str(fps),
                        '-f', 'x11grab',
-                       '-i', ':0.0',
+                       '-i', display,
                        '-f', 'image2pipe',
                        '-pix_fmt', 'rgb24',
                        '-vcodec', 'rawvideo',
@@ -76,12 +79,13 @@ class ScreenCapture(Surface):
                        '-follow_mouse', 'centered',
                        '-draw_mouse', '0',
                        '-f', 'x11grab',
-                       '-i', ':0.0',
+                       '-i', display,
                        '-f', 'image2pipe',
                        '-pix_fmt', 'rgb24',
                        '-vcodec', 'rawvideo', '-']
 
         command = ' '.join(command)
+        print(command)
         self.pipe = sp.Popen(command, shell=True, stdout=sp.PIPE,
                              bufsize=10 ** 8)
         self.play_next_image()

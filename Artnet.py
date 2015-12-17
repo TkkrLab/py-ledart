@@ -9,6 +9,7 @@
 
 from ProtocolInterface import Interface
 from matrix import convertSnakeModes, chunks
+import sys
 from Tools.Graphics import Surface
 
 
@@ -46,7 +47,19 @@ class Pixelmatrix(Artnet):
     def __init__(self, args, universe=0, port=6454):
         Artnet.__init__(self, args, universe, port)
 
+    def convert_layout(self, data):
+        ndata = Surface(width=data.height, height=data.width)
+        npoints = ndata.get_points()
+        fdata = [data[point] for point in data.get_points()]
+        fndata = []
+        for chunk in chunks(fdata, data.height):
+            fndata += chunk
+        for i, point in enumerate(npoints):
+            ndata[point] = fndata[i]
+        return ndata
+
     def send(self, data, ip):
         data = convertSnakeModes(data)
+        # data = self.convert_layout(data)
         data = self.build_packet(self.universe, data)
         self.transmit(data, ip)
