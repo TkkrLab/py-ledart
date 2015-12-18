@@ -28,7 +28,7 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    dest: ScreenCapture(fullscreen=True),
+    # dest: ScreenCapture(fullscreen=True),
     # dest: ScreenCapture(fullscreen=False),
     # dest: DisplayImage('images/sisters-sprites.png'),
     # dest: DisplayImage('images/horse-2-xxl.png'),
@@ -37,6 +37,7 @@ TARGETS = {
     # dest: DisplayImage('images/tiger.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
+    dest: Water(),
     # dest: RectTest(),
 
     # dest: RainbowEffect(),

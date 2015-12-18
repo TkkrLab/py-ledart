@@ -34,7 +34,7 @@ class PatternDummy(Surface):
 
 
 class SendPacketWidget(gtk.ToggleButton):
-    def __init__(self, parent, dest_ip='pixelmatrix'):
+    def __init__(self, parent, dest_ip='ledboard'):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.dest_ip = dest_ip
         self.par = parent
@@ -59,9 +59,7 @@ class SendPacketWidget(gtk.ToggleButton):
 
     def sendout(self, data):
         try:
-            if(self.sendoutData != data):
-                self.sendoutData = data
-                self.protocol.send(data, self.dest_ip)
+            self.protocol.send(data, self.dest_ip)
         except Exception as e:
             fmt = (lineno(), get_trace(), e)
             print >>self.par, ("%d:pattern:%s:%s:sendPacket>> %s" % fmt)
@@ -108,7 +106,7 @@ class MatrixSimWidget(gtk.DrawingArea, Interface):
 
     def process(self):
         try:
-            # self.matrixscreen.process(self.pattern)
+            self.pattern.generate()
             self.queue_draw()
         except Exception as e:
             if not self.hasprinted:
@@ -422,10 +420,8 @@ class Gui(object):
     def run(self):
         try:
             self.matrix_widget.process()
-            data = self.matrix_widget.get_data()
-            if data:
-                if self.args.netSilent == "disabled":
-                    self.send_packets.sendout(data)
+            data = self.matrix_widget.get_pattern()
+            self.send_packets.sendout(data)
         except:
             pass
             # fmt = (lineno(), str(e))
@@ -484,11 +480,9 @@ class Gui(object):
             pass
 
         # pass a guiobject
-        self.intermediate.__dict__['gui'] = self.window
+        self.intermediate.__dict__['parent_gui'] = self.window
         # delete inital object.
-        if self.pattern:
-            print >>self, ("where the hell")
-            del self.pattern
+        self.pattern = None
 
         patterns = get_pattern_classes(self.intermediate)
         try:

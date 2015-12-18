@@ -28,6 +28,7 @@ try:
     from sven import *
     from FillTest import *
     from GraphicsTests import *
+    from Water import *
 except Exception as e:
     debugprint("Various patterns >>", e)
 
