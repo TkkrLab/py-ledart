@@ -5,8 +5,8 @@ and conversion function(s) to apply to matrices
 
 from Tools.Graphics import Surface
 
-matrix_height = 48
-matrix_width = 96
+# matrix_height = 48
+# matrix_width = 96
 
 # matrix_width = 10
 # matrix_height = 10
@@ -26,8 +26,8 @@ matrix_width = 96
 # matrix_height = 12
 # matrix_width = 12
 
-# matrix_height = 32
-# matrix_width = 32
+matrix_height = 32
+matrix_width = 32
 
 matrix_size = (matrix_height * matrix_width)
 
