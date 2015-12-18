@@ -67,7 +67,8 @@ class ScreenCapture(Surface):
                        '-f', 'image2pipe',
                        '-pix_fmt', 'rgb24',
                        '-vcodec', 'rawvideo',
-                       '-vf', scale, '-']
+                       '-vf', scale,
+                       '-an', '-']
         else:
             fmt = (self.width, self.height)
             fmtstr = "%dx%d"
@@ -82,7 +83,8 @@ class ScreenCapture(Surface):
                        '-i', display,
                        '-f', 'image2pipe',
                        '-pix_fmt', 'rgb24',
-                       '-vcodec', 'rawvideo', '-']
+                       '-vcodec', 'rawvideo',
+                       '-an', '-']
 
         command = ' '.join(command)
         print(command)
