@@ -1,15 +1,16 @@
 from Tools.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
-# from Graphics.RGBColorTools import ColorRGBOps
-from matrix import matrix_width, matrix_height
+from Tools.Graphics import ColorRGBOps
+from matrix import matrix_width, matrix_height, to_matrix
 from patterns.Life.life import Life
 import random
 
-select = "BlueLife"
+select = 'MixedLife'
 
-class RandomLife(object):
+
+class RandomLife(Graphics):
     def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.life = Life(matrix_width, matrix_height, 1, color=BLACK)
-        self.graphics = Graphics(matrix_width, matrix_height)
 
     def pickRandomColor(self):
         color = random.randint(0, len(COLORS) - 1)
@@ -19,16 +20,12 @@ class RandomLife(object):
         return COLORS[color]
 
     def drawRandomColor(self):
-        life_matrix = self.graphics.toMatrix(self.life.field,
-                                             self.graphics.getSurfaceWidth())
-        for y in self.graphics.heightRange:
-            for x in self.graphics.widthRange:
+        self.fill(BLACK)
+        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        for point in self.get_points():
+                x, y = point
                 if life_matrix[y][x]:
-                    color = self.pickRandomColor()
-                    # give every lifing cell a random color
-                    self.graphics.drawPixel(x, y, color)
-                else:
-                    self.graphics.drawPixel(x, y, BLACK)
+                    self.draw_pixel(x, y, self.pickRandomColor())
 
     def draw(self):
         self.drawRandomColor()
@@ -36,60 +33,128 @@ class RandomLife(object):
     def generate(self):
         self.life.process()
         self.draw()
-        return self.graphics.getSurface()
 
 
-class MixedLife(object):
+class GreenLife(Graphics):
     def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.life = Life(matrix_width, matrix_height, 1, color=GREEN)
-        self.graphics = Graphics(matrix_width, matrix_height)
-        self.graphics.fill(BLACK)
 
     def draw(self):
-        life_matrix = self.graphics.toMatrix(self.life.field, self.graphics.getSurfaceWidth())
-        for y in self.graphics.heightRange:
-            for x in self.graphics.widthRange:
+        self.fill(BLACK)
+        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        for point in self.get_points():
+                x, y = point
                 if life_matrix[y][x]:
                     color = GREEN
-                else:
-                    color = BLACK
-                self.graphics.drawPixel(x, y, color)
+                    self.draw_pixel(x, y, color)
 
     def generate(self):
         self.life.process()
         self.draw()
-        return self.graphics.getSurface()
 
 
-class BlueLife(object):
+class BlueLife(Graphics):
     def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.life = Life(matrix_width, matrix_height, 1, color=BLUE)
-        self.graphics = Graphics(matrix_width, matrix_height)
 
     def draw(self):
-        life_matrix = self.graphics.toMatrix(self.life.field, self.graphics.getSurfaceWidth())
-        for y in self.graphics.heightRange:
-            for x in self.graphics.widthRange:
+        self.fill(BLACK)
+        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        for point in self.get_points():
+                x, y = point
                 if life_matrix[y][x]:
                     color = BLUE
-                else:
-                    color = BLACK
-                self.graphics.drawPixel(x, y, color)
+                    self.draw_pixel(x, y, color)
 
     def generate(self):
         self.life.process()
         self.draw()
-        return self.graphics.getSurface()
 
 
-class GrayedLife(object):
+class RedLife(Graphics):
+    def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.life = Life(matrix_width, matrix_height, 1, color=RED)
+
+    def draw(self):
+        self.fill(BLACK)
+        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        for point in self.get_points():
+                x, y = point
+                if life_matrix[y][x]:
+                    color = RED
+                    self.draw_pixel(x, y, color)
+
+    def generate(self):
+        self.life.process()
+        self.draw()
+
+
+class GrayedLife(Graphics):
     '''
     take the gray scales over every point and
     add or subtract depening on if alive or not
     '''
     def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
-        self.graphics.fill(BLUE)
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.fill(BLACK)
 
     def generate(self):
-        return self.graphics.getSurface()
+        pass
+
+
+class MixedLife(Graphics):
+    def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
+
+        blue = ColorRGBOps.darken(BLUE, 128)
+        green = ColorRGBOps.darken(GREEN, 128)
+        red = ColorRGBOps.darken(RED, 128)
+
+        self.life1 = Life(matrix_width, matrix_height, 1, color=BLUE)
+        self.life2 = Life(matrix_width, matrix_height, 1, color=green)
+        self.life3 = Life(matrix_width, matrix_height, 1, color=red)
+
+        self.step = int(0xff/10)
+
+        self.step_red = (self.step, 0, 0)
+        self.step_green = (0, self.step, 0)
+        self.step_blue = (0, 0, self.step)
+
+        self.index = 0
+    """
+    this draw function manipulates the graphics surface directly.
+    it's either elegent in one way.
+    and really really ugly in another way.
+    """
+    def drawThreeAdded(self):
+        points = self.get_points()
+        for i, point in enumerate(points):
+            color = self[point]
+            # check for first life field.
+            if self.life1.field[i]:
+                color = ColorRGBOps.add(color, self.step_blue)
+            else:
+                color = ColorRGBOps.subtract(color, self.step_blue)
+            
+            if self.life2.field[i]:
+                color = ColorRGBOps.add(color, self.step_green)
+            else:
+                color = ColorRGBOps.subtract(color, self.step_green)
+            
+            if self.life3.field[i]:
+                color = ColorRGBOps.add(color, self.step_red)
+            else:
+                color = ColorRGBOps.subtract(color, self.step_red)
+            
+            self[point] = color
+    def draw(self):
+        self.drawThreeAdded()
+
+    def generate(self):
+        self.life1.process()
+        self.life2.process()
+        self.life3.process()
+        self.draw()

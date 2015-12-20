@@ -16,9 +16,9 @@ def getaverageof(number, controller):
         return int(sums / len(averages))
 
 
-class VUmetertwo(object):
+class VUmetertwo(Graphics):
     def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.controller = AudioController(channel=1, rate=256000, period=64)
         self.color = BLUE
         self.inputlength = matrix_height
@@ -51,7 +51,7 @@ class VUmetertwo(object):
 
     def generate(self):
         average = self.getinputs()
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         for i, line in enumerate(self.inputs):
             if line > self.max:
                 self.max = line
@@ -66,28 +66,26 @@ class VUmetertwo(object):
                 self.data = 0xff
             if data > self.max:
                 self.max = data
-            self.graphics.drawLine(0, i, data - self.offset, i, self.color)
-        return self.graphics.getSurface()
+            self.draw_line(0, i, data - self.offset, i, self.color)
 
 
-class VUmeterThree(object):
+class VUmeterThree(Graphics):
     def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.controller = AudioController(channel=1, rate=16000, period=64)
         self.max = 1
 
     def generate(self):
-        self.graphics.fill(BLACK)
+        self.fill(BLACK)
         data = getaverageof(10, self.controller)
         data = int(translate(data, 0, 700, 0, 8))
         for i in range(0, 17):
-            self.graphics.drawLine(0, i, data - 10, 0, BLUE)
-        return self.graphics.getSurface()
+            self.draw_line(0, i, data - 10, 0, BLUE)
 
 
-class VUmeterone(object):
+class VUmeterone(Graphics):
     def __init__(self):
-        self.graphics = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, matrix_width, matrix_height)
         self.controller = AudioController(channel=1, rate=8000, period=128)
         self.average = []
         self.averaged = 1
@@ -97,6 +95,5 @@ class VUmeterone(object):
         data = getaverageof(10, self.controller)
         if data:
             data = int(translate(data, 0, 700, 0, 8))
-            self.graphics.fill(BLACK)
-            self.graphics.drawLine(0, 0, data - 10, 0, BLUE)
-        return self.graphics.getSurface()
+            self.fill(BLACK)
+            self.draw_line(0, 0, data - 10, 0, BLUE)

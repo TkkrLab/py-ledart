@@ -4,7 +4,7 @@ from matrix import matrix_width, matrix_height, to_matrix
 from Life.life import Life
 import random
 
-selected = 'RandomLife'
+selected = 'BlueLife'
 
 
 class RandomLife(Graphics):

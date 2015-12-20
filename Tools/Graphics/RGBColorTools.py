@@ -46,6 +46,46 @@ class ColorRGBOps(object):
         r, g, b = color
         return ((r + g + b) / 3,) * 3
 
+    def add(self, c1, c2):
+        r1, g1, b1 = c1
+        r2, g2, b2 = c2
+        r, g, b = (r1 + r2, g1 + g2, b1 + b2)
+
+        if r > 255:
+            r = 255
+        if g > 255:
+            g = 255
+        if b > 255:
+            b = 255
+        if r < 0:
+            r = 0
+        if g < 0:
+            g = 0
+        if b < 0:
+            b = 0
+
+        return (r, g, b)
+
+    def subtract(self, c1, c2):
+        r1, g1, b1 = c1
+        r2, g2, b2 = c2
+        r, g, b = (r1 - r2, g1 - g2, b1 - b2)
+
+        if r > 255:
+            r = 255
+        if g > 255:
+            g = 255
+        if b > 255:
+            b = 255
+        if r < 0:
+            r = 0
+        if g < 0:
+            g = 0
+        if b < 0:
+            b = 0
+
+        return (r, g, b)
+
     def brighten(self, color, amount):
         if type(amount) == tuple:
             ra, ga, ba = amount
@@ -62,11 +102,11 @@ class ColorRGBOps(object):
         if b > 255:
             b = 255
         if r < 0:
-            r = 10
+            r = 0
         if g < 0:
-            g = 10
+            g = 0
         if b < 0:
-            b = 10
+            b = 0
         return (r, g, b)
 
     def darken(self, color, amount):
@@ -85,11 +125,11 @@ class ColorRGBOps(object):
         if b > 255:
             b = 255
         if r < 0:
-            r = 10
+            r = 0
         if g < 0:
-            g = 10
+            g = 0
         if b < 0:
-            b = 10
+            b = 0
         return (r, g, b)
 
     def negative(self, color):
