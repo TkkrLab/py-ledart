@@ -1,10 +1,10 @@
-from Tools.Graphics import Graphics, BLUE, BLACK, GREEN, RED, COLORS
+from Tools.Graphics import Graphics, BLUE, BLACK, GREEN, RED, WHITE, COLORS
 from Tools.Graphics import ColorRGBOps
 from matrix import matrix_width, matrix_height, to_matrix
 from patterns.Life.life import Life
 import random
 
-select = 'MixedLife'
+select = 'ProgressedLife'
 
 
 class RandomLife(Graphics):
@@ -92,17 +92,30 @@ class RedLife(Graphics):
         self.draw()
 
 
-class GrayedLife(Graphics):
+class ProgressedLife(Graphics):
     '''
-    take the gray scales over every point and
-    add or subtract depening on if alive or not
+    brighten spots with prolonged cell life,
+    while darken spots where there is less cell life
     '''
     def __init__(self):
         Graphics.__init__(self, matrix_width, matrix_height)
-        self.fill(BLACK)
+        self.life = Life(matrix_width, matrix_height, 1, WHITE)
+        self.step = 7
+        self.color_step = (self.step, self.step, self.step)
+        self.fill(WHITE)
+
+    def draw(self):
+        for i, point in enumerate(self.get_points()):
+            color = self[point]
+            if self.life.field[i]:
+                color = ColorRGBOps.brighten(color, self.step)
+            else:
+                color = ColorRGBOps.darken(color, self.step)
+            self[point] = color
 
     def generate(self):
-        pass
+        self.life.process()
+        self.draw()
 
 
 class MixedLife(Graphics):
@@ -138,12 +151,12 @@ class MixedLife(Graphics):
                 color = ColorRGBOps.add(color, self.step_blue)
             else:
                 color = ColorRGBOps.subtract(color, self.step_blue)
-            
+            # check seconds
             if self.life2.field[i]:
                 color = ColorRGBOps.add(color, self.step_green)
             else:
                 color = ColorRGBOps.subtract(color, self.step_green)
-            
+            # check third
             if self.life3.field[i]:
                 color = ColorRGBOps.add(color, self.step_red)
             else:

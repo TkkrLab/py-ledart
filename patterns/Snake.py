@@ -4,28 +4,9 @@ from matrix import matrix_width, matrix_height
 import random
 import time
 
+select = 'Snake'
+
 # for now the snakeController is a pygame controller.
-# class SnakeController(PygameController, XboxController):
-#     def __init__(self, plugged=0):
-#         PygameController.__init__(self, plugged)
-#         self.UP = XboxController.UP_DPAD
-#         self.DOWN = XboxController.DOWN_DPAD
-#         self.LEFT = XboxController.LEFT_DPAD
-#         self.RIGHT = XboxController.RIGHT_DPAD
-#     def getUp(self):
-#         value = self.getButtons(self.UP)
-#         return value
-#     def getDown(self):
-#         value = self.getButtons(self.DOWN)
-#         return value
-#     def getLeft(self):
-#         value = self.getButtons(self.LEFT)
-#         return value
-#     def getRight(self):
-#         value = self.getButtons(self.RIGHT)
-#         return value
-
-
 class SnakeController(PygameController, XboxController):
     def __init__(self, plugged=0):
         PygameController.__init__(self, plugged)

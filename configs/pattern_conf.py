@@ -37,7 +37,8 @@ TARGETS = {
     # dest: DisplayImage('images/tiger.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
-    dest: Water(),
+    # dest: Water(),
+    dest:Smolders(),
     # dest: RectTest(),
 
     # dest: RainbowEffect(),
