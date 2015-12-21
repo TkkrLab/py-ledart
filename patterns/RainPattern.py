@@ -35,16 +35,17 @@ class RainDrop(object):
         self.y = self.height
         self.pos = (self.x, self.y)
 
+
 def xfrange(start, stop, step):
     while start < stop:
         yield start
         start += step
 
+
 class Fire(Surface):
     """
         this pattern displays a fire.
         like of pattern.
-        
         based upon: http://lodev.org/cgtutor/fire.html
     """
     def __init__(self):
@@ -52,7 +53,7 @@ class Fire(Surface):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         self.buffer = Surface(width=matrix_width, height=matrix_height)
         self.bottom_points = [x for x in range(0, self.width)]
-    
+
     def randomize_bottom(self):
         """
             create a random underground for the fire to rise from.
@@ -62,9 +63,9 @@ class Fire(Surface):
         for x in self.bottom_points:
             point = (x, self.height - 1)
             h = random.random()
-            s = random.random()
+            s = 1.0
             l = random.random()
-            r, g, b = colorsys.hls_to_rgb(h / 7, min(0.5, l * 2), 1.0)
+            r, g, b = colorsys.hls_to_rgb(h / 7, min(0.5, l * 2), s)
             r, g, b = (int(r * 0xff), int(g * 0xff), int(b * 0xff))
             self.buffer[point] = (r, g, b)
 
@@ -88,12 +89,12 @@ class Fire(Surface):
                 color = tuple(color)
                 point = (x, y)
                 self.buffer[point] = color
-    
+
     def draw(self):
         """ swap out the buffer to see what changed."""
         for point in self.get_points():
             self[point] = self.buffer[point]
-    
+
     def generate(self):
         self.process()
         self.draw()
