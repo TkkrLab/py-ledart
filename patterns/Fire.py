@@ -12,6 +12,8 @@ from matrix import matrix_width, matrix_height
 import random
 import colorsys
 
+select = 'MiniFire'
+
 
 def xfrange(start, stop, step):
     while start < stop:
@@ -19,23 +21,25 @@ def xfrange(start, stop, step):
         start += step
 
 
-class Fire(Surface):
+class MiniFire(Surface):
     """
         this pattern displays a fire.
         like of pattern.
         based upon: http://lodev.org/cgtutor/fire.html
+        this effect works well on smaller matrices.
     """
     def __init__(self):
         """ create a surface and a buffer to keep changes in."""
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         self.buffer = Surface(width=matrix_width, height=matrix_height)
         self.bottom_points = [x for x in range(0, self.width)]
+        # self.bottom_points = [random.randint(0, self.width) for x in range(0, self.width)]
 
     def randomize_bottom(self):
         """
             create a random underground for the fire to rise from.
             do it with hls as described on the fire.html,
-            but instead of a palette generate the correct colors right away
+            but instead of a palette, generate the correct colors right away
         """
         for x in self.bottom_points:
             point = (x, self.height - 1)
@@ -43,7 +47,7 @@ class Fire(Surface):
             s = 1.0
             l = random.random()
             r, g, b = colorsys.hls_to_rgb(h / 7, min(0.5, l * 2), s)
-            r, g, b = (int(r * 0xff), int(g * 0xff), int(b * 0xff))
+            r, g, b = (int(r * 0xff), int(g * 0xff / 8), int(b * 0xff))
             self.buffer[point] = (r, g, b)
 
     def process(self):
@@ -62,8 +66,10 @@ class Fire(Surface):
                 color = []
                 for i in range(0, 3):
                     c = abs(int((p1[i] + p2[i] + p3[i] - p4[i]) *
-                                random.randint(0, 105) /
+                                random.randint(0, 200) /
                                 random.randint(50, 600)))
+                    if c < 100:
+                        c = 0
                     color.append(min(c, 0xff))
                 color = tuple(color)
                 point = (x, y)

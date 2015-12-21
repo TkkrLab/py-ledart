@@ -4,8 +4,6 @@ from matrix import matrix_width, matrix_height
 from Tools.Graphics import Graphics, BLACK
 import random
 
-select = "Fire"
-
 
 class RainDrop(object):
     def __init__(self, color=(100, 255, 100)):

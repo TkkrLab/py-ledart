@@ -34,7 +34,7 @@ class PatternDummy(Surface):
 
 
 class SendPacketWidget(gtk.ToggleButton):
-    def __init__(self, parent, dest_ip='ledboard'):
+    def __init__(self, parent, dest_ip='pixelmatrix'):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.dest_ip = dest_ip
         self.par = parent

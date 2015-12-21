@@ -29,6 +29,7 @@ try:
     from FillTest import *
     from GraphicsTests import *
     from Water import *
+    from Fire import *
 except Exception as e:
     debugprint("Various patterns >>", e)
 
