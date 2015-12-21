@@ -13,7 +13,6 @@ select = "Smolders"
 
 
 class RainDrop(object):
-    # color indexing in fridgefire's matrix is G B R
     def __init__(self, color=(100, 255, 100)):
         self.color = color
         self.y = 0
