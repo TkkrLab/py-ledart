@@ -6,11 +6,9 @@ import sys
 import imp
 import os
 import time
-import traceback
 
 # import matrix simulator and matrix specifics
 from matrix import matrix_width, matrix_height
-from matrix import convertSnakeModes
 from Tools.Graphics import Surface
 from MatrixSim.MatrixScreen import interface_opts
 try:
@@ -177,6 +175,21 @@ def signal_handler(signal, frame):
     sys.exit(0)
 
 
+def get_protocol(args):
+    if args.netProtocol == "artnet":
+        import Artnet
+        protocol = Artnet.Artnet(args)
+    elif args.netProtocol == "lmcp":
+        import Lmcp
+        protocol = Lmcp.Lmcp(args)
+    elif args.netProtocol == "pixelmatrix":
+        import Artnet
+        protocol = Artnet.Pixelmatrix(args)
+    else:
+        raise(Exception("no protocol found/selected."))
+    return protocol
+
+
 if __name__ == "__main__":
     from ArgumentParser import get_args
     # get command line arguments:
@@ -210,17 +223,7 @@ if __name__ == "__main__":
         signal.signal(signal.SIGINT, signal_handler)
 
         # setup which protocol to use.
-        if args.netProtocol == "artnet":
-            import Artnet
-            protocol = Artnet.Artnet(args)
-        elif args.netProtocol == "lmcp":
-            import Lmcp
-            protocol = Lmcp.Lmcp(args)
-        elif args.netProtocol == "pixelmatrix":
-            import Artnet
-            protocol = Artnet.Pixelmatrix(args)
-        else:
-            raise(Exception("no protocol found/selected."))
+        protocol = get_protocol(args)
         protocol.open()
 
         # setup a screen if matrixSim argument was set.

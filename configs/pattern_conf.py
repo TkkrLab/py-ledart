@@ -8,7 +8,8 @@ michiel_laptop = "192.168.1.199"
 localhost = "127.0.0.1"
 broadcast = "10.42.255.255"
 matrix = "10.42.4.36"
-dest = ledboard
+# dest = ledboard
+dest = pixelmatrix
 
 TARGETS = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
@@ -36,9 +37,14 @@ TARGETS = {
     # dest: DisplayImage('images/hue_alpha.png'),
     # dest: DisplayImage('images/tiger.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
-    # dest: VideoPlay('/home/robert/Downloads/vid-images/bad.mp4')
+    # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
+    dest: VideoPlay('/home/robert/Videos/bad.mkv'),
     # dest: Water(),
-    dest:Smolders(),
+    # dest: Smolders(),
+    # dest: Fire(),
+    # dest: FireOne(),
+    # dest: FireTwo(),
+    # dest: FireThree(),
     # dest: RectTest(),
 
     # dest: RainbowEffect(),

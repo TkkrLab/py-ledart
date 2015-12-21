@@ -13,7 +13,7 @@ from MatrixSim.MatrixScreen import MatrixScreen
 from MatrixSim.Interfaces.Interface import Interface
 from Tools.Graphics import Surface
 from matrix import matrix_width, matrix_height
-from runPatternJob import get_trace, get_pattern_classes
+from runPatternJob import get_trace, get_pattern_classes, get_protocol
 import socket
 import inspect
 
@@ -44,17 +44,7 @@ class SendPacketWidget(gtk.ToggleButton):
         args = parent.args
 
         # setup which protocol to use.
-        if args.netProtocol == "artnet":
-            import Artnet
-            self.protocol = Artnet.Artnet(args)
-        elif args.netProtocol == "lmcp":
-            import Lmcp
-            self.protocol = Lmcp.Lmcp(args)
-        elif args.netProtocol == "pixelmatrix":
-            import Artnet
-            self.protocol = Artnet.Pixelmatrix(args)
-        else:
-            raise(Exception("no protocol found/selected."))
+        self.protocol = get_protocol(args)
         self.protocol.open()
 
     def sendout(self, data):

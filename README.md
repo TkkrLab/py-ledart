@@ -69,6 +69,8 @@ most options are self explainatory but if they aren't you give me a call! like a
 * alsaseq           [source](http://pp.com.mx/python/alsaseq/)
 * alsaaudio         [source](http://pyalsaaudio.sourceforge.net/)
 * pillow            [source](https://pillow.readthedocs.org/en/3.0.x/)
+* ffmpeg            [source](https://www.ffmpeg.org/)
+* pyUserInput       [source](https://github.com/SavinaRoja/PyUserInput)
 
 #### what to do if you want to run it ?
 

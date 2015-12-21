@@ -23,9 +23,6 @@ def chunked(data, chunksize):
         it += 1
 
 
-import sys
-
-
 class Lmcp(Interface):
     def __init__(self, args, port=1337):
         Interface.__init__(self, args, port)
@@ -34,6 +31,8 @@ class Lmcp(Interface):
         self.writeout = chr(0x01)
         self.draw = chr(0x10)
         self.draw_image = chr(0x11)
+        self.clear = chr(0x02)
+        self.cleared = False
 
     def compress(self, data):
         compressed = ''
@@ -42,6 +41,10 @@ class Lmcp(Interface):
         return compressed
 
     def send(self, data, ip):
+        # transmit a clear once.
+        if self.cleared is False:
+            self.cleared = True
+            self.transmit(self.clear, ip)
         if type(data) == str:
             return
         else:

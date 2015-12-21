@@ -1,6 +1,8 @@
 from Tools.Graphics import Surface
 from matrix import matrix_width, matrix_height, chunks
 import subprocess as sp
+import pymouse
+import shlex
 import os
 
 
@@ -15,16 +17,15 @@ def load_rgb24(data, surface):
 
 
 class VideoPlay(Surface):
-    def __init__(self, location=None, fps=18.4, center=True):
+    def __init__(self, location='', fps=18.4, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
-        # "fps=10.0, "
+        # # "fps=10.0, "
         fps = "fps=%d, " % float(fps)
         fmtstr = "-vf \"%sscale=%d:%d\""
         fmt = (fps, self.width, self.height)
         filteropts = fmtstr % (fmt)
-
         command = [ffmpeg,
                    '-loglevel', 'panic',
                    '-i', location,
@@ -34,9 +35,7 @@ class VideoPlay(Surface):
                    '-vcodec', 'rawvideo', '-']
 
         command = ' '.join(command)
-        self.pipe = sp.Popen(command, shell=True, stdout=sp.PIPE,
-                             bufsize=10 ** 8)
-        self.play_next_image()
+        self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def play_next_image(self):
         raw_image = self.pipe.stdout.read(self.width * self.height * 3)
@@ -47,11 +46,14 @@ class VideoPlay(Surface):
 
 
 class ScreenCapture(Surface):
-    def __init__(self, screen_resolution=(1280, 800), fullscreen=False, fps=10,
+    def __init__(self, screen_resolution=None, fullscreen=False, fps=10,
                  center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
+        if screen_resolution is None:
+            pm = pymouse.PyMouse()
+            screen_resolution = pm.screen_size()
+            print(screen_resolution)
         ffmpeg = "ffmpeg"
-        # fmt = (self.width, self.height)
         display = os.getenv("DISPLAY")
         if fullscreen:
             fmt = screen_resolution
@@ -87,9 +89,7 @@ class ScreenCapture(Surface):
                        '-an', '-']
 
         command = ' '.join(command)
-        print(command)
-        self.pipe = sp.Popen(command, shell=True, stdout=sp.PIPE,
-                             bufsize=10 ** 8)
+        self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
         self.play_next_image()
 
     def play_next_image(self):
