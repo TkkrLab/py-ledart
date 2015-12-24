@@ -12,6 +12,9 @@ and conversion function(s) to apply to matrices
 # matrix_height = 34
 # matrix_width = 20
 
+# matrix_height = 20
+# matrix_width = 34
+
 matrix_height = 10
 matrix_width = 17
 
@@ -26,6 +29,9 @@ matrix_width = 17
 
 # matrix_height = 48
 # matrix_width = 48
+
+# matrix_height = 32
+# matrix_width = 32
 
 matrix_size = (matrix_height * matrix_width)
 
