@@ -8,12 +8,15 @@
 """
 
 from Tools.Graphics import Surface
+from Tools.Timing import Timer
 from matrix import matrix_width, matrix_height
 import random
 import colorsys
 
-select = 'AliasedWPlasma'
+# select = 'AliasedWPlasma'
+# select = 'WeirdPlasmaLike'
 
+select = 'AliasedFire'
 
 def xfrange(start, stop, step):
     while start < stop:
@@ -67,7 +70,7 @@ class MiniFire(Surface):
                 for i in range(0, 3):
                     c = abs(int((p1[i] + p2[i] + p3[i] - p4[i]) *
                                 random.randint(0, 200) /
-                                random.randint(50, 600)))
+                                random.randint(50, 500)))
                     if c < 100:
                         c = 0
                     color.append(min(c, 0xff))
@@ -88,22 +91,25 @@ class MiniFire(Surface):
 class AliasedFire(Surface):
     def __init__(self):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
-        self.fire = MiniFire(self.width*2, self.height*2)
+        self.fire = MiniFire(self.width * 2, self.height * 2)
 
     def generate(self):
         self.fire.generate()
         for y in range(0, self.fire.height, 2):
             for x in range(0, self.fire.width, 2):
-                point_self = (x/2, y/2)
-                c1 = self.fire[(x/2, y/2)]
-                c2 = self.fire[(x/2 + 1, y/2)]
-                c3 = self.fire[(x/2, y/2 + 1)]
-                c4 = self.fire[(x/2 + 1, y/2 + 1)]
+                point_self = (x / 2, y / 2)
+                c1 = self.fire[(x / 2, y / 2)]
+                c2 = self.fire[(x / 2 + 1, y / 2)]
+                c3 = self.fire[(x / 2, y / 2 + 1)]
+                c4 = self.fire[(x / 2 + 1, y / 2 + 1)]
                 r = (c1[0] + c2[0] + c3[0] + c4[0]) / 4
                 g = (c1[1] + c2[1] + c3[1] + c4[1]) / 4
                 b = (c1[2] + c2[2] + c3[2] + c4[2]) / 4
                 color = (r, g, b)
                 self[point_self] = color
+        for x in range(0, self.fire.width):
+            point = (x / 2, self.height - 1)
+            self[point] = self.fire[(x / 2, self.fire.height - 1)]
 
 
 class WeirdPlasmaLike(Surface):
@@ -120,6 +126,7 @@ class WeirdPlasmaLike(Surface):
         self.bottom_points = range(0, self.width)
         # self.bottom_points = [random.randint(0, self.width) for x in range(0, self.width)]
         self.randomize_bottom()
+        self.timer = Timer(0.4)
 
     def randomize_bottom(self):
         """
@@ -130,10 +137,11 @@ class WeirdPlasmaLike(Surface):
         for x in self.bottom_points:
             point = (x, self.height - 1)
             h = random.random()
-            s = 0.8
+            s = 1.0
             l = random.random()
-            r, g, b = colorsys.hls_to_rgb(h * 0.33 , min(1.0, l * 2), s)
-            r, g, b = (int(r * 0xff), int(g * 0xff), int(b * 0xff))
+            r, g, b = colorsys.hls_to_rgb(h, l, s)
+            r, g, b = (r * 0xff, g * 0xff, b * 0xff)
+            # r, g, b = random.randint(0, 0xff), random.randint(0, 0xff), random.randint(0, 0xff)
             self.buffer[point] = (r, g, b)
 
     def process(self):
@@ -150,12 +158,13 @@ class WeirdPlasmaLike(Surface):
                 p4 = self[((x) % w, (y + 2) % h)]
                 color = []
                 for i in range(0, 3):
-                    c = abs(int(p1[i] - p2[i] + p3[i] + p4[i]) * 31 / 80)
+                    c = abs(int((p1[i] + p2[i] + p3[i] + p4[i]) / 4))
                     color.append(min(c, 0xff))
                 color = tuple(color)
                 point = (x, y)
                 self.buffer[point] = color
-        self.randomize_bottom()
+        if self.timer.valid():
+            self.randomize_bottom()
 
     def draw(self):
         """ swap out the buffer to see what changed."""
