@@ -26,24 +26,20 @@ class PygameDummyController(object):
 class PygameController(object):
     # axis for which axis to read (button)
     # plugged for which controller to select
-
+    pygame = __import__('pygame')
     def __init__(self, plugged=0):
-        import pygame
-        self.pygame = pygame
         self.pygame.init()
+        self.pygame.joystick.init()
         self.joystick = None
-        try:
-            self.joystick = self.pygame.joystick.Joystick(plugged)
-            if self.joystick:
-                self.joystick.init()
-                self.num_axis = self.joystick.get_numaxes()
-                self.num_buttons = self.joystick.get_numbuttons()
-                self.num_hats = self.joystick.get_numhats()
-            else:
-                raise ControllerError("unavailable")
 
-        except Exception:
-            print("PygameController: no controllers found.")
+        self.joystick = self.pygame.joystick.Joystick(plugged)
+        if self.joystick:
+            self.joystick.init()
+            self.num_axis = self.joystick.get_numaxes()
+            self.num_buttons = self.joystick.get_numbuttons()
+            self.num_hats = self.joystick.get_numhats()
+        else:
+            raise ControllerError("No Controllers Found")
 
     def handleEvents(self):
         if self.joystick:

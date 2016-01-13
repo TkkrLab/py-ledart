@@ -1,5 +1,5 @@
 from Tools.Graphics import Graphics, GREEN, BLUE, WHITE, BLACK
-from Tools.Controllers import PygameController, XboxController
+from Tools.Controllers import *
 from matrix import matrix_width, matrix_height
 import random
 import time
@@ -7,7 +7,7 @@ import time
 select = 'Snake'
 
 # for now the snakeController is a pygame controller.
-class SnakeController(PygameController, XboxController):
+class SnakeControllerXbox(PygameController, XboxController):
     def __init__(self, plugged=0):
         PygameController.__init__(self, plugged)
 
@@ -23,6 +23,25 @@ class SnakeController(PygameController, XboxController):
     def getRight(self):
         return self.getButtons(self.RIGHT_DPAD)
 
+
+class SnakeControllerLogiTech(PygameController, LogiTechController):
+    def __init__(self, plugged=0):
+        PygameController.__init__(self, plugged)
+
+    def getUp(self):
+        return self.getButtons(self.BUTTON_UP)
+
+    def getDown(self):
+        return self.getButtons(self.BUTTON_DOWN)
+
+    def getLeft(self):
+        return self.getButtons(self.BUTTON_LEFT)
+
+    def getRight(self):
+        return self.getButtons(self.BUTTON_RIGHT)
+
+
+controllers = [SnakeControllerXbox, SnakeControllerLogiTech]
 
 class Food(object):
     def __init__(self, pos, color, game):
@@ -50,10 +69,10 @@ class Food(object):
 
 
 class Snake(Graphics):
-    def __init__(self, speed=8, plugged=0):
+    def __init__(self, speed=8, select=0):
         Graphics.__init__(self, matrix_width, matrix_height)
 
-        self.controller = SnakeController(plugged)
+        self.controller = controllers[select]()
 
         self.body_color = GREEN
         self.head_color = BLUE
@@ -75,18 +94,18 @@ class Snake(Graphics):
         self.body.append(self.pos)
 
     def inputHandling(self):
-        if self.controller.getUp() and self.deltax != -1:
-            self.deltax = 1
-            self.deltay = 0
-        if self.controller.getDown() and self.deltax != 1:
-            self.deltax = -1
-            self.deltay = 0
-        if self.controller.getLeft() and self.deltay != 1:
+        if self.controller.getUp():
             self.deltax = 0
             self.deltay = -1
-        if self.controller.getRight() and self.deltay != -1:
+        if self.controller.getDown():
             self.deltax = 0
             self.deltay = 1
+        if self.controller.getLeft():
+            self.deltax = -1
+            self.deltay = 0
+        if self.controller.getRight():
+            self.deltax = 1
+            self.deltay = 0
 
     def update(self):
         x, y = self.pos
@@ -117,9 +136,10 @@ class Snake(Graphics):
             # and if we hit food increase tail length
             # also increase our speed
             if self.food.pos == self.pos:
-                self.speed += 0.5
-                while self.food.pos in self.body:
-                    self.food.randPos()
+                if self.tailLen > self.speed:
+                    self.speed = self.tailLen * 2
+                # while self.food.pos in self.body:
+                self.food.randPos()
                 self.food.randColor()
                 self.tailLen += 1
             # look if our "tail is in the way" and only if we have a tail.

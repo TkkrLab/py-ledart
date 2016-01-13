@@ -1,4 +1,5 @@
 import sys
+from ArgumentParser import *
 
 try:
     from PygameController import PygameController, PygameDummyController
@@ -14,7 +15,7 @@ def translate(value, leftmin, leftmax, rightmin, rightmax):
 
 
 class DummyController(object):
-    def __init__(self, plugged=0):
+    def __init__(self, plugged=0, **kwargs):
         self.value = 0
         self.increment = 50
 
@@ -23,6 +24,24 @@ class DummyController(object):
             self.increment *= -1
         self.value += self.increment
         return self.value
+
+
+class LogiTechController(object):
+    LTHUMB_X = 1
+    RTHUMB_X = 3
+    LTHUMB_Y = 0
+    RTHUMB_Y = 2
+    BUTTON_LEFT = 0
+    BUTTON_RIGHT = 2
+    BUTTON_UP = 3
+    BUTTON_DOWN = 1
+
+
+class PiranhaController(object):
+    LTHUMB_X = 1
+    RTHUMB_X = 3
+    LTHUMB_Y = 0
+    RTHUMB_Y = 2
 
 
 class MegaController(object):
@@ -66,8 +85,10 @@ class XboxController(object):
 
 
 class PongTtyController(object):
-    POT1 = 0
-    POT2 = 1
+    LTHUMB_X = 1
+    RTHUMB_X = 0
+    LTHUMB_Y = 1
+    RTHUMB_Y = 0
 
 
 class MidiController(object):
@@ -155,30 +176,32 @@ class AudioController(object):
 
 class ttyController(object):
     ser_port = None
-
-    def __init__(self, plugged=0, baud=115200, port="ACM", debug=False):
-        import serial
-        self.serial = serial
+    serial = __import__('serial')
+    def __init__(self, plugged=0):
         self.pos = (0, 0)
-        port = "/dev/tty" + port + str(plugged)
+        self.args = get_args()
+        port = "/dev/tty" + self.args.ttyport
+        baud = self.args.ttybaud
+        self.debug = self.args.ttydebug
         if not self.ser_port:
-            self.ser_port = self.serial.Serial(port, baud,
-                                               interCharTimeout=0.009)
-        self.debug = debug
+            self.ser_port = self.serial.Serial(port, baud, interCharTimeout=0.009)
 
     def getPos(self, button):
         try:
             # ask for next two bytes.
-            self.ser_port.write('n')
+            for i in xrange(0, 10):
+                self.ser_port.write('n')
             # look if anything in buffer.
             # if so extract values and return.
             if(self.ser_port.inWaiting()):
+                for i in xrange(0, 9):
+                    self.ser_port.read(2)
                 first, second = self.ser_port.read(2)
                 # get values.
                 first, second = ord(first), ord(second)
+                if self.debug:
+                    print(first, second)
                 self.pos = (first, second)
-            if self.debug:
-                print(first, second)
             return self.pos[button]
         except Exception as e:
             print("sys.exit: " + str(e))

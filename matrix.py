@@ -3,8 +3,8 @@ matrix dimensions and color order.
 and conversion function(s) to apply to matrices
 """
 
-# matrix_height = 48
-# matrix_width = 96
+matrix_height = 48
+matrix_width = 96
 
 # matrix_width = 10
 # matrix_height = 10
@@ -15,8 +15,8 @@ and conversion function(s) to apply to matrices
 # matrix_height = 20
 # matrix_width = 34
 
-matrix_height = 10
-matrix_width = 17
+# matrix_height = 10
+# matrix_width = 17
 
 # matrix_height = 80
 # matrix_width = 7
