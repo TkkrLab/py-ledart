@@ -3,35 +3,13 @@ matrix dimensions and color order.
 and conversion function(s) to apply to matrices
 """
 
+# tkkrlab ledboard size
 matrix_height = 48
 matrix_width = 96
 
-# matrix_width = 10
-# matrix_height = 10
-
-# matrix_height = 34
-# matrix_width = 20
-
-# matrix_height = 20
-# matrix_width = 34
-
+# pixelmatrix size
 # matrix_height = 10
 # matrix_width = 17
-
-# matrix_height = 80
-# matrix_width = 7
-
-# matrix_height = 8
-# matrix_width = 8
-
-# matrix_height = 12
-# matrix_width = 12
-
-# matrix_height = 48
-# matrix_width = 48
-
-# matrix_height = 32
-# matrix_width = 32
 
 matrix_size = (matrix_height * matrix_width)
 

@@ -6,6 +6,7 @@ import sys
 import imp
 import os
 import time
+import atexit
 
 # import matrix simulator and matrix specifics
 from matrix import matrix_width, matrix_height
@@ -191,6 +192,10 @@ def get_protocol(args):
 
 
 if __name__ == "__main__":
+    # first thing we do register at exit function.
+    # make tty be sane so that if the tty/terminal screws up.
+    # this will make it workable again.
+    atexit.register(lambda: os.system('stty sane; echo ""'))
     from ArgumentParser import get_args
     # get command line arguments:
     args = get_args()
@@ -274,3 +279,4 @@ if __name__ == "__main__":
                 sendout(args, protocol)
             previousTime = currentTime
         signal_handler(None, None)
+
