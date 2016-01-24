@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/TkkrLab/py-artnet.svg?branch=master)](https://travis-ci.org/TkkrLab/py-artnet)
+[![Build Status](https://travis-ci.org/TkkrLab/py-ledart.svg?branch=master)](https://travis-ci.org/TkkrLab/py-ledart)
 py-ledart
 ==========
 
