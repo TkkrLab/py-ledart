@@ -1,9 +1,12 @@
 import sys
 
-import alsaaudio
-import time
-import audioop
-import alsaseq
+try:
+    import alsaaudio
+    import time
+    import audioop
+    import alsaseq
+except Exception as e:
+    print(">> couldn't load: ", e)
 
 try:
     from PygameController import PygameController, PygameDummyController
