@@ -3,11 +3,13 @@ from Tools.Graphics.ConvertColors import HSVtoRGB
 from Tools.Graphics.RGBColorTools import ColorRGBOps
 from Tools.Palet import PaletGenerate
 from Tools.Timing import Timer
-from Tools.Controllers import translate, MidiController
 from matrix import matrix_width, matrix_height
 from math import sin, cos, sqrt, pi, radians
 import time
 import random
+
+from Tools.Controllers import translate
+# from Tools.Controllers.SoundControllers import MidiController
 
 select = "RainbowEffect"
 
@@ -56,162 +58,162 @@ class ColorFade(Graphics):
         self.fill(color)
 
 
-class PlasmaFifth(Graphics):
-    def __init__(self, speed=1):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.plasma = Graphics(matrix_width, matrix_height)
+# class PlasmaFifth(Graphics):
+#     def __init__(self, speed=1):
+#         Graphics.__init__(self, matrix_width, matrix_height)
+#         self.plasma = Graphics(matrix_width, matrix_height)
 
-        self.x_range = xrange(0, matrix_width, 1)
-        self.y_range = xrange(0, matrix_height, 1)
+#         self.x_range = xrange(0, matrix_width, 1)
+#         self.y_range = xrange(0, matrix_height, 1)
 
-        self.speed = speed
-        self.interval = 1000 / self.speed
-        self.time = random.randint(0, 100)
-        self.previousTick = 0
+#         self.speed = speed
+#         self.interval = 1000 / self.speed
+#         self.time = random.randint(0, 100)
+#         self.previousTick = 0
 
-        self.angle = 0
-        self.mc = MidiController()
+#         self.angle = 0
+#         self.mc = MidiController()
 
-        self.generatePalette()
-        self.generatePlasmaSurface()
+#         self.generatePalette()
+#         self.generatePlasmaSurface()
 
-    def generatePalette(self):
-        self.palette = []
-        pal = PaletGenerate()
-        for x in xrange(0, 0xff * 3, 1):
-            color = pal.colorFade()
-            r, g, b = color
-            colorRGB = (r, g, b)
-            self.palette.append(colorRGB)
+#     def generatePalette(self):
+#         self.palette = []
+#         pal = PaletGenerate()
+#         for x in xrange(0, 0xff * 3, 1):
+#             color = pal.colorFade()
+#             r, g, b = color
+#             colorRGB = (r, g, b)
+#             self.palette.append(colorRGB)
 
-    def generatePlasmaSurface(self):
-        self.angle = self.time % 360
-        x_offset = matrix_width * sin(radians(self.angle)) + matrix_width
-        y_offset = matrix_height * cos(radians(self.angle)) + matrix_height
-        size = 1.5
-        # good values: 6.328125 , 0.1328125
-        offset = self.mc.getButton(0, 0)
-        offset = translate(offset, 0, 128, 0, self.mc.getButton(0, 1))
-        fac = self.mc.getButton(0, 2)
-        fac = translate(fac, 0, 128, 0, self.mc.getButton(0, 3))
-        for y in self.y_range:
-            for x in self.x_range:
-                c = int(offset + (offset * sin(x_offset + x / (size * 2)))
-                        + offset + (offset * sin(y_offset + y / size))
-                        + offset + (offset * sin((x_offset + x + y_offset + y)
-                                    / (size * 2)))
-                        + offset + (offset * sin(sqrt(((x_offset + x) *
-                                    (x_offset + x) + (y_offset + y) *
-                                    (y_offset + y))) / size))
-                        ) / fac
-                color = (abs(int(c)),) * 3
-                self.plasma.draw_pixel(x, y, color)
+#     def generatePlasmaSurface(self):
+#         self.angle = self.time % 360
+#         x_offset = matrix_width * sin(radians(self.angle)) + matrix_width
+#         y_offset = matrix_height * cos(radians(self.angle)) + matrix_height
+#         size = 1.5
+#         # good values: 6.328125 , 0.1328125
+#         offset = self.mc.getButton(0, 0)
+#         offset = translate(offset, 0, 128, 0, self.mc.getButton(0, 1))
+#         fac = self.mc.getButton(0, 2)
+#         fac = translate(fac, 0, 128, 0, self.mc.getButton(0, 3))
+#         for y in self.y_range:
+#             for x in self.x_range:
+#                 c = int(offset + (offset * sin(x_offset + x / (size * 2)))
+#                         + offset + (offset * sin(y_offset + y / size))
+#                         + offset + (offset * sin((x_offset + x + y_offset + y)
+#                                     / (size * 2)))
+#                         + offset + (offset * sin(sqrt(((x_offset + x) *
+#                                     (x_offset + x) + (y_offset + y) *
+#                                     (y_offset + y))) / size))
+#                         ) / fac
+#                 color = (abs(int(c)),) * 3
+#                 self.plasma.draw_pixel(x, y, color)
 
-    def process(self):
-        millis = round(time.time() * 1000)
-        if((millis - self.previousTick) >= self.interval):
-            self.previousTick = time.time()
-            self.time += 1
+#     def process(self):
+#         millis = round(time.time() * 1000)
+#         if((millis - self.previousTick) >= self.interval):
+#             self.previousTick = time.time()
+#             self.time += 1
 
-    def draw(self):
-        self.fill(BLACK)
-        paletteShift = self.time / self.speed
-        self.generatePlasmaSurface()
-        for y in self.y_range:
-            for x in self.x_range:
-                plasma_color = self.plasma.read_pixel(x, y)
-                color_shift = self.palette[paletteShift % len(self.palette)]
-                r = (plasma_color[0] + color_shift[0])
-                g = (plasma_color[1] + color_shift[1])
-                b = (plasma_color[2] + color_shift[2])
-                color = (r, g, b,)
-                # darken the color to create a better contrast
-                # also boundery checks make it more smooth in ColorRGBOps
-                color = ColorRGBOps.darken(color, 200)
-                self.draw_pixel(x, y, color)
+#     def draw(self):
+#         self.fill(BLACK)
+#         paletteShift = self.time / self.speed
+#         self.generatePlasmaSurface()
+#         for y in self.y_range:
+#             for x in self.x_range:
+#                 plasma_color = self.plasma.read_pixel(x, y)
+#                 color_shift = self.palette[paletteShift % len(self.palette)]
+#                 r = (plasma_color[0] + color_shift[0])
+#                 g = (plasma_color[1] + color_shift[1])
+#                 b = (plasma_color[2] + color_shift[2])
+#                 color = (r, g, b,)
+#                 # darken the color to create a better contrast
+#                 # also boundery checks make it more smooth in ColorRGBOps
+#                 color = ColorRGBOps.darken(color, 200)
+#                 self.draw_pixel(x, y, color)
 
-    def generate(self):
-        self.process()
-        self.draw()
+#     def generate(self):
+#         self.process()
+#         self.draw()
 
 
-class PlasmaFourth(Graphics):
-    def __init__(self, speed=1):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.plasma = Graphics(matrix_width, matrix_height)
+# class PlasmaFourth(Graphics):
+#     def __init__(self, speed=1):
+#         Graphics.__init__(self, matrix_width, matrix_height)
+#         self.plasma = Graphics(matrix_width, matrix_height)
 
-        self.x_range = xrange(0, matrix_width, 1)
-        self.y_range = xrange(0, matrix_height, 1)
+#         self.x_range = xrange(0, matrix_width, 1)
+#         self.y_range = xrange(0, matrix_height, 1)
 
-        self.speed = speed
-        self.interval = 1000 / self.speed
-        self.time = random.randint(0, 100)
-        self.previousTick = 0
+#         self.speed = speed
+#         self.interval = 1000 / self.speed
+#         self.time = random.randint(0, 100)
+#         self.previousTick = 0
 
-        self.angle = 0
-        self.mc = MidiController()
+#         self.angle = 0
+#         self.mc = MidiController()
 
-        self.generatePalette()
-        self.generatePlasmaSurface()
+#         self.generatePalette()
+#         self.generatePlasmaSurface()
 
-    def generatePalette(self):
-        self.palette = []
-        pal = PaletGenerate()
-        for x in xrange(0, 0xff * 3, 1):
-            color = pal.colorFade()
-            r, g, b = color
-            colorRGB = (r, g, b)
-            self.palette.append(colorRGB)
-        print self.palette[0], self.palette[len(self.palette) - 1]
+#     def generatePalette(self):
+#         self.palette = []
+#         pal = PaletGenerate()
+#         for x in xrange(0, 0xff * 3, 1):
+#             color = pal.colorFade()
+#             r, g, b = color
+#             colorRGB = (r, g, b)
+#             self.palette.append(colorRGB)
+#         print self.palette[0], self.palette[len(self.palette) - 1]
 
-    def generatePlasmaSurface(self):
-        self.angle = self.time
-        x_offset = matrix_width * sin(radians(self.angle)) + matrix_width
-        y_offset = matrix_height * cos(radians(self.angle)) + matrix_height
-        plasma_set = [76, 81, 1, 90, 4, 4, 1, 89, 21, 1]
-        fac = translate(plasma_set[7], 0, 128, 0, 8)
-        fac2 = translate(plasma_set[8], 0, 128, 0, 8)
-        for y in self.y_range:
-            for x in self.x_range:
-                c = int((plasma_set[0] * 2 * sin((x + x_offset) /
-                         plasma_set[4]))
-                        + (plasma_set[1] * 2 * sin((y + y_offset) /
-                           plasma_set[5]))
-                        + (plasma_set[2] * 2 * sin(((x + x_offset) +
-                           (y + y_offset)) / plasma_set[6]))
-                        + (plasma_set[3] * 2 * sin(sqrt(float((x + x_offset) *
-                           (x + x_offset) + (y + y_offset) * (y + y_offset))) /
-                            fac))
-                        ) / fac2
-                color = (int(abs(c)),) * 3
-                self.plasma.draw_pixel(x, y, color)
+#     def generatePlasmaSurface(self):
+#         self.angle = self.time
+#         x_offset = matrix_width * sin(radians(self.angle)) + matrix_width
+#         y_offset = matrix_height * cos(radians(self.angle)) + matrix_height
+#         plasma_set = [76, 81, 1, 90, 4, 4, 1, 89, 21, 1]
+#         fac = translate(plasma_set[7], 0, 128, 0, 8)
+#         fac2 = translate(plasma_set[8], 0, 128, 0, 8)
+#         for y in self.y_range:
+#             for x in self.x_range:
+#                 c = int((plasma_set[0] * 2 * sin((x + x_offset) /
+#                          plasma_set[4]))
+#                         + (plasma_set[1] * 2 * sin((y + y_offset) /
+#                            plasma_set[5]))
+#                         + (plasma_set[2] * 2 * sin(((x + x_offset) +
+#                            (y + y_offset)) / plasma_set[6]))
+#                         + (plasma_set[3] * 2 * sin(sqrt(float((x + x_offset) *
+#                            (x + x_offset) + (y + y_offset) * (y + y_offset))) /
+#                             fac))
+#                         ) / fac2
+#                 color = (int(abs(c)),) * 3
+#                 self.plasma.draw_pixel(x, y, color)
 
-    def process(self):
-        millis = round(time.time() * 1000)
-        if((millis - self.previousTick) >= self.interval):
-            self.previousTick = time.time()
-            self.time += 1
+#     def process(self):
+#         millis = round(time.time() * 1000)
+#         if((millis - self.previousTick) >= self.interval):
+#             self.previousTick = time.time()
+#             self.time += 1
 
-    def draw(self):
-        paletteShift = self.time / self.speed
-        self.generatePlasmaSurface()
-        for y in self.y_range:
-            for x in self.x_range:
-                plasma_color = self.plasma.read_pixel(x, y)
-                color_shift = self.palette[paletteShift % len(self.palette)]
-                r = (plasma_color[0] + color_shift[0]) % (len(self.palette))
-                g = (plasma_color[1] + color_shift[1]) % (len(self.palette))
-                b = (plasma_color[2] + color_shift[2]) % (len(self.palette))
-                color = (r, g, b,)
-                # darken the color to create a better contrast
-                # also boundery checks make it more smooth in ColorRGBOps
-                color = ColorRGBOps.darken(color, 50)
-                self.draw_pixel(x, y, color)
+#     def draw(self):
+#         paletteShift = self.time / self.speed
+#         self.generatePlasmaSurface()
+#         for y in self.y_range:
+#             for x in self.x_range:
+#                 plasma_color = self.plasma.read_pixel(x, y)
+#                 color_shift = self.palette[paletteShift % len(self.palette)]
+#                 r = (plasma_color[0] + color_shift[0]) % (len(self.palette))
+#                 g = (plasma_color[1] + color_shift[1]) % (len(self.palette))
+#                 b = (plasma_color[2] + color_shift[2]) % (len(self.palette))
+#                 color = (r, g, b,)
+#                 # darken the color to create a better contrast
+#                 # also boundery checks make it more smooth in ColorRGBOps
+#                 color = ColorRGBOps.darken(color, 50)
+#                 self.draw_pixel(x, y, color)
 
-    def generate(self):
-        self.fill(BLACK)
-        self.process()
-        self.draw()
+#     def generate(self):
+#         self.fill(BLACK)
+#         self.process()
+#         self.draw()
 
 
 class RevolvingCircle(Graphics):
