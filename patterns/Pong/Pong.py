@@ -42,6 +42,9 @@ class PongControllerAuto(LogiTechController):
     def __init__(self, plugged=0, ball=None):
         self.ball = ball
 
+    def found(self):
+        return True
+
     def getPos(self, button):
         return self.ball.pos[0]
 
@@ -187,9 +190,10 @@ class Pong(Graphics):
         s1, s2 = select
         try:
             firstcontroler = controllers[s1]
-            self.controller1 = firstcontroler(plugged=s1)
+            self.controller1 = firstcontroler(plugged=s1, ball=self.ball)
             secondcontroler = controllers[s2]
-            self.controller2 = secondcontroler(plugged=s2)
+            self.controller2 = secondcontroler(plugged=s2, ball=self.ball)
+
         except Exception as e:
             fmt = (e, )
             fmtstr = "unable to find controllers playing on automatic\n>> %s\n"

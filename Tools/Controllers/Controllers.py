@@ -1,5 +1,9 @@
 import sys
-from ArgumentParser import *
+
+import alsaaudio
+import time
+import audioop
+import alsaseq
 
 try:
     from PygameController import PygameController, PygameDummyController
@@ -97,7 +101,6 @@ class MidiController(object):
     """
     def __init__(self, device_id=20, name="Arduino Leonardo",
                  portin=0, portout=0, numchannels=5, numinputs=16):
-        import alsaseq
         self.alsaseq = alsaseq
         self.inputed = {}
         self.positions = []
@@ -154,11 +157,8 @@ class AudioController(object):
     the lower the period and the higher the rate. the faster the sampeling.
     """
     def __init__(self, channel=1, rate=8000, period=160):
-        import alsaaudio
         self.audio = alsaaudio
-        import time
         self.time = time
-        import audioop
         self.audioop = audioop
         self.inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
         self.inp.setchannels(channel)

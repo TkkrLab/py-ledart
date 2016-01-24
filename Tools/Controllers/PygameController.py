@@ -31,15 +31,21 @@ class PygameController(object):
         self.pygame.init()
         self.pygame.joystick.init()
         self.joystick = None
+        try:
+            self.joystick = self.pygame.joystick.Joystick(plugged)
+        except Exception as e:
+            print("PygameController.py:37:", e)
+            print("selected: ", plugged)
+            self.joystick = None
 
-        self.joystick = self.pygame.joystick.Joystick(plugged)
         if self.joystick:
             self.joystick.init()
             self.num_axis = self.joystick.get_numaxes()
             self.num_buttons = self.joystick.get_numbuttons()
             self.num_hats = self.joystick.get_numhats()
-        else:
-            raise ControllerError("No Controllers Found")
+
+    def found(self):
+        return self.joystick
 
     def handleEvents(self):
         if self.joystick:
