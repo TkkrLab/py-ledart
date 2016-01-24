@@ -35,7 +35,7 @@ install:
   - "pip install coveralls"
   - "pip install coverage"
 
-# before_script: "export AUDIODEV=null"
+before_script: "export AUDIODEV=null"
 
 script: nosetests
 
