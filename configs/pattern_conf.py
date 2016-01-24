@@ -8,9 +8,9 @@ michiel_laptop = "192.168.1.199"
 localhost = "127.0.0.1"
 broadcast = "10.42.255.255"
 matrix = "10.42.4.36"
-# dest = ledboard
+dest = ledboard
 # dest = pixelmatrix
-dest = '10.42.4.213'
+# dest = '10.42.4.213'
 
 TARGETS = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
@@ -27,7 +27,7 @@ TARGETS = {
     # dest: BlueLife(),
     # dest: GreenLife(),
     # dest: SuperPixelBros(),
-    dest: Pong(speed=5),
+    # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
     # dest: ScreenCapture(fullscreen=True),
@@ -62,7 +62,7 @@ TARGETS = {
     # dest: RainPattern(chance=0.1, color=(40, 60, 255)),
     # dest: GraphicsCircleTest(),
     # dest: GraphicsRectTest(),
-    # dest: GraphicsLineTest(),
+    dest: GraphicsLineTest(),
     # dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
     # dest: VUmeterThree(),
