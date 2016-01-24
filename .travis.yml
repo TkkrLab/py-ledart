@@ -39,7 +39,8 @@ before_script:
   - "export AUDIODEV=null"
   - "sudo modprobe snd-dummy"
 
-script: nosetests
+script:
+  - nosetests --verbosity=3
 
 after_success:
   coveralls
