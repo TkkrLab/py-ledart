@@ -17,6 +17,10 @@ try:
 except Exception as e:
     print("MatrixScreen>> " + str(e))
 
+fps = 0
+def get_fps():
+    global fps
+    return fps
 
 def get_trace():
     exc_type, exc_obj, exc_tb = sys.exc_info()

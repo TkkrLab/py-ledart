@@ -1,5 +1,6 @@
 from Tools.Graphics import Surface
 from matrix import matrix_width, matrix_height, chunks
+from ArgumentParser import get_args, add_argument
 import subprocess as sp
 import pymouse
 import shlex
@@ -44,11 +45,13 @@ class VideoPlay(Surface):
     def generate(self):
         self.play_next_image()
 
-
 class ScreenCapture(Surface):
-    def __init__(self, screen_resolution=None, fullscreen=False, fps=10,
+    def __init__(self, fps=10.0, screen_resolution=None, fullscreen=False,
                  center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
+        add_argument("--test", type=str, default="a", help="<testing>", metavar="<testing>")
+        args = get_args()
+        print(args.test)
         if screen_resolution is None:
             pm = pymouse.PyMouse()
             screen_resolution = pm.screen_size()
