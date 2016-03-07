@@ -57,20 +57,14 @@ most options are self explainatory but if they aren't you give me a call! like a
 
 #### Dependencies.
 * python2.7	        [source](https://www.python.org/downloads/)
-* pypng		        [source](https://pypi.python.org/pypi/pypng)
-* pygame	        [source](http://pygame.org/news.html)
-* pyserial-2.7	    [source](https://pypi.python.org/pypi/pyserial)
-* pygtk 	        [source](http://www.pygtk.org/downloads.html)
-* pygtksourveiw2    [source](http://packages.ubuntu.com/lucid-updates/python/python-gtksourceview2)
-* PyOpenGl	        [source](https://pypi.python.org/pypi/PyOpenGL)
-* SciPy             [source](http://www.scipy.org/)
-* NumPy             [source](http://www.numpy.org/)
-* PyAudio           [source](http://people.csail.mit.edu/hubert/pyaudio/)
-* alsaseq           [source](http://pp.com.mx/python/alsaseq/)
-* alsaaudio         [source](http://pyalsaaudio.sourceforge.net/)
-* pillow            [source](https://pillow.readthedocs.org/en/3.0.x/)
-* ffmpeg            [source](https://www.ffmpeg.org/)
-* pyUserInput       [source](https://github.com/SavinaRoja/PyUserInput)
+* ffmpeg            	[source](https://www.ffmpeg.org/)
+* pyserial 		(pip install pyserial)
+* pillow		(pip install pillow)
+* pygame		(pip install hg+http://bitbucket.org/pygame/pygame)
+* pyopengl              (pip install pyopengl)
+* pyuserinput		(pip install git+https://github.com/SavinaRoja/PyUserInput)
+* xlib			(pip install svn+https://svn.code.sf.net/p/python-xlib/code/trunk/)
+
 
 #### what to do if you want to run it ?
 
