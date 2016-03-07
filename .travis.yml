@@ -31,6 +31,7 @@ before_install:
   - cd ../
 
 install:
+  - "pip install pypng numpy pyserial pyopengl Pillow"
   - "pip install coveralls"
   - "pip install coverage"
 
