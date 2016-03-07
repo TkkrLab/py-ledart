@@ -1,15 +1,15 @@
-Pillow==3.1.1
+Pillow
 
-# pygame==1.9.2a0
+# pygame
 hg+http://bitbucket.org/pygame/pygame
 
-PyOpenGL==3.1.0
-pyserial==3.0.1
-python-gnupg==0.3.8
+PyOpenGL
+pyserial
+python-gnupg
 
-# python-xlib==0.15rc1
+# python-xlib
 svn+https://svn.code.sf.net/p/python-xlib/code/trunk/
-# PyUserInput==0.1.9
+# PyUserInput
 git+https://github.com/SavinaRoja/PyUserInput
 
-PyYAML==3.11
+PyYAML==

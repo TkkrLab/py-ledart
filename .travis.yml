@@ -10,6 +10,8 @@ addons:
   apt:
     packages:
       - python-alsaaudio
+      - git
+      - mercurial
 
 install:
   - "pip install -r requirements.txt"
