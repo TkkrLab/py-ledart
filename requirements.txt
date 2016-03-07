@@ -12,4 +12,4 @@ svn+https://svn.code.sf.net/p/python-xlib/code/trunk/
 # PyUserInput
 git+https://github.com/SavinaRoja/PyUserInput
 
-PyYAML==
+PyYAML
