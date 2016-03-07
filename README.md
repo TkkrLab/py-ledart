@@ -115,10 +115,6 @@ the default framerate is 15 Fps which is the delay that dictates how fast the re
 
 and the default config is default_conf.py
 
-which won't work if you didn't put the right things in it. like the right ip.
-
-etc etc.
-
 if you want to run the code with the build in simulator just add --matrixSim=enabled
 
 to the command line options and it will run localy on your screen.
@@ -127,11 +123,6 @@ for example:
 ```shell
     python runpatternJob.py --fps=25 --config=myLamps_conf.py --matrixSim=enabled
 ```
-
-
-but ofcourse this wouldn't look right if you config file contains code for anything other than a matrix display.
-
-but you can view the display as a string of pixels though, cause basicly in reality it is just that.
 
 
 ## Projects py-ledart is used in.
