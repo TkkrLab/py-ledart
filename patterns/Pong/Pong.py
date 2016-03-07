@@ -64,7 +64,6 @@ class PongControllerMC(PygameController, MegaController):
         value = PygameController.getAxis(self, button)
         value = translate(value, 1.0,-1.0, 0, 10.1)
         value = int(round(value))
-        print value
         return value
 
 controllers = []

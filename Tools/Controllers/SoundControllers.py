@@ -44,17 +44,14 @@ def TestMidiC():
             for x in range(0, mc.numchannels):
                 key = (x, y)
                 value = mc.getInputed()[key]
-                print(key)
                 chan, button = key
                 while(mc.getInputed()[key] == 0):
                     value = mc.getButton(chan, button)
-                print(value)
         # for x in range(0, 16):
         #     for y in range(0, 4):
         #         value = mc.getButton(x, y)
         #         while(value == 0):
         #             value = mc.getButton(x, y)
-        #         print((x, y), value)
         # if(time.time() - previous > 10):
         #     return
 

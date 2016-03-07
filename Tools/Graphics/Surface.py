@@ -134,7 +134,6 @@ class ImageSurface(Surface):
         self.imtype = self.determine_type(fname)
         if self.imtype is None:
             raise(Exception("Couldn't load image."))
-        print(thumbnail)
 
         if (self.image.width > width) or (self.image.height > height):
             if thumbnail:
