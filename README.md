@@ -58,7 +58,7 @@ most options are self explainatory but if they aren't you give me a call! like a
 
 #### Dependencies.
 
-## command line operation:
+** command line operation:
 * python2.7     [source](https://www.python.org/downloads/)
 * ffmpeg        [source](https://www.ffmpeg.org/)
 * pyserial      (pip install pyserial)
@@ -68,7 +68,7 @@ most options are self explainatory but if they aren't you give me a call! like a
 * pyuserinput   (pip install git+https://github.com/SavinaRoja/PyUserInput)
 * xlib          (pip install svn+https://svn.code.sf.net/p/python-xlib/code/trunk/)
 
-## Gui
+** Gui
 * python-gtksourceview2
 * pygtk
 
