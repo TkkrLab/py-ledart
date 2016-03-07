@@ -58,19 +58,19 @@ most options are self explainatory but if they aren't you give me a call! like a
 
 #### Dependencies.
 
-** command line operation:
-* python2.7     [source](https://www.python.org/downloads/)
-* ffmpeg        [source](https://www.ffmpeg.org/)
-* pyserial      (pip install pyserial)
-* pillow        (pip install pillow)
-* pygame        (pip install hg+http://bitbucket.org/pygame/pygame)
-* pyopengl      (pip install pyopengl)
-* pyuserinput   (pip install git+https://github.com/SavinaRoja/PyUserInput)
-* xlib          (pip install svn+https://svn.code.sf.net/p/python-xlib/code/trunk/)
+* command line operation:
+** python2.7     [source](https://www.python.org/downloads/)
+** ffmpeg        [source](https://www.ffmpeg.org/)
+** pyserial      (pip install pyserial)
+** pillow        (pip install pillow)
+** pygame        (pip install hg+http://bitbucket.org/pygame/pygame)
+** pyopengl      (pip install pyopengl)
+** pyuserinput   (pip install git+https://github.com/SavinaRoja/PyUserInput)
+** xlib          (pip install svn+https://svn.code.sf.net/p/python-xlib/code/trunk/)
 
-** Gui
-* python-gtksourceview2
-* pygtk
+* Gui
+** python-gtksourceview2
+** pygtk
 
 #### what to do if you want to run it ?
 
