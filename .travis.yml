@@ -11,27 +11,8 @@ addons:
     packages:
       - python-alsaaudio
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libasound2 libasound2-dev libc6 python-support libjs-jquery alsa-base alsa-tools mercurial python-dev alsa-utils alsa-oss
-  - sudo apt-get build-dep -qq python-pygame
-  - sudo apt-get install -qq python-pygame python-gtk2 python-gtksourceview2 python-scipy python-pyaudio python-numpy
-  - hg clone https://bitbucket.org/pygame/pygame
-  - cd pygame
-  - sudo apt-get install -qq libsdl-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsmpeg-dev libportmidi-dev libavformat-dev libswscale-dev
-  - python setup.py build
-  - sudo python setup.py install
-  - cd ../
-  - wget http://pp.com.mx/python/alsaseq/alsaseq-0.4.1.tar.gz
-  - tar xf alsaseq-0.4.1.tar.gz
-  - cd alsaseq-0.4.1/
-  - python setup.py build
-  - sudo python setup.py install
-  - python -c 'import alsaseq, alsamidi'
-  - cd ../
-
 install:
-  - "pip install pypng numpy pyserial pyopengl Pillow"
+  - "pip install -r requirements.txt"
   - "pip install coveralls"
   - "pip install coverage"
 
