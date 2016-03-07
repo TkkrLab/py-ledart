@@ -12,6 +12,7 @@ addons:
       - python-alsaaudio
       - git
       - mercurial
+      - sdl
 
 install:
   - "pip install -r requirements.txt"
