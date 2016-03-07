@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7 -B
+#!venv/bin/python2.7 -B
 
 # import some generaly used libraries
 import signal
