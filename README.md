@@ -137,31 +137,7 @@ but you can view the display as a string of pixels though, cause basicly in real
 ## Projects py-ledart is used in.
 [PixelMatrix with artnet interface](https://www.tkkrlab.nl/wiki/Pixelmatrix)
 
-[Ledboard with lmcp interface]()
-
-
-## converting video to images with ffmpeg for VideoPlay class.
-
-use this to slice the whole video in images that correspond to a certain fps.
-```shell
-    ffmpeg -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
-```
-
-while you could cut out a little piece (in the example 3 minutes) if the video is to long.
-```shell
-    ffmpeg -ss 00:00:00 -t 00:03:00 -i video.mp4 -vf "fps=9.10, scale=-1:48" frames/title-%d.png
-```
-
-notice scale=-1:48
-
-you'll have to fill in your own ledboard width/height respectivly
-
-i choose -1:48 because that way ffmpeg won't stretch your image to fill your ledboard.
-
-to play the video all you'll have to do is point VideoPlay class to it in the config file.
-```python
-    dest: VideoPlay('images/videos/star-field/')
-```
+[Ledboard with lmcp interface](https://www.youtube.com/watch?v=QTXkxrPD9WQ)
 
 
 ## ideas
