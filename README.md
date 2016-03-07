@@ -166,7 +166,7 @@ but you can view the display as a string of pixels though, cause basicly in real
 
 
 # Art-Editor
-## how to run the editor forexample:
+## how to run the editor:
 ```shell
     robert@Laptop:~/py-artnet$ python runPatternJob.py --gui=enabled
 ```
