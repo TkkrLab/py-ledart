@@ -1,4 +1,4 @@
-#!venv/bin/python2.7 -B
+#!/home/duality/py-ledart/venv/bin/python2.7 -B
 
 # import some generaly used libraries
 import signal
@@ -272,11 +272,11 @@ if __name__ == "__main__":
                 sendout(args, protocol)
                 # TODO: figure out how to dynamicly
                 # adjust time as to have a fixed fps.
-                if len(measured) > 3:
-                    if args.fps > cfps:
-                        fps -= 0.001
-                    if args.fps < cfps:
-                        fps += 0.001
+                # if len(measured) > 3:
+                #     if args.fps > cfps:
+                #         fps -= 0.001
+                #     if args.fps < cfps:
+                #         fps += 0.001
                 time.sleep(abs(fps))
             # else send everything out as fast as possible
             else:

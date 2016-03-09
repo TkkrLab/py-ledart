@@ -1,6 +1,6 @@
 from Tools.Graphics import Surface
 from matrix import matrix_width, matrix_height, chunks
-from ArgumentParser import get_args, add_argument
+from ArgumentParser import get_args
 import subprocess as sp
 import pymouse
 import shlex
@@ -18,12 +18,15 @@ def load_rgb24(data, surface):
 
 
 class VideoPlay(Surface):
-    def __init__(self, location='', fps=18.4, center=True):
+    def __init__(self, location='', fps=None, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
         # # "fps=10.0, "
-        fps = "fps=%d, " % float(fps)
+        if fps == None:
+            fps = "fps=%d, " % float(get_args().fps)
+        else:
+            fps = "fps=%d, " % float(fps)
         fmtstr = "-vf \"%sscale=%d:%d\""
         fmt = (fps, self.width, self.height)
         filteropts = fmtstr % (fmt)
@@ -46,7 +49,7 @@ class VideoPlay(Surface):
         self.play_next_image()
 
 class ScreenCapture(Surface):
-    def __init__(self, fps=10.0, screen_resolution=None, fullscreen=False,
+    def __init__(self, screen_resolution=None, fullscreen=False, fps=None,
                  center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         if screen_resolution is None:
@@ -55,6 +58,8 @@ class ScreenCapture(Surface):
             print("selected resolution: " + str(screen_resolution))
         ffmpeg = "ffmpeg"
         display = os.getenv("DISPLAY")
+        if fps == None:
+            fps = get_args().fps
         if fullscreen:
             fmt = screen_resolution
             fmtstr = "%dx%d"
@@ -69,6 +74,8 @@ class ScreenCapture(Surface):
                        '-f', 'image2pipe',
                        '-pix_fmt', 'rgb24',
                        '-vcodec', 'rawvideo',
+                       '-preset', 'ultrafast',
+                       '-crf', '0',
                        '-vf', scale,
                        '-an', '-']
         else:
@@ -86,9 +93,12 @@ class ScreenCapture(Surface):
                        '-f', 'image2pipe',
                        '-pix_fmt', 'rgb24',
                        '-vcodec', 'rawvideo',
+                       '-preset', 'ultrafast',
+                       '-crf', '0',
                        '-an', '-']
 
         command = ' '.join(command)
+        print("using command: %s" % (command))
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
         self.play_next_image()
 
