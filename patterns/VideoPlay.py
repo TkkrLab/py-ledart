@@ -16,7 +16,6 @@ def load_rgb24(data, surface):
         surface[point] = color
         p += 1
 
-
 class VideoPlay(Surface):
     def __init__(self, location='', fps=None, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
@@ -39,6 +38,37 @@ class VideoPlay(Surface):
                    '-vcodec', 'rawvideo', '-']
 
         command = ' '.join(command)
+        self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
+
+    def play_next_image(self):
+        raw_image = self.pipe.stdout.read(self.width * self.height * 3)
+        load_rgb24(raw_image, self)
+
+    def generate(self):
+        self.play_next_image()
+
+class CamCapture(Surface):
+    def __init__(self, dev='/dev/video0', fps=None):
+        Surface.__init__(self, width=matrix_width, height=matrix_height)
+        if fps == None:
+            fps = str(get_args().fps)
+
+        ffmpeg = 'ffmpeg'
+        scale = "scale=%d:%d" % (self.width, self.height)
+
+        command = [ffmpeg,
+                   '-f', 'v4l2',
+                   '-framerate', fps,
+                   '-video_size', '640x480',
+                   '-i', dev,
+                   '-vf', scale,
+                   '-f', 'image2pipe',
+                   '-pix_fmt', 'rgb24',
+                   '-vcodec', 'rawvideo',
+                   '-']
+
+        command = ' '.join(command)
+        print("command: ", command)
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def play_next_image(self):

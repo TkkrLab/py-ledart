@@ -8,7 +8,7 @@ michiel_laptop = "192.168.1.199"
 localhost = "127.0.0.1"
 broadcast = "10.42.255.255"
 matrix = "10.42.4.36"
-dest = ledboard
+dest = localhost
 # dest = pixelmatrix
 # dest = '10.42.4.213'
 
@@ -29,7 +29,7 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    dest: ScreenCapture(fullscreen=True),
+    # dest: ScreenCapture(fullscreen=True),
     # dest: ScreenCapture(fullscreen=False),
     # dest: DisplayImage('../Pictures/nebulacrosseyed.jpg'),
     # dest: DisplayImage('images/sisters-sprites.png'),
@@ -41,6 +41,7 @@ TARGETS = {
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay('/home/duality/Videos/bad.mkv'),
+    dest: CamCapture(),
     # dest: Water(),
     # dest: AliasedWPlasma(),
     
