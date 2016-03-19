@@ -1,4 +1,4 @@
-#!/home/duality/py-ledart/venv/bin/python2.7 -B
+#!python2.7 -B
 
 # import some generaly used libraries
 import signal
