@@ -59,7 +59,7 @@ class CamCapture(Surface):
         command = [ffmpeg,
                    '-f', 'v4l2',
                    '-framerate', fps,
-                   '-video_size', '640x480',
+                   '-video_size', '160x120',
                    '-i', dev,
                    '-vf', scale,
                    '-f', 'image2pipe',
