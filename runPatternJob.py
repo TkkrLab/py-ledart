@@ -8,6 +8,11 @@ import os
 import time
 import atexit
 
+import cProfile
+
+# generate no byte code
+sys.dont_write_bytecode = True
+
 # import matrix simulator and matrix specifics
 from matrix import matrix_width, matrix_height
 from Tools.Graphics import Surface

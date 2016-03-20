@@ -8,36 +8,39 @@ import os
 
 
 def load_rgb24(data, surface):
+    # p = 0
+    # indexes = surface.get_points()
+    # for c in chunks(data, 3):
+    #     color = (ord(c[0]), ord(c[1]), ord(c[2]))
+    #     point = indexes[p]
+    #     surface[point] = color
+    #     p += 1
     p = 0
-    indexes = surface.get_points()
-    for c in chunks(data, 3):
-        color = (ord(c[0]), ord(c[1]), ord(c[2]))
-        point = indexes[p]
-        surface[point] = color
+    for r,g,b in chunks(data, 3):
+        surface[p] = (ord(r) + ord(g) + ord(b))
         p += 1
 
 class VideoPlay(Surface):
-    def __init__(self, location='', fps=None, center=True):
+    def __init__(self, location='', center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
-        # # "fps=10.0, "
-        if fps == None:
-            fps = "fps=%d, " % float(get_args().fps)
-        else:
-            fps = "fps=%d, " % float(fps)
-        fmtstr = "-vf \"%sscale=%d:%d\""
-        fmt = (fps, self.width, self.height)
+
+        fmtstr = "-vf \"scale=%d:%d\""
+        fmt = (self.width, self.height)
         filteropts = fmtstr % (fmt)
         command = [ffmpeg,
-                   '-loglevel', 'panic',
+                   # '-loglevel', 'panic',
                    '-i', location,
+                   # '-framerate', '10.0',
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',
-                   '-vcodec', 'rawvideo', '-']
+                   '-vcodec', 'rawvideo',
+                   '-']
 
         command = ' '.join(command)
+        print("command: %s" % (command))
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def play_next_image(self):
@@ -58,7 +61,8 @@ class CamCapture(Surface):
 
         command = [ffmpeg,
                    '-f', 'v4l2',
-                   '-framerate', fps,
+                   # '-framerate', fps,
+                   '-r', '1',
                    '-video_size', '160x120',
                    '-i', dev,
                    '-vf', scale,

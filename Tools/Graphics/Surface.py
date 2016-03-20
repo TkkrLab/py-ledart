@@ -3,6 +3,7 @@
 """
 
 from PIL import Image
+from operator import itemgetter
 
 
 class Surface(object):
@@ -95,8 +96,10 @@ class Surface(object):
             return self.surface[point]
         elif isinstance(key, slice):
             return self.get_list_rep()[key.start:key.stop:key.step]
-        else:
+        elif isinstance(key, tuple):
             return self.surface[key]
+        else:
+            raise(KeyError)
 
     def __setitem__(self, key, value):
         self.surface[key] = value

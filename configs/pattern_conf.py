@@ -3,14 +3,10 @@ from patterns.Patterns import *
 
 pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
-raspberrypi = "192.168.2.42"
-michiel_laptop = "192.168.1.199"
 localhost = "127.0.0.1"
-broadcast = "10.42.255.255"
-matrix = "10.42.4.36"
-dest = localhost
+dest = ledboard
+# dest = localhost
 # dest = pixelmatrix
-# dest = '10.42.4.213'
 
 TARGETS = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
@@ -40,8 +36,8 @@ TARGETS = {
     # dest: DisplayImage('images/tiger.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
-    # dest: VideoPlay('/home/duality/Videos/bad.mkv'),
-    dest: CamCapture(),
+    dest: VideoPlay('/home/robert/Videos/bad.mkv'),
+    # dest: CamCapture(),
     # dest: Water(),
     # dest: AliasedWPlasma(),
     
