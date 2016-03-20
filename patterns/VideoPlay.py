@@ -30,9 +30,9 @@ class VideoPlay(Surface):
         fmt = (self.width, self.height)
         filteropts = fmtstr % (fmt)
         command = [ffmpeg,
-                   # '-loglevel', 'panic',
+                   '-loglevel', 'panic',
                    '-i', location,
-                   # '-framerate', '10.0',
+                   '-framerate', '10.0',
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',
