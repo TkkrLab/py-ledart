@@ -17,7 +17,7 @@ def load_rgb24(data, surface):
     #     p += 1
     p = 0
     for r,g,b in chunks(data, 3):
-        surface[p] = (ord(r) + ord(g) + ord(b))
+        surface[p] = (ord(r), ord(g), ord(b))
         p += 1
 
 class VideoPlay(Surface):

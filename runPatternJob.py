@@ -7,6 +7,7 @@ import imp
 import os
 import time
 import atexit
+import traceback
 
 import cProfile
 
@@ -154,7 +155,7 @@ def sendout(args, protocol):
                     try:
                         protocol.send(pattern, t)
                     except Exception as e:
-                        # traceback.print_exc()
+                        traceback.print_exc()
                         print("\r\ndest: %s" % (t))
                         print("pattern size, width, height: ",
                               pattern.get_size(), pattern.get_width(),

@@ -91,7 +91,7 @@ class Surface(object):
         return self.d_offset
 
     def __getitem__(self, key):
-        if type(key) == int:
+        if isinstance(key, int):
             point = self.indexes[key]
             return self.surface[point]
         elif isinstance(key, slice):
@@ -102,7 +102,15 @@ class Surface(object):
             raise(KeyError)
 
     def __setitem__(self, key, value):
-        self.surface[key] = value
+        if isinstance(key, int):
+            index = self.indexes[key]
+            self.surface[index] = value
+            # print("index, key, value", index, key, value)
+        elif isinstance(key, tuple):
+            self.surface[key] = value
+        else:
+            print("unknown type(key: %s)" % (str(type(key))))
+            raise("unknown type(key: %s)" % (str(type(key))))
 
     def __eq__(self, other):
         if self.size != other.size:
