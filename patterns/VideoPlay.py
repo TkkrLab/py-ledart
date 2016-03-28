@@ -15,24 +15,37 @@ def load_rgb24(data, surface):
     #     point = indexes[p]
     #     surface[point] = color
     #     p += 1
+
+    # p = 0
+    # for r,g,b in chunks(data, 3):
+    #     surface[p] = (ord(r), ord(g), ord(b))
+    #     p += 1
+
     p = 0
-    for r,g,b in chunks(data, 3):
-        surface[p] = (ord(r), ord(g), ord(b))
+    for color in chunks(data, 3):
+        r, g, b = color
+        color = (ord(r), ord(g), ord(b))
+        # change on surface only when the color is not the same
+        if surface[p] != color:
+            surface[p] = color
         p += 1
+    
+    # print(surface.surface)
 
 class VideoPlay(Surface):
-    def __init__(self, location='', center=True):
+    def __init__(self, location='', fps=10, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
-
+        if(fps == None):
+            fps = str(float(get_args().fps))
         fmtstr = "-vf \"scale=%d:%d\""
         fmt = (self.width, self.height)
         filteropts = fmtstr % (fmt)
         command = [ffmpeg,
                    '-loglevel', 'panic',
                    '-i', location,
-                   '-framerate', '10.0',
+                   '-framerate', str(float(fps)),
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',

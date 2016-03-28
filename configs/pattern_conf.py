@@ -5,8 +5,10 @@ pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
 localhost = "127.0.0.1"
 # dest = ledboard
-dest = localhost
+# dest = localhost
 # dest = pixelmatrix
+dest = '10.42.3.12'
+# dest = ''
 
 TARGETS = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
