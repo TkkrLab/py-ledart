@@ -38,7 +38,7 @@ TARGETS = {
     # dest: DisplayImage('images/tiger.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
-    dest: VideoPlay('/home/duality/Videos/bad.mkv'),
+    # dest: VideoPlay('/home/robert/Videos/bad.mkv'),
     # dest: CamCapture(),
     # dest: Water(),
     # dest: AliasedWPlasma(),
@@ -63,7 +63,7 @@ TARGETS = {
     # dest: GraphicsCircleTest(),
     # dest: GraphicsRectTest(),
     # dest: GraphicsLineTest(),
-    # dest: GraphicsPixelTest(),
+    dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
     # dest: VUmeterThree(),
 }

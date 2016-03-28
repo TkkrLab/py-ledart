@@ -8,19 +8,6 @@ import os
 
 
 def load_rgb24(data, surface):
-    # p = 0
-    # indexes = surface.get_points()
-    # for c in chunks(data, 3):
-    #     color = (ord(c[0]), ord(c[1]), ord(c[2]))
-    #     point = indexes[p]
-    #     surface[point] = color
-    #     p += 1
-
-    # p = 0
-    # for r,g,b in chunks(data, 3):
-    #     surface[p] = (ord(r), ord(g), ord(b))
-    #     p += 1
-    # return
     p = 0
     for color in chunks(data, 3):
         r, g, b = color
