@@ -20,7 +20,7 @@ def load_rgb24(data, surface):
     # for r,g,b in chunks(data, 3):
     #     surface[p] = (ord(r), ord(g), ord(b))
     #     p += 1
-
+    # return
     p = 0
     for color in chunks(data, 3):
         r, g, b = color
