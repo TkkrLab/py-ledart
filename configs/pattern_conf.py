@@ -5,10 +5,12 @@ pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
 localhost = "127.0.0.1"
 # dest = ledboard
-# dest = localhost
 # dest = pixelmatrix
-# dest = '10.42.3.12'
-dest = '10.42.7.124'
+# dest = localhost
+dest = '10.42.3.12'
+# dest = '10.42.7.124'
+# dest = '10.42.4.84'
+# dest = '10.42.6.105'
 
 TARGETS = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
@@ -21,7 +23,7 @@ TARGETS = {
     # dest: MixedLife(),
     # dest: RandomLife(),
     # dest: RedLife(),
-    # dest: BlueLife(),
+    dest: BlueLife(),
     # dest: GreenLife(),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
@@ -63,7 +65,7 @@ TARGETS = {
     # dest: GraphicsCircleTest(),
     # dest: GraphicsRectTest(),
     # dest: GraphicsLineTest(),
-    dest: GraphicsPixelTest(),
+    # dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
     # dest: VUmeterThree(),
 }

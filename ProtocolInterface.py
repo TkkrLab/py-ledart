@@ -21,7 +21,7 @@ class Interface(object):
 
     def open(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.setblocking(0)
+        # self.sock.setblocking(0)
 
     def transmit(self, data, ip):
         target = (ip, self.port)
