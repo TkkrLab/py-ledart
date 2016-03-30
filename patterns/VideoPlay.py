@@ -1,6 +1,7 @@
 from Tools.Graphics import Surface
 from matrix import matrix_width, matrix_height, chunks
 from ArgumentParser import get_args
+import time
 import subprocess as sp
 import pymouse
 import shlex
@@ -9,35 +10,35 @@ import os
 
 def load_rgb24(data, surface):
     p = 0
-    indexes = surface.get_points()
-    for c in chunks(data, 3):
-        color = (ord(c[0]), ord(c[1]), ord(c[2]))
-        point = indexes[p]
-        surface[point] = color
+    for color in chunks(data, 3):
+        # change on surface only when the color is not the same
+        if surface[p] != color:
+            surface[p] = map(ord, color)
         p += 1
 
 class VideoPlay(Surface):
-    def __init__(self, location='', fps=None, center=True):
+    def __init__(self, location='', fps=10, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
-        # # "fps=10.0, "
-        if fps == None:
-            fps = "fps=%d, " % float(get_args().fps)
-        else:
-            fps = "fps=%d, " % float(fps)
-        fmtstr = "-vf \"%sscale=%d:%d\""
-        fmt = (fps, self.width, self.height)
+        if(fps == None):
+            fps = str(float(get_args().fps))
+        self.f_fps = float(fps)
+        fmtstr = "-vf \"scale=%d:%d\""
+        fmt = (self.width, self.height)
         filteropts = fmtstr % (fmt)
         command = [ffmpeg,
                    '-loglevel', 'panic',
                    '-i', location,
+                   # '-framerate', str(float(fps)),
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',
-                   '-vcodec', 'rawvideo', '-']
+                   '-vcodec', 'rawvideo',
+                   '-']
 
         command = ' '.join(command)
+        print("command: %s" % (command))
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def play_next_image(self):
@@ -46,6 +47,7 @@ class VideoPlay(Surface):
 
     def generate(self):
         self.play_next_image()
+        # time.sleep()
 
 class CamCapture(Surface):
     def __init__(self, dev='/dev/video0', fps=None):
@@ -58,7 +60,8 @@ class CamCapture(Surface):
 
         command = [ffmpeg,
                    '-f', 'v4l2',
-                   '-framerate', fps,
+                   # '-framerate', fps,
+                   '-r', '1',
                    '-video_size', '160x120',
                    '-i', dev,
                    '-vf', scale,
@@ -98,7 +101,7 @@ class ScreenCapture(Surface):
             command = [ffmpeg,
                        '-loglevel', 'panic',
                        '-video_size', screensize,
-                       '-framerate', str(fps),
+                       '-framerate', '10.0',
                        '-f', 'x11grab',
                        '-i', display,
                        '-f', 'image2pipe',
@@ -115,7 +118,7 @@ class ScreenCapture(Surface):
             command = [ffmpeg,
                        '-loglevel', 'panic',
                        '-video_size', screensize,
-                       '-framerate', str(fps),
+                       '-framerate', '10.0',
                        '-follow_mouse', 'centered',
                        '-draw_mouse', '0',
                        '-f', 'x11grab',
@@ -138,3 +141,35 @@ class ScreenCapture(Surface):
 
     def generate(self):
         self.play_next_image()
+
+import av
+
+class VideoTest(Surface):
+    def __init__(self):
+        Surface.__init__(self, width=matrix_width, height=matrix_height)
+        self.container = av.open('/home/robert/Videos/bad.mkv')
+        self.video = next(s for s in self.container.streams if s.type == b'video')
+        frame = self.generate_frame()
+        self.draw_frame(frame)
+    
+    def generate_frame(self):
+        data = []
+        for packet in self.container.demux(self.video):
+            for frame in packet.decode():
+                f = frame.reformat(matrix_width, matrix_height, 'rgb24')
+                data = []
+                for row in f.to_nd_array():
+                    data.extend(map(tuple, row))
+                yield(data)
+    
+    def draw_frame(self, frame):
+        # frame will be a generator be we just want to tackle this one generator at a time.
+        for i, color in enumerate(frame.next()):
+            self[i] = color
+    
+    def generate(self):
+        frame = self.generate_frame()
+        self.draw_frame(frame)
+        # we determine our own fps.
+        # actually better do this with a timer
+        time.sleep(float(1./self.video.average_rate))
