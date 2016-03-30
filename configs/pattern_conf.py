@@ -5,12 +5,13 @@ pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
 localhost = "127.0.0.1"
 # dest = ledboard
-dest = pixelmatrix
-# dest = localhost
+# dest = pixelmatrix
+dest = localhost
 # dest = '10.42.3.12'
 # dest = '10.42.7.124'
 # dest = '10.42.4.84'
 # dest = '10.42.6.105'
+# dest = '10.42.4.12'
 
 TARGETS = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
@@ -22,7 +23,7 @@ TARGETS = {
     # dest: Snake(speed=17),
     # dest: MixedLife(),
     # dest: RandomLife(),
-    # dest: RedLife(),
+    dest: RedLife(),
     # dest: BlueLife(),
     # dest: GreenLife(),
     # dest: SuperPixelBros(),
@@ -40,7 +41,7 @@ TARGETS = {
     # dest: DisplayImage('images/tiger.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
-    dest: VideoPlay('/home/robert/Videos/bad.mkv'),
+    # dest: VideoPlay('/home/robert/Videos/bad.mkv'),
     # dest: VideoTest(),
     # dest: CamCapture(),
     # dest: Water(),

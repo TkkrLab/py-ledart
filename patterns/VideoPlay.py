@@ -17,20 +17,19 @@ def load_rgb24(data, surface):
         p += 1
 
 class VideoPlay(Surface):
-    def __init__(self, location='', fps=10, center=True):
+    def __init__(self, location='', fps=5, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
         if(fps == None):
             fps = str(float(get_args().fps))
-        self.f_fps = float(fps)
         fmtstr = "-vf \"scale=%d:%d\""
         fmt = (self.width, self.height)
         filteropts = fmtstr % (fmt)
         command = [ffmpeg,
                    '-loglevel', 'panic',
                    '-i', location,
-                   # '-framerate', str(float(fps)),
+                   '-framerate', str(float(fps)),
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',
@@ -47,7 +46,6 @@ class VideoPlay(Surface):
 
     def generate(self):
         self.play_next_image()
-        # time.sleep()
 
 class CamCapture(Surface):
     def __init__(self, dev='/dev/video0', fps=None):
