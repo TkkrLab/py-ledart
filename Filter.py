@@ -3,6 +3,7 @@ from Tools.Graphics import Surface
 
 # this function swaps widht and height
 def convert_dim_layout(data):
+    return data
     ndata = Surface(width=data.height, height=data.width)
     points = data.get_points()
     for point in points:
@@ -18,9 +19,9 @@ def convert_snake_layout(data):
     points = ndata.get_points()
     for point in points:
         x, y = point
-        if not ((y + 1) % 2):
-            for x in range(0, data.width):
-                xi = data.width - 1 - x
-                pos = xi, y
+        if not ((x + 1) % 2):
+            for y in range(0, data.height):
+                yi = data.height - 1 - y
+                pos = x, yi
                 ndata[(x, y)] = data[pos]
     return ndata

@@ -21,14 +21,14 @@ class Graphics(Surface):
             return
         if y < 0 or y >= self.get_height():
             return
-        return self.surface[(x, y)]
+        return self[(x, y)]
 
     def draw_pixel(self, x, y, color):
         if x < 0 or x >= self.get_width():
             return
         if y < 0 or y >= self.get_height():
             return
-        self.surface[(x, y)] = color
+        self[(x, y)] = color
 
     def convert():
         pass
