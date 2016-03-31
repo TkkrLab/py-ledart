@@ -42,8 +42,8 @@ class Surface(object):
     def gen_indexes(self):
         indexes = {}
         p = 0
-        for x in xrange(0, self.width):
-            for y in xrange(0, self.height):
+        for y in xrange(0, self.height):
+            for x in xrange(0, self.width):
                 pos = (x, y)
                 indexes[pos] = p
                 p += 1
@@ -82,6 +82,8 @@ class Surface(object):
             raise(KeyError)
 
     def __setitem__(self, key, value):
+        if not isinstance(value, tuple):
+            raise(ValueError)
         if isinstance(key, int):
             self.surface[key] = value
         elif isinstance(key, tuple):

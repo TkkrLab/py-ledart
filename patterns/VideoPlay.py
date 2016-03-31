@@ -13,7 +13,7 @@ def load_rgb24(data, surface):
     for color in chunks(data, 3):
         # change on surface only when the color is not the same
         if surface[p] != color:
-            surface[p] = map(ord, color)
+            surface[p] = tuple(map(ord, color))
         p += 1
 
 class VideoPlay(Surface):
@@ -29,7 +29,7 @@ class VideoPlay(Surface):
         command = [ffmpeg,
                    '-loglevel', 'panic',
                    '-i', location,
-                   '-framerate', str(float(fps)),
+                   # '-framerate', str(float(fps)),
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',
