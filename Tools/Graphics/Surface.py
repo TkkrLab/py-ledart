@@ -71,22 +71,23 @@ class Surface(object):
 
     """ allow to get/set value by point (x, y) or by index int(index) """
     def __getitem__(self, key):
-        if isinstance(key, int):
+        if type(key) == int:
             return self.surface[key]
-        elif isinstance(key, slice):
+        elif type(key) == slice:
             return self.surface[key.start:key.stop:key.step]
-        elif isinstance(key, tuple):
+        elif type(key) == tuple:
             index = self.indexes[key]
             return self.surface[index]
         else:
             raise(KeyError)
 
     def __setitem__(self, key, value):
-        if not isinstance(value, tuple):
+        if type(value) != tuple:
             raise(ValueError)
-        if isinstance(key, int):
+
+        if type(key) == int:
             self.surface[key] = value
-        elif isinstance(key, tuple):
+        elif type(key) == tuple:
             index = self.indexes[key]
             self.surface[index] = value
         else:
