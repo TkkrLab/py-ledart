@@ -1,12 +1,9 @@
 """
-    this object describes a surface object which has:
-    width, height, size
-    and points to which you can draw color data.
-    like surface[i] or surface[(x, y)]
+    this file descibes surface types.
 """
+from operator import itemgetter
 
 class Surface(object):
-    """ instantiate a new surface or make a copy"""
     def __init__(self, surface=None, **kwargs):
         if surface:
             self.width = int(surface.width)
@@ -15,42 +12,53 @@ class Surface(object):
             self.size = int(surface.size)
             self.color_rep = tuple(surface.color_rep)
             self.color_depth = int(surface.color_depth)
-            self.indexes = dict(surface.indexes)
-            self.surface = list(surface.surface)
+            self.indexes = list(surface.indexes)
+            self.surface = dict(surface.surface)
         else:
             self.width = kwargs.get('width', 1)
             self.height = kwargs.get('height', 1)
             self.d_offset = kwargs.get('offset', (0, 0))
-
             self.size = self.width * self.height
+            # represent r, g, b can be set of needed.
             self.color_rep = (0, 0, 0)
+            # represent the max value a color can be.
             self.color_depth = 0xff
-
-            """ map for points (x, y) to index int(index) """
+            # represent the indexes as x, y. for x, y, z
+            # you could set the pos_rep to 3
             self.indexes = self.gen_indexes()
-            """ empty list for the colors """
             self.surface = self.gen_surface()
 
-    """ return a list of default, which if none is self.color_rep """
+    """
+        generate a dictionary as surface that has,
+        positional keys, and pixel data as value.
+    """
     def gen_surface(self, default=None):
-        if default == None:
-            default = self.color_rep
+        if default:
+            value = default
+        else:
+            value = self.color_rep
 
-        return [default for i in xrange(self.size)]
+        surface = {}
+        for index in self.indexes:
+            surface[index] = value
+        return surface
 
-    """ returns a dictionary that is a map of points (x, y) to indexes int(index)"""
+    """
+        generate a list of x, y pairs that correspond to
+        positional values.
+    """
     def gen_indexes(self):
-        indexes = {}
-        p = 0
-        for x in xrange(0, self.width):
-            for y in xrange(0, self.height):
+        indexes = []
+        for y in range(0, self.height):
+            for x in range(0, self.width):
                 pos = (x, y)
-                indexes[pos] = p
-                p += 1
-
+                indexes.append(pos)
         return indexes
 
-    """ getter setter functions. """
+    """
+        getter method's.
+        for getting the surface atributes.
+    """
     def get_size(self):
         return self.size
 
@@ -63,50 +71,66 @@ class Surface(object):
     def get_points(self):
         return self.indexes
 
+    def get_list_rep(self):
+        surface_list = []
+        for index in self.indexes:
+            surface_list.append(self.surface[index])
+        return surface_list
+
+    """
+        setting and getting display offsets.
+        these are in surface because a surface can have a offset.
+    """
     def set_d_offset(self, pos):
         self.d_offset = pos
 
     def get_d_offset(self):
         return self.d_offset
 
-    """ allow to get/set value by point (x, y) or by index int(index) """
     def __getitem__(self, key):
         if isinstance(key, int):
-            return self.surface[key]
+            point = self.indexes[key]
+            return self.surface[point]
         elif isinstance(key, slice):
-            return self.surface[key.start:key.stop:key.step]
+            return self.get_list_rep()[key.start:key.stop:key.step]
         elif isinstance(key, tuple):
-            index = self.indexes[key]
-            return self.surface[index]
+            return self.surface[key]
         else:
             raise(KeyError)
 
     def __setitem__(self, key, value):
         if isinstance(key, int):
-            self.surface[key] = value
-        elif isinstance(key, tuple):
             index = self.indexes[key]
             self.surface[index] = value
+            # print("index, key, value", index, key, value)
+        elif isinstance(key, tuple):
+            self.surface[key] = value
         else:
-            raise(KeyError)
+            print("unknown type(key: %s)" % (str(type(key))))
+            raise("unknown type(key: %s)" % (str(type(key))))
+
+    def __eq__(self, other):
+        if self.size != other.size:
+            return False
+        for index in self.indexes:
+            if other[index] != self.surface[index]:
+                return False
+        return True
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def __len__(self):
-        return self.size
+        return len(self.indexes)
 
-    """ function returns a list of bytes. """
-    def __bytes__(self):
-        __str = [chr(c) for color in self.surface for c in color]
-        return bytearray(__str)
-
-    """ function returns a list of bytes. (python2.7 strings) """
     def __str__(self):
-        __str = [chr(c) for color in self.surface for c in color]
-        return ''.join(__str)
+        data = ''
+        indexes = self.gen_indexes()
+        for index in indexes:
+            color = self.surface[index]
+            for c in color:
+                data += chr(c)
+        return data
 
-    """ basic Surface representation and info. """
     def __repr__(self):
-        fmtstr = "<Surface width=%d, height=%d, [%s, ... %s]>"
-        fmt = (self.width, self.height,
-               self.surface[0], self.surface[-1])
-        return (fmtstr % fmt)
-
+        return str(dict(self.surface))
