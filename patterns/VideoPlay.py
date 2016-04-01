@@ -7,15 +7,6 @@ import pymouse
 import shlex
 import os
 
-
-def load_rgb24(data, surface):
-    p = 0
-    for color in chunks(data, 3):
-        # change on surface only when the color is not the same
-        if surface[p] != color:
-            surface[p] = map(ord, color)
-        p += 1
-
 class VideoPlay(Surface):
     def __init__(self, location='', fps=5, center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
@@ -29,7 +20,7 @@ class VideoPlay(Surface):
         command = [ffmpeg,
                    '-loglevel', 'panic',
                    '-i', location,
-                   '-framerate', str(float(fps)),
+                   # '-framerate', str(float(fps)),
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',
@@ -40,12 +31,12 @@ class VideoPlay(Surface):
         print("command: %s" % (command))
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
-    def play_next_image(self):
-        raw_image = self.pipe.stdout.read(self.width * self.height * 3)
-        load_rgb24(raw_image, self)
-
     def generate(self):
-        self.play_next_image()
+        raw_image = self.pipe.stdout.read(self.width * self.height * 3)
+        for p, color in enumerate(chunks(raw_image, 3)):
+            # change on surface only when the color is not the same
+            if self[p] != color:
+                self[p] = tuple(map(ord, color))
 
 class CamCapture(Surface):
     def __init__(self, dev='/dev/video0', fps=None):
@@ -72,12 +63,12 @@ class CamCapture(Surface):
         print("command: ", command)
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
-    def play_next_image(self):
-        raw_image = self.pipe.stdout.read(self.width * self.height * 3)
-        load_rgb24(raw_image, self)
-
     def generate(self):
-        self.play_next_image()
+        raw_image = self.pipe.stdout.read(self.width * self.height * 3)
+        for p, color in enumerate(chunks(raw_image, 3)):
+            # change on surface only when the color is not the same
+            if self[p] != color:
+                self[p] = tuple(map(ord, color))
 
 class ScreenCapture(Surface):
     def __init__(self, screen_resolution=None, fullscreen=False, fps=None,
@@ -131,14 +122,13 @@ class ScreenCapture(Surface):
         command = ' '.join(command)
         print("using command: %s" % (command))
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
-        self.play_next_image()
-
-    def play_next_image(self):
-        raw_image = self.pipe.stdout.read(self.width * self.height * 3)
-        load_rgb24(raw_image, self)
 
     def generate(self):
-        self.play_next_image()
+        raw_image = self.pipe.stdout.read(self.width * self.height * 3)
+        for p, color in enumerate(chunks(raw_image, 3)):
+            # change on surface only when the color is not the same
+            if self[p] != color:
+                self[p] = tuple(map(ord, color))
 
 import av
 
@@ -170,4 +160,4 @@ class VideoTest(Surface):
         self.draw_frame(frame)
         # we determine our own fps.
         # actually better do this with a timer
-        time.sleep(float(1./self.video.average_rate))
+        # time.sleep(float(1./self.video.average_rate))

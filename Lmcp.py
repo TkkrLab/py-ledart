@@ -36,10 +36,10 @@ class Lmcp(Interface):
 
     def compress(self, data):
         # print(type(data))
-        compressed = ''
+        compressed = []
         for color in data:
-            compressed += chr((int(color[0])+ int(color[1])+ int(color[2]))/3)
-        return compressed
+            compressed.append(chr((int(color[0])+ int(color[1])+ int(color[2]))/3))
+        return ''.join(compressed)
 
     def send(self, data, ip):
         # transmit a clear once.

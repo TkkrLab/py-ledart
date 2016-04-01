@@ -48,9 +48,16 @@ class Surface(object):
         positional values.
     """
     def gen_indexes(self):
+<<<<<<< HEAD
         indexes = []
         for y in range(0, self.height):
             for x in range(0, self.width):
+=======
+        indexes = {}
+        p = 0
+        for y in xrange(0, self.height):
+            for x in xrange(0, self.width):
+>>>>>>> newsurfaceimp
                 pos = (x, y)
                 indexes.append(pos)
         return indexes
@@ -88,6 +95,7 @@ class Surface(object):
         return self.d_offset
 
     def __getitem__(self, key):
+<<<<<<< HEAD
         if isinstance(key, int):
             point = self.indexes[key]
             return self.surface[point]
@@ -95,11 +103,29 @@ class Surface(object):
             return self.get_list_rep()[key.start:key.stop:key.step]
         elif isinstance(key, tuple):
             return self.surface[key]
+=======
+        if type(key) == int:
+            return self.surface[key]
+        elif type(key) == slice:
+            return self.surface[key.start:key.stop:key.step]
+        elif type(key) == tuple:
+            index = self.indexes[key]
+            return self.surface[index]
+>>>>>>> newsurfaceimp
         else:
             raise(KeyError)
 
     def __setitem__(self, key, value):
+<<<<<<< HEAD
         if isinstance(key, int):
+=======
+        if type(value) != tuple:
+            raise(ValueError)
+
+        if type(key) == int:
+            self.surface[key] = value
+        elif type(key) == tuple:
+>>>>>>> newsurfaceimp
             index = self.indexes[key]
             self.surface[index] = value
             # print("index, key, value", index, key, value)

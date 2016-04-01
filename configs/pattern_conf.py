@@ -4,8 +4,8 @@ from patterns.Patterns import *
 pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
 localhost = "127.0.0.1"
-# dest = ledboard
-dest = pixelmatrix
+dest = ledboard
+# dest = pixelmatrix
 # dest = localhost
 # dest = '10.42.3.12'
 # dest = '10.42.7.124'
