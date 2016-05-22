@@ -42,39 +42,33 @@ class Lmcp(Interface):
         return ''.join(compressed)
 
     def send(self, data, ip):
-        # transmit a clear once.
-        if self.cleared is False:
-            self.cleared = True
-            self.transmit(self.clear, ip)
-        if type(data) == str:
-            return
+        (x, y), width, height = data.d_offset, data.width, data.height
+        if data.size <= self.send_limit:
+            packet = (self.draw_image + chr(x) + chr(y) +
+                      chr(width) + chr(height))
+            packet += self.compress(data)
+            self.transmit(packet, ip)
+            self.transmit(self.writeout, ip)
         else:
-            (x, y), width, height = data.d_offset, data.width, data.height
-            if data.size <= self.send_limit:
-                packet = (self.draw_image + chr(x) + chr(y) +
-                          chr(width) + chr(height))
-                packet += self.compress(data)
+            # figure out how many rows you can send withing the limit
+            # and transmit that.
+            size = self.send_limit / data.width
+            chunksize = size * data.width
+            for i, chunk in chunked(data, chunksize):
+                packet = (self.draw_image + chr(x) + chr(y + size * i) +
+                          chr(data.width) + chr(size))
+                packet += self.compress(chunk)
                 self.transmit(packet, ip)
-                self.transmit(self.writeout, ip)
-            else:
-                # figure out how many rows you can send withing the limit
-                # and transmit that.
-                size = self.send_limit / data.width
-                chunksize = size * data.width
-                for i, chunk in chunked(data, chunksize):
-                    packet = (self.draw_image + chr(x) + chr(y + size * i) +
-                              chr(data.width) + chr(size))
-                    packet += self.compress(chunk)
-                    self.transmit(packet, ip)
-                # then if any data remains over, transmit that to the last bit.
-                # recalculate the new rectangle to write to.
-                remains = data.height % size
-                if remains:
-                    y = data.height - remains
-                    chunksize = data.width * remains
-                    chunk = data[-chunksize:]
-                    packet = (self.draw_image + chr(x) + chr(y) +
-                              chr(data.width) + chr(remains))
-                    packet += self.compress(chunk)
-                    self.transmit(packet, ip)
-                self.transmit(self.writeout, ip)
+            # then if any data remains over, transmit that to the last bit.
+            # recalculate the new rectangle to write to.
+            remains = data.height % size
+            if remains:
+                y = data.height - remains
+                chunksize = data.width * remains
+                chunk = data[-chunksize:]
+                packet = (self.draw_image + chr(x) + chr(y) +
+                          chr(data.width) + chr(remains))
+                packet += self.compress(chunk)
+                self.transmit(packet, ip)
+            self.transmit(self.writeout, ip)
+
