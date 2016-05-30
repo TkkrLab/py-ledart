@@ -10,6 +10,7 @@ import select
 class Interface(object):
     def __init__(self, args, port=1337):
         self.port = port
+        self.args = args
         self.open()
 
     def set_port(self, port):

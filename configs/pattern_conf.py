@@ -3,8 +3,10 @@ from patterns.Patterns import *
 
 pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
+minimatrix = 'minimatrix'
 localhost = "127.0.0.1"
-dest = ledboard
+# dest = ledboard
+dest = minimatrix
 # dest = pixelmatrix
 # dest = localhost
 # dest = '10.42.3.12'
@@ -31,7 +33,7 @@ TARGETS = {
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
     # dest: ScreenCapture(fullscreen=True),
-    # dest: ScreenCapture(fullscreen=False),
+    dest: ScreenCapture(fullscreen=False),
     # dest: DisplayImage('../Pictures/nebulacrosseyed.jpg'),
     # dest: DisplayImage('images/sisters-sprites.png'),
     # dest: DisplayImage('images/horse-2-xxl.png'),
@@ -41,7 +43,7 @@ TARGETS = {
     # dest: DisplayImage('images/tiger.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
-    dest: VideoPlay('/home/robert/Videos/bad.mkv'),
+    # dest: VideoPlay('/home/robert/Videos/bad.mkv'),
     # dest: VideoTest(),
     # dest: CamCapture(),
     # dest: Water(),

@@ -4,8 +4,11 @@ and conversion function(s) to apply to matrices
 """
 
 # tkkrlab ledboard size
-matrix_height = 48
-matrix_width = 96
+# matrix_height = 48
+# matrix_width = 96
+
+matrix_height = 32
+matrix_width = 64
 
 # pixelmatrix size
 # matrix_height = 10
