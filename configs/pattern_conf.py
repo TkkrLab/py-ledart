@@ -5,8 +5,9 @@ pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
 minimatrix = 'minimatrix'
 localhost = "127.0.0.1"
-# dest = ledboard
+bcast = '10.42.0.0'
 dest = minimatrix
+# dest = ledboard
 # dest = pixelmatrix
 # dest = localhost
 # dest = '10.42.3.12'
@@ -34,7 +35,7 @@ TARGETS = {
     # dest: Pong(speed=8),
     # dest: ScreenCapture(fullscreen=True),
     # dest: ScreenCapture(fullscreen=False),
-    dest: DisplayImage('../Pictures/nebulacrosseyed.jpg'),
+    # dest: DisplayImage('../Pictures/nebulacrosseyed.jpg'),
     # dest: DisplayImage('images/sisters-sprites.png'),
     # dest: DisplayImage('images/horse-2-xxl.png'),
     # dest: DisplayImage('images/horse-xxl.png'),
@@ -63,7 +64,7 @@ TARGETS = {
     # dest: PlasmaFourth(),
     # dest: PlasmaFirst(),
     # dest: PlasmaSecond(),
-    # dest: PlasmaThird(),
+    dest: PlasmaThird(),
     # dest: RevolvingCircle(),
     # dest: RainPattern(chance=0.7, color=(40, 60, 255)),
     # dest: GraphicsCircleTest(),
