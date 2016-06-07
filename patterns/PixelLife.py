@@ -92,17 +92,30 @@ class RedLife(Graphics):
         self.draw()
 
 
-class GrayedLife(Graphics):
+class ProgressedLife(Graphics):
     '''
-    take the gray scales over every point and
-    add or subtract depening on if alive or not
+    brighten spots with prolonged cell life,
+    while darken spots where there is less cell life
     '''
     def __init__(self):
         Graphics.__init__(self, matrix_width, matrix_height)
-        self.fill(BLACK)
+        self.life = Life(matrix_width, matrix_height, 1, WHITE)
+        self.step = 7
+        self.color_step = (self.step, self.step, self.step)
+        self.fill(WHITE)
+
+    def draw(self):
+        for i, point in enumerate(self.get_points()):
+            color = self[point]
+            if self.life.field[i]:
+                color = ColorRGBOps.brighten(color, self.step)
+            else:
+                color = ColorRGBOps.darken(color, self.step)
+            self[point] = color
 
     def generate(self):
-        pass
+        self.life.process()
+        self.draw()
 
 
 class MixedLife(Graphics):
@@ -113,9 +126,15 @@ class MixedLife(Graphics):
         green = ColorRGBOps.darken(GREEN, 128)
         red = ColorRGBOps.darken(RED, 128)
 
-        self.life1 = Life(matrix_width, matrix_height, 1, color=blue)
+        self.life1 = Life(matrix_width, matrix_height, 1, color=BLUE)
         self.life2 = Life(matrix_width, matrix_height, 1, color=green)
         self.life3 = Life(matrix_width, matrix_height, 1, color=red)
+
+        self.step = int(0xff/10)
+
+        self.step_red = (self.step, 0, 0)
+        self.step_green = (0, self.step, 0)
+        self.step_blue = (0, 0, self.step)
 
         self.index = 0
     """
@@ -124,30 +143,26 @@ class MixedLife(Graphics):
     and really really ugly in another way.
     """
     def drawThreeAdded(self):
-        pass
-        # for index, cell in enumerate(self.life1.field):
-        #   color = self.graphics.surface[index]
-        #   if cell:
-        #       color = ColorRGBOps.add(color, self.life1.cellColor)
-        #   else:
-        #       color = ColorRGBOps.subtract(color, BLUE)
-        #   self.graphics.surface[index] = color
-
-        # for index, cell in enumerate(self.life2.field):
-        #   color = self.graphics.surface[index]
-        #   if cell:
-        #       color = ColorRGBOps.add(color, self.life2.cellColor)
-        #   else:
-        #       color = ColorRGBOps.subtract(color, GREEN)
-        #   self.graphics.surface[index] = color
-
-        # for index, cell in enumerate(self.life3.field):
-        #   color = self.graphics.surface[index]
-        #   if cell:
-        #       color = ColorRGBOps.add(color, self.life3.cellColor)
-        #   else:
-        #       color = ColorRGBOps.subtract(color, RED)
-        #   self.graphics.surface[index] = color
+        points = self.get_points()
+        for i, point in enumerate(points):
+            color = self[point]
+            # check for first life field.
+            if self.life1.field[i]:
+                color = ColorRGBOps.add(color, self.step_blue)
+            else:
+                color = ColorRGBOps.subtract(color, self.step_blue)
+            # check seconds
+            if self.life2.field[i]:
+                color = ColorRGBOps.add(color, self.step_green)
+            else:
+                color = ColorRGBOps.subtract(color, self.step_green)
+            # check third
+            if self.life3.field[i]:
+                color = ColorRGBOps.add(color, self.step_red)
+            else:
+                color = ColorRGBOps.subtract(color, self.step_red)
+            
+            self[point] = color
     def draw(self):
         self.drawThreeAdded()
 
@@ -156,3 +171,4 @@ class MixedLife(Graphics):
         self.life2.process()
         self.life3.process()
         self.draw()
+

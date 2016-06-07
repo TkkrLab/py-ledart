@@ -1,7 +1,7 @@
 from Tools.Graphics import Graphics
 from matrix import matrix_width, matrix_height
 
-selected = ''
+selected = 'Test'
 
 class Test(Graphics):
     def __init__(self):

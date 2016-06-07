@@ -34,7 +34,7 @@ class PatternDummy(Surface):
 
 
 class SendPacketWidget(gtk.ToggleButton):
-    def __init__(self, parent, dest_ip='pixelmatrix'):
+    def __init__(self, parent, dest_ip='moo'):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.dest_ip = dest_ip
         self.par = parent
@@ -172,6 +172,7 @@ class Gui(object):
 
         self.matrix_widget = MatrixSimWidget(self)
         if self.args.netSilent == "disabled":
+            print("setting send_packets")
             self.send_packets = SendPacketWidget(self)
 
         if self.args.fps:

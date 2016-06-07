@@ -6,7 +6,9 @@ ledboard = 'ledboard'
 minimatrix = 'minimatrix'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
-dest = minimatrix
+moo = 'moo'
+dest = moo
+# dest = localhost
 # dest = ledboard
 # dest = pixelmatrix
 # dest = localhost
@@ -24,7 +26,7 @@ TARGETS = {
     # dest: OldTron(),
     # dest: Tron(),
     # dest: Snake(speed=17),
-    # dest: MixedLife(),
+    dest: MixedLife(),
     # dest: RandomLife(),
     # dest: RedLife(),
     # dest: BlueLife(),
@@ -64,7 +66,7 @@ TARGETS = {
     # dest: PlasmaFourth(),
     # dest: PlasmaFirst(),
     # dest: PlasmaSecond(),
-    dest: PlasmaThird(),
+    # dest: PlasmaThird(),
     # dest: RevolvingCircle(),
     # dest: RainPattern(chance=0.7, color=(40, 60, 255)),
     # dest: GraphicsCircleTest(),

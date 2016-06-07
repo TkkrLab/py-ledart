@@ -4,7 +4,7 @@ from matrix import matrix_width, matrix_height, to_matrix
 from patterns.Life.life import Life
 import random
 
-select = 'ProgressedLife'
+select = 'MixedLife'
 
 
 class RandomLife(Graphics):

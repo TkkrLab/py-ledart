@@ -48,17 +48,19 @@ class GraphicsRectTest(Graphics):
         self.pos = 0, 0
 
     def generate(self):
+        # self.fill(BLACK)
+        self.draw_rect(0, 0, matrix_width, matrix_height, self.color)
         # clear the drawing surface
-        self.fill(BLACK)
+        # self.fill(BLACK)
         # put a rectangle on the surface
-        x, y = self.pos
-        if x >= matrix_width:
-            x = 0
-        if y >= matrix_height:
-            y = 0
-        self.draw_rect(x, y, matrix_width - x,
-                                matrix_height - y, self.color)
-        self.pos = x + 1, y + 1
+        # x, y = self.pos
+        # if x >= matrix_width:
+        #     x = 0
+        # if y >= matrix_height:
+        #     y = 0
+        # self.draw_rect(x, y, matrix_width - x,
+        #                         matrix_height - y, self.color)
+        # self.pos = x + 1, y + 1
 
 
 class GraphicsCircleTest(Graphics):
