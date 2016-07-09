@@ -37,12 +37,14 @@ class Lmcp(Interface):
         self.cleared = False
         self.grayscaling = (self.args.color != "enabled")
 
+        self.debug = False
+
     def compress(self, data):
         # print(type(data))
         compressed = []
         for color in data:
             if self.grayscaling:
-                compressed.append(chr((int(color[0])+ int(color[1])+ int(color[2]))/3))
+                compressed.append(chr((int(color[0]) + int(color[1]) + int(color[2]))/3))
             else:
                 # compressed.append(chr((int(color[0]) + int(color[1]) + int(color[2])) ))
                 for c in color:
@@ -63,6 +65,8 @@ class Lmcp(Interface):
                       chr(data.width) + chr(size))
             packet += self.compress(chunk)
             self.transmit(packet, ip)
+            if(self.debug):
+                print("packet len: %d" % len(packet))
         # then if any data remains over, transmit that to the last bit.
         # recalculate the new rectangle to write to.
         remains = data.height % size
@@ -74,4 +78,6 @@ class Lmcp(Interface):
                       chr(data.width) + chr(remains))
             packet += self.compress(chunk)
             self.transmit(packet, ip)
+            if(self.debug):
+                print("packet len: %d" % len(packet))
         self.transmit(self.writeout, ip)

@@ -83,4 +83,5 @@ class MatrixScreen(object):
         sys.stdout.write("%s      \r" % self.fps)
 
     def __del__(self):
+        print("delete.")
         self.interface.quit()

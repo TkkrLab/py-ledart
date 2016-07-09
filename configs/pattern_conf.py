@@ -4,10 +4,13 @@ from patterns.Patterns import *
 pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
 minimatrix = 'minimatrix'
+megamatrix = 'megamatrix'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
-dest = moo
+dest = minimatrix
+# dest = minimatrix
+# dest = moo
 # dest = localhost
 # dest = ledboard
 # dest = pixelmatrix
@@ -26,7 +29,9 @@ TARGETS = {
     # dest: OldTron(),
     # dest: Tron(),
     # dest: Snake(speed=17),
-    dest: MixedLife(),
+    # dest: MixedLife(),
+    dest: ProgressedLife(),
+    # dest: GraphicsLineScroll(),
     # dest: RandomLife(),
     # dest: RedLife(),
     # dest: BlueLife(),
@@ -54,6 +59,7 @@ TARGETS = {
     
     # dest: AliasedFire(),
     # dest: MiniFire(),
+    # moo: MiniFire(),
     # dest: Smolders(),
     # dest: FireOne(),
     # dest: FireTwo(),

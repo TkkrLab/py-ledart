@@ -1,4 +1,4 @@
-from Tools.Graphics import Graphics, BLACK, GREEN, RED, CYAN, YELLOW
+from Tools.Graphics import Graphics, BLACK, GREEN, RED, CYAN, YELLOW, WHITE
 from matrix import matrix_width, matrix_height
 import random
 
@@ -22,6 +22,37 @@ class GraphicsPixelTest(Graphics):
             self.deltay *= -1
         self.pos = x + self.deltax, y + self.deltay
 
+
+class GraphicsLineScroll(Graphics):
+    def __init__(self):
+        Graphics.__init__(self, matrix_width, matrix_height)
+        self.color = RED
+        self.pos = 0,0
+        self.vertical = True
+        self.horizontal = False
+
+    def generate(self):
+        self.fill(BLACK)
+        if(self.vertical):
+            x, y = self.pos
+            # self.draw_pixel(x, y, self.color)
+            self.draw_line(x, y, x, matrix_height, self.color)
+            x += 1
+            if(x == matrix_width):
+                x = 0
+                self.horizontal = True
+                self.vertical = False
+            self.pos = x, y
+        if(self.horizontal):
+            x, y = self.pos
+            # self.draw_pixel(x, y, self.color)
+            self.draw_line(x, y, matrix_width, y, self.color)
+            y += 1
+            if(y == matrix_height):
+                y = 0
+                self.horizontal = False
+                self.vertical = True
+            self.pos = x, y
 
 class GraphicsLineTest(Graphics):
     def __init__(self):
