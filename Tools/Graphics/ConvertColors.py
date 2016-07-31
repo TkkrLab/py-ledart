@@ -30,7 +30,7 @@ def RGBtoHSL(color):
 	h*=255.
 	s*=255.
 	l*=255.
-	return (int(h), int(s), int(l),)
+	return [int(h), int(s), int(l),]
 
 def HSLtoRGB(color):
 	h,s,l = color
@@ -77,7 +77,7 @@ def HSLtoRGB(color):
 	r *= 255.
 	g *= 255.
 	b *= 255.
-	return (int(r),int(g),int(b),)
+	return [int(r),int(g),int(b),]
 
 def RGBtoHSV(color):
 	r,g,b = color
@@ -110,7 +110,7 @@ def RGBtoHSV(color):
 	h*=255.
 	s*=255.
 	v*=255.
-	return (int(h),int(s),int(v),)
+	return [int(h),int(s),int(v),]
 
 
 def HSVtoRGB(color):
@@ -147,4 +147,4 @@ def HSVtoRGB(color):
 	r*=255.
 	g*=255.
 	b*=255.
-	return (int(r),int(g),int(b),)
+	return [int(r),int(g),int(b),]

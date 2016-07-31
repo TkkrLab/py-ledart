@@ -60,6 +60,6 @@ class ImageSurface(Surface):
                     color = (alpha, alpha, alpha)
                 if invert:
                     r, g, b = color
-                    color = (0xff - r, 0xff - g, 0xff - b)
+                    color = [0xff - r, 0xff - g, 0xff - b]
                 self[point] = color
                 p += 1

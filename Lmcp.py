@@ -22,6 +22,9 @@ def chunked(data, chunksize):
         yield (it, chunk)
         it += 1
 
+""" Flattenc returns a dimension less list of characters."""
+def flattenc(l):
+  return [chr(y) for x in l for y in x]
 
 class Lmcp(Interface):
     def __init__(self, args, port=1337):
@@ -39,16 +42,17 @@ class Lmcp(Interface):
 
         self.debug = False
 
+    def grayscale(self, c):
+        return chr((int(c[0])+ int(c[1]) + int(c[2])) / 3)
+        
     def compress(self, data):
-        # print(type(data))
         compressed = []
-        for color in data:
-            if self.grayscaling:
-                compressed.append(chr((int(color[0]) + int(color[1]) + int(color[2]))/3))
-            else:
-                # compressed.append(chr((int(color[0]) + int(color[1]) + int(color[2])) ))
-                for c in color:
-                    compressed += chr(int(c))
+        if self.grayscaling:
+            # compressed = map(lambda x: chr(sum(x) / 3), data)
+            compressed = map(self.grayscale, data)
+        else:
+            compressed = flattenc(data)
+            # print compressed
 
         return ''.join(compressed)
 

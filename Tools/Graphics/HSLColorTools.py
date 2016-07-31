@@ -4,7 +4,7 @@ class ColorHSL(object):
 		self.saturation = s
 		self.lightness = l
 	def getColor(self):
-		return (self.hue, self.saturation, self.lightness)
+		return [self.hue, self.saturation, self.lightness]
 
 class ColorHSLOps(object):
 	def __init__(self):

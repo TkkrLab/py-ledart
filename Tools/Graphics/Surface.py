@@ -11,9 +11,9 @@ class Surface(object):
         if surface:
             self.width = int(surface.width)
             self.height = int(surface.height)
-            self.d_offset = tuple(surface.d_offset)
+            self.d_offset = list(surface.d_offset)
             self.size = int(surface.size)
-            self.color_rep = tuple(surface.color_rep)
+            self.color_rep = list(surface.color_rep)
             self.color_depth = int(surface.color_depth)
             self.indexes = dict(surface.indexes)
             self.surface = list(surface.surface)
@@ -82,7 +82,7 @@ class Surface(object):
             raise(KeyError)
 
     def __setitem__(self, key, value):
-        if type(value) != tuple:
+        if type(value) != list:
             raise(ValueError)
 
         if type(key) == int:

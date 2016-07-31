@@ -6,7 +6,7 @@ def rand_color():
     r = random.randint(0, 255)
     g = random.randint(0, 255)
     b = random.randint(0, 255)
-    return (r, g, b)
+    return [r, g, b]
 
 
 class Graphics(Surface):
@@ -28,7 +28,7 @@ class Graphics(Surface):
             return
         if y < 0 or y >= self.get_height():
             return
-        self[(x, y)] = color
+        self[(x, y)] = list(color)
 
     def convert():
         pass
