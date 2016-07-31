@@ -8,6 +8,7 @@ import os
 import time
 import atexit
 import traceback
+from socket import gethostbyname
 
 import cProfile
 
@@ -235,6 +236,9 @@ if __name__ == "__main__":
         if not len(TARGETS):
             print("nothing is configured in %s" % args.config)
             sys.exit(1)
+        # resolve hostenames if any
+        for target in TARGETS:
+            TARGETS[gethostbyname(target)] = TARGETS.pop(target)
         # ---------
 
         signal.signal(signal.SIGINT, signal_handler)

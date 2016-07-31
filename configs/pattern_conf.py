@@ -1,6 +1,5 @@
 # import all patterns availble for use.
 from patterns.Patterns import *
-from socket import gethostbyname
 
 pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'
@@ -9,8 +8,7 @@ megamatrix = 'megamatrix'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
-dest = gethostbyname(megamatrix)
-print("\ndest: %s\n" % (dest))
+dest = megamatrix
 # dest = minimatrix
 # dest = moo
 # dest = localhost
