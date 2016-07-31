@@ -51,7 +51,7 @@ class MiniFire(Surface):
             l = random.random()
             r, g, b = colorsys.hls_to_rgb(h / 7, min(0.5, l * 2), s)
             r, g, b = (int(r * 0xff), int(g * 0xff / 8), int(b * 0xff))
-            self.buffer[point] = (r, g, b)
+            self.buffer[point] = [r, g, b]
 
     def process(self):
         self.randomize_bottom()
@@ -74,7 +74,6 @@ class MiniFire(Surface):
                     if c < 100:
                         c = 0
                     color.append(min(c, 0xff))
-                color = tuple(color)
                 point = (x, y)
                 self.buffer[point] = color
 
@@ -105,7 +104,7 @@ class AliasedFire(Surface):
                 r = (c1[0] + c2[0] + c3[0] + c4[0]) / 4
                 g = (c1[1] + c2[1] + c3[1] + c4[1]) / 4
                 b = (c1[2] + c2[2] + c3[2] + c4[2]) / 4
-                color = (r, g, b)
+                color = [r, g, b]
                 self[point_self] = color
         for x in range(0, self.fire.width):
             point = (x / 2, self.height - 1)
@@ -142,7 +141,7 @@ class WeirdPlasmaLike(Surface):
             r, g, b = colorsys.hls_to_rgb(h, l, s)
             r, g, b = (r * 0xff, g * 0xff, b * 0xff)
             # r, g, b = random.randint(0, 0xff), random.randint(0, 0xff), random.randint(0, 0xff)
-            self.buffer[point] = (r, g, b)
+            self.buffer[point] = [r, g, b]
 
     def process(self):
         """
@@ -160,7 +159,6 @@ class WeirdPlasmaLike(Surface):
                 for i in range(0, 3):
                     c = abs(int((p1[i] + p2[i] + p3[i] + p4[i]) / 4))
                     color.append(min(c, 0xff))
-                color = tuple(color)
                 point = (x, y)
                 self.buffer[point] = color
         if self.timer.valid():
@@ -193,7 +191,7 @@ class AliasedWPlasma(Surface):
                 r = (c1[0] + c2[0] + c3[0] + c4[0]) / 4
                 g = (c1[1] + c2[1] + c3[1] + c4[1]) / 4
                 b = (c1[2] + c2[2] + c3[2] + c4[2]) / 4
-                color = (r, g, b)
+                color = [r, g, b]
                 self[point_self] = color
 
 
@@ -222,7 +220,7 @@ class Smolders(Surface):
             l = random.random()
             r, g, b = colorsys.hls_to_rgb(h / 3.5, min(0.5, l * 2), s)
             r, g, b = (int(r * 0xff), int(g * 0xff), int(b * 0xff))
-            self.buffer[point] = (r, g, b)
+            self.buffer[point] = [r, g, b]
 
     def process(self):
         self.randomize_bottom()
@@ -243,7 +241,6 @@ class Smolders(Surface):
                                 random.randint(0, 150) /
                                 random.randint(50, 600)))
                     color.append(min(c, 0xff))
-                color = tuple(color)
                 point = (x, y)
                 self.buffer[point] = color
 
@@ -282,7 +279,7 @@ class FireThree(Surface):
             l = random.random()
             r, g, b = colorsys.hls_to_rgb(h / 4., min(0.5, l * 2), 1.0)
             r, g, b = (int(r * 0xff), int(g * 0xff), int(b * 0xff))
-            self.buffer[point] = (r, g, b)
+            self.buffer[point] = [r, g, b]
 
     def process(self):
         self.randomize_bottom()
@@ -303,7 +300,6 @@ class FireThree(Surface):
                                 random.randint(0, 110) /
                                 random.randint(200, 300)))
                     color.append(min(c, 0xff))
-                color = tuple(color)
                 point = (x, y)
                 self.buffer[point] = color
 
@@ -342,7 +338,7 @@ class FireTwo(Surface):
             l = random.random()
             r, g, b = colorsys.hls_to_rgb(h / 4., min(0.5, l * 2), 1.0)
             r, g, b = (int(r * 0xff), int(g * 0xff), int(b * 0xff))
-            self.buffer[point] = (r, g, b)
+            self.buffer[point] = [r, g, b]
 
     def process(self):
         self.randomize_bottom()
@@ -363,7 +359,6 @@ class FireTwo(Surface):
                                 random.randint(64, 96) /
                                 random.randint(300, 400)))
                     color.append(min(c, 0xff))
-                color = tuple(color)
                 point = (x, y)
                 self.buffer[point] = color
 
@@ -402,7 +397,7 @@ class FireOne(Surface):
             l = random.random()
             r, g, b = colorsys.hls_to_rgb(h / 4., min(0.5, l * 2), s)
             r, g, b = (int(r * 0xff), int(g * 0xff), int(b * 0xff))
-            self.buffer[point] = (r, g, b)
+            self.buffer[point] = [r, g, b]
 
     def process(self):
         self.randomize_bottom()
@@ -421,7 +416,6 @@ class FireOne(Surface):
                 for i in range(0, 3):
                     c = abs(int((p1[i] + p2[i] + p3[i] + p4[i]) * 32 / 129))
                     color.append(min(c, 0xff))
-                color = tuple(color)
                 point = (x, y)
                 self.buffer[point] = color
 

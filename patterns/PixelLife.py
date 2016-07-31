@@ -100,7 +100,7 @@ class ProgressedLife(Graphics):
     def __init__(self):
         Graphics.__init__(self, matrix_width, matrix_height)
         self.life = Life(matrix_width, matrix_height, 1, WHITE)
-        self.step = 7
+        self.step = 4
         self.color_step = (self.step, self.step, self.step)
         self.fill(WHITE)
 

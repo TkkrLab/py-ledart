@@ -57,7 +57,7 @@ class ImageSurface(Surface):
                 elif len(imdata[p]) == 4:
                     pass
                     r, g, b, alpha = imdata[p]
-                    color = (alpha, alpha, alpha)
+                    color = [alpha, alpha, alpha]
                 if invert:
                     r, g, b = color
                     color = [0xff - r, 0xff - g, 0xff - b]

@@ -69,7 +69,7 @@ class CamCapture(Surface):
         for p, color in enumerate(chunks(raw_image, 3)):
             # change on surface only when the color is not the same
             if self[p] != color:
-                self[p] = tuple(map(ord, color))
+                self[p] = map(ord, color)
 
 class ScreenCapture(Surface):
     def __init__(self, screen_resolution=None, fullscreen=False, fps=None,
@@ -129,36 +129,36 @@ class ScreenCapture(Surface):
         for p, color in enumerate(chunks(raw_image, 3)):
             # change on surface only when the color is not the same
             if self[p] != color:
-                self[p] = tuple(map(ord, color))
+                self[p] = map(ord, color)
 
-import av
+# import av
 
-class VideoTest(Surface):
-    def __init__(self):
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
-        self.container = av.open('/home/robert/Videos/bad.mkv')
-        self.video = next(s for s in self.container.streams if s.type == b'video')
-        frame = self.generate_frame()
-        self.draw_frame(frame)
+# class VideoTest(Surface):
+#     def __init__(self):
+#         Surface.__init__(self, width=matrix_width, height=matrix_height)
+#         self.container = av.open('/home/robert/Videos/bad.mkv')
+#         self.video = next(s for s in self.container.streams if s.type == b'video')
+#         frame = self.generate_frame()
+#         self.draw_frame(frame)
     
-    def generate_frame(self):
-        data = []
-        for packet in self.container.demux(self.video):
-            for frame in packet.decode():
-                f = frame.reformat(matrix_width, matrix_height, 'rgb24')
-                data = []
-                for row in f.to_nd_array():
-                    data.extend(map(tuple, row))
-                yield(data)
+#     def generate_frame(self):
+#         data = []
+#         for packet in self.container.demux(self.video):
+#             for frame in packet.decode():
+#                 f = frame.reformat(matrix_width, matrix_height, 'rgb24')
+#                 data = []
+#                 for row in f.to_nd_array():
+#                     data.extend(map(list, row))
+#                 yield(data)
     
-    def draw_frame(self, frame):
-        # frame will be a generator be we just want to tackle this one generator at a time.
-        for i, color in enumerate(frame.next()):
-            self[i] = color
+#     def draw_frame(self, frame):
+#         # frame will be a generator be we just want to tackle this one generator at a time.
+#         for i, color in enumerate(frame.next()):
+#             self[i] = color
     
-    def generate(self):
-        frame = self.generate_frame()
-        self.draw_frame(frame)
-        # we determine our own fps.
-        # actually better do this with a timer
-        # time.sleep(float(1./self.video.average_rate))
+#     def generate(self):
+#         frame = self.generate_frame()
+#         self.draw_frame(frame)
+#         # we determine our own fps.
+#         # actually better do this with a timer
+#         # time.sleep(float(1./self.video.average_rate))

@@ -102,6 +102,7 @@ def tst_patterns(dir, showpass=True):
         except Exception as e:
             print("---------------------")
             print("Pattern:%s Exception:%s" % (pattern, e))
+            print(traceback.print_exc())
             print("---------------------")
             continue
 
@@ -182,7 +183,8 @@ def listpatterns():
 
 def signal_handler(signal, frame):
     print("\nExiting closing connections.")
-    protocol.close()
+    if args.netSilent != "enabled":
+        protocol.close()
     sys.exit(0)
 
 
