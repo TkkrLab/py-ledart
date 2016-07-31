@@ -1,6 +1,0 @@
-Pillow==3.1.1
-pygame==1.9.2a0
-PyOpenGL==3.1.0
-pyserial==3.0.1
-python-xlib==0.15rc1
-PyUserInput==0.1.9
