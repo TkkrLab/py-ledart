@@ -47,7 +47,6 @@ try:
 except Exception as e:
     debugprint("VideoPlay >>", e)
     traceback.print_exc()
-    traceback.print_exception(sys.exc_info())
 
 # uses pygame for testing.
 try:
