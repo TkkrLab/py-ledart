@@ -1,7 +1,7 @@
 """
 import patterns here if they are in a different file.
 """
-
+import traceback
 
 def debugprint(discr, exception):
     import inspect
@@ -46,6 +46,8 @@ try:
     from VideoPlay import *
 except Exception as e:
     debugprint("VideoPlay >>", e)
+    traceback.print_exc()
+    traceback.print_exception(sys.exc_info())
 
 # uses pygame for testing.
 try:

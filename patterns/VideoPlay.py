@@ -48,6 +48,7 @@ class CamCapture(Surface):
         scale = "scale=%d:%d" % (self.width, self.height)
 
         command = [ffmpeg,
+                   '-loglevel', 'panic',
                    '-f', 'v4l2',
                    # '-framerate', fps,
                    '-r', '1',

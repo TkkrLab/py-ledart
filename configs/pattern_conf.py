@@ -8,7 +8,7 @@ megamatrix = 'megamatrix'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
-dest = minimatrix
+dest = megamatrix
 # dest = minimatrix
 # dest = moo
 # dest = localhost
@@ -30,7 +30,7 @@ TARGETS = {
     # dest: Tron(),
     # dest: Snake(speed=17),
     # dest: MixedLife(),
-    dest: ProgressedLife(),
+    # dest: ProgressedLife(),
     # dest: GraphicsLineScroll(),
     # dest: RandomLife(),
     # dest: RedLife(),
@@ -42,7 +42,7 @@ TARGETS = {
     # dest: Pong(speed=8),
     # dest: ScreenCapture(fullscreen=True),
     # dest: ScreenCapture(fullscreen=False),
-    # dest: DisplayImage('../Pictures/nebulacrosseyed.jpg'),
+    # dest: DisplayImage('../Pictures/magiceye/nebulacrosseyed.jpg'),
     # dest: DisplayImage('images/sisters-sprites.png'),
     # dest: DisplayImage('images/horse-2-xxl.png'),
     # dest: DisplayImage('images/horse-xxl.png'),
@@ -53,7 +53,7 @@ TARGETS = {
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay('/home/robert/Videos/bad.mkv'),
     # dest: VideoTest(),
-    # dest: CamCapture(),
+    dest: CamCapture(),
     # dest: Water(),
     # dest: AliasedWPlasma(),
     
