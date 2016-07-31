@@ -42,9 +42,13 @@ class Lmcp(Interface):
 
         self.debug = False
 
+    """ Send_clear sends a clear command to clear the ledboard."""
+    def send_clear(self):
+        self.bcast(self.clear)
+
     def grayscale(self, c):
         return chr((int(c[0])+ int(c[1]) + int(c[2])) / 3)
-        
+
     def compress(self, data):
         compressed = []
         if self.grayscaling:
@@ -85,3 +89,7 @@ class Lmcp(Interface):
             if(self.debug):
                 print("packet len: %d" % len(packet))
         self.transmit(self.writeout, ip)
+
+    def close(self):
+        self.send_clear()
+        Interface(self).close()

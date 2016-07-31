@@ -22,7 +22,10 @@ class Interface(object):
 
     def open(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.sock.setblocking(0)
+
+    def bcast(self, data):
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        self.transmit(data, '255.255.255.255')
 
     def transmit(self, data, ip):
         target = (ip, self.port)
