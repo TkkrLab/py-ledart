@@ -5,22 +5,19 @@ import time
 import subprocess as sp
 import pymouse
 import shlex
-import os
+import os, fcntl, sys
 
 class VideoPlay(Surface):
-    def __init__(self, location='', fps=5, center=True):
+    def __init__(self, location='', center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
-        if(fps == None):
-            fps = str(float(get_args().fps))
         fmtstr = "-vf \"scale=%d:%d\""
         fmt = (self.width, self.height)
         filteropts = fmtstr % (fmt)
         command = [ffmpeg,
                    '-loglevel', 'panic',
                    '-i', location,
-                   # '-framerate', str(float(fps)),
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',
@@ -32,17 +29,17 @@ class VideoPlay(Surface):
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):
+        # read and turn all elements into int values.
         raw_image = self.pipe.stdout.read(self.width * self.height * 3)
-        for p, color in enumerate(chunks(raw_image, 3)):
-            # change on surface only when the color is not the same
-            if self[p] != color:
-                self[p] = tuple(map(ord, color))
+        raw_image = map(ord, raw_image)
+        # create an itterator
+        it = iter(raw_image)
+        # use the itterator to zip three following values together.
+        self.surface = zip(it, it, it)
 
 class CamCapture(Surface):
-    def __init__(self, dev='/dev/video0', fps=None):
+    def __init__(self, dev='/dev/video0'):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
-        if fps == None:
-            fps = str(get_args().fps)
 
         ffmpeg = 'ffmpeg'
         scale = "scale=%d:%d" % (self.width, self.height)
@@ -50,7 +47,6 @@ class CamCapture(Surface):
         command = [ffmpeg,
                    '-loglevel', 'panic',
                    '-f', 'v4l2',
-                   # '-framerate', fps,
                    '-r', '1',
                    '-video_size', '160x120',
                    '-i', dev,
