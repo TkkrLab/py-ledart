@@ -97,10 +97,10 @@ class ProgressedLife(Graphics):
     brighten spots with prolonged cell life,
     while darken spots where there is less cell life
     '''
-    def __init__(self):
+    def __init__(self, decay=4):
         Graphics.__init__(self, matrix_width, matrix_height)
         self.life = Life(matrix_width, matrix_height, 1, WHITE)
-        self.step = 4
+        self.step = decay
         self.color_step = (self.step, self.step, self.step)
         self.fill(WHITE)
 

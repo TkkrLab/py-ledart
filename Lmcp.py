@@ -11,6 +11,7 @@
 """
 from ProtocolInterface import Interface
 
+import itertools
 
 def chunked(data, chunksize):
     """ yield sections 'chunks' of data, with iteration count."""
@@ -24,7 +25,7 @@ def chunked(data, chunksize):
 
 """ Flattenc returns a dimension less list of characters."""
 def flattenc(l):
-  return [chr(y) for x in l for y in x]
+    return [chr(y) for x in l for y in x]
 
 class Lmcp(Interface):
     def __init__(self, args, port=1337):
@@ -66,11 +67,11 @@ class Lmcp(Interface):
         else:
             draw_image = self.draw_image_rgb
         (x, y), width, height = data.d_offset, data.width, data.height
-        size = self.send_limit / data.width
-        chunksize = size * data.width
+        size = self.send_limit / width
+        chunksize = size * width
         for i, chunk in chunked(data, chunksize):
             packet = (draw_image + chr(x) + chr(y + size * i) +
-                      chr(data.width) + chr(size))
+                      chr(width) + chr(size))
             packet += self.compress(chunk)
             self.transmit(packet, ip)
             if(self.debug):
@@ -80,15 +81,16 @@ class Lmcp(Interface):
         remains = data.height % size
         if remains:
             y = data.height - remains
-            chunksize = data.width * remains
+            chunksize = width * remains
             chunk = data[-chunksize:]
             packet = (draw_image + chr(x) + chr(y) +
-                      chr(data.width) + chr(remains))
+                      chr(width) + chr(remains))
             packet += self.compress(chunk)
             self.transmit(packet, ip)
             if(self.debug):
                 print("packet len: %d" % len(packet))
         self.transmit(self.writeout, ip)
+
 
     def close(self):
         self.send_clear()

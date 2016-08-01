@@ -8,6 +8,9 @@ and conversion function(s) to apply to matrices
 # matrix_width = 96
 
 # matrix_height = 32
+# matrix_width = 32
+
+# matrix_height = 32
 # matrix_width = 64
 
 # matrix_height = 48

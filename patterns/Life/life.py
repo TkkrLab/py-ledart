@@ -2,7 +2,7 @@
     this file contains that describe the cells and the field.
 """
 import random
-
+import time
 
 class Life(object):
     def __init__(self, width=800, height=600, size=10, color=(100, 100, 100)):
@@ -16,6 +16,10 @@ class Life(object):
         self.field = [1] * self.fieldSize
         self.buffer = [0] * self.fieldSize
         self.position = 0
+        # reset field after this amount of time even if evolving.
+        self.start_time = time.time();
+        # 60 seconds
+        self.timeout = 60
         # reset field after this many iterations if field stays the same.
         self.resetLim = 40
         # keep track of count
@@ -26,6 +30,11 @@ class Life(object):
         self.createRandomField()
 
     def process(self):
+        # check for timeout
+        if (time.time() - self.start_time) >= self.timeout:
+            self.start_time = time.time()
+            self.createRandomField()
+        # apply the rules
         for self.position, cell in enumerate(self.field):
             if(self.field[self.position]):
                 around = self.totalAround(self.field, self.position)
@@ -66,6 +75,8 @@ class Life(object):
         # if resetCount == restLim then restCount = 0 and create random field
         if self.resetCount == self.resetLim:
             self.resetCount = 0
+            # reset timeout
+            self.start_time = time.time()
             self.createRandomField()
         self.previousCount = count
 
