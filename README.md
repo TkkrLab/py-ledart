@@ -42,7 +42,7 @@ as I said or didn't this Software is a work in progress!
 
 this should give you something nice to look at though:
 ```shell
-    python2.7 runPatternJob.py --matrixSim=enabled --fps=20
+    python2.7 runPatternJob.py --matrixSim=enabled --netsilent=enabled --fps=20
 ```
 
 this is spamming your localhost with packets. that is this program is made to send packets somewhere :)
