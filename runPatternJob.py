@@ -12,9 +12,6 @@ from socket import gethostbyname
 
 import cProfile
 
-# generate no byte code
-sys.dont_write_bytecode = True
-
 # import matrix simulator and matrix specifics
 from matrix import matrix_width, matrix_height
 from Tools.Graphics import Surface
@@ -25,10 +22,45 @@ except Exception as e:
     print("MatrixScreen>> " + str(e))
     traceback.print_exc()
 
-fps = 0
-def get_fps():
-    global fps
-    return fps
+from ArgumentParser import get_args
+
+# get command line arguments
+args = get_args()
+
+# generate no byte code
+sys.dont_write_bytecode = True
+
+# setup a screen if matrixSim argument was set.
+if args.matrixSim == "enabled":
+    if args.fullscreen == "enabled":
+        fullscreen = True
+    else:
+        fullscreen = False
+    interface = interface_opts[args.simInterface]
+    matrixscreen = MatrixScreen(matrix_width, matrix_height,
+                                args.pixelSize,
+                                fullscreen,
+                                interface)
+
+def get_protocol(args):
+    if args.netProtocol == "artnet":
+        import Artnet
+        protocol = Artnet.Artnet(args)
+    elif args.netProtocol == "lmcp":
+        import Lmcp
+        protocol = Lmcp.Lmcp(args)
+    elif args.netProtocol == "pixelmatrix":
+        import Artnet
+        protocol = Artnet.Pixelmatrix(args)
+    else:
+        raise(Exception("no protocol found/selected."))
+    return protocol
+
+# setup which protocol to use.
+protocol = get_protocol(args)
+
+# generate no byte code
+sys.dont_write_bytecode = True
 
 def get_trace():
     exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -134,7 +166,7 @@ def checkList(first, second):
     return True
 
 
-def sendout(args, protocol):
+def sendout(args, TARGETS, protocol):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
     # or only to the matrix simulator if netSilent enabled.
@@ -162,12 +194,11 @@ def sendout(args, protocol):
                               pattern.get_size(), pattern.get_width(),
                               pattern.get_height())
                         raise(e)
-                        sys.exit(0)
     # matrix sim needs this because i am to lazy to press the x button.
     except KeyboardInterrupt:
-        signal_handler(None, None)
+        cleanup(1)
     except SystemExit:
-        signal_handler(None, None)
+        cleanup(2)
 sendout.previous = Surface(width=10, height=10)
 
 
@@ -180,37 +211,19 @@ def listpatterns():
     for pattern in sorted(patterns):
         print(pattern)
 
-
-def signal_handler(signal, frame):
-    print("\nExiting closing connections.")
+# cleanup exits calls close and leaves tty in sane state.
+def cleanup(d):
+    print("\nExiting(%d) closing connections." % d)
+    os.system('stty sane; echo ""')
+    args = get_args()
     if args.netSilent != "enabled":
         protocol.close()
     sys.exit(0)
 
-
-def get_protocol(args):
-    if args.netProtocol == "artnet":
-        import Artnet
-        protocol = Artnet.Artnet(args)
-    elif args.netProtocol == "lmcp":
-        import Lmcp
-        protocol = Lmcp.Lmcp(args)
-    elif args.netProtocol == "pixelmatrix":
-        import Artnet
-        protocol = Artnet.Pixelmatrix(args)
-    else:
-        raise(Exception("no protocol found/selected."))
-    return protocol
-
-
-if __name__ == "__main__":
+def main():
     # first thing we do register at exit function.
     # make tty be sane so that if the tty/terminal screws up.
     # this will make it workable again.
-    atexit.register(lambda: os.system('stty sane; echo ""'))
-    from ArgumentParser import get_args
-    # get command line arguments:
-    args = get_args()
     if args.list:
         listpatterns()
         sys.exit()
@@ -240,23 +253,7 @@ if __name__ == "__main__":
             TARGETS[gethostbyname(target)] = TARGETS.pop(target)
         # ---------
 
-        signal.signal(signal.SIGINT, signal_handler)
-
-        # setup which protocol to use.
-        protocol = get_protocol(args)
         protocol.open()
-
-        # setup a screen if matrixSim argument was set.
-        if args.matrixSim == "enabled":
-            if args.fullscreen == "enabled":
-                fullscreen = True
-            else:
-                fullscreen = False
-            interface = interface_opts[args.simInterface]
-            matrixscreen = MatrixScreen(matrix_width, matrix_height,
-                                        args.pixelSize,
-                                        fullscreen,
-                                        interface)
 
         if args.fps > 0:
             fps = 1. / args.fps
@@ -280,18 +277,12 @@ if __name__ == "__main__":
                 sys.stdout.write(fmtstr % fmt)
                 sys.stdout.flush()
             if args.fps > 0:
-                sendout(args, protocol)
-                # TODO: figure out how to dynamicly
-                # adjust time as to have a fixed fps.
-                # if len(measured) > 3:
-                #     if args.fps > cfps:
-                #         fps -= 0.001
-                #     if args.fps < cfps:
-                #         fps += 0.001
+                sendout(args, TARGETS, protocol)
                 time.sleep(abs(fps))
             # else send everything out as fast as possible
             else:
-                sendout(args, protocol)
+                sendout(args, TARGETS, protocol)
             previousTime = currentTime
-        signal_handler(None, None)
 
+if __name__ == "__main__":
+    main()

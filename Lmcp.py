@@ -27,7 +27,7 @@ def chunked(data, chunksize):
 def flattenc(l):
     return [chr(y) for x in l for y in x]
 
-class Lmcp(Interface):
+class LegacyLmcp(Interface):
     def __init__(self, args, port=1337):
         Interface.__init__(self, args, port)
         self.send_limit = 1024 - 5
@@ -95,3 +95,7 @@ class Lmcp(Interface):
     def close(self):
         self.send_clear()
         Interface(self).close()
+
+class Lmcp(LegacyLmcp):
+    def __init__(self, args, port=1337):
+        LegacyLmcp.__init__(self, args, port)
