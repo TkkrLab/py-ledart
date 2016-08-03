@@ -23,6 +23,7 @@ try:
     from MatrixSim.MatrixScreen import MatrixScreen
 except Exception as e:
     print("MatrixScreen>> " + str(e))
+    traceback.print_exc()
 
 fps = 0
 def get_fps():
@@ -71,7 +72,7 @@ def find_patterns_in_dir(dir):
 def get_pattern_classes(module):
     # holds the patterns that are found
     patterns = []
-    # look into the modules dictionary for the things in there
+    # look in the module dictionary for objects with generate function
     for obj in module.__dict__:
         # if we find objects
         if isinstance(obj, object):
@@ -79,9 +80,7 @@ def get_pattern_classes(module):
                 # we try and get that objects dictionary.
                 # if it's a class it will contain methods and more.
                 thedict = module.__dict__[obj].__dict__
-                # and if it contains the 'generate' method
                 if(thedict['generate']):
-                    # the class is appended to the list.
                     patterns.append(module.__dict__[obj])
             except:
                 # continue if we try and read something we can't.
@@ -173,7 +172,7 @@ sendout.previous = Surface(width=10, height=10)
 
 
 def listpatterns():
-    pattern_objects = find_patterns_in_dir('patterns')
+    pattern_objects = find_patterns_in_dir('Patterns')
     patterns = []
     for pattern in pattern_objects:
         patterns.append(pattern.__name__)
@@ -216,7 +215,7 @@ if __name__ == "__main__":
         listpatterns()
         sys.exit()
     if args.testing:
-        tst_patterns('patterns', showpass=False)
+        tst_patterns('Patterns', showpass=False)
         print("Done testing. ")
         sys.exit()
     # if gui selected start that else start the headless code.
