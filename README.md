@@ -42,7 +42,7 @@ as I said or didn't this Software is a work in progress!
 
 this should give you something nice to look at though:
 ```shell
-    python2.7 runPatternJob.py --matrixSim=enabled --netsilent=enabled --fps=20
+    python2.7 runPatternJob.py --matrixSim=enabled --netSilent=enabled --fps=20
 ```
 
 this is spamming your localhost with packets. that is this program is made to send packets somewhere :)
@@ -59,7 +59,7 @@ most options are self explainatory but if they aren't you give me a call! like a
 ## Dependencies.
 
 ### command line operation:
-* python2.7     [source](https://www.python.org/downloads/)
+* pypy          [source](http://pypy.org/)
 * ffmpeg        [source](https://www.ffmpeg.org/)
 * pyserial      (pip install pyserial)
 * pillow        (pip install pillow)
