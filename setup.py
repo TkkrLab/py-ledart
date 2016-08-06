@@ -22,5 +22,5 @@ setup(name='ledart',
       license='GPL3',
       packages=find_packages(),
       install_requires=['pip'],
-      cmdclass=dict(install=PipInstall),
+      # cmdclass=dict(install=PipInstall),
       zip_safe=False)
