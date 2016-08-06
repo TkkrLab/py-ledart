@@ -7,5 +7,5 @@ setup(name='ledart',
       author='Duality (aka Robert van der Tuuk',
       author_email='201292@live.nl',
       license='GPL3',
-      packages=['Ledart'],
+      packages=['Ledart', 'Ledart/Tools'],
       zip_safe=False)
