@@ -170,35 +170,29 @@ def sendout(args, TARGETS, protocol):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
     # or only to the matrix simulator if netSilent enabled.
-    try:
-        for t in TARGETS:
-            pattern = TARGETS[t]
-            # generate the next set of images to send.
-            pattern.generate()
-            if args.matrixSim == "enabled":
-                matrixscreen.handleinput()
-                matrixscreen.process(pattern)
-            if args.sendOnChange == "enabled":
-                changed = (Surface(pattern) != Surface(sendout.previous))
-                sendout.previous = Surface(pattern)
-            else:
-                changed = True
-            if changed:
-                if not (args.netSilent == "enabled"):
-                    try:
-                        protocol.send(pattern, t)
-                    except Exception as e:
-                        traceback.print_exc()
-                        print("\r\ndest: %s" % (t))
-                        print("pattern size, width, height: ",
-                              pattern.get_size(), pattern.get_width(),
-                              pattern.get_height())
-                        raise(e)
-    # matrix sim needs this because i am to lazy to press the x button.
-    except KeyboardInterrupt:
-        cleanup(1)
-    except SystemExit:
-        cleanup(2)
+    for t in TARGETS:
+        pattern = TARGETS[t]
+        # generate the next set of images to send.
+        pattern.generate()
+        if args.matrixSim == "enabled":
+            matrixscreen.handleinput()
+            matrixscreen.process(pattern)
+        if args.sendOnChange == "enabled":
+            changed = (Surface(pattern) != Surface(sendout.previous))
+            sendout.previous = Surface(pattern)
+        else:
+            changed = True
+        if changed:
+            if not (args.netSilent == "enabled"):
+                try:
+                    protocol.send(pattern, t)
+                except Exception as e:
+                    traceback.print_exc()
+                    print("\r\ndest: %s" % (t))
+                    print("pattern size, width, height: ",
+                          pattern.get_size(), pattern.get_width(),
+                          pattern.get_height())
+                    raise(e)
 sendout.previous = Surface(width=10, height=10)
 
 
@@ -215,15 +209,19 @@ def listpatterns():
 def cleanup(d):
     print("\nExiting(%d) closing connections." % d)
     os.system('stty sane; echo ""')
-    args = get_args()
-    if args.netSilent != "enabled":
-        protocol.close()
+    protocol.close()
     sys.exit(0)
+
+def sigint_handler(signal, frame):
+    cleanup(3)
 
 def main():
     # first thing we do register at exit function.
     # make tty be sane so that if the tty/terminal screws up.
     # this will make it workable again.
+    signal.signal(signal.SIGINT, sigint_handler)
+
+    # command parsing
     if args.list:
         listpatterns()
         sys.exit()

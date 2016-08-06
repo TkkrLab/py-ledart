@@ -96,6 +96,12 @@ class LegacyLmcp(Interface):
         self.send_clear()
         Interface(self).close()
 
+    def __del__(self):
+        self.close()
+
+    def __exit__(self):
+        self.close()
+
 class Lmcp(LegacyLmcp):
     def __init__(self, args, port=1337):
         LegacyLmcp.__init__(self, args, port)
