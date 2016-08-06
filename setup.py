@@ -1,17 +1,6 @@
 from distutils.core import setup
-from distutils.command.install import install
 from setuptools import find_packages
 import subprocess as sp
-
-# reqs = parse_requirements("Ledart/requirements.txt")
-
-class PipInstall(install):
-    def run(self):
-        install.run(self)
-
-        p = sp.Popen("pip install -r Ledart/requirements.txt", shell=False,
-                     stdout=sp.PIPE)
-        out, err = p.communicate()
 
 setup(name='ledart',
       version='0.2',
@@ -22,5 +11,4 @@ setup(name='ledart',
       license='GPL3',
       packages=find_packages(),
       install_requires=['pip'],
-      # cmdclass=dict(install=PipInstall),
       zip_safe=False)
