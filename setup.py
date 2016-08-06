@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='ledart',
       version='0.2',
@@ -7,5 +7,5 @@ setup(name='ledart',
       author='Duality (aka Robert van der Tuuk',
       author_email='201292@live.nl',
       license='GPL3',
-      packages=['Ledart', 'Ledart/Tools'],
+      packages=find_packages(),
       zip_safe=False)
