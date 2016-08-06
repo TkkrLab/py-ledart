@@ -1,5 +1,6 @@
-from distutils.core import setup, find_packages
+from distutils.core import setup
 from distutils.command.install import install
+from setuptools import find_packages
 import subprocess as sp
 
 # reqs = parse_requirements("Ledart/requirements.txt")
