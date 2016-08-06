@@ -7,7 +7,7 @@ class PipInstall(install):
     def run(self):
         install.run(self)
 
-        p = sp.Popen("pip install -r Ledart/requirements.txt", shell=False
+        p = sp.Popen("pip install -r Ledart/requirements.txt", shell=False,
                      stdout=sp.PIPE)
         out, err = p.communicate()
 
