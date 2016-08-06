@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from distutils.core import setup, find_packages
 from distutils.command.install import install
 import subprocess as sp
 
