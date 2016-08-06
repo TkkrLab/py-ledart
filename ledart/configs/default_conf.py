@@ -2,7 +2,7 @@
 from Patterns.Patterns import *
 
 localhost = "localhost"
-ledboard = "ledboard"
+ledboard = "megamatrix"
 dest = ledboard
 
 TARGETS = {
