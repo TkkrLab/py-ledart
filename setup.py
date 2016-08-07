@@ -5,7 +5,7 @@ from setuptools import find_packages
 reqs = []
 links = []
 
-with open("Ledart/requirements") as f:
+with open("Ledart/requirements.txt") as f:
     for line in f:
         line = line.strip()
         if line.startswith("#"):
