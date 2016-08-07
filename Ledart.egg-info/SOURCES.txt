@@ -76,8 +76,4 @@ Ledart/Tools/Graphics/__init__.py
 Ledart/configs/__init__.py
 Ledart/configs/byob_conf.py
 Ledart/configs/default_conf.py
-Ledart/configs/default_conf_BACKUP_27831.py
-Ledart/configs/default_conf_BASE_27831.py
-Ledart/configs/default_conf_LOCAL_27831.py
-Ledart/configs/default_conf_REMOTE_27831.py
 Ledart/configs/pattern_conf.py
