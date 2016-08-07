@@ -2,6 +2,8 @@ from distutils.core import setup
 from distutils.command.install_data import install_data
 from setuptools import find_packages
 
+version = '0.2.4'
+
 reqs = ['Pillow==3.3.0',
          'PyOpenGL==3.1.0',
          'PyUserInput==0.1.10',
@@ -15,7 +17,7 @@ reqs = ['Pillow==3.3.0',
          'wsgiref==0.1.2']
 
 setup(name='Ledart',
-      version='0.2.3',
+      version=version,
       description='led controle software.',
       author='Duality (aka Robert van der Tuuk',
       author_email='201292@live.nl',
@@ -23,5 +25,5 @@ setup(name='Ledart',
       packages=find_packages(),
       install_requires=reqs,
       url='https://github.com/tkkrlab/py-ledart',
-      download_url = 'https://github.com/tkkrlab/py-ledart/tarbal/0.2.3',
+      download_url = ('https://github.com/tkkrlab/py-ledart/tarbal/%s' % version),
       zip_safe=False)
