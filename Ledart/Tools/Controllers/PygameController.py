@@ -1,9 +1,9 @@
 import sys
 
 if __name__ != '__main__':
-    from ArgumentParser import get_args
-else:
     from ...ArgumentParser import get_args
+else:
+    from ArgumentParser import get_args
 
 class ControllerError(BaseException):
     def __init__(self, value):
