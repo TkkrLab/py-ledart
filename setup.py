@@ -1,6 +1,13 @@
 from distutils.core import setup
+from distutils.command.install_data import install_data
 from setuptools import find_packages
-import subprocess as sp
+from post_setup import main as post_install
+
+
+class my_install(install_data):
+    def run(self):
+        install_data.run(self)
+        post_install()
 
 setup(name='ledart',
       version='0.2',
@@ -11,4 +18,5 @@ setup(name='ledart',
       license='GPL3',
       packages=find_packages(),
       install_requires=['pip'],
+      cmdclass={'install': my_install},
       zip_safe=False)
