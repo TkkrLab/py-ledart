@@ -15,7 +15,7 @@ class Graphics(Surface):
 
     def fill(self, color):
         for i in xrange(0, self.get_size()):
-            self.surface[i] = color
+            self.surface[i] = list(color)
 
 
     def read_pixel(self, x, y):
