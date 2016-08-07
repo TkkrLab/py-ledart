@@ -3,10 +3,7 @@ import sys
 
 from Pixel import Pixel
 
-if __name__ != '__main__':
-    from ..Tools.Graphics import BLUE, BLACK
-else:
-    from Tools.Graphics import BLUE, BLACK
+from Tools.Graphics import BLUE, BLACK
 
 # setup interface options, if no interface possible
 # set to a dummy

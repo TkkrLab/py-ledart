@@ -1,2 +1,2 @@
-from .MatrixScreen import *
-from .Pixel import *
+from MatrixScreen import *
+from Pixel import *

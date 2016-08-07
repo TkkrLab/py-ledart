@@ -11,8 +11,6 @@
 """
 from ProtocolInterface import Interface
 
-import array
-
 def chunked(data, chunksize):
     """ yield sections 'chunks' of data, with iteration count."""
     chunk = []
