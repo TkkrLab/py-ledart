@@ -15,7 +15,7 @@ reqs = ['Pillow==3.3.0',
          'wsgiref==0.1.2']
 
 setup(name='Ledart',
-      version='0.2.2',
+      version='0.2.3',
       description='led controle software.',
       author='Duality (aka Robert van der Tuuk',
       author_email='201292@live.nl',
@@ -23,5 +23,5 @@ setup(name='Ledart',
       packages=find_packages(),
       install_requires=reqs,
       url='https://github.com/tkkrlab/py-ledart',
-      download_url = 'https://github.com/tkkrlab/py-ledart/tarbal/0.2.2',
+      download_url = 'https://github.com/tkkrlab/py-ledart/tarbal/0.2.3',
       zip_safe=False)
