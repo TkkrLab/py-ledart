@@ -3,7 +3,7 @@ import sys
 
 from Pixel import Pixel
 
-from Tools.Graphics import BLUE, BLACK
+from ..Tools.Graphics import BLUE, BLACK
 
 # setup interface options, if no interface possible
 # set to a dummy
