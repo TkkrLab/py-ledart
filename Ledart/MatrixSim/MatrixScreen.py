@@ -1,9 +1,8 @@
 import time
 import sys
 
-from Pixel import Pixel
-
-from Tools.Graphics import BLUE, BLACK
+import Pixel
+import BLUE, BLACK
 
 # setup interface options, if no interface possible
 # set to a dummy
