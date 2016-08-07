@@ -16,7 +16,7 @@ with open("Ledart/requirements.txt") as f:
         else:
             reqs.append(line)
 
-setup(name='Leddart',
+setup(name='Ledart',
       version='0.2',
       description='led controle software.',
       url='https://github.com/tkkrlab/py-ledart',
