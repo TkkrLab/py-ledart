@@ -7,7 +7,7 @@ from post_setup import main as post_install
 class my_install(install_data):
     def run(self):
         install_data.run(self)
-        post_install()
+        # post_install()
 
 setup(name='ledart',
       version='0.2',
