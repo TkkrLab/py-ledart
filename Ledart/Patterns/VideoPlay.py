@@ -10,6 +10,8 @@ import os, fcntl, sys
 class VideoPlay(Surface):
     def __init__(self, location='', center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
+        args = get_args()
+
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
         fmtstr = "-vf \"scale=%d:%d\""
@@ -25,7 +27,8 @@ class VideoPlay(Surface):
                    '-']
 
         command = ' '.join(command)
-        print("command: %s" % (command))
+        if args.debug:
+            print("\ncommand: %s" % (command))
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):
@@ -40,6 +43,7 @@ class VideoPlay(Surface):
 class CamCapture(Surface):
     def __init__(self, dev='/dev/video0'):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
+        args = get_args()
 
         ffmpeg = 'ffmpeg'
         scale = "scale=%d:%d" % (self.width, self.height)
@@ -57,7 +61,8 @@ class CamCapture(Surface):
                    '-']
 
         command = ' '.join(command)
-        print("command: ", command)
+        if args.debug:
+            print("\ncommand: %s" % command)
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):
@@ -71,10 +76,12 @@ class ScreenCapture(Surface):
     def __init__(self, screen_resolution=None, fullscreen=False, fps=None,
                  center=True):
         Surface.__init__(self, width=matrix_width, height=matrix_height)
+        args = get_args()
         if screen_resolution is None:
             pm = pymouse.PyMouse()
             screen_resolution = pm.screen_size()
-            print("selected resolution: " + str(screen_resolution))
+            if args.debug:
+                print("selected resolution: " + str(screen_resolution))
         ffmpeg = "ffmpeg"
         display = os.getenv("DISPLAY")
         if fps == None:
@@ -104,7 +111,7 @@ class ScreenCapture(Surface):
             command = [ffmpeg,
                        '-loglevel', 'panic',
                        '-video_size', screensize,
-                       '-framerate', '10.0',
+                       # '-framerate', '10.0',
                        '-follow_mouse', 'centered',
                        '-draw_mouse', '0',
                        '-f', 'x11grab',
@@ -117,7 +124,8 @@ class ScreenCapture(Surface):
                        '-an', '-']
 
         command = ' '.join(command)
-        print("using command: %s" % (command))
+        if args.debug:
+            print("\ncommand: %s" % (command))
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):

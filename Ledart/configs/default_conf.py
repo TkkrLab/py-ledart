@@ -6,5 +6,5 @@ ledboard = "megamatrix"
 dest = ledboard
 
 TARGETS = {
-    dest: BlueLife(),
+    dest: PixelLife(),
 }

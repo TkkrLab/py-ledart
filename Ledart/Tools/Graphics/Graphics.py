@@ -14,7 +14,9 @@ class Graphics(Surface):
         Surface.__init__(self, width=width, height=height)
 
     def fill(self, color):
-        self.surface = self.gen_surface(default=color)
+        for i in xrange(0, self.get_size()):
+            self.surface[i] = color
+
 
     def read_pixel(self, x, y):
         if x < 0 or x >= self.get_width():

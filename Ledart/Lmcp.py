@@ -11,7 +11,7 @@
 """
 from ProtocolInterface import Interface
 
-import itertools
+import array
 
 def chunked(data, chunksize):
     """ yield sections 'chunks' of data, with iteration count."""
@@ -23,9 +23,10 @@ def chunked(data, chunksize):
         yield (it, chunk)
         it += 1
 
-""" Flattenc returns a dimension less list of characters."""
+""" Flattenc turns a 2D list into a flattened list of characters. """
 def flattenc(l):
     return [chr(y) for x in l for y in x]
+
 
 class LegacyLmcp(Interface):
     def __init__(self, args, port=1337):
@@ -54,7 +55,9 @@ class LegacyLmcp(Interface):
         compressed = []
         if self.grayscaling:
             # compressed = map(lambda x: chr(sum(x) / 3), data)
-            compressed = map(self.grayscale, data)
+            # compressed = map(self.grayscale, data)
+            for c in data:
+                compressed.append(self.grayscale(c))
         else:
             compressed = flattenc(data)
             # print compressed
@@ -95,6 +98,13 @@ class LegacyLmcp(Interface):
     def close(self):
         self.send_clear()
         Interface(self).close()
+
+class TestLmcp(LegacyLmcp):
+    def __init__(self, args, port=1337):
+        LegacyLmcp.__init__(self, args, port)
+
+    def send(self, data, ip):
+        return
 
 class Lmcp(LegacyLmcp):
     def __init__(self, args, port=1337):
