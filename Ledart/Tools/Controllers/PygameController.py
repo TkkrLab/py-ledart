@@ -1,5 +1,5 @@
 import sys
-from ArgumentParser import get_args
+from ...ArgumentParser import get_args
 
 class ControllerError(BaseException):
     def __init__(self, value):
