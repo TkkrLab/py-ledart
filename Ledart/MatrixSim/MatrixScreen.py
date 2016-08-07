@@ -2,7 +2,7 @@ import time
 import sys
 
 import Pixel
-import BLUE, BLACK
+from Graphics import BLUE, BLACK
 
 # setup interface options, if no interface possible
 # set to a dummy
