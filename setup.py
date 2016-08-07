@@ -2,7 +2,7 @@ from distutils.core import setup
 from distutils.command.install_data import install_data
 from setuptools import find_packages
 
-req = ['Pillow==3.3.0',
+reqs = ['Pillow==3.3.0',
          'PyOpenGL==3.1.0',
          'PyUserInput==0.1.10',
          'cffi==1.7.0',
