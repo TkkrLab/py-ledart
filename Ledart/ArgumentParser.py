@@ -22,8 +22,9 @@ parser.add_argument("--color",        help="by default everything is grayscaled,
 parser.add_argument("--gui",          help="enables the graphical interface.",                                                              metavar="<enabled>",               nargs="?", default="disabled",          type=str)
 
 # testing/debugging
-parser.add_argument("--testing",      help="if enabled will run some tests and log to stdout",                         action="store_true")
-parser.add_argument("--list",         help="lists patterns with generate functions",                                   action="store_true")
+parser.add_argument("--testing",      help="if enabled will run some tests and log to stdout.",                         action="store_true")
+parser.add_argument("--list",         help="lists patterns with generate functions.",                                   action="store_true")
+parser.add_argument("--debug",        help="enables patterns and other code to print debug information.",              action="store_true")
 
 # matrix simulator
 parser.add_argument("--matrixSim",    help="turns on buildin matrix simulation",                                                            metavar="<enabled>",               nargs="?", default="disabled",          type=str)

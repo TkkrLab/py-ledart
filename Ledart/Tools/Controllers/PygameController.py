@@ -1,5 +1,9 @@
 import sys
 
+if __name__ != '__main__':
+    from ArgumentParser import get_args
+else:
+    from ...ArgumentParser import get_args
 
 class ControllerError(BaseException):
     def __init__(self, value):
@@ -28,14 +32,16 @@ class PygameController(object):
     # plugged for which controller to select
     pygame = __import__('pygame')
     def __init__(self, plugged=0):
+        args = get_args()
         self.pygame.init()
         self.pygame.joystick.init()
         self.joystick = None
         try:
             self.joystick = self.pygame.joystick.Joystick(plugged)
         except Exception as e:
-            print("PygameController.py:37:", e)
-            print("selected: ", plugged)
+            if args.debug:
+                print("PygameController.py:37:", e)
+                print("selected: ", plugged)
             self.joystick = None
 
         if self.joystick:

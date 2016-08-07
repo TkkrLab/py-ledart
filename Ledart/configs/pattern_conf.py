@@ -33,9 +33,7 @@ TARGETS = {
     # dest: ProgressedLife(decay=30),
     # dest: GraphicsLineScroll(),
     # dest: RandomLife(),
-    dest: RedLife(),
-    # dest: BlueLife(),
-    # dest: GreenLife(),
+    dest: PixelLife(color=(0, 0, 0xFF))
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),

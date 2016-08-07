@@ -35,10 +35,11 @@ class RandomLife(Graphics):
         self.draw()
 
 
-class GreenLife(Graphics):
-    def __init__(self):
+class PixelLife(Graphics):
+    def __init__(self, color=BLUE):
         Graphics.__init__(self, matrix_width, matrix_height)
-        self.life = Life(matrix_width, matrix_height, 1, color=GREEN)
+        self.life = Life(matrix_width, matrix_height, 1)
+        self.color = color
 
     def draw(self):
         self.fill(BLACK)
@@ -46,46 +47,7 @@ class GreenLife(Graphics):
         for point in self.get_points():
                 x, y = point
                 if life_matrix[y][x]:
-                    color = GREEN
-                    self.draw_pixel(x, y, color)
-
-    def generate(self):
-        self.life.process()
-        self.draw()
-
-
-class BlueLife(Graphics):
-    def __init__(self):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.life = Life(matrix_width, matrix_height, 1, color=BLUE)
-
-    def draw(self):
-        self.fill(BLACK)
-        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
-        for point in self.get_points():
-                x, y = point
-                if life_matrix[y][x]:
-                    color = BLUE
-                    self.draw_pixel(x, y, color)
-
-    def generate(self):
-        self.life.process()
-        self.draw()
-
-
-class RedLife(Graphics):
-    def __init__(self):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.life = Life(matrix_width, matrix_height, 1, color=RED)
-
-    def draw(self):
-        self.fill(BLACK)
-        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
-        for point in self.get_points():
-                x, y = point
-                if life_matrix[y][x]:
-                    color = RED
-                    self.draw_pixel(x, y, color)
+                    self.draw_pixel(x, y, self.color)
 
     def generate(self):
         self.life.process()

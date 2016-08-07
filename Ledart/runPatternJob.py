@@ -46,12 +46,18 @@ def get_protocol(args):
     if args.netProtocol == "artnet":
         import Artnet
         protocol = Artnet.Artnet(args)
-    elif args.netProtocol == "lmcp":
-        import Lmcp
-        protocol = Lmcp.Lmcp(args)
     elif args.netProtocol == "pixelmatrix":
         import Artnet
         protocol = Artnet.Pixelmatrix(args)
+    elif args.netProtocol == "lmcp":
+        import Lmcp
+        protocol = Lmcp.Lmcp(args)
+    elif args.netProtocol == "legacylmcp":
+        import Lmcp
+        protocol = Lmcp.LegacyLmcp(args)
+    elif args.netProtocol == "testlmcp":
+        import Lmcp
+        protocol = Lmcp.TestLmcp(args)
     else:
         raise(Exception("no protocol found/selected."))
     return protocol
@@ -122,6 +128,8 @@ def get_pattern_classes(module):
 
 
 def tst_patterns(dir, showpass=True):
+    def name_of_global_obj(xx):
+        return [objname for objname,oid in globals().items() if id(oid)==id(xx)][0]
     patterns = find_patterns_in_dir(dir)
     for pattern in patterns:
         try:
@@ -129,12 +137,11 @@ def tst_patterns(dir, showpass=True):
             pat.generate()
             if showpass:
                 print("-----------------")
-                print("passed: %s" % pat)
+                print("passed: %s" % type(pat))
                 print("-----------------")
         except Exception as e:
             print("---------------------")
             print("Pattern:%s Exception:%s" % (pattern, e))
-            print(traceback.print_exc())
             print("---------------------")
             continue
 
@@ -224,11 +231,11 @@ def main():
     # command parsing
     if args.list:
         listpatterns()
-        sys.exit()
+        cleanup(5)
     if args.testing:
         tst_patterns('Patterns', showpass=False)
         print("Done testing. ")
-        sys.exit()
+        cleanup(4)
     # if gui selected start that else start the headless code.
     if args.gui == "enabled":
         try:
@@ -238,14 +245,14 @@ def main():
         except Exception as e:
             print(e)
         print("Exiting.")
-        sys.exit(0)
+        cleanup(6)
     else:
         TARGETS = load_targets(args.config)
 
         # check if there is anything configured.
         if not len(TARGETS):
             print("nothing is configured in %s" % args.config)
-            sys.exit(1)
+            cleanup(7)
         # resolve hostenames if any
         for target in TARGETS:
             TARGETS[gethostbyname(target)] = TARGETS.pop(target)
