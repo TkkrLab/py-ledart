@@ -1,7 +1,8 @@
 av==0.3.1
 cffi==1.7.0
 Pillow==3.3.0
-git+https://github.com/CTPUG/pygame_cffi
+# git+https://github.com/CTPUG/pygame_cffi
+pygame_cffi
 PyOpenGL==3.1.0
 pyserial==3.1.1
 svn+https://svn.code.sf.net/p/python-xlib/code/trunk/
