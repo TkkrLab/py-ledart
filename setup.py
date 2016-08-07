@@ -19,11 +19,12 @@ with open("Ledart/requirements.txt") as f:
 setup(name='Ledart',
       version='0.2',
       description='led controle software.',
-      url='https://github.com/tkkrlab/py-ledart',
       author='Duality (aka Robert van der Tuuk',
       author_email='201292@live.nl',
       license='GPL3',
       packages=find_packages(),
       install_requires=reqs,
+      url='https://github.com/tkkrlab/py-ledart',
+      download_url = 'https://github.com/tkkrlab/py-ledart/tarbal/0.2',
       dependency_links=links,
       zip_safe=False)
