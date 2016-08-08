@@ -7,9 +7,9 @@
     http://lodev.org/cgtutor/fire.html
 """
 
-from Tools.Graphics import Surface
-from Tools.Timing import Timer
-from matrix import matrix_width, matrix_height
+from Ledart.Tools.Graphics import Surface
+from Ledart.Tools.Timing import Timer
+from Ledart.matrix import matrix_width, matrix_height
 import random
 import colorsys
 

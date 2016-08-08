@@ -1,5 +1,5 @@
-from Tools.Graphics import Graphics, BLACK, GREEN, RED, CYAN, YELLOW, WHITE
-from matrix import matrix_width, matrix_height
+from Ledart.Tools.Graphics import Graphics, BLACK, GREEN, RED, CYAN, YELLOW, WHITE
+from Ledart.matrix import matrix_width, matrix_height
 import random
 
 

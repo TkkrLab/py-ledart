@@ -23,7 +23,7 @@ class Surface(object):
             self.d_offset = kwargs.get('offset', (0, 0))
 
             self.size = self.width * self.height
-            self.color_rep = (0, 0, 0)
+            self.color_rep = [0, 0, 0]
             self.color_depth = 0xff
 
             """ map for points (x, y) to index int(index) """

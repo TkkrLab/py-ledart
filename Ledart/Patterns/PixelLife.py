@@ -1,6 +1,6 @@
-from Tools.Graphics import Graphics, WHITE, BLUE, BLACK, GREEN, RED, COLORS
-from Tools.Graphics import ColorRGBOps
-from matrix import matrix_width, matrix_height, to_matrix
+from Ledart.Tools.Graphics import Graphics, WHITE, BLUE, BLACK, GREEN, RED, COLORS
+from Ledart.Tools.Graphics import ColorRGBOps
+from Ledart.matrix import matrix_width, matrix_height, to_matrix
 from Life.life import Life
 import random
 

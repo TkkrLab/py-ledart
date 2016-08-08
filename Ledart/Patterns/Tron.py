@@ -1,9 +1,9 @@
-from Tools.Graphics import Graphics, BLUE, BLACK
-from matrix import matrix_width, matrix_height
 import random
-
 from pygame.locals import *
 import pygame
+
+from Ledart.Tools.Graphics import Graphics, BLUE, BLACK
+from Ledart.matrix import matrix_width, matrix_height
 
 
 class TronPlayer(Graphics):

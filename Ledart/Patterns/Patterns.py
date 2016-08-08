@@ -32,6 +32,7 @@ try:
     from Fire import *
 except Exception as e:
     debugprint("Various patterns >>", e)
+    traceback.print_exc()
 
 
 """ these patterns can't standalone, they use supporting libraries."""

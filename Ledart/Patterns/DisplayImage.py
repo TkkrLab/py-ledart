@@ -1,5 +1,5 @@
-from Tools.Graphics import ImageSurface
-from matrix import matrix_width, matrix_height
+from Ledart.Tools.Graphics import ImageSurface
+from Ledart.matrix import matrix_width, matrix_height
 
 
 class DisplayImage(ImageSurface):

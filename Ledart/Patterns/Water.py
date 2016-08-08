@@ -1,7 +1,7 @@
-from Tools.Graphics import Graphics
-from Tools.Graphics import BLUE, BLACK
-from Tools.Timing import Timer
-from matrix import matrix_width, matrix_height
+from Ledart.Tools.Graphics import Graphics
+from Ledart.Tools.Graphics import BLUE, BLACK
+from Ledart.Tools.Timing import Timer
+from Ledart.matrix import matrix_width, matrix_height
 import random
 
 

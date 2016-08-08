@@ -1,5 +1,5 @@
 # import all patterns availble for use.
-from Patterns.Patterns import *
+from Ledart.Patterns.Patterns import *
 
 localhost = "localhost"
 ledboard = "ledboard"

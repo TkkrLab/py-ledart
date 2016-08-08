@@ -1,7 +1,7 @@
 # raindrop by Duality
 
-from matrix import matrix_width, matrix_height
-from Tools.Graphics import Graphics, BLACK
+from Ledart.matrix import matrix_width, matrix_height
+from Ledart.Tools.Graphics import Graphics, BLACK
 import random
 
 

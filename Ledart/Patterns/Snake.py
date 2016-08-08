@@ -1,6 +1,6 @@
-from Tools.Graphics import Graphics, GREEN, BLUE, WHITE, BLACK
-from Tools.Controllers import *
-from matrix import matrix_width, matrix_height
+from Ledart.Tools.Graphics import Graphics, GREEN, BLUE, WHITE, BLACK
+from Ledart.Tools.Controllers import *
+from Ledart.matrix import matrix_width, matrix_height
 import random
 import time
 

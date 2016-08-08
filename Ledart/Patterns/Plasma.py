@@ -1,14 +1,14 @@
-from Tools.Graphics import Graphics, BLACK, BLUE
-from Tools.Graphics.ConvertColors import HSVtoRGB
-from Tools.Graphics.RGBColorTools import ColorRGBOps
-from Tools.Palet import PaletGenerate
-from Tools.Timing import Timer
-from matrix import matrix_width, matrix_height
 from math import sin, cos, sqrt, pi, radians
 import time
 import random
 
-from Tools.Controllers import translate
+from Ledart.Tools.Graphics import Graphics, BLACK, BLUE
+from Ledart.Tools.Graphics.ConvertColors import HSVtoRGB
+from Ledart.Tools.Graphics.RGBColorTools import ColorRGBOps
+from Ledart.Tools.Palet import PaletGenerate
+from Ledart.Tools.Timing import Timer
+from Ledart.matrix import matrix_width, matrix_height
+from Ledart.Tools.Controllers import translate
 # from Tools.Controllers.SoundControllers import MidiController
 
 select = "RainbowEffect"

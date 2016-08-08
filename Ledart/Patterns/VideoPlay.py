@@ -1,11 +1,13 @@
-from Tools.Graphics import Surface
-from matrix import matrix_width, matrix_height, chunks
-from ArgumentParser import get_args
 import time
 import subprocess as sp
 import pymouse
 import shlex
 import os, fcntl, sys
+
+from Ledart.Tools.Graphics import Surface
+from Ledart.matrix import matrix_width, matrix_height, chunks
+from Ledart.ArgumentParser import get_args
+
 
 class VideoPlay(Surface):
     def __init__(self, location='', center=True):

@@ -1,5 +1,5 @@
-from matrix import matrix_width, matrix_height
-from Tools.Graphics import Graphics, BLUE
+from Ledart.matrix import matrix_width, matrix_height
+from Ledart.Tools.Graphics import Graphics, BLUE
 
 
 class FillTest(Graphics):

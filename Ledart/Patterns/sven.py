@@ -3,8 +3,8 @@ made by: sven
 Displays: random leds at random positions.
 """
 
-from matrix import matrix_width, matrix_height
-from Tools.Graphics import Graphics, BLACK, rand_color
+from Ledart.matrix import matrix_width, matrix_height
+from Ledart.Tools.Graphics import Graphics, BLACK, rand_color
 import random
 
 

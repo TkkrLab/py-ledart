@@ -1,5 +1,5 @@
 # import all patterns availble for use.
-from patterns.Patterns import *
+from Ledart.patterns.Patterns import *
 
 pixelmatrix = "pixelmatrix"
 ledboard = 'ledboard'

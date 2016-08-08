@@ -128,8 +128,6 @@ def get_pattern_classes(module):
 
 
 def tst_patterns(dir, showpass=True):
-    def name_of_global_obj(xx):
-        return [objname for objname,oid in globals().items() if id(oid)==id(xx)][0]
     patterns = find_patterns_in_dir(dir)
     for pattern in patterns:
         try:
@@ -145,16 +143,14 @@ def tst_patterns(dir, showpass=True):
             print("---------------------")
             continue
 
-
+""" TODO: use actuall config file and not python source files. """
 def load_targets(configfile):
     # this function allows loading of the config files specified by
-    # --config/configfile and load patterns defined in there.
-    package = "configs"
-    fp, path, description = imp.find_module(package)
-    path = [path]
-    fp, path, description = imp.find_module(str(configfile)[:-3], path)
-    config = imp.load_module("configuration", fp, path, description)
-    return config.TARGETS
+    # --config=configfile and load patterns defined in there.
+    configfile = "Ledart/configs/" + configfile
+    variables = {}
+    execfile(configfile, variables)
+    return variables['TARGETS']
 
 
 def debugprint(data):
