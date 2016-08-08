@@ -1,8 +1,14 @@
 from distutils.core import setup
-from distutils.command.install_data import install_data
 from setuptools import find_packages
+import os
 
-version = '0.2.4'
+"""
+    clearly assumes there already are tags pressent,
+    and only gets it for the current branch.
+    my case will only be used in the master branch.
+"""
+with os.popen("git describe --abbrev=0") as fd:
+    version = fd.read().strip()
 
 reqs = ['Pillow==3.3.0',
          'PyOpenGL==3.1.0',
