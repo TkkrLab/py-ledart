@@ -36,11 +36,6 @@ except Exception as e:
 
 
 """ these patterns can't standalone, they use supporting libraries."""
-# use pillow
-try:
-    from Capture import *
-except Exception as e:
-    debugprint("Capture >>", e)
 
 # uses ffmpeg
 try:

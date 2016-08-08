@@ -1,14 +1,14 @@
 # import all patterns availble for use.
 from Ledart.Patterns.Patterns import *
 
-pixelmatrix = "pixelmatrix"
+pixelmatrix = "Arduino-42"
 ledboard = 'ledboard'
 minimatrix = 'minimatrix'
 megamatrix = 'megamatrix'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
-dest = megamatrix
+dest = pixelmatrix
 # dest = minimatrix
 # dest = moo
 # dest = localhost
@@ -38,12 +38,12 @@ TARGETS = {
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    dest: ScreenCapture(fullscreen=True),
+    # dest: ScreenCapture(fullscreen=True),
     # dest: ScreenCapture(fullscreen=False),
-    # dest: DisplayImage('images/tkkrlab.png'),
+    # dest: DisplayImage('Ledart/images/tkkrlab.png'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
-    # dest: VideoPlay('/home/robert/Videos/bad.mkv'),
+    dest: VideoPlay('/home/robert/Videos/bad.mkv'),
     # dest: VideoTest(),
     # dest: CamCapture(),
     # dest: Water(),

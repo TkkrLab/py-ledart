@@ -62,9 +62,9 @@ class UdpSocket(object):
         readable, writable, exceptional = select.select([self.sock],
                                                         [self.sock],
                                                         [self.sock])
-        for w in writable:
-            w.sendto(data, target)
-        # self.sock.sendto(data, target)
+        # for w in writable:
+        #     w.sendto(data, target)
+        self.sock.sendto(data, target)
 
     def send(self, data, dest):
         """

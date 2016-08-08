@@ -5,8 +5,6 @@
 # 2015-12-12 Duality:
 # class struckture introduced for easy implentation of other
 # protocols, and abstraction of sockets.
-
-
 from DeviceInterfaces import UdpSocket
 from Filter import convert_snake_layout
 from Filter import convert_dim_layout

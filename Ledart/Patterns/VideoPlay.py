@@ -68,11 +68,13 @@ class CamCapture(Surface):
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):
+        # turn all elements into int values.
         raw_image = self.pipe.stdout.read(self.width * self.height * 3)
-        for p, color in enumerate(chunks(raw_image, 3)):
-            # change on surface only when the color is not the same
-            if self[p] != color:
-                self[p] = map(ord, color)
+        raw_image = map(ord, raw_image)
+        # create an itterator
+        it = iter(raw_image)
+        # use the itterator to zip three following values together.
+        self.surface = zip(it, it, it)
 
 class ScreenCapture(Surface):
     def __init__(self, screen_resolution=None, fullscreen=False, fps=None,
@@ -138,11 +140,6 @@ class ScreenCapture(Surface):
         it = iter(raw_image)
         # use the itterator to zip three following values together.
         self.surface = zip(it, it, it)
-        # raw_image = self.pipe.stdout.read(self.width * self.height * 3)
-        # for p, color in enumerate(chunks(raw_image, 3)):
-        #     # change on surface only when the color is not the same
-        #     if self[p] != color:
-        #         self[p] = map(ord, color)
 
 # import av
 

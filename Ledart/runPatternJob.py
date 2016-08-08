@@ -45,10 +45,10 @@ if args.matrixSim == "enabled":
 def get_protocol(args):
     if args.netProtocol == "artnet":
         import Artnet
-        protocol = Artnet.Artnet(args)
+        protocol = Artnet.Artnet(universe=0)
     elif args.netProtocol == "pixelmatrix":
         import Artnet
-        protocol = Artnet.Pixelmatrix(args)
+        protocol = Artnet.Pixelmatrix(universe=0)
     elif args.netProtocol == "lmcp":
         import Lmcp
         protocol = Lmcp.Lmcp()
@@ -200,7 +200,7 @@ def sendout(args, TARGETS, protocol):
                     print("pattern size, width, height: ",
                           pattern.get_size(), pattern.get_width(),
                           pattern.get_height())
-                    raise(e)
+                    cleanup(8)
 sendout.previous = Surface(width=10, height=10)
 
 
