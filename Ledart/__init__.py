@@ -1,3 +1,4 @@
+__package__ = "Ledart"
 from Tools import *
 from MatrixSim import *
 

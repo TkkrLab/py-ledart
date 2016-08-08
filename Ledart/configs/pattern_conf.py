@@ -33,12 +33,12 @@ TARGETS = {
     # dest: ProgressedLife(decay=30),
     # dest: GraphicsLineScroll(),
     # dest: RandomLife(),
-    dest: PixelLife(color=(0, 0, 0xFF))
+    # dest: PixelLife(color=(0, 0, 0xFF))
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
-    # dest: ScreenCapture(fullscreen=True),
+    dest: ScreenCapture(fullscreen=True),
     # dest: ScreenCapture(fullscreen=False),
     # dest: DisplayImage('images/tkkrlab.png'),
     # dest: DisplayGif('/home/robert/1353.gif'),

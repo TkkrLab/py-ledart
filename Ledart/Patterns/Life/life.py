@@ -81,7 +81,8 @@ class Life(object):
         self.previousCount = count
 
     def copy_buffer(self):
-        self.field = list(self.buffer)
+        # self.field = list(self.buffer)
+        self.field, self.buffer = self.buffer, self.field
 
     def checkUpper(self, field, position):
         if position - self.fieldWidth > 0:

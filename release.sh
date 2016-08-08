@@ -19,7 +19,6 @@ if [ -z ${message+x} ]; then
     echo "no message set"
     exit
 fi
-exit
 
 git tag $version -m "$message"
 git tag

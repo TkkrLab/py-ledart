@@ -51,13 +51,17 @@ def get_protocol(args):
         protocol = Artnet.Pixelmatrix(args)
     elif args.netProtocol == "lmcp":
         import Lmcp
-        protocol = Lmcp.Lmcp(args)
+        protocol = Lmcp.Lmcp()
     elif args.netProtocol == "legacylmcp":
         import Lmcp
-        protocol = Lmcp.LegacyLmcp(args)
+        if args.color == "enabled":
+            display_mode = Lmcp.rgb24
+        else:
+            display_mode = Lmcp.grayscale
+        protocol = Lmcp.LegacyLmcp(dispmode=display_mode)
     elif args.netProtocol == "testlmcp":
         import Lmcp
-        protocol = Lmcp.TestLmcp(args)
+        protocol = Lmcp.TestLmcp()
     else:
         raise(Exception("no protocol found/selected."))
     return protocol
@@ -89,13 +93,14 @@ def find_patterns_in_dir(dir):
     # for everything in a directory.
     for item in os.listdir(dir):
         # if it is a source file.
-        if item.endswith("py"):
+        if item.endswith(".py") and not item.startswith("__"):
             # extract the file name and import it.
             sfile = item.split('.')[0]
             try:
                 mod = __import__(sfile)
             except Exception as e:
                 print("%s:Couldn't import module cause: %s" % (sfile, e))
+                traceback.print_exc()
                 continue
             # extract classes
             classes = get_pattern_classes(mod)
@@ -200,7 +205,7 @@ sendout.previous = Surface(width=10, height=10)
 
 
 def listpatterns():
-    pattern_objects = find_patterns_in_dir('Patterns')
+    pattern_objects = find_patterns_in_dir('Ledart/Patterns')
     patterns = []
     for pattern in pattern_objects:
         patterns.append(pattern.__name__)
@@ -229,7 +234,7 @@ def main():
         listpatterns()
         cleanup(5)
     if args.testing:
-        tst_patterns('Patterns', showpass=False)
+        tst_patterns('Ledart/Patterns', showpass=False)
         print("Done testing. ")
         cleanup(4)
     # if gui selected start that else start the headless code.

@@ -1,18 +1,20 @@
 """
-    author: Duality
-    protocol author: Jawsper
-    https://github.com/jawsper
+author: Duality
+protocol author: Jawsper
+https://github.com/jawsper
 
-    this file describes a protocol that implements,
-    part of the documented lcmp protocol,
-    because only part is needed for the working of
-    py-ledart software.
+this file describes a protocol that implements,
+part of the documented lcmp protocol,
+because only part is needed for the working of
+py-ledart software.
 
 """
-from ProtocolInterface import Interface
+from DeviceInterfaces import UdpSocket
 
 def chunked(data, chunksize):
-    """ yield sections 'chunks' of data, with iteration count."""
+    """
+    yield sections 'chunks' of data, with iteration count.
+    """
     chunk = []
     it = 0
     while(it < (len(data) / chunksize)):
@@ -21,14 +23,33 @@ def chunked(data, chunksize):
         yield (it, chunk)
         it += 1
 
-""" Flattenc turns a 2D list into a flattened list of characters. """
-def flattenc(l):
-    return [chr(y) for x in l for y in x]
+def rgb24(colordata):
+    """ 
+    Take color input, and flattens the input.
+    returns raw rgb24
+    """
+    return ''.join([chr(y) for x in colordata for y in x])
+
+def grayscale(colordata, cache=[]):
+    """
+    Grayscale data input.
+    return every 3 bytes averaged (r, g, b)
+    """
+
+    # averages a triplet of [r, g, b]
+    def avgtri(c):
+        return chr((c[0]+ c[1] + c[2]) / 3)
+    return ''.join([avgtri(c) for c in colordata])
 
 
-class LegacyLmcp(Interface):
-    def __init__(self, args, port=1337):
-        Interface.__init__(self, args, port)
+class LegacyLmcp(UdpSocket):
+    """
+    Legacy Lmcp has the ability to either transmit full color image.
+    or to transmit a grayscalled image, for which also could be set a
+    color overlay.
+    """
+    def __init__(self, dispmode=grayscale, port=1337):
+        UdpSocket.__init__(self, port)
         self.send_limit = 1024 - 5
 
         self.writeout = chr(0x01)
@@ -38,32 +59,20 @@ class LegacyLmcp(Interface):
         self.draw_rows_rgb = chr(0x30)
         self.draw_image_rgb = chr(0x31)
         self.cleared = False
-        self.grayscaling = (self.args.color != "enabled")
+        # dictates how data is displayed
+        self.dispmode = dispmode
 
         self.debug = False
 
-    """ Send_clear sends a clear command to clear the ledboard."""
     def send_clear(self):
         self.bcast(self.clear)
 
-    def grayscale(self, c):
-        return chr((int(c[0])+ int(c[1]) + int(c[2])) / 3)
-
-    def compress(self, data):
-        compressed = []
-        if self.grayscaling:
-            # compressed = map(lambda x: chr(sum(x) / 3), data)
-            # compressed = map(self.grayscale, data)
-            for c in data:
-                compressed.append(self.grayscale(c))
-        else:
-            compressed = flattenc(data)
-            # print compressed
-
-        return ''.join(compressed)
-
-    def send(self, data, ip):
-        if self.grayscaling:
+    def send(self, data, dest):
+        """
+        Calculates (data) chunks based on max data size allowed per packet.
+        Then transmit and draws those blocks to dest.
+        """
+        if self.dispmode == grayscale:
             draw_image = self.draw_image
         else:
             draw_image = self.draw_image_rgb
@@ -73,8 +82,8 @@ class LegacyLmcp(Interface):
         for i, chunk in chunked(data, chunksize):
             packet = (draw_image + chr(x) + chr(y + size * i) +
                       chr(width) + chr(size))
-            packet += self.compress(chunk)
-            self.transmit(packet, ip)
+            packet += self.dispmode(chunk)
+            self.transmit(packet, dest)
             if(self.debug):
                 print("packet len: %d" % len(packet))
         # then if any data remains over, transmit that to the last bit.
@@ -86,16 +95,16 @@ class LegacyLmcp(Interface):
             chunk = data[-chunksize:]
             packet = (draw_image + chr(x) + chr(y) +
                       chr(width) + chr(remains))
-            packet += self.compress(chunk)
-            self.transmit(packet, ip)
+            packet += self.dispmode(chunk)
+            self.transmit(packet, dest)
             if(self.debug):
                 print("packet len: %d" % len(packet))
-        self.transmit(self.writeout, ip)
+        self.transmit(self.writeout, dest)
 
 
     def close(self):
         self.send_clear()
-        Interface(self).close()
+        UdpSocket(self).close()
 
     def __del__(self):
         self.close()
@@ -104,13 +113,32 @@ class LegacyLmcp(Interface):
         self.close()
 
 
-class TestLmcp(LegacyLmcp):
-    def __init__(self, args, port=1337):
-        LegacyLmcp.__init__(self, args, port)
-
-    def send(self, data, ip):
-        return
-
 class Lmcp(LegacyLmcp):
-    def __init__(self, args, port=1337):
-        LegacyLmcp.__init__(self, args, port)
+    """
+    New Lmcp implementation doesn't have grayscaling.
+    so no need for selecting a mode.
+    """
+    def __init__(self, port=1337):
+        LegacyLmcp.__init__(self, dispmode=rgb24, port=port)
+
+
+class TestLmcp(LegacyLmcp):
+    def __init__(self, port=1337):
+        LegacyLmcp.__init__(self, port)
+
+    def make_header(self, *args):
+        header = []
+        for c in args:
+            if not isinstance(c, str):
+                header.append(chr(c))
+            else:
+                header.append(c)
+        return ''.join(header)
+    
+    def send(self, data, dest):
+        draw_image = self.draw_image_rgb
+        (x, y), width, height = data.d_offset, data.width, data.height
+        packet = self.make_header(draw_image, x, y, width, height)
+        packet += str(data)
+        self.transmit(packet, dest)
+        self.transmit(self.writeout, dest)

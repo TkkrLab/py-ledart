@@ -96,7 +96,7 @@ class ScreenCapture(Surface):
             command = [ffmpeg,
                        '-loglevel', 'panic',
                        '-video_size', screensize,
-                       '-framerate', '10.0',
+                       # '-framerate', '10.0',
                        '-f', 'x11grab',
                        '-i', display,
                        '-f', 'image2pipe',
@@ -131,11 +131,18 @@ class ScreenCapture(Surface):
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):
+        # turn all elements into int values.
         raw_image = self.pipe.stdout.read(self.width * self.height * 3)
-        for p, color in enumerate(chunks(raw_image, 3)):
-            # change on surface only when the color is not the same
-            if self[p] != color:
-                self[p] = map(ord, color)
+        raw_image = map(ord, raw_image)
+        # create an itterator
+        it = iter(raw_image)
+        # use the itterator to zip three following values together.
+        self.surface = zip(it, it, it)
+        # raw_image = self.pipe.stdout.read(self.width * self.height * 3)
+        # for p, color in enumerate(chunks(raw_image, 3)):
+        #     # change on surface only when the color is not the same
+        #     if self[p] != color:
+        #         self[p] = map(ord, color)
 
 # import av
 

@@ -7,14 +7,14 @@
 # protocols, and abstraction of sockets.
 
 
-from ProtocolInterface import Interface
+from DeviceInterfaces import UdpSocket
 from Filter import convert_snake_layout
 from Filter import convert_dim_layout
 
 
-class Artnet(Interface):
-    def __init__(self, args, universe=0, port=6454):
-        Interface.__init__(self, args, port=port)
+class Artnet(UdpSocket):
+    def __init__(self, universe=0, port=6454):
+        UdpSocket.__init__(self, port=port)
         self.universe = universe
 
     def build_packet(self, universe, dmxdata):
@@ -43,8 +43,8 @@ class Pixelmatrix(Artnet):
         enable snake mode and flip x for pixelmatrix
     """
 
-    def __init__(self, args, universe=0, port=6454):
-        Artnet.__init__(self, args, universe, port)
+    def __init__(self, universe=0, port=6454):
+        Artnet.__init__(self, universe, port)
 
     def send(self, data, ip):
         data = convert_dim_layout(data)
