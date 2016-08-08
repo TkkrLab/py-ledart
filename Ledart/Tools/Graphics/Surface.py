@@ -85,7 +85,7 @@ class Surface(object):
             raise(KeyError)
 
     def __setitem__(self, key, value):
-        if type(value) != tuple:
+        if type(value) != list:
             raise(ValueError)
 
         if type(key) == int:

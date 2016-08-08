@@ -40,7 +40,7 @@ class VideoPlay(Surface):
         # create an itterator
         it = iter(raw_image)
         # use the itterator to zip three following values together.
-        self.surface = zip(it, it, it)
+        self.surface = [list(c) for c in zip(it, it, it)]
 
 class CamCapture(Surface):
     def __init__(self, dev='/dev/video0'):
@@ -68,13 +68,13 @@ class CamCapture(Surface):
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):
-        # turn all elements into int values.
+        # read and turn all elements into int values.
         raw_image = self.pipe.stdout.read(self.width * self.height * 3)
         raw_image = map(ord, raw_image)
         # create an itterator
         it = iter(raw_image)
         # use the itterator to zip three following values together.
-        self.surface = zip(it, it, it)
+        self.surface = [list(c) for c in zip(it, it, it)]
 
 class ScreenCapture(Surface):
     def __init__(self, screen_resolution=None, fullscreen=False, fps=None,
@@ -133,13 +133,13 @@ class ScreenCapture(Surface):
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):
-        # turn all elements into int values.
+        # read and turn all elements into int values.
         raw_image = self.pipe.stdout.read(self.width * self.height * 3)
         raw_image = map(ord, raw_image)
         # create an itterator
         it = iter(raw_image)
         # use the itterator to zip three following values together.
-        self.surface = zip(it, it, it)
+        self.surface = [list(c) for c in zip(it, it, it)]
 
 # import av
 
