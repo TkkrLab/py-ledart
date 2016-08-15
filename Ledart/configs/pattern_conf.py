@@ -8,7 +8,7 @@ megamatrix = 'megamatrix'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
-dest = pixelmatrix
+dest = megamatrix
 # dest = minimatrix
 # dest = moo
 # dest = localhost
@@ -33,7 +33,8 @@ TARGETS = {
     # dest: ProgressedLife(decay=30),
     # dest: GraphicsLineScroll(),
     # dest: RandomLife(),
-    # dest: PixelLife(color=(0, 0, 0xFF))
+    dest: Mandelbrot(),
+    # dest: PixelLife(color=(0, 0, 0xFF)),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
     # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
@@ -43,7 +44,7 @@ TARGETS = {
     # dest: DisplayImage('Ledart/images/tkkrlab.png'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
-    dest: VideoPlay('/home/robert/Videos/bad.mkv'),
+    # dest: VideoPlay('/home/robert/Videos/bad.mkv'),
     # dest: VideoTest(),
     # dest: CamCapture(),
     # dest: Water(),

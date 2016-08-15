@@ -22,6 +22,7 @@ def debugprint(discr, exception):
 """ try to load patterns and see if anything goes wrong."""
 
 try:
+    from Mandelbrot import *
     from RainPattern import *
     from PixelLife import *
     from Plasma import *

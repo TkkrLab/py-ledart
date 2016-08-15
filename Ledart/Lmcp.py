@@ -13,7 +13,7 @@ from DeviceInterfaces import UdpSocket
 
 def chunked(data, chunksize):
     """
-    yield sections 'chunks' of data, with iteration count.
+    yield sections 'chunks' of data with size <chunksize>, with iteration count.
     """
     chunk = []
     it = 0

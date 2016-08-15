@@ -24,7 +24,7 @@ class PaletGenerate(object):
                 self.cpledselect = self.cledselect - 1
         self.colors[self.cpledselect] = 255 - self.cvalue
         self.colors[self.cledselect] = self.cvalue
-        return tuple(self.colors)
+        return list(self.colors)
 
     def rainbowRange(self):
         return next(self.pool)

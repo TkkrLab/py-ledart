@@ -145,6 +145,7 @@ def tst_patterns(dir, showpass=True):
         except Exception as e:
             print("---------------------")
             print("Pattern:%s Exception:%s" % (pattern, e))
+            traceback.print_exc()
             print("---------------------")
             continue
 
@@ -178,29 +179,31 @@ def sendout(args, TARGETS, protocol):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
     # or only to the matrix simulator if netSilent enabled.
-    for t in TARGETS:
-        pattern = TARGETS[t]
-        # generate the next set of images to send.
-        pattern.generate()
-        if args.matrixSim == "enabled":
-            matrixscreen.handleinput()
-            matrixscreen.process(pattern)
-        if args.sendOnChange == "enabled":
-            changed = (Surface(pattern) != Surface(sendout.previous))
-            sendout.previous = Surface(pattern)
-        else:
-            changed = True
-        if changed:
-            if not (args.netSilent == "enabled"):
-                try:
+    try:
+        for t in TARGETS:
+            pattern = TARGETS[t]
+            # generate the next set of images to send.
+            pattern.generate()
+            if args.matrixSim == "enabled":
+                matrixscreen.handleinput()
+                matrixscreen.process(pattern)
+            if args.sendOnChange == "enabled":
+                changed = (Surface(pattern) != Surface(sendout.previous))
+                sendout.previous = Surface(pattern)
+            else:
+                changed = True
+            if changed:
+                if not (args.netSilent == "enabled"):
                     protocol.send(pattern, t)
-                except Exception as e:
-                    traceback.print_exc()
-                    print("\r\ndest: %s" % (t))
-                    print("pattern size, width, height: ",
-                          pattern.get_size(), pattern.get_width(),
-                          pattern.get_height())
-                    cleanup(8)
+    except KeyboardInterrupt:
+        cleanup(9)
+    except Exception as e:
+        traceback.print_exc()
+        print("\r\ndest: %s" % (t))
+        print("pattern size, width, height: ",
+              pattern.get_size(), pattern.get_width(),
+              pattern.get_height())
+        cleanup(8)
 sendout.previous = Surface(width=10, height=10)
 
 
