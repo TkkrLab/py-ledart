@@ -117,9 +117,11 @@ class Lmcp(LegacyLmcp):
     """
     New Lmcp implementation doesn't have grayscaling.
     so no need for selecting a mode.
+
+    for now it's just legacy.
     """
     def __init__(self, port=1337):
-        LegacyLmcp.__init__(self, dispmode=rgb24, port=port)
+        LegacyLmcp.__init__(self, dispmode=grayscale, port=port)
 
 
 class TestLmcp(LegacyLmcp):

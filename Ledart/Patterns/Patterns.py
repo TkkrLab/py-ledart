@@ -31,6 +31,7 @@ try:
     from GraphicsTests import *
     from Water import *
     from Fire import *
+    from Sim import *
 except Exception as e:
     debugprint("Various patterns >>", e)
     traceback.print_exc()

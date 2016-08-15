@@ -62,7 +62,7 @@ class Graphics(Surface):
             ystep = 1
         else:
             ystep = -1
-        for x in range(x1, x2 + 1):
+        for x in xrange(x1, x2 + 1):
             if issteep:
                 self.draw_pixel(y, x, color)
             else:
