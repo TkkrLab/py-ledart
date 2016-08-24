@@ -7,6 +7,7 @@ import os
     and only gets it for the current branch.
     my case will only be used in the master branch.
 """
+
 with os.popen("git describe --abbrev=0") as fd:
     version = fd.read().strip()
 

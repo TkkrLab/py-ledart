@@ -1,4 +1,5 @@
 import random
+import time
 import math
 
 from Ledart.matrix import matrix_width, matrix_height
@@ -7,16 +8,17 @@ from Ledart.Tools import Graphics, BLUE, WHITE, BLACK
 
 class Particle(object):
     def __init__(self, (x, y), size, mass=1):
+        random.seed(time.time())
         self.x = x
         self.y = y
         self.size = size
         self.mass = mass
         self.color = WHITE
         self.wall = 1
-        self.speed = 1
+        self.speed = 5 + random.random() * 10
         self.angle = random.random() * (2 * math.pi)
-        self.drag = 0.9999999
-        self.elasticity = 0.8
+        self.drag = 1
+        self.elasticity = 0.96
 
     def move(self, gravity):
         self.x += math.sin(self.angle) * self.speed
@@ -83,8 +85,8 @@ class Sim(Graphics):
         # self.gravity = (math.pi, 100)
         self.random_vecs()
         self.particles = []
-        for n in xrange(self.width * 6):
-            size = 1
+        for n in xrange(self.width*2):
+            size = random.randrange(0, 3)
             x = random.randint(size, self.width - size)
             y = random.randint(size, self.height - size)
             density = random.randint(1, 20)
@@ -94,14 +96,18 @@ class Sim(Graphics):
 
     def random_vecs(self):
         self.applied_forces = []
-        angles = [0, math.pi, math.pi / 2, math.pi * 2]
+        # angles = [0, math.pi, math.pi / 2, math.pi * 2]
+        angles = []
+        for i in range(0, 4):
+            angles.append(random.random() * (2 * math.pi))
         self.applied_forces = []
         for angle in angles:
-            self.applied_forces.append(tuple([angle, random.random()*100]))
+            self.applied_forces.append(tuple([angle, 1000 + random.random()*10000]))
 
     def generate(self):
         self.fill(BLACK)
-        self.random_vecs()
+        if not (int(time.time()) % 10):
+            self.random_vecs()
         for i, particle in enumerate(self.particles):
             # particle.move(self.gravity)
             for vec in self.applied_forces:
