@@ -13,10 +13,10 @@ class Particle(object):
         self.mass = mass
         self.color = WHITE
         self.wall = 1
-        self.speed = random.random()
+        self.speed = 1
         self.angle = random.random() * (2 * math.pi)
-        self.drag = 0.999
-        self.elasticity = 0.75
+        self.drag = 0.9999999
+        self.elasticity = 0.8
 
     def move(self, gravity):
         self.x += math.sin(self.angle) * self.speed
@@ -80,10 +80,11 @@ class Sim(Graphics):
         self.height = matrix_height
         Graphics.__init__(self, self.width, self.height)
         self.fill(BLACK)
-        self.gravity = (math.pi, 0.06)
+        # self.gravity = (math.pi, 100)
+        self.random_vecs()
         self.particles = []
-        for n in xrange(self.width * 7):
-            size = 0
+        for n in xrange(self.width * 6):
+            size = 1
             x = random.randint(size, self.width - size)
             y = random.randint(size, self.height - size)
             density = random.randint(1, 20)
@@ -91,10 +92,20 @@ class Sim(Graphics):
             particle.color = [200 - density * 10, 200 - density * 10, 0xff]
             self.particles.append(particle)
 
+    def random_vecs(self):
+        self.applied_forces = []
+        angles = [0, math.pi, math.pi / 2, math.pi * 2]
+        self.applied_forces = []
+        for angle in angles:
+            self.applied_forces.append(tuple([angle, random.random()*100]))
+
     def generate(self):
         self.fill(BLACK)
+        self.random_vecs()
         for i, particle in enumerate(self.particles):
-            particle.move(self.gravity)
+            # particle.move(self.gravity)
+            for vec in self.applied_forces:
+                particle.move(vec)
             particle.bounce(self.width, self.height)
             for other in self.particles[i+1:]:
                 particle.collide(other)

@@ -84,7 +84,7 @@ class Graphics(Surface):
 
     def draw_circle(self, x0, y0, radius, color):
         x0, y0 = int(x0), int(y0)
-        radius = int(radius)
+        radius = int(radius-1)
         # brensenham circle
         error = 1 - radius
         errory = 1
