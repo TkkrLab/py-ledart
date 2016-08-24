@@ -82,9 +82,6 @@ class Surface(object):
             index = self.indexes[key]
             return self.surface[index]
         else:
-            print(self.indexes)
-            print(len(self.indexes))
-            print(key)
             raise(KeyError)
 
     def __setitem__(self, key, value):
