@@ -4,3 +4,4 @@ pattern/*.pyc
 Gui/IntermediateCode/intermediate.py*
 Gui/new_file.py*
 venv/
+Ledart.egg-info*
