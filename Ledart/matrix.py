@@ -31,6 +31,21 @@ matrix_size = (matrix_height * matrix_width)
 COLOR_ORDER = [0, 1, 2]
 
 
+def chunked(data, chunksize):
+    """
+    yield sections 'chunks' of data with size <chunksize>, with iteration count.
+    """
+    chunk = []
+    it = 0
+    if chunksize <= 0:
+        yield (0, [])
+    else:
+        while(it < (len(data) / chunksize)):
+            index = (it * chunksize)
+            chunk = data[index:(index + chunksize)]
+            yield (it, chunk)
+            it += 1
+
 def chunks(l, n):
     for i in xrange(0, len(l), n):
         yield l[i:i + n]

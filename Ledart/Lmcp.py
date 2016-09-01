@@ -10,18 +10,7 @@ py-ledart software.
 
 """
 from DeviceInterfaces import UdpSocket
-
-def chunked(data, chunksize):
-    """
-    yield sections 'chunks' of data with size <chunksize>, with iteration count.
-    """
-    chunk = []
-    it = 0
-    while(it < (len(data) / chunksize)):
-        index = (it * chunksize)
-        chunk = data[index:(index + chunksize)]
-        yield (it, chunk)
-        it += 1
+from matrix import chunked
 
 def rgb24(colordata):
     """ 

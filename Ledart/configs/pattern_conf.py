@@ -34,7 +34,7 @@ TARGETS = {
     # dest: GraphicsLineScroll(),
     # dest: RandomLife(),
     # dest: Mandelbrot(),
-    dest: Sim(),
+    # dest: Sim(),
     # dest: PixelLife(color=(0, 0, 0xFF)),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
@@ -73,5 +73,5 @@ TARGETS = {
     # dest: GraphicsLineTest(),
     # dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
-    # dest: VUmeterThree(),
+    dest: VUmeter(),
 }
