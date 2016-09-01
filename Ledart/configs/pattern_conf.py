@@ -52,7 +52,7 @@ TARGETS = {
     # dest: AliasedWPlasma(),
     
     # dest: AliasedFire(),
-    # dest: MiniFire(),
+    dest: MiniFire(),
     # dest: Smolders(),
     # dest: FireOne(),
     # dest: FireTwo(),
@@ -73,5 +73,5 @@ TARGETS = {
     # dest: GraphicsLineTest(),
     # dest: GraphicsPixelTest(),
     # dest: GraphicsDotTest(),
-    dest: VUmeter(),
+    # dest: VUmeter(),
 }

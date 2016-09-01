@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
 # import some generaly used libraries
-import signal
+import os
+import gc
 import sys
 import imp
-import os
 import time
+import signal
 import atexit
 import traceback
 from socket import gethostbyname
@@ -153,8 +154,14 @@ def tst_patterns(dir, showpass=True):
 def load_targets(configfile):
     # this function allows loading of the config files specified by
     # --config=configfile and load patterns defined in there.
-    configfile = "Ledart/configs/" + configfile
+
+    # test if the config file exists, if not it's maybe a local file
+    # and else it's probably a path description + file.
     variables = {}
+    currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    if not os.path.exists(configfile):
+        configfile = os.path.join(currentdir, "configs", configfile)
+    print("loading config from: %s" % (configfile))
     execfile(configfile, variables)
     return variables['TARGETS']
 
@@ -271,7 +278,6 @@ def main():
         adjust = 0
         currentTime = time.time()
         measured = []
-
         while(True):
             # send patterns out in a timed fasion. if args.fps != 0
             # check if we want to print the fps to the terminal

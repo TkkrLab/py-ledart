@@ -38,3 +38,4 @@ parser.add_argument("--simInterface", help="lets you choose the simulator drawin
 add_argument("--ttyport", type=str, default="USB0", help="select serial port", metavar="/dev/tty<port>")
 add_argument("--ttybaud", type=int, default=115200, help="set serial baudrate", metavar="<baud>")
 add_argument("--ttydebug", type=bool, default=False, help="enabled debugging output for serial.", metavar="<True, False>")
+
