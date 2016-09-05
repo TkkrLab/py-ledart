@@ -26,14 +26,23 @@ matrix_width = 128
 # matrix_height = 10
 # matrix_width = 17
 
+matrix_x = 0
+matrix_y = 0
 matrix_size = (matrix_height * matrix_width)
 
 COLOR_ORDER = [0, 1, 2]
 
+def set_matrix_dimensions(size):
+    global matrix_x
+    global matrix_y
+    global matrix_width
+    global matrix_height
+    global matrix_size
+    matrix_x, matrix_y, matrix_width, matrix_height = size
 
 def chunked(data, chunksize):
     """
-    yield sections 'chunks' of data with size <chunksize>, with iteration count.
+    yield 'chunks' of data with a size <chunksize>, with iteration count.
     """
     chunk = []
     it = 0
@@ -47,9 +56,15 @@ def chunked(data, chunksize):
             it += 1
 
 def chunks(l, n):
+    """
+    yields chunks of a list.
+    """
     for i in xrange(0, len(l), n):
         yield l[i:i + n]
 
 
 def to_matrix(l, n):
+    """
+    turns a list l into a 2d list with inner list size of n
+    """
     return [l[i:i + n] for i in range(0, len(l), n)]

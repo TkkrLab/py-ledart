@@ -35,7 +35,7 @@ class MatrixScreen(object):
     it draws blocks in a array the size of the pixels is
     defined in matrix.py
     """
-    def __init__(self, width, height, pixelsize, fullscreen=False,
+    def __init__(self, width=1, height=1, pixelsize=10, fullscreen=False,
                  interface=DummyInterface):
         self.interface = interface(width, height, pixelsize, fullscreen)
         self.width = width

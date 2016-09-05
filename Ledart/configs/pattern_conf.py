@@ -1,5 +1,8 @@
 # import all patterns availble for use.
-from Ledart.Patterns.Patterns import *
+from Ledart.Lmcp import *
+from Ledart.Artnet import *
+from Ledart.matrix import set_matrix_dimensions
+from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 
 pixelmatrix = "Arduino-42"
 ledboard = 'ledboard'
@@ -9,19 +12,19 @@ localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
 dest = megamatrix
-# dest = minimatrix
-# dest = moo
-# dest = localhost
-# dest = ledboard
-# dest = pixelmatrix
-# dest = localhost
-# dest = '10.42.3.12'
-# dest = '10.42.7.124'
-# dest = '10.42.4.84'
-# dest = '10.42.6.105'
-# dest = '10.42.4.12'
 
-TARGETS = {
+matrix_dims = [0, 0, 32, 32]
+set_matrix_dimensions(matrix_dims)
+protocol = LegacyLmcp(dispmode=rgb24)
+# matrixsim = MatrixScreen(width=matrix_width,
+#                          height=matrix_height,
+#                          pixelsize=10,
+#                          fullscreen=False,
+#                          interface=interface_opts["pygame"])
+
+from Ledart.Patterns.Patterns import *
+
+targets = {
     # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
     # dest: FillTest(),
     # dest: Sven(),

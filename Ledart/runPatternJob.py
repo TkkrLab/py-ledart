@@ -14,64 +14,9 @@ from socket import gethostbyname
 import cProfile
 
 # import matrix simulator and matrix specifics
-from matrix import matrix_width, matrix_height
 from Tools.Graphics import Surface
-from MatrixSim.MatrixScreen import interface_opts
-try:
-    from MatrixSim.MatrixScreen import MatrixScreen
-except Exception as e:
-    print("MatrixScreen>> " + str(e))
-    traceback.print_exc()
 
 from ArgumentParser import get_args
-
-# get command line arguments
-args = get_args()
-
-# generate no byte code
-sys.dont_write_bytecode = True
-
-# setup a screen if matrixSim argument was set.
-if args.matrixSim == "enabled":
-    if args.fullscreen == "enabled":
-        fullscreen = True
-    else:
-        fullscreen = False
-    interface = interface_opts[args.simInterface]
-    matrixscreen = MatrixScreen(matrix_width, matrix_height,
-                                args.pixelSize,
-                                fullscreen,
-                                interface)
-
-def get_protocol(args):
-    if args.netProtocol == "artnet":
-        import Artnet
-        protocol = Artnet.Artnet(universe=0)
-    elif args.netProtocol == "pixelmatrix":
-        import Artnet
-        protocol = Artnet.Pixelmatrix(universe=0)
-    elif args.netProtocol == "lmcp":
-        import Lmcp
-        protocol = Lmcp.Lmcp()
-    elif args.netProtocol == "legacylmcp":
-        import Lmcp
-        if args.color == "enabled":
-            display_mode = Lmcp.rgb24
-        else:
-            display_mode = Lmcp.grayscale
-        protocol = Lmcp.LegacyLmcp(dispmode=display_mode)
-    elif args.netProtocol == "testlmcp":
-        import Lmcp
-        protocol = Lmcp.TestLmcp()
-    else:
-        raise(Exception("no protocol found/selected."))
-    return protocol
-
-# setup which protocol to use.
-protocol = get_protocol(args)
-
-# generate no byte code
-sys.dont_write_bytecode = True
 
 def get_trace():
     exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -123,8 +68,8 @@ def get_pattern_classes(module):
             try:
                 # we try and get that objects dictionary.
                 # if it's a class it will contain methods and more.
-                thedict = module.__dict__[obj].__dict__
-                if(thedict['generate']):
+                obj_dict = module.__dict__[obj].__dict__
+                if(obj_dict['generate']):
                     patterns.append(module.__dict__[obj])
             except:
                 # continue if we try and read something we can't.
@@ -159,20 +104,21 @@ def load_targets(configfile):
     # and else it's probably a path description + file.
     variables = {}
     currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    
     if not os.path.exists(configfile):
         configfile = os.path.join(currentdir, "configs", configfile)
+    
     print("loading config from: %s" % (configfile))
     execfile(configfile, variables)
-    return variables['TARGETS']
 
+    targets = variables.get('targets', None)
+    protocol = variables.get('protocol', None)
+    matrix_sim = variables.get('matrixsim', None)
 
-def debugprint(data):
-    """Function that prints into the stdout, in the shape of the matrix."""
-    from matrix import matrix_size, matrix_width
-    chunksize = matrix_width
-    for i in range(0, matrix_size, chunksize):
-        print(data[i:i + chunksize])
-    print("")
+    print("protocol: %s" % protocol)
+    print("matrixsim: %s" % matrix_sim)
+
+    return (targets, protocol, matrix_sim)
 
 
 def checkList(first, second):
@@ -182,16 +128,16 @@ def checkList(first, second):
     return True
 
 
-def sendout(args, TARGETS, protocol):
+def sendout(args, targets, protocol):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
     # or only to the matrix simulator if netSilent enabled.
     try:
-        for t in TARGETS:
-            pattern = TARGETS[t]
+        for t in targets:
+            pattern = targets[t]
             # generate the next set of images to send.
             pattern.generate()
-            if args.matrixSim == "enabled":
+            if matrixscreen:
                 matrixscreen.handleinput()
                 matrixscreen.process(pattern)
             if args.sendOnChange == "enabled":
@@ -199,7 +145,7 @@ def sendout(args, TARGETS, protocol):
                 sendout.previous = Surface(pattern)
             else:
                 changed = True
-            if changed:
+            if changed and protocol:
                 if not (args.netSilent == "enabled"):
                     protocol.send(pattern, t)
     except KeyboardInterrupt:
@@ -227,11 +173,21 @@ def listpatterns():
 def cleanup(d):
     print("\nExiting(%d) closing connections." % d)
     os.system('stty sane; echo ""')
-    protocol.close()
+    if protocol:
+        protocol.close()
     sys.exit(0)
 
 def sigint_handler(signal, frame):
     cleanup(3)
+
+# get command line arguments
+args = get_args()
+
+# generate no byte code
+sys.dont_write_bytecode = True
+
+# load config
+targets, protocol, matrixscreen = load_targets(args.config)
 
 def main():
     # first thing we do register at exit function.
@@ -249,27 +205,26 @@ def main():
         cleanup(4)
     # if gui selected start that else start the headless code.
     if args.gui == "enabled":
-        try:
-            from Gui.Gui import Gui
-            editor = Gui(args)
-            editor.main()
-        except Exception as e:
-            print(e)
+        # try:
+        #     from Gui.Gui import Gui
+        #     editor = Gui(args)
+        #     editor.main()
+        # except Exception as e:
+        #     print(e)
         print("Exiting.")
         cleanup(6)
     else:
-        TARGETS = load_targets(args.config)
 
         # check if there is anything configured.
-        if not len(TARGETS):
+        if not len(targets):
             print("nothing is configured in %s" % args.config)
             cleanup(7)
         # resolve hostenames if any
-        for target in TARGETS:
-            TARGETS[gethostbyname(target)] = TARGETS.pop(target)
+        for target in targets:
+            targets[gethostbyname(target)] = targets.pop(target)
         # ---------
-
-        protocol.open()
+        if protocol:
+            protocol.open()
 
         if args.fps > 0:
             fps = 1. / args.fps
@@ -292,11 +247,11 @@ def main():
                 sys.stdout.write(fmtstr % fmt)
                 sys.stdout.flush()
             if args.fps > 0:
-                sendout(args, TARGETS, protocol)
+                sendout(args, targets, protocol)
                 time.sleep(abs(fps))
             # else send everything out as fast as possible
             else:
-                sendout(args, TARGETS, protocol)
+                sendout(args, targets, protocol)
             previousTime = currentTime
 
 if __name__ == "__main__":
