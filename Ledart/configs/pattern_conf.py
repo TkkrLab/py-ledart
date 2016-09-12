@@ -11,11 +11,12 @@ megamatrix = 'megamatrix'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
-dest = megamatrix
+dest = '10.42.4.1'
 
-matrix_dims = [0, 0, 32, 32]
-set_matrix_dimensions(matrix_dims)
-protocol = LegacyLmcp(dispmode=rgb24)
+dims = [0, 0, 16, 1]
+set_matrix_dimensions(dims)
+protocol = Artnet()
+# protocol = LegacyLmcp(dispmode=rgb24)
 # matrixsim = MatrixScreen(width=matrix_width,
 #                          height=matrix_height,
 #                          pixelsize=10,

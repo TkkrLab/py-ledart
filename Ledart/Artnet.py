@@ -3,7 +3,7 @@
 # 2013-09-02 Aprogas
 
 # 2015-12-12 Duality:
-# class struckture introduced for easy implentation of other
+# class structure introduced for easy implentation of other
 # protocols, and abstraction of sockets.
 from DeviceInterfaces import UdpSocket
 from Filter import convert_snake_layout
