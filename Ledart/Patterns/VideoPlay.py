@@ -5,13 +5,14 @@ import shlex
 import os, fcntl, sys
 
 from Ledart.Tools.Graphics import Surface
-from Ledart.matrix import matrix_width, matrix_height, chunks
+from Ledart.stripinfo import strip_width, strip_height
+from Ledart.utils import chunks
 from Ledart.ArgumentParser import get_args
 
 
 class VideoPlay(Surface):
     def __init__(self, location='', center=True):
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
         args = get_args()
 
         # load in a image with ffmpeg and apply fps
@@ -44,7 +45,7 @@ class VideoPlay(Surface):
 
 class CamCapture(Surface):
     def __init__(self, dev='/dev/video0'):
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
         args = get_args()
 
         ffmpeg = 'ffmpeg'
@@ -79,7 +80,7 @@ class CamCapture(Surface):
 class ScreenCapture(Surface):
     def __init__(self, screen_resolution=None, fullscreen=False, fps=None,
                  center=True):
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
         args = get_args()
         if screen_resolution is None:
             pm = pymouse.PyMouse()
@@ -145,7 +146,7 @@ class ScreenCapture(Surface):
 
 # class VideoTest(Surface):
 #     def __init__(self):
-#         Surface.__init__(self, width=matrix_width, height=matrix_height)
+#         Surface.__init__(self, width=strip_width, height=strip_height)
 #         self.container = av.open('/home/robert/Videos/bad.mkv')
 #         self.video = next(s for s in self.container.streams if s.type == b'video')
 #         frame = self.generate_frame()
@@ -155,7 +156,7 @@ class ScreenCapture(Surface):
 #         data = []
 #         for packet in self.container.demux(self.video):
 #             for frame in packet.decode():
-#                 f = frame.reformat(matrix_width, matrix_height, 'rgb24')
+#                 f = frame.reformat(strip_width, strip_height, 'rgb24')
 #                 data = []
 #                 for row in f.to_nd_array():
 #                     data.extend(map(list, row))

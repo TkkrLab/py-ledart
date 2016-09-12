@@ -1,6 +1,6 @@
 # raindrop by Duality
 
-from Ledart.matrix import matrix_width, matrix_height
+from Ledart.stripinfo import strip_width, strip_height
 from Ledart.Tools.Graphics import Graphics, BLACK
 import random
 
@@ -9,7 +9,7 @@ class RainDrop(object):
     def __init__(self, color=(100, 255, 100)):
         self.color = color
         self.y = 0
-        self.x = random.randint(0, matrix_width)
+        self.x = random.randint(0, strip_width)
         self.pos = (self.x, self.y)
         self.height = self.y
 
@@ -34,7 +34,7 @@ class RainPattern(Graphics):
         will call 2.0 :D
     """
     def __init__(self, color=(80, 255, 100), chance=0.04):
-        Graphics.__init__(self, width=matrix_width, height=matrix_height)
+        Graphics.__init__(self, width=strip_width, height=strip_height)
         self.color = color
         self.chance = chance
         # insert single drop for testing
@@ -45,14 +45,14 @@ class RainPattern(Graphics):
         # put drop in data and increment it's position
         for drop in self.drops:
             # calculate where to put it
-            index = ((drop.y - 1) * matrix_width + drop.x) - 1
-            # put drop oN matrix screen
+            index = ((drop.y - 1) * strip_width + drop.x) - 1
+            # put drop oN strip screen
             if index >= 0:
                 self.draw_pixel(drop.x, drop.y - 1, drop.color)
             # increment it's height
             drop.incrementHeight()
             # if it falls of the screen remove it.
-            if drop.getHeight() > matrix_height:
+            if drop.getHeight() > strip_height:
                 self.drops.remove(drop)
         # add a random chance for drops to appear.
         if(random.random() < self.chance):
@@ -67,12 +67,12 @@ class RainPattern(Graphics):
 #         self.color = color
 #         self.chance = chance
 #         self.data = []
-#         for i in xrange(matrix_size):
+#         for i in xrange(strip_size):
 #             self.data.insert(0, (0, 0, 0))  # black/off
 
 #     def generate(self):
 #         # Pop 7 times to move one line down
-#         for i in xrange(matrix_width):
+#         for i in xrange(strip_width):
 #             self.data.pop()
 #             if (random.random() < self.chance):  # random chance of raindrop
 #                 self.data.insert(0, self.color)

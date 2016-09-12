@@ -1,6 +1,6 @@
 from Ledart.Tools.Graphics import Graphics, BLACK, RED, BLUE, GREEN
 from Ledart.Tools.Controllers import PygameController, XboxController
-from Ledart.matrix import matrix_width, matrix_height, matrix_size
+from Ledart.stripinfo import strip_width, strip_height, strip_size
 
 c = BLACK
 r = RED
@@ -18,7 +18,7 @@ level1 = [c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c,
           g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g,
           g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g]
 
-level = [BLUE] * matrix_size
+level = [BLUE] * strip_size
 
 
 class PixelBrosController(PygameController, XboxController):
@@ -87,7 +87,7 @@ class SuperPixelBros(Graphics):
 
     """
     def __init__(self):
-        Graphics.__init__(self, matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
 
         self.players = []
         self.player = Player((9, 7), BLUE, self)
@@ -104,10 +104,10 @@ class SuperPixelBros(Graphics):
         self.fill(BLACK)
         # draw the map.
         surfaceheight = self.get_height()
-        level_matrix = self.toMatrix(self.level, surfaceheight)
+        level_strip = self.toMatrix(self.level, surfaceheight)
         for y in range(0, self.get_height()):
             for x in range(0, self.get_width()):
-                tile = level_matrix[x][y]
+                tile = level_strip[x][y]
                 # draw the map flipped
                 self.draw_pixel(self.get_width() - x - 1, y, tile)
 

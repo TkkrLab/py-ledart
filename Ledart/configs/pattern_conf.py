@@ -1,7 +1,7 @@
 # import all patterns availble for use.
 from Ledart.Lmcp import *
 from Ledart.Artnet import *
-from Ledart.matrix import set_matrix_dimensions
+from Ledart.stripinfo import *
 from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 
 pixelmatrix = "Arduino-42"
@@ -13,8 +13,9 @@ bcast = '10.42.0.0'
 moo = 'moo'
 dest = '10.42.4.1'
 
-dims = [0, 0, 16, 1]
-set_matrix_dimensions(dims)
+dims = ledstrip(length=16)
+# dims = matrixstrip(x=0, y=0, width=32, height=32)
+set_strip_dimensions(dims)
 protocol = Artnet()
 # protocol = LegacyLmcp(dispmode=rgb24)
 # matrixsim = MatrixScreen(width=matrix_width,

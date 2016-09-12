@@ -1,6 +1,6 @@
 from Ledart.Tools.Graphics import Graphics, GREEN, BLUE, BLACK
 from Ledart.Tools.Controllers import *
-from Ledart.matrix import matrix_width, matrix_height
+from Ledart.stripinfo import strip_width, strip_height
 from itertools import count
 import time
 import random
@@ -176,8 +176,8 @@ class Pong(Graphics):
     Pong game
     """
     def __init__(self, bcolor=GREEN, pcolor=BLUE,
-                 speed=matrix_height / 2, select=(autocontroller, autocontroller)):
-        Graphics.__init__(self, matrix_width, matrix_height)
+                 speed=strip_height / 2, select=(autocontroller, autocontroller)):
+        Graphics.__init__(self, strip_width, strip_height)
 
         # create a ball. multiple balls should be possible :)
         self.ball = Ball((self.get_width() / 2,
@@ -204,7 +204,7 @@ class Pong(Graphics):
         paddle1_pos = (0, 0)
         self.paddle1 = (Paddle(paddle1_pos, pcolor, self.controller1,
                         self.controller1.LTHUMB_X, self))
-        paddle2_pos = (0, matrix_width - 1)
+        paddle2_pos = (0, strip_width - 1)
         self.paddle2 = (Paddle(paddle2_pos, pcolor, self.controller2,
                         self.controller2.RTHUMB_X, self))
 
@@ -312,8 +312,8 @@ class Pong(Graphics):
 #     Pong game
 #     """
 #     def __init__(self, bcolor=GREEN, pcolor=BLUE,
-#                  speed=matrix_height / 2, port="ACM", plugged=0):
-#         Graphics.__init__(self, matrix_width, matrix_height)
+#                  speed=strip_height / 2, port="ACM", plugged=0):
+#         Graphics.__init__(self, strip_width, strip_height)
 
 #         # create a ball. multiple balls should be possible :)
 #         self.ball = Ball((self.get_width() / 2,
@@ -334,7 +334,7 @@ class Pong(Graphics):
 #         paddle1_pos = (0, 0)
 #         self.paddle1 = (Paddle(paddle1_pos, pcolor, self.controller,
 #                         self.controller.POT1, self))
-#         paddle2_pos = (0, matrix_height - 1)
+#         paddle2_pos = (0, strip_height - 1)
 #         self.paddle2 = (Paddle(paddle2_pos, pcolor, self.controller,
 #                         self.controller.POT2, self))
 

@@ -9,7 +9,7 @@
 
 from Ledart.Tools.Graphics import Surface
 from Ledart.Tools.Timing import Timer
-from Ledart.matrix import matrix_width, matrix_height
+from Ledart.stripinfo import strip_width, strip_height
 import random
 import colorsys
 
@@ -31,7 +31,7 @@ class MiniFire(Surface):
         based upon: http://lodev.org/cgtutor/fire.html
         this effect works well on smaller matrices.
     """
-    def __init__(self, width=matrix_width, height=matrix_height):
+    def __init__(self, width=strip_width, height=strip_height):
         """ create a surface and a buffer to keep changes in."""
         Surface.__init__(self, width=width, height=height)
         self.buffer = Surface(width=width, height=height)
@@ -89,7 +89,7 @@ class MiniFire(Surface):
 
 class AliasedFire(Surface):
     def __init__(self):
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
         self.fire = MiniFire(self.width * 2, self.height * 2)
 
     def generate(self):
@@ -118,7 +118,7 @@ class WeirdPlasmaLike(Surface):
         based upon: http://lodev.org/cgtutor/fire.html
         this effect works well on smaller matrices.
     """
-    def __init__(self, width=matrix_width, height=matrix_height):
+    def __init__(self, width=strip_width, height=strip_height):
         """ create a surface and a buffer to keep changes in."""
         Surface.__init__(self, width=width, height=height)
         self.buffer = Surface(width=width, height=height)
@@ -176,7 +176,7 @@ class WeirdPlasmaLike(Surface):
 
 class AliasedWPlasma(Surface):
     def __init__(self):
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
         self.effect = WeirdPlasmaLike(self.width * 2, self.height * 2)
 
     def generate(self):
@@ -203,8 +203,8 @@ class Smolders(Surface):
     """
     def __init__(self):
         """ create a surface and a buffer to keep changes in."""
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
-        self.buffer = Surface(width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
+        self.buffer = Surface(width=strip_width, height=strip_height)
         self.bottom_points = [x for x in range(0, self.width)]
 
     def randomize_bottom(self):
@@ -262,8 +262,8 @@ class FireThree(Surface):
     """
     def __init__(self):
         """ create a surface and a buffer to keep changes in."""
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
-        self.buffer = Surface(width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
+        self.buffer = Surface(width=strip_width, height=strip_height)
         self.bottom_points = [x for x in range(0, self.width)]
 
     def randomize_bottom(self):
@@ -321,8 +321,8 @@ class FireTwo(Surface):
     """
     def __init__(self):
         """ create a surface and a buffer to keep changes in."""
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
-        self.buffer = Surface(width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
+        self.buffer = Surface(width=strip_width, height=strip_height)
         self.bottom_points = [x for x in range(0, self.width)]
 
     def randomize_bottom(self):
@@ -380,8 +380,8 @@ class FireOne(Surface):
     """
     def __init__(self):
         """ create a surface and a buffer to keep changes in."""
-        Surface.__init__(self, width=matrix_width, height=matrix_height)
-        self.buffer = Surface(width=matrix_width, height=matrix_height)
+        Surface.__init__(self, width=strip_width, height=strip_height)
+        self.buffer = Surface(width=strip_width, height=strip_height)
         self.bottom_points = [x for x in range(0, self.width)]
 
     def randomize_bottom(self):

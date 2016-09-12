@@ -10,7 +10,7 @@ py-ledart software.
 
 """
 from DeviceInterfaces import UdpSocket
-from matrix import chunked
+from utils import chunked
 
 def rgb24(colordata):
     """ 

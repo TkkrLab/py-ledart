@@ -7,7 +7,7 @@ from Ledart.Tools.Graphics.ConvertColors import HSVtoRGB
 from Ledart.Tools.Graphics.RGBColorTools import ColorRGBOps
 from Ledart.Tools.Palet import PaletGenerate
 from Ledart.Tools.Timing import Timer
-from Ledart.matrix import matrix_width, matrix_height
+from Ledart.stripinfo import strip_width, strip_height
 from Ledart.Tools.Controllers import translate
 # from Tools.Controllers.SoundControllers import MidiController
 
@@ -19,7 +19,7 @@ class RainbowEffect(Graphics):
         this doesn't work for now. will fix later.
     """
     def __init__(self, speed=0.1):
-        Graphics.__init__(self, matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
         self.fill(BLACK)
 
         self.palet = PaletGenerate()
@@ -46,7 +46,7 @@ class RainbowEffect(Graphics):
 
 class ColorFade(Graphics):
     def __init__(self, speed=4):
-        Graphics.__init__(self, matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
         self.fill(BLACK)
         self.palet = PaletGenerate()
         self.speed = speed
@@ -60,11 +60,11 @@ class ColorFade(Graphics):
 
 # class PlasmaFifth(Graphics):
 #     def __init__(self, speed=1):
-#         Graphics.__init__(self, matrix_width, matrix_height)
-#         self.plasma = Graphics(matrix_width, matrix_height)
+#         Graphics.__init__(self, strip_width, strip_height)
+#         self.plasma = Graphics(strip_width, strip_height)
 
-#         self.x_range = xrange(0, matrix_width, 1)
-#         self.y_range = xrange(0, matrix_height, 1)
+#         self.x_range = xrange(0, strip_width, 1)
+#         self.y_range = xrange(0, strip_height, 1)
 
 #         self.speed = speed
 #         self.interval = 1000 / self.speed
@@ -88,8 +88,8 @@ class ColorFade(Graphics):
 
 #     def generatePlasmaSurface(self):
 #         self.angle = self.time % 360
-#         x_offset = matrix_width * sin(radians(self.angle)) + matrix_width
-#         y_offset = matrix_height * cos(radians(self.angle)) + matrix_height
+#         x_offset = strip_width * sin(radians(self.angle)) + strip_width
+#         y_offset = strip_height * cos(radians(self.angle)) + strip_height
 #         size = 1.5
 #         # good values: 6.328125 , 0.1328125
 #         offset = self.mc.getButton(0, 0)
@@ -139,11 +139,11 @@ class ColorFade(Graphics):
 
 # class PlasmaFourth(Graphics):
 #     def __init__(self, speed=1):
-#         Graphics.__init__(self, matrix_width, matrix_height)
-#         self.plasma = Graphics(matrix_width, matrix_height)
+#         Graphics.__init__(self, strip_width, strip_height)
+#         self.plasma = Graphics(strip_width, strip_height)
 
-#         self.x_range = xrange(0, matrix_width, 1)
-#         self.y_range = xrange(0, matrix_height, 1)
+#         self.x_range = xrange(0, strip_width, 1)
+#         self.y_range = xrange(0, strip_height, 1)
 
 #         self.speed = speed
 #         self.interval = 1000 / self.speed
@@ -168,8 +168,8 @@ class ColorFade(Graphics):
 
 #     def generatePlasmaSurface(self):
 #         self.angle = self.time
-#         x_offset = matrix_width * sin(radians(self.angle)) + matrix_width
-#         y_offset = matrix_height * cos(radians(self.angle)) + matrix_height
+#         x_offset = strip_width * sin(radians(self.angle)) + strip_width
+#         y_offset = strip_height * cos(radians(self.angle)) + strip_height
 #         plasma_set = [76, 81, 1, 90, 4, 4, 1, 89, 21, 1]
 #         fac = translate(plasma_set[7], 0, 128, 0, 8)
 #         fac2 = translate(plasma_set[8], 0, 128, 0, 8)
@@ -218,11 +218,11 @@ class ColorFade(Graphics):
 
 class RevolvingCircle(Graphics):
     def __init__(self, width=5, speed=1):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.plasma = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
+        self.plasma = Graphics(strip_width, strip_height)
 
-        self.x_range = xrange(0, matrix_width, 1)
-        self.y_range = xrange(0, matrix_height, 1)
+        self.x_range = xrange(0, strip_width, 1)
+        self.y_range = xrange(0, strip_height, 1)
 
         self.speed = speed
         self.interval = 1000 / self.speed
@@ -247,10 +247,10 @@ class RevolvingCircle(Graphics):
 
     def generatePlasmaSurface(self):
         self.angle = int(self.time / self.speed)
-        x_offset = (matrix_width * sin(radians(self.angle)) +
-                    matrix_width * sin(radians(self.angle)))
-        y_offset = (matrix_height * cos(radians(self.angle)) +
-                    matrix_height * cos(radians(self.angle)))
+        x_offset = (strip_width * sin(radians(self.angle)) +
+                    strip_width * sin(radians(self.angle)))
+        y_offset = (strip_height * cos(radians(self.angle)) +
+                    strip_height * cos(radians(self.angle)))
         for y in self.y_range:
             for x in self.x_range:
                 c = int((0x7f * sin(sqrt(float((x + x_offset) /
@@ -291,11 +291,11 @@ class RevolvingCircle(Graphics):
 
 class PlasmaThird(Graphics):
     def __init__(self, speed=10):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.plasma = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
+        self.plasma = Graphics(strip_width, strip_height)
 
-        self.x_range = xrange(0, matrix_width, 1)
-        self.y_range = xrange(0, matrix_height, 1)
+        self.x_range = xrange(0, strip_width, 1)
+        self.y_range = xrange(0, strip_height, 1)
 
         self.speed = speed
         self.interval = speed
@@ -318,8 +318,8 @@ class PlasmaThird(Graphics):
 
     def generatePlasmaSurface(self):
         self.angle = self.time
-        x_offset = matrix_width * sin(radians(self.angle)) + matrix_width
-        y_offset = matrix_height * cos(radians(self.angle)) + matrix_height
+        x_offset = strip_width * sin(radians(self.angle)) + strip_width
+        y_offset = strip_height * cos(radians(self.angle)) + strip_height
         for y in self.y_range:
             for x in self.x_range:
                 c = int(128 + (128 * sin((x + x_offset) / 2.0))
@@ -361,11 +361,11 @@ class PlasmaThird(Graphics):
 
 class PlasmaSecond(Graphics):
     def __init__(self, speed=1):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.plasma = Graphics(matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
+        self.plasma = Graphics(strip_width, strip_height)
 
-        self.x_range = xrange(0, matrix_width, 1)
-        self.y_range = xrange(0, matrix_height, 1)
+        self.x_range = xrange(0, strip_width, 1)
+        self.y_range = xrange(0, strip_height, 1)
 
         self.speed = speed
         self.interval = 1000 / self.speed
@@ -389,10 +389,10 @@ class PlasmaSecond(Graphics):
 
     def generatePlasmaSurface(self):
         self.angle = self.time / self.speed
-        x_offset = (matrix_width * sin(radians(self.angle)) +
-                    matrix_width * sin(radians(self.angle)))
-        y_offset = (matrix_height * cos(radians(self.angle)) +
-                    matrix_height * cos(radians(self.angle)))
+        x_offset = (strip_width * sin(radians(self.angle)) +
+                    strip_width * sin(radians(self.angle)))
+        y_offset = (strip_height * cos(radians(self.angle)) +
+                    strip_height * cos(radians(self.angle)))
         for y in self.y_range:
             for x in self.x_range:
                 c = int(128 + (128 * sin((x + x_offset) / 2.0))
@@ -435,11 +435,11 @@ class PlasmaSecond(Graphics):
 
 class PlasmaFirst(Graphics):
     def __init__(self, speed=20):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.plasma = Graphics(width=matrix_width, height=matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
+        self.plasma = Graphics(width=strip_width, height=strip_height)
 
-        self.x_range = xrange(0, matrix_width, 1)
-        self.y_range = xrange(0, matrix_height, 1)
+        self.x_range = xrange(0, strip_width, 1)
+        self.y_range = xrange(0, strip_height, 1)
 
         self.interval = .1 / speed
         self.time = 0

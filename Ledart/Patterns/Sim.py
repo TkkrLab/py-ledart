@@ -2,7 +2,7 @@ import random
 import time
 import math
 
-from Ledart.matrix import matrix_width, matrix_height
+from Ledart.stripinfo import strip_width, strip_height
 from Ledart.Tools import Graphics, BLUE, WHITE, BLACK
 
 
@@ -78,8 +78,8 @@ class Particle(object):
 
 class Sim(Graphics):
     def __init__(self):
-        self.width = matrix_width
-        self.height = matrix_height
+        self.width = strip_width
+        self.height = strip_height
         Graphics.__init__(self, self.width, self.height)
         self.fill(BLACK)
         # self.gravity = (math.pi, 100)

@@ -1,4 +1,5 @@
-from Ledart.matrix import matrix_width, matrix_height, chunked
+from Ledart.stripinfo import strip_width, strip_height
+from Ledart.utils import chunked
 from Ledart.Tools.Graphics import Graphics, BLUE, WHITE, BLACK
 
 import alsaaudio, time, audioop
@@ -24,7 +25,7 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 
 class VUmeter(Graphics):
     def __init__(self):
-        Graphics.__init__(self, matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
         self.inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
         self.inp.setchannels(1)
         self.inp.setrate(4000)

@@ -3,7 +3,7 @@ from pygame.locals import *
 import pygame
 
 from Ledart.Tools.Graphics import Graphics, BLUE, BLACK
-from Ledart.matrix import matrix_width, matrix_height
+from Ledart.stripinfo import strip_width, strip_height
 
 
 class TronPlayer(Graphics):
@@ -31,17 +31,17 @@ class TronPlayer(Graphics):
         x += self.deltax
         y += self.deltay
         # if tail goes offscreenit appears on the other side.
-        if x >= matrix_width:
+        if x >= strip_width:
             x = 0
             self.pos = x, y
         elif x < 0:
-            x = matrix_width - 1
+            x = strip_width - 1
             self.pos = x, y
-        elif y >= matrix_height:
+        elif y >= strip_height:
             y = 0
             self.pos = x, y
         elif y < 0:
-            y = matrix_height - 1
+            y = strip_height - 1
             self.pos = x, y
         else:
             self.pos = x, y
@@ -56,7 +56,7 @@ class TronPlayer(Graphics):
 
 class Tron(Graphics):
     def __init__(self):
-        Graphics.__init__(self, matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
         self.fill(BLUE)
 
     def generate(self):
@@ -66,10 +66,10 @@ class Tron(Graphics):
 class OldTron(Graphics):
     # version before creating players that handle processing on thier own.
     def __init__(self):
-        Graphics.__init__(self, matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
         self.color = BLUE
-        x = random.randint(1, matrix_width - 1)
-        y = random.randint(1, matrix_height - 1)
+        x = random.randint(1, strip_width - 1)
+        y = random.randint(1, strip_height - 1)
         self.pos = x, y
         self.speed = 1
         self.deltax, self.deltay = 0, 0
@@ -92,17 +92,17 @@ class OldTron(Graphics):
         x += self.deltax
         y += self.deltay
         # if the tail goes offscreen it appears on the other side.
-        if x >= matrix_width:
+        if x >= strip_width:
             x = 0
             self.pos = x, y
         elif x < 0:
-            x = matrix_width - 1
+            x = strip_width - 1
             self.pos = x, y
-        elif y >= matrix_height:
+        elif y >= strip_height:
             y = 0
             self.pos = x, y
         elif y < 0:
-            y = matrix_height - 1
+            y = strip_height - 1
             self.pos = x, y
         else:
             self.pos = x, y

@@ -1,6 +1,6 @@
 from Ledart.Tools.Graphics import Graphics, GREEN, BLUE, WHITE, BLACK
 from Ledart.Tools.Controllers import *
-from Ledart.matrix import matrix_width, matrix_height
+from Ledart.stripinfo import strip_width, strip_height
 import random
 import time
 
@@ -53,8 +53,8 @@ class Food(object):
         self.pos = pos
 
     def randPos(self):
-        x = random.randint(0, matrix_width - 1)
-        y = random.randint(0, matrix_height - 1)
+        x = random.randint(0, strip_width - 1)
+        y = random.randint(0, strip_height - 1)
         self.pos = x, y
 
     def randColor(self):
@@ -70,15 +70,15 @@ class Food(object):
 
 class Snake(Graphics):
     def __init__(self, speed=8, select=0):
-        Graphics.__init__(self, matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
 
         self.controller = controllers[select]()
 
         self.body_color = GREEN
         self.head_color = BLUE
 
-        x = random.randint(1, matrix_width - 1)
-        y = random.randint(1, matrix_height - 1)
+        x = random.randint(1, strip_width - 1)
+        y = random.randint(1, strip_height - 1)
         self.pos = x, y
         self.original_speed = speed
         self.speed = speed
@@ -115,17 +115,17 @@ class Snake(Graphics):
             x += self.deltax
             y += self.deltay
             # if the snake goes offscreen it appears on the other side.
-            if x >= matrix_width:
+            if x >= strip_width:
                 x = 0
                 self.pos = x, y
             elif x < 0:
-                x = matrix_width - 1
+                x = strip_width - 1
                 self.pos = x, y
-            elif y >= matrix_height:
+            elif y >= strip_height:
                 y = 0
                 self.pos = x, y
             elif y < 0:
-                y = matrix_height - 1
+                y = strip_height - 1
                 self.pos = x, y
             else:
                 self.pos = x, y

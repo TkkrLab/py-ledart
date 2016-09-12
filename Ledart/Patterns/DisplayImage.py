@@ -1,10 +1,10 @@
 from Ledart.Tools.Graphics import ImageSurface
-from Ledart.matrix import matrix_width, matrix_height
+from Ledart.stripinfo import strip_width, strip_height
 
 
 class DisplayImage(ImageSurface):
     def __init__(self, fname='Ledart/images/tkkrlab.png'):
-        ImageSurface.__init__(self, matrix_width, matrix_height, fname)
+        ImageSurface.__init__(self, strip_width, strip_height, fname)
 
     def generate(self):
         pass

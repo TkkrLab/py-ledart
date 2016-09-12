@@ -1,6 +1,7 @@
 from Ledart.Tools.Graphics import Graphics, WHITE, BLUE, BLACK, GREEN, RED, COLORS
 from Ledart.Tools.Graphics import ColorRGBOps
-from Ledart.matrix import matrix_width, matrix_height, to_matrix
+from Ledart.stripinfo import strip_width, strip_height
+from Ledart.utils import to_matrix
 from Life.life import Life
 import random
 
@@ -9,8 +10,8 @@ selected = 'BlueLife'
 
 class RandomLife(Graphics):
     def __init__(self):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.life = Life(matrix_width, matrix_height, 1, color=BLACK)
+        Graphics.__init__(self, strip_width, strip_height)
+        self.life = Life(strip_width, strip_height, 1, color=BLACK)
 
     def pickRandomColor(self):
         color = random.randint(0, len(COLORS) - 1)
@@ -21,10 +22,10 @@ class RandomLife(Graphics):
 
     def drawRandomColor(self):
         self.fill(BLACK)
-        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        life_strip = to_matrix(self.life.field, self.life.fieldWidth)
         for point in self.get_points():
                 x, y = point
-                if life_matrix[y][x]:
+                if life_strip[y][x]:
                     self.draw_pixel(x, y, self.pickRandomColor())
 
     def draw(self):
@@ -37,16 +38,16 @@ class RandomLife(Graphics):
 
 class PixelLife(Graphics):
     def __init__(self, color=BLUE):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.life = Life(matrix_width, matrix_height, 1)
+        Graphics.__init__(self, strip_width, strip_height)
+        self.life = Life(strip_width, strip_height, 1)
         self.color = color
 
     def draw(self):
         self.fill(BLACK)
-        life_matrix = to_matrix(self.life.field, self.life.fieldWidth)
+        life_strip = to_matrix(self.life.field, self.life.fieldWidth)
         for point in self.get_points():
                 x, y = point
-                if life_matrix[y][x]:
+                if life_strip[y][x]:
                     self.draw_pixel(x, y, self.color)
 
     def generate(self):
@@ -60,8 +61,8 @@ class ProgressedLife(Graphics):
     while darken spots where there is less cell life
     '''
     def __init__(self, decay=4):
-        Graphics.__init__(self, matrix_width, matrix_height)
-        self.life = Life(matrix_width, matrix_height, 1, WHITE)
+        Graphics.__init__(self, strip_width, strip_height)
+        self.life = Life(strip_width, strip_height, 1, WHITE)
         self.step = decay
         self.color_step = (self.step, self.step, self.step)
         self.fill(WHITE)
@@ -82,15 +83,15 @@ class ProgressedLife(Graphics):
 
 class MixedLife(Graphics):
     def __init__(self):
-        Graphics.__init__(self, matrix_width, matrix_height)
+        Graphics.__init__(self, strip_width, strip_height)
 
         blue = ColorRGBOps.darken(BLUE, 128)
         green = ColorRGBOps.darken(GREEN, 128)
         red = ColorRGBOps.darken(RED, 128)
 
-        self.life1 = Life(matrix_width, matrix_height, 1, color=BLUE)
-        self.life2 = Life(matrix_width, matrix_height, 1, color=green)
-        self.life3 = Life(matrix_width, matrix_height, 1, color=red)
+        self.life1 = Life(strip_width, strip_height, 1, color=BLUE)
+        self.life2 = Life(strip_width, strip_height, 1, color=green)
+        self.life3 = Life(strip_width, strip_height, 1, color=red)
 
         self.step = int(0xff/10)
 
