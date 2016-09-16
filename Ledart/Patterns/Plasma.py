@@ -538,5 +538,5 @@ class TestPlasma(Graphics):
             nx = int(self.n * sin(radians(x)) / self.scaler)
             ny = int(self.n * cos(radians(y)) / self.scaler)
             np = int((nx * ny) ** 0.5)
-            self[x, y] = self.colors[int(np * 10) % len(self.colors)]
+            self[x, y] = self.colors[int(np / 100) % len(self.colors)]
             self.n += 1
