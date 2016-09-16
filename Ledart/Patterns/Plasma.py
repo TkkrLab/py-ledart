@@ -487,3 +487,56 @@ class PlasmaFirst(Graphics):
         self.fill(BLACK)
         self.process()
         self.draw()
+
+# >>> import colorsys
+# ... from math import sin, cos, radians
+# ... from Ledart import Graphics, MatrixScreen
+# ... from Ledart import PygameInterface
+# ...
+# ... width, height = 128, 64
+# ...                                                                                                                                         
+# ... g = Graphics(width=width, height=height)
+# ... sim = MatrixScreen(width=width, height=height, pixelsize=10, fullscreen=False, interface=PygameInterface)
+# ...
+# ... 
+# ...
+# ... a = generate_color(width * height)
+# ... n = 1
+# ... scaler = 0.8
+# ... try:
+# ...     while(True):
+# ...         p = 0
+# ...         g.fill([0x00, 0x00, 0x00])
+# ...         for y in range(0, height):
+# ...             for x in range(0, width):
+# ...                 np = int(n * (sin(radians(x * scaler)) ** cos(radians(y * scaler)) ** 0.5))
+# ...                 g.draw_pixel(x, y, a[np % len(a)])
+# ...                 p += 1
+# ...                 n += 1
+# ...         sim.handleinput()
+# ...         sim.process(g)
+import colorsys
+
+def generate_color(n=5):         
+    hsv_tuples = [(x * 0.9 / n, 0.9, 0.9) for x in xrange(n)]
+    hex_out = []              
+    for rgb in hsv_tuples:      
+        rgb = map(lambda x: int(x*0xff), colorsys.hsv_to_rgb(*rgb))
+        hex_out.append(rgb)
+    return hex_out
+
+class TestPlasma(Graphics):
+    def __init__(self):
+        Graphics.__init__(self, strip_width, strip_height)
+        self.colors = generate_color(self.get_size())
+        self.scaler = 10
+        self.n = 1
+
+    def generate(self):
+        for point in self.get_points():
+            x, y = point
+            nx = int(self.n * sin(radians(x)) / self.scaler)
+            ny = int(self.n * cos(radians(y)) / self.scaler)
+            np = int((nx * ny) ** 0.5)
+            self[x, y] = self.colors[np % len(self.colors)]
+            self.n += 1

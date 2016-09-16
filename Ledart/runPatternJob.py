@@ -131,7 +131,7 @@ def checkList(first, second):
 def sendout(args, targets, protocol):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
-    # or only to the matrix simulator if netSilent enabled.
+    # or only to the matrix simulator if no pattern is selected.
     try:
         for t in targets:
             pattern = targets[t]
@@ -146,8 +146,7 @@ def sendout(args, targets, protocol):
             else:
                 changed = True
             if changed and protocol:
-                if not (args.netSilent == "enabled"):
-                    protocol.send(pattern, t)
+                protocol.send(pattern, t)
     except KeyboardInterrupt:
         cleanup(9)
     except Exception as e:

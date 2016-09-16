@@ -11,12 +11,12 @@ megamatrix = 'megamatrix'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
-dest = '10.42.4.1'
+dest = megamatrix
 
-dims = ledstrip(length=16)
+dims = matrix(x=0, y=0, width=128, height=64)
 # dims = matrixstrip(x=0, y=0, width=32, height=32)
 set_strip_dimensions(dims)
-protocol = Artnet()
+protocol = LegacyLmcp(dispmode=rgb24)
 # protocol = LegacyLmcp(dispmode=rgb24)
 # matrixsim = MatrixScreen(width=matrix_width,
 #                          height=matrix_height,
@@ -55,9 +55,9 @@ targets = {
     # dest: CamCapture(),
     # dest: Water(),
     # dest: AliasedWPlasma(),
-    
     # dest: AliasedFire(),
-    dest: MiniFire(),
+    # dest: MiniFire(),
+    dest: TestPlasma(),
     # dest: Smolders(),
     # dest: FireOne(),
     # dest: FireTwo(),
