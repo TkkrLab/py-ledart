@@ -9,6 +9,7 @@ because only part is needed for the working of
 py-ledart software.
 
 """
+
 from DeviceInterfaces import UdpSocket
 from utils import chunked
 

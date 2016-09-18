@@ -1,4 +1,5 @@
 # import all patterns availble for use.
+import os
 from Ledart.Lmcp import *
 from Ledart.Artnet import *
 from Ledart.stripinfo import *
@@ -12,25 +13,26 @@ localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
 dest = megamatrix
-
-dims = matrix(x=0, y=0, width=128, height=64)
+width, height = 128, 64
+# width, height = 128, 64
+dims = matrix(x=0, y=0, width=width, height=height)
 # dims = matrixstrip(x=0, y=0, width=32, height=32)
 set_strip_dimensions(dims)
+# protocol = LegacyLmcp(dispmode=grayscale)
 protocol = LegacyLmcp(dispmode=rgb24)
-# protocol = LegacyLmcp(dispmode=rgb24)
-# matrixsim = MatrixScreen(width=matrix_width,
-#                          height=matrix_height,
-#                          pixelsize=10,
-#                          fullscreen=False,
-#                          interface=interface_opts["pygame"])
 
+"""
+matrixsim = MatrixScreen(width=width,
+                         height=height,
+                         pixelsize=2,
+                         fullscreen=False,
+                         interface=interface_opts["opengl"])
+"""
 from Ledart.Patterns.Patterns import *
 
 targets = {
-    # dest: RainPattern(color=(0xff, 0xff, 0xff), chance=0.5),
     # dest: FillTest(),
     # dest: Sven(),
-    # dest: BarberpolePattern(),
     # dest: OldTron(),
     # dest: Tron(),
     # dest: Snake(speed=17),
@@ -43,11 +45,11 @@ targets = {
     # dest: PixelLife(color=(0, 0, 0xFF)),
     # dest: SuperPixelBros(),
     # dest: Pong(speed=5),
-    # dest: Pong(bcolor=(0, 0, 255), speed=3, port="USB", plugged=0),
     # dest: Pong(speed=8),
     # dest: ScreenCapture(fullscreen=True),
     # dest: ScreenCapture(fullscreen=False),
-    # dest: DisplayImage('Ledart/images/tkkrlab.png'),
+    # dest: DisplayImage(basedir + '/images/tkkrlab.png'),
+    dest: DisplayImage(basedir + '/images/System-Shock-2.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay('/home/robert/Videos/bad.mkv'),
@@ -57,7 +59,7 @@ targets = {
     # dest: AliasedWPlasma(),
     # dest: AliasedFire(),
     # dest: MiniFire(),
-    dest: TestPlasma(),
+    # dest: TestPlasma(),
     # dest: Smolders(),
     # dest: FireOne(),
     # dest: FireTwo(),
@@ -71,8 +73,10 @@ targets = {
     # dest: PlasmaFirst(),
     # dest: PlasmaSecond(),
     # dest: PlasmaThird(),
+    
     # dest: RevolvingCircle(),
     # dest: RainPattern(chance=0.7, color=(40, 60, 255)),
+
     # dest: GraphicsCircleTest(),
     # dest: GraphicsRectTest(),
     # dest: GraphicsLineTest(),

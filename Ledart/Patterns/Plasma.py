@@ -517,10 +517,10 @@ class PlasmaFirst(Graphics):
 # ...         sim.process(g)
 import colorsys
 
-def generate_color(n=5):         
+def generate_color(n=5):
     hsv_tuples = [(x * 0.9 / n, 0.9, 0.9) for x in xrange(n)]
-    hex_out = []              
-    for rgb in hsv_tuples:      
+    hex_out = []
+    for rgb in hsv_tuples:
         rgb = map(lambda x: int(x*0xff), colorsys.hsv_to_rgb(*rgb))
         hex_out.append(rgb)
     return hex_out
@@ -531,6 +531,7 @@ class TestPlasma(Graphics):
         self.colors = generate_color(self.get_size())
         self.scaler = 10
         self.n = 1
+        self.lim = 1e2
 
     def generate(self):
         for point in self.get_points():
@@ -538,7 +539,7 @@ class TestPlasma(Graphics):
             nx = int(self.n * sin(radians(x)) / self.scaler)
             ny = int(self.n * cos(radians(y)) / self.scaler)
             np = int((nx * ny) ** 0.5)
-            if (np % len(self.colors)) < 1000:
-                np = 1000
-            self[x, y] = self.colors[np % len(self.colors)]
+            if (np % len(self.colors)) < self.lim:
+                np = self.lim
+            self[x, y] = self.colors[int(np % len(self.colors))]
             self.n += 1

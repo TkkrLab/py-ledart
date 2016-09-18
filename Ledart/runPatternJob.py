@@ -104,6 +104,7 @@ def load_targets(configfile):
     # and else it's probably a path description + file.
     variables = {}
     currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    variables['basedir'] = currentdir
     
     if not os.path.exists(configfile):
         configfile = os.path.join(currentdir, "configs", configfile)
