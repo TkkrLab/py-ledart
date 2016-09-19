@@ -2,10 +2,130 @@
 
 py-ledart
 ==========
-py-ledart is a lib for controlling ledstrips and ledmatrices of a network or a
-
-other supported way of connecting.
+py-ledart is a python lib for controlling ledstrips and ledmatrices on a network.
 
 supports following protocols:
-** Lmcp (ledmatrix protocol)()
-** Artnet
+
+* Lmcp (ledmatrix control protocol)(https://www.tkkrlab.nl/wiki/Ledboard)
+
+* Artnet (https://en.wikipedia.org/wiki/Art-Net)
+
+
+py-ledart has some submodules that make it easy to send and generate pixeldata.
+
+or for when you just want to run it from the command line, 
+there are some build in patterns that can be run.
+
+## features
+features include:
+
+submodules for easily coding patterns,
+
+easily drawing, and easily sending out patterns.
+
+other features include easily previewing your creations, with a matrix simulator.
+
+
+## configuration for the commandline tool.
+a example config might look like:
+```python
+# import all patterns availble for use.
+from Ledart.Lmcp import *
+from Ledart.Artnet import *
+from Ledart.stripinfo import *
+from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
+
+localhost = "localhost"
+dest = localhost
+
+width, height = 32, 32
+set_strip_dimensions(matrix(0, 0, width, height))
+
+# don't send out anything.
+protocol = ArtNet()
+# start the simulator for a nice demo.
+matrixsim = MatrixScreen(width=width,
+                         height=height,
+                         pixelsize=10,
+                         fullscreen=False,
+                         interface=interface_opts["pygame"])
+
+from Ledart.Patterns.Patterns import *
+
+targets = {
+    dest: PixelLife(color=(0, 0, 0xff)),
+}
+
+```
+and is called like:
+```
+    $ python -m Ledart --conf=pathtoconfig/the_conf.py
+```
+
+you simply import a protocol from a submodule like Artnet and set the variable protocol with it.
+
+then you can decide to run a simulator, like the one based on pygame.
+
+if any of the variables protocol or matrixsim is set to None, the tool wil simply not run that part of the interface.
+
+so to be clear if protocol is set to None, no data wil be sendout via that protocol,
+and when matrixim is set to None no simulation will be run.
+
+``` set_strip_dimensions() ``` must always be called either with ``` matrix(x, y, width, height)```
+
+or with ``` ledstrip(length) ```
+
+targets is a list of pairs,
+wheren the left value is the destination, like ip or hostname.
+
+and the right value is a pattern to run.
+
+the pattern follows like:
+```
+targets = 
+    {
+        destination : pattern,
+    }
+```
+
+multiple patterns can be sendout like:
+
+```
+targets = 
+    {
+        destination1 : pattern1(),
+        destination2 : pattern2(),
+        destination1 : pattern2()
+    }
+```
+
+## installation
+installing the software is as easy as installing it with pip
+
+either from the git repo:
+```
+    $ pip install git+https://github.com/TkkrLab/py-ledart
+```
+
+or from pypi:
+```
+    $ pip install Ledart
+```
+keep in mind the pypi version brobably lacks behind some.
+
+some of the dependecies require compiling,
+like with pygame-cffi,
+mostly the dependencies can be installed via your favorite
+packagemanager
+
+the dependencies currently include:
+```
+    Pillow >= 3.3.0
+    PyOpenGL >= 3.1.0
+    PyUserInput >= 0.1.10
+    cffi >= 1.7.0
+    pygame-cffi >= 0.1.1
+    pyserial >= 3.1.1
+    python-xlib >= 0.16
+    pyalsaaudio >= 0.8.2
+```

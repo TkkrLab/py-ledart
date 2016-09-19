@@ -78,8 +78,8 @@ def get_pattern_classes(module):
     return patterns
 
 
-def tst_patterns(dir, showpass=True):
-    patterns = find_patterns_in_dir(dir)
+def tst_patterns(directory, showpass=True):
+    patterns = find_patterns_in_dir(directory)
     for pattern in patterns:
         try:
             pat = pattern()
@@ -200,7 +200,9 @@ def main():
         listpatterns()
         cleanup(5)
     if args.testing:
-        tst_patterns('Ledart/Patterns', showpass=False)
+        currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+        directory = os.path.join(currentdir, 'Patterns')
+        tst_patterns(directory, showpass=False)
         print("Done testing. ")
         cleanup(4)
     # if gui selected start that else start the headless code.
