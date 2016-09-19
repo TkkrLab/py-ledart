@@ -102,8 +102,8 @@ def load_targets(configfile):
 
     # test if the config file exists, if not it's maybe a local file
     # and else it's probably a path description + file.
-    variables = {}
     currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    variables = {}
     variables['basedir'] = currentdir
     
     if not os.path.exists(configfile):
@@ -141,7 +141,7 @@ def sendout(args, targets, protocol):
             if matrixscreen:
                 matrixscreen.handleinput()
                 matrixscreen.process(pattern)
-            if args.sendOnChange == "enabled":
+            if args.sendOnChange:
                 changed = (Surface(pattern) != Surface(sendout.previous))
                 sendout.previous = Surface(pattern)
             else:
@@ -161,7 +161,8 @@ sendout.previous = Surface(width=10, height=10)
 
 
 def listpatterns():
-    pattern_objects = find_patterns_in_dir('Ledart/Patterns')
+    currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    pattern_objects = find_patterns_in_dir(os.path.join(currentdir, 'Patterns'))
     patterns = []
     for pattern in pattern_objects:
         patterns.append(pattern.__name__)
@@ -202,19 +203,9 @@ def main():
     if args.testing:
         currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
         directory = os.path.join(currentdir, 'Patterns')
-        tst_patterns(directory, showpass=False)
+        tst_patterns(directory, showpass=args.debug)
         print("Done testing. ")
         cleanup(4)
-    # if gui selected start that else start the headless code.
-    if args.gui == "enabled":
-        # try:
-        #     from Gui.Gui import Gui
-        #     editor = Gui(args)
-        #     editor.main()
-        # except Exception as e:
-        #     print(e)
-        print("Exiting.")
-        cleanup(6)
     else:
 
         # check if there is anything configured.
@@ -243,7 +234,7 @@ def main():
             measured.append(cfps)
             if len(measured) > 100:
                 del measured[0]
-            if args.showFps == "enabled":
+            if args.showFps:
                 fmt = (cfps, sum(measured) / len(measured))
                 fmtstr = "current fps: %0.2f average: %0.2f            \r"
                 sys.stdout.write(fmtstr % fmt)

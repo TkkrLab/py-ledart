@@ -148,4 +148,4 @@ that can be installed via pip
 
 and one other that must beinstalled via packagemanger is:
 
-``` ffmpeg```
+``` ffmpeg ```
