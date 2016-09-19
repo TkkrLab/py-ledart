@@ -106,6 +106,14 @@ targets =
     }
 ```
 
+a real case might look like:
+```
+targets = 
+    {
+        '10.42.3.42' : PixelLife(),
+    }
+```
+
 ## installation
 installing the software is as easy as installing it with pip
 
