@@ -41,14 +41,20 @@ dest = localhost
 width, height = 32, 32
 set_strip_dimensions(matrix(0, 0, width, height))
 
-# don't send out anything.
+# sendout with the ArtNet protocol
 protocol = ArtNet()
+
+# use None to not sendout anything
+# protocol = None
+
 # start the simulator for a nice demo.
 matrixsim = MatrixScreen(width=width,
                          height=height,
                          pixelsize=10,
                          fullscreen=False,
                          interface=interface_opts["pygame"])
+# or use None to not start the simulator.
+# matrixsim = None
 
 # import patterns.
 from Ledart.Patterns.Patterns import *
