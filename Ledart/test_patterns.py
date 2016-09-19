@@ -3,7 +3,7 @@ import os, sys
 from Ledart.runPatternJob import find_patterns_in_dir
 from Ledart.stripinfo import strip_size
 
-currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+currentdir = os.path.dirname(os.path.realpath(__file__))
 
 def test():
     patterns = find_patterns_in_dir(os.path.join(currentdir, 'Patterns'))
