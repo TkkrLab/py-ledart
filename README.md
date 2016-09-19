@@ -75,15 +75,15 @@ then you can decide to run a simulator, like the one based on pygame.
 
 if any of the variables ``` protocol ``` or ``` matrixsim ``` is set to ``` None```, the tool wil simply not run that part of the interface.
 
-so to be clear if protocol is set to ``` None```, no data wil be sendout via a protocol,
-and when matrixim is set to ``` None``` no simulation will be run.
+so to be clear if ``` protocol ``` is set to ``` None```, no data wil be sendout via a protocol,
+and when ``` matrixim``` is set to ``` None``` no simulation will be run.
 
 ``` set_strip_dimensions() ``` must always be called either with ``` matrix(x, y, width, height)```
 
 or with ``` ledstrip(length) ```
 
-targets is a list of pairs,
-wheren the left value is the destination, like ip or hostname.
+```targets``` is a list of pairs,
+where the left value is the destination, like ip or hostname.
 
 and the right value is a pattern to run.
 
