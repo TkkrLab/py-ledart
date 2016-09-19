@@ -49,7 +49,7 @@ targets = {
     # dest: ScreenCapture(fullscreen=True),
     # dest: ScreenCapture(fullscreen=False),
     # dest: DisplayImage(basedir + '/images/tkkrlab.png'),
-    dest: DisplayImage(basedir + '/images/System-Shock-2.jpg'),
+    dest: DisplayImage('/home/duality/System-Shock-2.jpg'),
     # dest: DisplayGif('/home/robert/1353.gif'),
     # dest: VideoPlay('/home/robert/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay('/home/robert/Videos/bad.mkv'),
