@@ -29,7 +29,7 @@ other features include easily previewing your creations, with a matrix simulator
 ## configuration for the commandline tool.
 a example config might look like:
 ```python
-# import all patterns availble for use.
+# import all needed submodules
 from Ledart.Lmcp import *
 from Ledart.Artnet import *
 from Ledart.stripinfo import *
@@ -50,6 +50,7 @@ matrixsim = MatrixScreen(width=width,
                          fullscreen=False,
                          interface=interface_opts["pygame"])
 
+# import patterns.
 from Ledart.Patterns.Patterns import *
 
 targets = {
@@ -66,10 +67,10 @@ you simply import a protocol from a submodule like Artnet and set the variable p
 
 then you can decide to run a simulator, like the one based on pygame.
 
-if any of the variables protocol or matrixsim is set to None, the tool wil simply not run that part of the interface.
+if any of the variables ``` protocol ``` or ``` matrixsim ``` is set to ```python None```, the tool wil simply not run that part of the interface.
 
-so to be clear if protocol is set to None, no data wil be sendout via that protocol,
-and when matrixim is set to None no simulation will be run.
+so to be clear if protocol is set to ```python None```, no data wil be sendout via a protocol,
+and when matrixim is set to ```python None``` no simulation will be run.
 
 ``` set_strip_dimensions() ``` must always be called either with ``` matrix(x, y, width, height)```
 
