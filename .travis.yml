@@ -24,7 +24,7 @@ before_script:
   - "sudo modprobe snd-dummy"
 
 script:
-  - nosetests --verbosity=3
+  - nosetests
 
 after_success:
   coveralls
