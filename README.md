@@ -144,3 +144,8 @@ the dependencies currently include:
     python-xlib >= 0.16
     pyalsaaudio >= 0.8.2
 ```
+that can be installed via pip
+
+and one other that must beinstalled via packagemanger is:
+
+``` ffmpeg```
