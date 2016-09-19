@@ -17,6 +17,11 @@ import cProfile
 from Tools.Graphics import Surface
 
 from ArgumentParser import get_args
+# get command line arguments
+args = get_args()
+protocol = None
+matrixsim = None
+targets = None
 
 def get_trace():
     exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -181,20 +186,17 @@ def cleanup(d):
 def sigint_handler(signal, frame):
     cleanup(3)
 
-# get command line arguments
-args = get_args()
 
 # generate no byte code
 sys.dont_write_bytecode = True
-
-# load config
-targets, protocol, matrixscreen = load_targets(args.config)
 
 def main():
     # first thing we do register at exit function.
     # make tty be sane so that if the tty/terminal screws up.
     # this will make it workable again.
     signal.signal(signal.SIGINT, sigint_handler)
+    # load config
+    targets, protocol, matrixscreen = load_targets(args.config)
 
     # command parsing
     if args.list:
