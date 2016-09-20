@@ -20,6 +20,7 @@ from ArgumentParser import get_args
 args = get_args()
 # load config
 targets, protocol, matrixscreen = load_targets(args.config)
+basepath = os.path.dirname(os.path.realpath(__file__))
 
 
 def tst_patterns(directory, showpass=True):
@@ -40,8 +41,8 @@ def tst_patterns(directory, showpass=True):
             continue
 
 def listpatterns():
-    currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
-    pattern_objects = find_patterns_in_dir(os.path.join(currentdir, 'Patterns'))
+    basepath = os.path.dirname(os.path.realpath__file__)
+    pattern_objects = find_patterns_in_dir(os.path.join(basepath, 'Patterns'))
     patterns = []
     for pattern in pattern_objects:
         patterns.append(pattern.__name__)
@@ -106,8 +107,7 @@ def main():
         listpatterns()
         cleanup(5)
     if args.testing:
-        currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
-        directory = os.path.join(currentdir, 'Patterns')
+        directory = os.path.join(basepath, 'Patterns')
         tst_patterns(directory, showpass=args.debug)
         print("Done testing. ")
         cleanup(4)

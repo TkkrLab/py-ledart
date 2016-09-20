@@ -100,12 +100,12 @@ def load_targets(configfile):
 
     # test if the config file exists, if not it's maybe a local file
     # and else it's probably a path description + file.
-    currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    basepath = os.path.dirname(os.path.realpath(__file__))
     variables = {}
-    variables['basedir'] = currentdir
+    variables['basedir'] = basepath
     
     if not os.path.exists(configfile):
-        configfile = os.path.join(currentdir, "configs", configfile)
+        configfile = os.path.join(basepath, "configs", configfile)
     
     print("loading config from: %s" % (configfile))
     execfile(configfile, variables)
