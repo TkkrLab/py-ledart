@@ -106,15 +106,15 @@ def load_targets(configfile):
     if not os.path.exists(configfile):
         configfile = os.path.join(basepath, "configs", configfile)
     
-    print("loading config from: %s" % (configfile))
+    # print("loading config from: %s" % (configfile))
     execfile(configfile, variables)
 
     targets = variables.get('targets', None)
     protocol = variables.get('protocol', None)
     matrix_sim = variables.get('matrixsim', None)
 
-    print("protocol: %s" % protocol)
-    print("matrixsim: %s" % matrix_sim)
+    # print("protocol: %s" % protocol)
+    # print("matrixsim: %s" % matrix_sim)
 
     return (targets, protocol, matrix_sim)
 
