@@ -15,15 +15,17 @@ import cProfile
 from Tools.Graphics import Surface
 from utils import load_targets
 from utils import find_patterns_in_dir
-from ArgumentParser import get_args
-# get command line arguments
-args = get_args()
-# load config
-targets, protocol, matrixscreen = load_targets(args.config)
+
 basepath = os.path.dirname(os.path.realpath(__file__))
+protocol, matrixscreen, targets = None, None, None
 
 
-def tst_patterns(directory, showpass=True):
+def tst_patterns(directory, showpass=False):
+    from stripinfo import set_strip_dimensions, matrix
+    set_strip_dimensions(matrix(x=0, y=0, width=3, height=3))
+
+    failed = []
+
     patterns = find_patterns_in_dir(directory)
     for pattern in patterns:
         try:
@@ -37,8 +39,10 @@ def tst_patterns(directory, showpass=True):
             print("---------------------")
             print("Pattern:%s Exception:%s" % (pattern, e))
             traceback.print_exc()
+            failed.append(pattern)
             print("---------------------")
             continue
+    return failed
 
 def listpatterns():
     basepath = os.path.dirname(os.path.realpath__file__)
@@ -102,6 +106,10 @@ def main():
     # this will make it workable again.
     signal.signal(signal.SIGINT, sigint_handler)
 
+    from ArgumentParser import get_args
+    # get command line arguments
+    args = get_args()
+
     # command parsing
     if args.list:
         listpatterns()
@@ -112,6 +120,11 @@ def main():
         print("Done testing. ")
         cleanup(4)
     else:
+        # load config
+        global targets
+        global protocol
+        global matrixscreen
+        targets, protocol, matrixscreen = load_targets(args.config)
 
         # check if there is anything configured.
         if not len(targets):

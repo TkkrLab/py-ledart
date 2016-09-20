@@ -1,4 +1,5 @@
 import os, sys
+import traceback
 
 
 """
@@ -44,9 +45,6 @@ def get_trace():
 """ returns a list of objects found in a directory/module """
 def find_patterns_in_dir(dir):
     patterns = []
-    # get the current working directory so we.
-    # can join and find it.
-    dir = os.path.join(os.getcwd(), dir)
     # see if dir is already in path. else add it.
     if dir not in sys.path:
         sys.path.append(dir)
@@ -59,6 +57,7 @@ def find_patterns_in_dir(dir):
             # extract the file name and import it.
             sfile = item.split('.')[0]
             try:
+                print(sfile)
                 mod = __import__(sfile)
             except Exception as e:
                 print("%s:Couldn't import module cause: %s" % (sfile, e))

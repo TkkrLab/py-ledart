@@ -78,15 +78,14 @@ class Particle(object):
 
 class Sim(Graphics):
     def __init__(self):
-        self.width = strip_width
-        self.height = strip_height
-        Graphics.__init__(self, self.width, self.height)
+        Graphics.__init__(self, strip_width, strip_height)
+        print("strip_width: %d strip_height: %d" % (strip_width, strip_height))
         self.fill(BLACK)
         # self.gravity = (math.pi, 100)
         self.random_vecs()
         self.particles = []
         for n in xrange(self.width*2):
-            size = random.randrange(0, 3)
+            size = random.randrange(0, int(strip_width / 3))
             x = random.randint(size, self.width - size)
             y = random.randint(size, self.height - size)
             density = random.randint(1, 20)
