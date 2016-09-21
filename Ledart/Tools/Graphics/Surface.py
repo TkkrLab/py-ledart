@@ -76,7 +76,7 @@ class Surface(object):
         elif type(key) == slice:
             return self.surface[key.start:key.stop:key.step]
         elif type(key) == list:
-            index = self.indexes[key]
+            index = self.indexes[tuple(key)]
             return self.surface[index]
         elif type(key) == tuple:
             index = self.indexes[key]
@@ -85,11 +85,15 @@ class Surface(object):
             raise(KeyError)
 
     def __setitem__(self, key, value):
-        if type(value) != list:
+        if (type(value) != list or
+            len(value) != 3):
             raise(ValueError)
 
         if type(key) == int:
             self.surface[key] = value
+        elif type(key) == list:
+            index = self.indexes[tuple(key)]
+            self.surface[index] = value
         elif type(key) == tuple:
             index = self.indexes[key]
             self.surface[index] = value
