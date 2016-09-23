@@ -72,6 +72,8 @@ class Surface(object):
     """ allow to get/set value by point (x, y) or by index int(index) """
     def __getitem__(self, key):
         if type(key) == int:
+            if key > self.size or key < 0:
+                raise(KeyError)
             return self.surface[key]
         elif type(key) == slice:
             return self.surface[key.start:key.stop:key.step]
@@ -88,8 +90,13 @@ class Surface(object):
         if (type(value) != list or
             len(value) != 3):
             raise(ValueError)
+        for c in value:
+            if c < 0 or c > self.color_depth:
+                raise(ValueError)
 
         if type(key) == int:
+            if key > self.size or key < 0:
+                raise(KeyError)
             self.surface[key] = value
         elif type(key) == list:
             index = self.indexes[tuple(key)]
@@ -108,7 +115,7 @@ class Surface(object):
         __str = [chr(c) for color in self.surface for c in color]
         return bytearray(__str)
 
-    """ function returns a list of bytes. (python2.7 strings) """
+    """ this function returns a string (python2.7 byte array) """
     def __str__(self):
         __str = [chr(c) for color in self.surface for c in color]
         return ''.join(__str)
