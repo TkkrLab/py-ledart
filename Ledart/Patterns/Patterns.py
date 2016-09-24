@@ -26,7 +26,6 @@ try:
     from RainPattern import *
     from PixelLife import *
     from Plasma import *
-    from sven import *
     from FillTest import *
     from GraphicsTests import *
     from Water import *

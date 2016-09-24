@@ -1,7 +1,7 @@
 import unittest
-from Ledart import Surface, WHITE, BLUE, BLACK
+from Ledart.Tools.Graphics import Surface, WHITE, BLUE, BLACK
 
-class SurfaceTest(unittest.TestCase):
+class TestSurface(unittest.TestCase):
     def setUp(self):
         self.width = 3
         self.height = 3

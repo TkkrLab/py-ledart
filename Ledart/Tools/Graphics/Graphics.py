@@ -1,17 +1,9 @@
 import random
 from Surface import Surface
 
-
-def rand_color():
-    r = random.randint(0, 255)
-    g = random.randint(0, 255)
-    b = random.randint(0, 255)
-    return [r, g, b]
-
-
 class Graphics(Surface):
-    def __init__(self, width, height):
-        Surface.__init__(self, width=width, height=height)
+    def __init__(self, width=1, height=1, offset=(0, 0)):
+        Surface.__init__(self, width=width, height=height, offset=offset)
 
     def fill(self, color):
         if not isinstance(color, list):
