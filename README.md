@@ -114,6 +114,13 @@ targets =
     }
 ```
 
+## pre-installation
+install these through your favorite packagemanager:
+```
+    ffmpeg
+    pygame
+```
+
 ## installation
 installing the software is as easy as installing it with pip
 
@@ -126,12 +133,7 @@ or from pypi:
 ```
     $ pip install Ledart
 ```
-keep in mind the pypi version brobably lacks behind some.
-
-some of the dependecies require compiling,
-like with pygame-cffi,
-mostly the dependencies can be installed via your favorite
-packagemanager
+keep in mind the pypi version probably lacks behind some.
 
 the dependencies currently include:
 ```
@@ -146,6 +148,3 @@ the dependencies currently include:
 ```
 that can be installed via pip
 
-and one other that must beinstalled via packagemanger is:
-
-``` ffmpeg ```
