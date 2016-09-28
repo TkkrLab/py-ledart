@@ -13,7 +13,7 @@ localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
 dest = megamatrix
-width, height = 128, 64
+width, height = 128, 47
 # width, height = 128, 64
 dims = matrix(x=0, y=0, width=width, height=height)
 # dims = matrixstrip(x=0, y=0, width=32, height=32)
