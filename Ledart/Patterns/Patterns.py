@@ -29,6 +29,7 @@ try:
     from sven import *
     from FillTest import *
     from GraphicsTests import *
+    from CellurarAutomata import *
     from Water import *
     from Fire import *
     from Sim import *

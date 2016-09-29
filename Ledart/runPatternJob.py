@@ -2,6 +2,7 @@
 
 # import some generaly used libraries
 import os
+import gc
 import sys
 import imp
 import time
@@ -105,6 +106,7 @@ def main():
     # make tty be sane so that if the tty/terminal screws up.
     # this will make it workable again.
     signal.signal(signal.SIGINT, sigint_handler)
+    gc.disable()
 
     from ArgumentParser import get_args
     # get command line arguments
