@@ -132,9 +132,11 @@ def main():
         if not len(targets):
             print("nothing is configured in %s" % args.config)
             cleanup(7)
-        # resolve hostenames if any
+        # resolve hostenames if protocol specified.
+        # else it doesn't really matter.
         for target in targets:
-            targets[gethostbyname(target)] = targets.pop(target)
+            if protocol:
+                targets[gethostbyname(target)] = targets.pop(target)
         # ---------
         if protocol:
             protocol.open()
