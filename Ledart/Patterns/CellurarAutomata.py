@@ -52,7 +52,7 @@ class Ca(Graphics):
         """ displays the picuture as it's generated. """
         self.apply_rule(self.rule, self.hpos)
         self.hpos += 1
-        if self.hpos > (self.height - 1):
+        if self.hpos > self.height:
             self.hpos = 1
             self.fill(BLACK)
             self.create_random_row(0)
