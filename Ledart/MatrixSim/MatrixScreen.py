@@ -79,8 +79,5 @@ class MatrixScreen(object):
         # update the screen so our data is shown.
         self.interface.update()
 
-    def printfps(self):
-        sys.stdout.write("%s      \r" % self.fps)
-
     def close(self):
         self.interface.quit()
