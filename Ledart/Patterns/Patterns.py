@@ -30,6 +30,7 @@ try:
     from FillTest import *
     from GraphicsTests import *
     from CellurarAutomata import *
+    from Fractals import *
     from Water import *
     from Fire import *
     from Sim import *
