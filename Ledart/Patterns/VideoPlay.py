@@ -5,15 +5,19 @@ import shlex
 import os, fcntl, sys
 
 from Ledart.Tools.Graphics import Surface
-from Ledart.stripinfo import strip_width, strip_height
 from Ledart.utils import chunks
 from Ledart.ArgumentParser import get_args
 
 
 class VideoPlay(Surface):
-    def __init__(self, location='', center=True):
-        Surface.__init__(self, width=strip_width, height=strip_height)
+    def __init__(self, **kwargs):
+        Surface.__init__(self, **kwargs)
         args = get_args()
+
+        self.location = kwargs.get('location', None)
+        center = kwargs.get('center', True)
+        if self.location == None:
+            return
 
         # load in a image with ffmpeg and apply fps
         ffmpeg = "ffmpeg"
@@ -35,6 +39,9 @@ class VideoPlay(Surface):
         self.pipe = sp.Popen(shlex.split(command), stdout=sp.PIPE)
 
     def generate(self):
+        if self.location == None:
+            return
+
         # read and turn all elements into int values.
         raw_image = self.pipe.stdout.read(self.width * self.height * 3)
         raw_image = map(ord, raw_image)
@@ -44,8 +51,10 @@ class VideoPlay(Surface):
         self.surface = [list(c) for c in zip(it, it, it)]
 
 class CamCapture(Surface):
-    def __init__(self, dev='/dev/video0'):
-        Surface.__init__(self, width=strip_width, height=strip_height)
+    # def __init__(self, dev='/dev/video0'):
+    def __init__(self, **kwargs):
+        Surface.__init__(self, **kwargs)
+        dev = kwargs.get('dev', '/dev/video0')
         args = get_args()
 
         ffmpeg = 'ffmpeg'
@@ -78,9 +87,13 @@ class CamCapture(Surface):
         self.surface = [list(c) for c in zip(it, it, it)]
 
 class ScreenCapture(Surface):
-    def __init__(self, screen_resolution=None, fullscreen=False, fps=None,
-                 center=True):
-        Surface.__init__(self, width=strip_width, height=strip_height)
+    def __init__(self, **kwargs):
+        Surface.__init__(self, **kwargs)
+        screen_resolution = kwargs.get('screen_resolution', None)
+        fullscreen = kwargs.get('fullscreen', False)
+        fps = kwargs.get('fps', None)
+        center = kwargs.get('center', True)
+
         args = get_args()
         if screen_resolution is None:
             pm = pymouse.PyMouse()
@@ -141,35 +154,3 @@ class ScreenCapture(Surface):
         it = iter(raw_image)
         # use the itterator to zip three following values together.
         self.surface = [list(c) for c in zip(it, it, it)]
-
-# import av
-
-# class VideoTest(Surface):
-#     def __init__(self):
-#         Surface.__init__(self, width=strip_width, height=strip_height)
-#         self.container = av.open('/home/robert/Videos/bad.mkv')
-#         self.video = next(s for s in self.container.streams if s.type == b'video')
-#         frame = self.generate_frame()
-#         self.draw_frame(frame)
-    
-#     def generate_frame(self):
-#         data = []
-#         for packet in self.container.demux(self.video):
-#             for frame in packet.decode():
-#                 f = frame.reformat(strip_width, strip_height, 'rgb24')
-#                 data = []
-#                 for row in f.to_nd_array():
-#                     data.extend(map(list, row))
-#                 yield(data)
-    
-#     def draw_frame(self, frame):
-#         # frame will be a generator be we just want to tackle this one generator at a time.
-#         for i, color in enumerate(frame.next()):
-#             self[i] = color
-    
-#     def generate(self):
-#         frame = self.generate_frame()
-#         self.draw_frame(frame)
-#         # we determine our own fps.
-#         # actually better do this with a timer
-#         # time.sleep(float(1./self.video.average_rate))

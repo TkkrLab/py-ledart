@@ -7,7 +7,8 @@
 
 class Surface(object):
     """ instantiate a new surface or make a copy"""
-    def __init__(self, surface=None, **kwargs):
+    def __init__(self, **kwargs):
+        surface = kwargs.get('surface', None)
         if surface:
             self.width = int(surface.width)
             self.height = int(surface.height)
@@ -18,11 +19,12 @@ class Surface(object):
             self.indexes = dict(surface.indexes)
             self.surface = list(surface.surface)
         else:
-            self.width = kwargs.get('width', 1)
-            self.height = kwargs.get('height', 1)
-            self.d_offset = kwargs.get('offset', (0, 0))
+            dims = kwargs.get('dims', [0, 0, 1, 1])
+            x, y, self.width, self.height = dims
+            self.d_offset = (x, y)
 
             self.size = self.width * self.height
+
             self.color_rep = [0, 0, 0]
             self.color_depth = 0xff
 

@@ -1,12 +1,11 @@
 from Ledart.Tools.Graphics import Graphics, BLUE, BLACK, WHITE
-from Ledart.stripinfo import strip_width, strip_height
 from Ledart.Tools.Timing import Timer
 import random
 import time
 
 class Ca(Graphics):
     def __init__(self, **kwargs):
-        Graphics.__init__(self, width=strip_width, height=strip_height)
+        Graphics.__init__(self, **kwargs)
         self.rule = kwargs.get("rule", random.randint(0, 0xff))
         self.scrolling = kwargs.get("scrolling", True)
         self.refresh_time = kwargs.get("refreshtime", 6.0)

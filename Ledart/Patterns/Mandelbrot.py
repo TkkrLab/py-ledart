@@ -1,12 +1,11 @@
 from __future__ import division
 
-from Ledart.stripinfo import strip_width, strip_height
 from Ledart.Tools import Graphics
 from Ledart.Tools import BLUE
 
 class Mandelbrot(Graphics):
-    def __init__(self):
-        Graphics.__init__(self, strip_width, strip_height)
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
         self.scale = 1
         self.offset = 0
         self.zdistance = 0

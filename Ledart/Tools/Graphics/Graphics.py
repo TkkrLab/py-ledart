@@ -10,8 +10,8 @@ def rand_color():
 
 
 class Graphics(Surface):
-    def __init__(self, width, height):
-        Surface.__init__(self, width=width, height=height)
+    def __init__(self, **kwargs):
+        Surface.__init__(self, **kwargs)
 
     def fill(self, color):
         if not isinstance(color, list):
@@ -34,7 +34,7 @@ class Graphics(Surface):
             return
         self[(x, y)] = list(color)
 
-    def convert():
+    def convert(self):
         pass
 
     def blit(self, source_image, dest_rect):

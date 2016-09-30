@@ -1,5 +1,4 @@
 __package__ = "Ledart"
-from stripinfo import *
 from utils import *
 from MatrixSim import *
 from Tools import *

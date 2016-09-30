@@ -3,7 +3,7 @@ from pygame.locals import *
 import pygame
 
 from Ledart.Tools.Graphics import Graphics, BLUE, BLACK
-from Ledart.stripinfo import strip_width, strip_height
+# from Ledart.stripinfo import self.width, self.height
 
 
 class TronPlayer(Graphics):
@@ -31,17 +31,17 @@ class TronPlayer(Graphics):
         x += self.deltax
         y += self.deltay
         # if tail goes offscreenit appears on the other side.
-        if x >= strip_width:
+        if x >= self.game.width:
             x = 0
             self.pos = x, y
         elif x < 0:
-            x = strip_width - 1
+            x = self.game.width - 1
             self.pos = x, y
-        elif y >= strip_height:
+        elif y >= self.game.height:
             y = 0
             self.pos = x, y
         elif y < 0:
-            y = strip_height - 1
+            y = self.game.height - 1
             self.pos = x, y
         else:
             self.pos = x, y
@@ -55,8 +55,8 @@ class TronPlayer(Graphics):
 
 
 class Tron(Graphics):
-    def __init__(self):
-        Graphics.__init__(self, strip_width, strip_height)
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
         self.fill(BLUE)
 
     def generate(self):
@@ -65,11 +65,11 @@ class Tron(Graphics):
 
 class OldTron(Graphics):
     # version before creating players that handle processing on thier own.
-    def __init__(self):
-        Graphics.__init__(self, strip_width, strip_height)
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
         self.color = BLUE
-        x = random.randint(1, strip_width - 1)
-        y = random.randint(1, strip_height - 1)
+        x = random.randint(1, self.width - 1)
+        y = random.randint(1, self.height - 1)
         self.pos = x, y
         self.speed = 1
         self.deltax, self.deltay = 0, 0
@@ -92,17 +92,17 @@ class OldTron(Graphics):
         x += self.deltax
         y += self.deltay
         # if the tail goes offscreen it appears on the other side.
-        if x >= strip_width:
+        if x >= self.width:
             x = 0
             self.pos = x, y
         elif x < 0:
-            x = strip_width - 1
+            x = self.width - 1
             self.pos = x, y
-        elif y >= strip_height:
+        elif y >= self.height:
             y = 0
             self.pos = x, y
         elif y < 0:
-            y = strip_height - 1
+            y = self.height - 1
             self.pos = x, y
         else:
             self.pos = x, y
