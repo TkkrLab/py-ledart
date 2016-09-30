@@ -3,7 +3,7 @@ class Interface(object):
     the basic drawing interface api
     """
     def __init__(self, width, height, blocksize, fullscreen=False):
-        """ Initialize the interface. it know how big the screen is."""
+        """ Initialize the interface. it knows how big the screen is."""
         # due to physical matrix layout these are switched.
         self.width = width * blocksize
         self.height = height * blocksize

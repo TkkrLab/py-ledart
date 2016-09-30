@@ -6,9 +6,9 @@ from Ledart.Tools.Graphics import Surface
 
 # setup interface options, if no interface possible
 # set to a dummy
-from Interfaces.DummyInterface import DummyInterface
+from Interfaces.Interface import Interface
 interface_opts = {
-    "dummy": DummyInterface
+    "dummy": Interface
 }
 
 # set an option for a pygame interface
@@ -17,7 +17,7 @@ try:
     interface_opts["pygame"] = PygameInterface
 except Exception as e:
     print("module not installed, %s" % str(e))
-    interface_opts["pygame"] = DummyInterface
+    interface_opts["pygame"] = Interface
 
 # set an option for a opengl interface
 try:
@@ -25,7 +25,7 @@ try:
     interface_opts["opengl"] = OpenGlInterface
 except Exception as e:
     print("Module not installed, %s" % str(e))
-    interface_opts["opengl"] = DummyInterface
+    interface_opts["opengl"] = Interface
 
 
 class MatrixScreen(object):
@@ -35,7 +35,7 @@ class MatrixScreen(object):
     defined in matrix.py
     """
     def __init__(self, width=1, height=1, pixelsize=10, fullscreen=False,
-                 interface=DummyInterface):
+                 interface=Interface):
         self.interface = interface(width, height, pixelsize, fullscreen)
         self.width = width
         self.height = height
