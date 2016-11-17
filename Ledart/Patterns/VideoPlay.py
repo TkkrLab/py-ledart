@@ -12,6 +12,7 @@ from Ledart.ArgumentParser import get_args
 class VideoPlay(Surface):
     def __init__(self, **kwargs):
         Surface.__init__(self, **kwargs)
+        print(kwargs)
         args = get_args()
 
         self.location = kwargs.get('location', None)
@@ -26,7 +27,7 @@ class VideoPlay(Surface):
         filteropts = fmtstr % (fmt)
         command = [ffmpeg,
                    '-loglevel', 'panic',
-                   '-i', location,
+                   '-i', self.location,
                    filteropts,
                    '-f', 'image2pipe',
                    '-pix_fmt', 'rgb24',

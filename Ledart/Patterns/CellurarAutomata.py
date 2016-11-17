@@ -15,7 +15,8 @@ class Ca(Graphics):
         self.hpos = 1
         self.height_range = range(1, self.height)
         # seed first line
-        self.create_random_row(0)
+        # self.create_random_row(0)
+        self.draw_pixel(self.width / 2, 0, self.color)
         # timer for refreshing the screen.
         self.refresh_timer = Timer(self.refresh_time)
 
@@ -60,6 +61,7 @@ class Ca(Graphics):
     def generate_whole(self):
         """ generates a whole picture and then displays it. """
         if self.refresh_timer.valid():
+            self.color = [random.randint(25, 0xff), random.randint(25, 0xff), random.randint(25, 0xff)]
             self.rule = random.randint(0, 0xff)
             self.create_random_row(0)
             for i in range(1, self.height):
