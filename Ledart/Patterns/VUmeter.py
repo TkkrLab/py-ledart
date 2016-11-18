@@ -40,7 +40,6 @@ class VUmeter(Graphics):
                 h = int(audioop.avg(chunk, 1))
                 c1 = h * 4
                 c = [min(0xff, c1), 0xff - min(0xff, c1), 0]
-
                 self.draw_line(x, self.height, x, self.height - h, c)
         # for x in range(0, self.width):
         #     if l:

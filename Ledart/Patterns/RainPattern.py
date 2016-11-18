@@ -55,5 +55,5 @@ class RainPattern(Graphics):
                 self.drops.remove(drop)
         # add a random chance for drops to appear.
         if(random.random() < self.chance):
-            raindrop = RainDrop(self.color)
+            raindrop = RainDrop(self, self.color)
             self.drops.append(raindrop)
