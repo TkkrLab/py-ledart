@@ -6,7 +6,7 @@ from Ledart.stripinfo import *
 from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 
 pixelmatrix = '192.168.1.116'
-dest = megamatrix
+dest = pixelmatrix
 
 width, height = 17, 10
 dims = matrix(x=0, y=0, width=width, height=height)
