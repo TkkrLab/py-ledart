@@ -1,5 +1,6 @@
 import sys
 
+from Ledart.ArgumentParser import get_args
 try:
     from PygameController import PygameController, PygameDummyController
 except Exception as e:
@@ -94,10 +95,9 @@ class ttyController(object):
     serial = __import__('serial')
     def __init__(self, plugged=0):
         self.pos = (0, 0)
-        self.args = get_args()
-        port = "/dev/tty" + self.args.ttyport
-        baud = self.args.ttybaud
-        self.debug = self.args.ttydebug
+        port = "/dev/ttyUSB" + str(plugged)
+        baud = 115200
+        self.debug = False
         if not self.ser_port:
             self.ser_port = self.serial.Serial(port, baud, interCharTimeout=0.009)
 
