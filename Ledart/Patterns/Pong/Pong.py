@@ -9,7 +9,7 @@ import random
 # this controller class is for the wireless pong controllers.
 # with the 2.4 GHz nrf's inside.
 class PongControllerTty(ttyController, PongTtyController):
-    def __init__(self, plugged=0):
+    def __init__(self, plugged=0, **kwargs):
         ttyController.__init__(self, plugged)
 
     def getPos(self, button):
