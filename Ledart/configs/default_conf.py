@@ -4,7 +4,7 @@ from Ledart.Artnet import *
 from Ledart.utils import *
 from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 
-localhost = "localhost"
+localhost = "atest"
 dest = localhost
 
 width, height = 32, 32
