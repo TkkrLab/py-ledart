@@ -12,7 +12,6 @@ from Ledart.ArgumentParser import get_args
 class VideoPlay(Surface):
     def __init__(self, **kwargs):
         Surface.__init__(self, **kwargs)
-        print(kwargs)
         args = get_args()
 
         self.location = kwargs.get('location', None)

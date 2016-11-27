@@ -1,2 +1,2 @@
-from MatrixScreen import *
-from Pixel import *
+from Ledart.MatrixSim.MatrixScreen import *
+from Ledart.MatrixSim.Pixel import *

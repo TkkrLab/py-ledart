@@ -5,6 +5,23 @@ import time
 
 select = 'Snake'
 
+# dummy that does nothing.
+class SnakeControllerDummy(DummyController):
+    def __init__(self, **kwargs):
+        DummyController.__init__(self, **kwargs)
+    
+    def getUp(self):
+        return 0
+
+    def getDown(self):
+        return 0
+
+    def getLeft(self):
+        return 0
+
+    def getRight(self):
+        return 0
+
 # for now the snakeController is a pygame controller.
 class SnakeControllerXbox(PygameController, XboxController):
     def __init__(self, plugged=0):
@@ -40,7 +57,7 @@ class SnakeControllerLogiTech(PygameController, LogiTechController):
         return self.getButtons(self.BUTTON_RIGHT)
 
 
-controllers = [SnakeControllerXbox, SnakeControllerLogiTech]
+controllers = [SnakeControllerDummy, SnakeControllerXbox, SnakeControllerLogiTech]
 
 class Food(object):
     def __init__(self, pos, color, game):

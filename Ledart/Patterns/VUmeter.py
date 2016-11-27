@@ -25,11 +25,11 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 class VUmeter(Graphics):
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
-        self.inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
-        self.inp.setchannels(1)
-        self.inp.setrate(4000)
+        self.inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE)
+        self.inp.setchannels(2)
+        self.inp.setrate(44100)
         self.inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-        self.period = self.width
+        self.period = kwargs.get('period', 32)
         self.inp.setperiodsize(self.period)
 
     def generate(self):

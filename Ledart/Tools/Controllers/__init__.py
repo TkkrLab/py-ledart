@@ -1,3 +1,3 @@
-from Controllers import *
-from PygameController import *
-from SoundControllers import *
+from Ledart.Tools.Controllers.Controllers import *
+from Ledart.Tools.Controllers.PygameController import *
+from Ledart.Tools.Controllers.SoundControllers import *

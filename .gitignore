@@ -5,5 +5,5 @@ Gui/IntermediateCode/intermediate.py*
 Gui/new_file.py*
 venv/
 Ledart.egg-info*
-pyledart.sublime-project
-pyledart.sublime-workspace
+py-ledart.sublime-project*
+py-ledart.sublime-workspace*
