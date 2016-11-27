@@ -21,10 +21,10 @@ dims = matrix(x=0, y=0, width=width, height=height)
 # protocol = LegacyLmcp(dispmode=grayscale)
 # protocol = LegacyLmcp(dispmode=rgb24)
 
-# matrixsim = MatrixScreen(dims=dims,
-#                          pixelsize=10,
-#                          fullscreen=False,
-#                          interface=interface_opts["pygame"])
+matrixsim = MatrixScreen(dims=dims,
+                         pixelsize=7,
+                         fullscreen=False,
+                         interface=interface_opts["pygame"])
 
 targets = {
     # dest: FillTest(dims=dims),
@@ -40,13 +40,13 @@ targets = {
     # dest: SuperPixelBros(dims=dims),
     # dest: Pong(dims=dims, speed=5),
     # dest: Pong(dims=dims, speed=8),
-    # dest: ScreenCapture(dims=dims, fullscreen=True),
+    dest: ScreenCapture(dims=dims, fullscreen=True),
     # dest: ScreenCapture(dims=dims, fullscreen=False),
     # dest: DisplayImage(dims=dims, fname='/home/duality/Pictures/tkkrlab.png'),
     # dest: DisplayImage(dims=dims, fname='/home/duality/Pictures/System-Shock-2.jpg'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad.mkv'),
-    dest: CamCapture(dims=dims),
+    # dest: CamCapture(dims=dims),
     # dest: Water(dims=dims),
     # dest: AliasedWPlasma(dims=dims),
     # dest: AliasedFire(dims=dims),
