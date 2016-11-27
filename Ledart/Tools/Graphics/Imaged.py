@@ -13,7 +13,6 @@ class ImageSurface(Surface):
         backup_fname = os.path.join(base_path, 'image/tkkrlab.png')
 
         fname = kwargs.get('fname', backup_fname)
-        print("fname: " + fname)
 
         image = Image.open(fname)
         self.imtype = self.determine_type(fname)
