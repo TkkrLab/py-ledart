@@ -79,7 +79,7 @@ if any of the variables ``` protocol ``` or ``` matrixsim ``` is set to ``` None
 so to be clear if ``` protocol ``` is set to ``` None```, no data wil be sendout via a protocol,
 and when ``` matrixsim``` is set to ``` None``` no simulation will be run.
 
-a dimension representing a matrix or a led strip must always be passed to a pattern and/or the matriximulator.
+a dimension representing a matrix or a led strip must always be passed to a pattern and/or the matrixsimulator.
 
 a dimension object can be constructed with: ``` ledstrip(length=number_of_pixel) ```
 
