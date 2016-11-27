@@ -11,7 +11,7 @@ import os
 with os.popen("git describe --abbrev=0") as fd:
     version = fd.read().strip()
 
-reqs = ['Pillow >= 3.3.0',
+reqs = ['Pillow >= 2.9.0',
         'PyOpenGL >= 3.1.0',
         'PyUserInput >= 0.1.10',
         'cffi >= 1.7.0',
