@@ -46,7 +46,7 @@ def tst_patterns(directory, showpass=False):
     return failed
 
 def listpatterns():
-    basepath = os.path.dirname(os.path.realpath__file__)
+    basepath = os.path.dirname(os.path.realpath(__file__))
     pattern_objects = find_patterns_in_dir(os.path.join(basepath, 'Patterns'))
     patterns = []
     for pattern in pattern_objects:
