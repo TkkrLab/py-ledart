@@ -1,7 +1,6 @@
 from Ledart.Tools.Graphics import Graphics
 from Ledart.Tools.Graphics import BLUE, BLACK
 from Ledart.Tools.Timing import Timer
-from Ledart.stripinfo import strip_width, strip_height
 import random
 
 
@@ -16,7 +15,7 @@ class Ripple(object):
     def process(self):
         self.radius += self.speed
         if self.radius > max(self.graphics.width, self.graphics.height):
-            self.pos = (random.randint(0, strip_width), random.randint(0, strip_height))
+            self.pos = (random.randint(0, self.width), random.randint(0, self.height))
             self.radius = 0
     
     def draw(self):
@@ -25,11 +24,11 @@ class Ripple(object):
 
 
 class Water(Graphics):
-    def __init__(self):
-        Graphics.__init__(self, width=strip_width, height=strip_height)
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
         self.ripples = []
         for i in range(0, 4):
-            x, y = random.randint(0, strip_width), random.randint(0, strip_height)
+            x, y = random.randint(0, self.width), random.randint(0, self.height)
             self.ripples.append(Ripple((x, y), BLUE, self))
     
     def generate(self):

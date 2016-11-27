@@ -3,6 +3,7 @@ import sys
 
 from Ledart.Tools.Graphics import BLUE, BLACK
 from Ledart.Tools.Graphics import Surface
+from Ledart.utils import matrix
 
 # setup interface options, if no interface possible
 # set to a dummy
@@ -34,8 +35,9 @@ class MatrixScreen(object):
     it draws blocks in a array the size of the pixels is
     defined in matrix.py
     """
-    def __init__(self, width=1, height=1, pixelsize=10, fullscreen=False,
+    def __init__(self, dims=matrix(0, 0, 1, 1), pixelsize=10, fullscreen=False,
                  interface=Interface):
+        x, y, width, height = dims
         self.interface = interface(width, height, pixelsize, fullscreen)
         self.width = width
         self.height = height
@@ -45,7 +47,7 @@ class MatrixScreen(object):
         self.window_height = height * pixelsize
 
         self.interface.setcaption("Matrix Simulator.")
-        self.psurface = Surface(width=width, height=height)
+        self.psurface = Surface(dims=dims)
 
     def handleinput(self):
         self.interface.handleinput()

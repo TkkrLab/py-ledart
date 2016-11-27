@@ -1,6 +1,5 @@
 from Ledart.Tools.Graphics import Graphics, BLACK, RED, BLUE, GREEN
 from Ledart.Tools.Controllers import PygameController, XboxController
-from Ledart.stripinfo import strip_width, strip_height, strip_size
 
 c = BLACK
 r = RED
@@ -18,7 +17,6 @@ level1 = [c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c,
           g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g,
           g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g, g]
 
-level = [BLUE] * strip_size
 
 
 class PixelBrosController(PygameController, XboxController):
@@ -86,8 +84,8 @@ class SuperPixelBros(Graphics):
     makes sure the player get the right data.
 
     """
-    def __init__(self):
-        Graphics.__init__(self, strip_width, strip_height)
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
 
         self.players = []
         self.player = Player((9, 7), BLUE, self)

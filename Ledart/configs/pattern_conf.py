@@ -22,7 +22,7 @@ dims = matrix(x=0, y=0, width=width, height=height)
 # protocol = LegacyLmcp(dispmode=rgb24)
 
 matrixsim = MatrixScreen(dims=dims,
-                         pixelsize=10,
+                         pixelsize=7,
                          fullscreen=False,
                          interface=interface_opts["pygame"])
 

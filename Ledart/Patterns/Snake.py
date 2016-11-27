@@ -1,6 +1,5 @@
 from Ledart.Tools.Graphics import Graphics, GREEN, BLUE, WHITE, BLACK
 from Ledart.Tools.Controllers import *
-from Ledart.stripinfo import strip_width, strip_height
 import random
 import time
 
@@ -53,8 +52,8 @@ class Food(object):
         self.pos = pos
 
     def randPos(self):
-        x = random.randint(0, strip_width - 1)
-        y = random.randint(0, strip_height - 1)
+        x = random.randint(0, self.game.width - 1)
+        y = random.randint(0, self.game.height - 1)
         self.pos = x, y
 
     def randColor(self):
@@ -69,19 +68,21 @@ class Food(object):
 
 
 class Snake(Graphics):
-    def __init__(self, speed=8, select=0):
-        Graphics.__init__(self, strip_width, strip_height)
+    # def __init__(self, dims, speed=8, select=0):
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
 
-        self.controller = controllers[select]()
+        self.select = kwargs.get('select', 0)
+        self.controller = controllers[self.select]()
 
         self.body_color = GREEN
         self.head_color = BLUE
 
-        x = random.randint(1, strip_width - 1)
-        y = random.randint(1, strip_height - 1)
+        x = random.randint(1, self.width - 1)
+        y = random.randint(1, self.height - 1)
         self.pos = x, y
-        self.original_speed = speed
-        self.speed = speed
+        self.speed = kwargs.get('speed', 8)
+        self.original_speed = self.speed
         self.previousTick = 0
         self.deltax, self.deltay = 0, 0
 
@@ -115,17 +116,17 @@ class Snake(Graphics):
             x += self.deltax
             y += self.deltay
             # if the snake goes offscreen it appears on the other side.
-            if x >= strip_width:
+            if x >= self.width:
                 x = 0
                 self.pos = x, y
             elif x < 0:
-                x = strip_width - 1
+                x = self.width - 1
                 self.pos = x, y
-            elif y >= strip_height:
+            elif y >= self.height:
                 y = 0
                 self.pos = x, y
             elif y < 0:
-                y = strip_height - 1
+                y = self.height - 1
                 self.pos = x, y
             else:
                 self.pos = x, y
@@ -160,7 +161,6 @@ class Snake(Graphics):
                 self.draw_pixel(x, y, self.head_color)
             else:
                 # else just draw our body this color
-                # self.graphics.draw_pixel(x,y,Color.subtract(self.body_color, (int(255/(i+1)),)*3))
                 self.draw_pixel(x, y, (255, 255, 255))
         self.food.draw()
 

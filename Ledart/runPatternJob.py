@@ -16,21 +16,21 @@ import cProfile
 from Tools.Graphics import Surface
 from utils import load_targets
 from utils import find_patterns_in_dir
+from utils import matrix
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 protocol, matrixscreen, targets = None, None, None
 
 
 def tst_patterns(directory, showpass=False):
-    from stripinfo import set_strip_dimensions, matrix
-    set_strip_dimensions(matrix(x=0, y=0, width=3, height=3))
+    test_dims = matrix(x=0, y=0, width=10, height=17)
 
     failed = []
 
     patterns = find_patterns_in_dir(directory)
     for pattern in patterns:
         try:
-            pat = pattern()
+            pat = pattern(dims=test_dims)
             pat.generate()
             if showpass:
                 print("-----------------")

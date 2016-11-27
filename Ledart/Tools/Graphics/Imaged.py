@@ -1,21 +1,26 @@
 from PIL import Image
+import Ledart
+import os
 from Surface import Surface
 
 class ImageSurface(Surface):
-    def __init__(self, width, height, fname, thumbnail=False):
+    # def __init__(self, width, height, fname, thumbnail=False):
+    def __init__(self, **kwargs):
+        # create the surface to draw the image on.
+        Surface.__init__(self, **kwargs)
+
+        base_path = os.path.dirname(os.path.abspath(Ledart.__file__))
+        backup_fname = os.path.join(base_path, 'image/tkkrlab.png')
+
+        fname = kwargs.get('fname', backup_fname)
+        print("fname: " + fname)
+
         image = Image.open(fname)
         self.imtype = self.determine_type(fname)
         if self.imtype is None:
             raise(Exception("Couldn't load image."))
 
-        # if (image.width > width) or (image.height > height):
-        #     if thumbnail:
-        #         image.thumbnail((width, height))
-        #     else:
-        image = image.resize((width, height))
-
-        # create the surface to draw the image on.
-        Surface.__init__(self, width=width, height=height)
+        image = image.resize((self.width, self.height))
 
         if self.imtype == "png":
             self.load_png(image)

@@ -6,6 +6,12 @@ import traceback
     these functions are utils, that are handy to have for various things.
 """
 
+def matrix(x=0, y=0, width=1, height=1):
+    return [x, y, width, height]
+
+def ledstrip(length=1, channel=0):
+    return [0, channel, 1, length]
+
 def chunked(data, chunksize):
     """
     yield 'chunks' of data with a size <chunksize>, with iteration count.

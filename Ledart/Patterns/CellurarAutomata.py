@@ -1,12 +1,11 @@
 from Ledart.Tools.Graphics import Graphics, BLUE, BLACK, WHITE
-from Ledart.stripinfo import strip_width, strip_height
 from Ledart.Tools.Timing import Timer
 import random
 import time
 
 class Ca(Graphics):
     def __init__(self, **kwargs):
-        Graphics.__init__(self, width=strip_width, height=strip_height)
+        Graphics.__init__(self, **kwargs)
         self.rule = kwargs.get("rule", random.randint(0, 0xff))
         self.scrolling = kwargs.get("scrolling", True)
         self.refresh_time = kwargs.get("refreshtime", 6.0)
@@ -16,7 +15,8 @@ class Ca(Graphics):
         self.hpos = 1
         self.height_range = range(1, self.height)
         # seed first line
-        self.create_random_row(0)
+        # self.create_random_row(0)
+        self.draw_pixel(self.width / 2, 0, self.color)
         # timer for refreshing the screen.
         self.refresh_timer = Timer(self.refresh_time)
 
@@ -52,7 +52,7 @@ class Ca(Graphics):
         """ displays the picuture as it's generated. """
         self.apply_rule(self.rule, self.hpos)
         self.hpos += 1
-        if self.hpos > (self.height - 1):
+        if self.hpos > self.height:
             self.hpos = 1
             self.fill(BLACK)
             self.create_random_row(0)
@@ -61,6 +61,7 @@ class Ca(Graphics):
     def generate_whole(self):
         """ generates a whole picture and then displays it. """
         if self.refresh_timer.valid():
+            self.color = [random.randint(25, 0xff), random.randint(25, 0xff), random.randint(25, 0xff)]
             self.rule = random.randint(0, 0xff)
             self.create_random_row(0)
             for i in range(1, self.height):

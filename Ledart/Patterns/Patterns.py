@@ -26,7 +26,6 @@ try:
     from RainPattern import *
     from PixelLife import *
     from Plasma import *
-    from sven import *
     from FillTest import *
     from GraphicsTests import *
     from CellurarAutomata import *
@@ -59,7 +58,7 @@ except Exception as e:
 try:
     from DisplayImage import *
 except Exception as e:
-    debugprint("DisplayPng >>", e)
+    debugprint("DisplayImage >>", e)
 
 # patterns that do use pygame
 try:
@@ -76,9 +75,3 @@ try:
     from Snake import *
 except Exception as e:
     debugprint("snake >>", e)
-
-# Graphics module has some tests in it too.
-# try:
-#     from Tools import *
-# except Exception as e:
-#     debugprint("graphics >>", e)

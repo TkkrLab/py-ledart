@@ -2,15 +2,13 @@ import random
 import time
 import math
 
-from Ledart.stripinfo import strip_width, strip_height
 from Ledart.Tools import Graphics, BLUE, WHITE, BLACK
 
 
 class Particle(object):
-    def __init__(self, (x, y), size, mass=1):
+    def __init__(self, pos, size, mass=1):
         random.seed(time.time())
-        self.x = x
-        self.y = y
+        self.x, self.y = pos
         self.size = size
         self.mass = mass
         self.color = WHITE
@@ -77,17 +75,16 @@ class Particle(object):
         g.draw_circle(self.x, self.y, self.size, self.color)
 
 class Sim(Graphics):
-    def __init__(self):
-        Graphics.__init__(self, strip_width, strip_height)
-        print("strip_width: %d strip_height: %d" % (strip_width, strip_height))
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
         self.fill(BLACK)
         # self.gravity = (math.pi, 100)
         self.random_vecs()
         self.particles = []
         for n in xrange(self.width*2):
-            size = random.randrange(0, int(strip_width / 3))
-            x = random.randint(size, self.width - size)
-            y = random.randint(size, self.height - size)
+            size = random.randrange(0, int(self.width / 3))
+            x = random.randint(size, self.width)
+            y = random.randint(size, self.height)
             density = random.randint(1, 20)
             particle = Particle((x, y), size, (density * size)**2)
             particle.color = [200 - density * 10, 200 - density * 10, 0xff]

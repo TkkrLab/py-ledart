@@ -1,4 +1,3 @@
-from Ledart.stripinfo import strip_width, strip_height
 from Ledart.utils import chunked
 from Ledart.Tools.Graphics import Graphics, BLUE, WHITE, BLACK
 
@@ -24,8 +23,8 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
     return rightMin + (valueScaled * rightSpan)
 
 class VUmeter(Graphics):
-    def __init__(self):
-        Graphics.__init__(self, strip_width, strip_height)
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
         self.inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
         self.inp.setchannels(1)
         self.inp.setrate(4000)
@@ -41,7 +40,6 @@ class VUmeter(Graphics):
                 h = int(audioop.avg(chunk, 1))
                 c1 = h * 4
                 c = [min(0xff, c1), 0xff - min(0xff, c1), 0]
-
                 self.draw_line(x, self.height, x, self.height - h, c)
         # for x in range(0, self.width):
         #     if l:

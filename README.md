@@ -29,39 +29,32 @@ other features include easily previewing your creations, with a matrix simulator
 ## configuration for the commandline tool.
 a example config might look like:
 ```python
-# import all needed submodules
+# import all patterns availble for use.
 from Ledart.Lmcp import *
 from Ledart.Artnet import *
-from Ledart.stripinfo import *
+from Ledart.utils import *
 from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 
 localhost = "localhost"
 dest = localhost
 
 width, height = 32, 32
-set_strip_dimensions(matrix(0, 0, width, height))
+dims = matrix(0, 0, width, height)
 
-# sendout with the ArtNet protocol
-protocol = ArtNet()
-
-# use None to not sendout anything
-# protocol = None
-
+# don't send out anything.
+protocol = None
 # start the simulator for a nice demo.
-matrixsim = MatrixScreen(width=width,
-                         height=height,
-                         pixelsize=10,
+matrixsim = MatrixScreen(dims=dims,
+                         pixelsize=7,
                          fullscreen=False,
                          interface=interface_opts["pygame"])
-# or use None to not start the simulator.
-# matrixsim = None
 
-# import patterns.
 from Ledart.Patterns.Patterns import *
 
 targets = {
-    dest: PixelLife(color=(0, 0, 0xff)),
+    dest: PixelLife(dims=dims, color=(0, 0, 0xff)),
 }
+
 
 ```
 and is called like:
@@ -69,23 +62,37 @@ and is called like:
     $ python -m Ledart --conf=pathtoconfig/the_conf.py
 ```
 
-you simply import a protocol from a submodule like Artnet and set the variable protocol with it.
+calling the script with:
+```
+    $ python -m Ledart
+```
+
+will give you a nice demo of the above code.
+
+
+you import a protocol from a submodule like Artnet and set the variable protocol with it.
 
 then you can decide to run a simulator, like the one based on pygame.
 
 if any of the variables ``` protocol ``` or ``` matrixsim ``` is set to ``` None```, the tool wil simply not run that part of the interface.
 
 so to be clear if ``` protocol ``` is set to ``` None```, no data wil be sendout via a protocol,
-and when ``` matrixim``` is set to ``` None``` no simulation will be run.
+and when ``` matrixsim``` is set to ``` None``` no simulation will be run.
 
-``` set_strip_dimensions() ``` must always be called either with ``` matrix(x, y, width, height)```
+a dimension representing a matrix or a led strip must always be passed to a pattern and/or the matrixsimulator.
 
-or with ``` ledstrip(length) ```
+a dimension object can be constructed with: ``` ledstrip(length=number_of_pixel) ```
+
+or with: ``` matrix(x=x_pos, y=y_pos, width=width_in_pixel, height=height_in_pixels) ```
 
 ```targets``` is a list of pairs,
 where the left value is the destination, like ip or hostname.
 
 and the right value is a pattern to run.
+
+notice that if you pass a hostename instead of a ip address, the hostname will be tried to be resolved when a protocol is specified.
+
+it might error when it's not able to find it.
 
 the pattern follows like:
 ```
@@ -110,7 +117,7 @@ a real case might look like:
 ```
 targets = 
     {
-        '10.42.3.42' : PixelLife(),
+        '10.42.3.42' : PixelLife(dims=matrix(0, 0, 32, 32)),
     }
 ```
 
@@ -137,7 +144,7 @@ keep in mind the pypi version probably lacks behind some.
 
 the dependencies currently include:
 ```
-    Pillow >= 3.3.0
+    Pillow >= 2.9.0
     PyOpenGL >= 3.1.0
     PyUserInput >= 0.1.10
     cffi >= 1.7.0
