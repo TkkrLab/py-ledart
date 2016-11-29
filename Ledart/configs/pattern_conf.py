@@ -27,6 +27,7 @@ matrixsim = MatrixScreen(dims=dims,
                          interface=interface_opts["pygame"])
 
 targets = {
+    # dest: Ca(dims=dims),
     # dest: FillTest(dims=dims),
     # dest: Tron(dims=dims),
     # dest: Snake(dims=dims, speed=17),
@@ -36,7 +37,7 @@ targets = {
     # dest: RandomLife(dims=dims),
     # dest: Mandelbrot(dims=dims),
     # dest: Sim(dims=dims),
-    dest: PixelLife(dims=dims, color=(0, 0, 0xFF)),
+    # dest: PixelLife(dims=dims, color=(0, 0, 0xFF)),
     # dest: SuperPixelBros(dims=dims),
     # dest: Pong(dims=dims, speed=5),
     # dest: Pong(dims=dims, speed=8),
@@ -68,5 +69,5 @@ targets = {
     # dest: GraphicsLineTest(dims=dims),
     # dest: GraphicsPixelTest(dims=dims),
     # dest: GraphicsDotTest(dims=dims),
-    # dest: VUmeter(dims=dims)
+    dest: VUmeter(dims=dims)
 }

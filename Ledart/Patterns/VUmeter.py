@@ -25,23 +25,25 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 class VUmeter(Graphics):
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
-        self.inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE)
-        self.inp.setchannels(2)
-        self.inp.setrate(44100)
-        self.inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-        self.period = kwargs.get('period', 32)
-        self.inp.setperiodsize(self.period)
+        self.stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
+        self.stream.setchannels(2)
+        self.stream.setrate(8000)
+        self.stream.setformat(alsaaudio.PCM_FORMAT_S16_LE)
+        self.stream.setperiodsize(self.width)
 
     def generate(self):
         self.fill(BLACK)
-        l, data = self.inp.read()
+        l, data = self.stream.read()
+        h = 0
         if l:
-            for x, chunk in chunked(data, len(data) / self.period):
-                h = int(audioop.avg(chunk, 1))
-                c1 = h * 4
-                c = [min(0xff, c1), 0xff - min(0xff, c1), 0]
-                self.draw_line(x, self.height, x, self.height - h, c)
-        # for x in range(0, self.width):
-        #     if l:
-        #         self.h = audioop.max(data, 2) / 4
-        #     self.draw_line(x, self.height, x, self.height - self.h, BLUE)
+            for x, data in chunked(data, len(data) / self.width):
+                # try:
+                if not (len(data) & 1):
+                    h = audioop.max(data, 2) / 100
+                # except Exception as e:
+                #     # print(e)
+                #     pass
+                color = [min(h, 0xff), max(0xff - h, 0), 0]
+                self.draw_line(x, self.height, x, self.height - h, color)
+            # print((audioop.max(data, 2) / 100) * "*")
+        # self.draw_line(0, 0, self.width, 0, BLUE)
