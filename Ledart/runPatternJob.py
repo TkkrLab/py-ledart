@@ -23,7 +23,7 @@ protocol, matrixscreen, targets = None, None, None
 
 
 def tst_patterns(directory, showpass=False):
-    test_dims = matrix(x=0, y=0, width=10, height=17)
+    test_dims = matrix(x=0, y=0, width=128, height=64)
 
     failed = []
 

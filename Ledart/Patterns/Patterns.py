@@ -34,6 +34,7 @@ try:
     from Fire import *
     from Sim import *
     from VUmeter import *
+    from Fft import *
 except Exception as e:
     debugprint("Various patterns >>", e)
     traceback.print_exc()

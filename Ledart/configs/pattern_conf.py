@@ -69,5 +69,6 @@ targets = {
     # dest: GraphicsLineTest(dims=dims),
     # dest: GraphicsPixelTest(dims=dims),
     # dest: GraphicsDotTest(dims=dims),
-    dest: VUmeter(dims=dims)
+    # dest: VUmeter(dims=dims)
+    dest: Fft(dims=dims)
 }
