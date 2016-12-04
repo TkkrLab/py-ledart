@@ -42,6 +42,15 @@ class Graphics(Surface):
 
 # wiki http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
     def draw_line(self, x1, y1, x2, y2, color):
+        if x1 < 0 or x1 >= self.width:
+            return
+        if x2 < 0 or x2 >= self.width:
+            return
+        if y1 < 0 or y1 >= self.height:
+            return
+        if y2 < 0 or y2 >= self.height:
+            return
+
         x1, y1 = int(x1), int(y1)
         x2, y2 = int(x2), int(y2)
         issteep = abs(y2 - y1) > abs(x2 - x1)
@@ -62,15 +71,19 @@ class Graphics(Surface):
             ystep = 1
         else:
             ystep = -1
-        for x in xrange(x1, x2 + 1):
-            if issteep:
-                self.draw_pixel(y, x, color)
-            else:
-                self.draw_pixel(x, y, color)
-            error -= deltay
-            if error < 0:
-                y += ystep
-                error += deltax
+        try:
+            for x in xrange(x1, x2 + 1):
+                if issteep:
+                    self.draw_pixel(y, x, color)
+                else:
+                    self.draw_pixel(x, y, color)
+                error -= deltay
+                if error < 0:
+                    y += ystep
+                    error += deltax
+        except Exception as e:
+            print("x1: %d x2: %d" % (x1 , x2))
+            raise e
 
     def draw_rect(self, x, y, width, height, color):
         x, y = int(x), int(y)

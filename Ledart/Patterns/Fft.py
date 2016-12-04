@@ -20,8 +20,8 @@ class Fft(Graphics):
         if(self.sound_mode == 'stereo'):
             self.no_channels = 2
 
-        self.sample_rate = 44100 / 2
-        self.chunk = 512
+        self.sample_rate = 44100 / 4
+        self.chunk = 512 / 2
 
         self.stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
         self.stream.setchannels(self.no_channels)
@@ -49,7 +49,7 @@ class Fft(Graphics):
         self.fill(BLACK)
 
         l, data = self.stream.read()
-
+        self.stream.pause(1)
         if l:
             try:
                 matrix = self.calc_levels(data)
@@ -66,3 +66,5 @@ class Fft(Graphics):
             except Exception as e:
                 if e.message != "not a whole number of frames":
                     raise e
+        time.sleep(0.001)
+        self.stream.pause(0)

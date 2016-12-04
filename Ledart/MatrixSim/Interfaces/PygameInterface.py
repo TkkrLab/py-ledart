@@ -9,7 +9,7 @@ class PygameInterface(Interface):
     """
     def __init__(self, width, height, blocksize, fullscreen=False):
         Interface.__init__(self, width, height, blocksize)
-        self.flags = pygame.DOUBLEBUF | pygame.HWSURFACE
+        self.flags = 0
         if fullscreen:
             self.flags |= pygame.FULLSCREEN
         self.window = pygame.display.set_mode((self.width, self.height),
