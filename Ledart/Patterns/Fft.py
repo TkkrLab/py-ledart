@@ -11,7 +11,7 @@ class Fft(Graphics):
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
 
-        self.mode = kwargs.get('mode', 1)
+        self.mode = kwargs.get('mode', 3)
         self.sound_mode = kwargs.get('soundmode', 'stereo')
         self.topcolor = kwargs.get('topcolor', GREEN)
         self.barcolor = kwargs.get('barcolor', BLUE)
@@ -61,6 +61,8 @@ class Fft(Graphics):
                         self.draw_line(x, self.height - matrix[x], x, self.height-1, BLUE)
                     elif self.mode == 2:
                         self.draw_pixel(x, self.height - matrix[x], GREEN)
+                    elif self.mode == 3:
+                        self.draw_line(x, (self.height / 2) - matrix[x], x, (self.height / 2) + matrix[x], GREEN)
                     else:
                         if x >= (self.width - 1):
                             self.draw_pixel(x, self.height - matrix[x] + self.min, GREEN)

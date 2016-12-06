@@ -20,12 +20,12 @@ width, height = 128, 64
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-# protocol = LegacyLmcp(dispmode=rgb24)
+protocol = LegacyLmcp(dispmode=rgb24)
 
-matrixsim = MatrixScreen(dims=dims,
-                         pixelsize=7,
-                         fullscreen=False,
-                         interface=interface_opts["pygame"])
+# matrixsim = MatrixScreen(dims=dims,
+#                          pixelsize=7,
+#                          fullscreen=False,
+#                          interface=interface_opts["pygame"])
 
 targets = {
     # dest: Ca(dims=dims),
