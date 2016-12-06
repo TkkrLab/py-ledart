@@ -1,8 +1,9 @@
 from Ledart.Tools.Graphics import Graphics, BLUE, BLACK, GREEN
 
-import numpy
+import traceback
 import alsaaudio
 import struct
+import numpy
 import time
 
 
@@ -21,7 +22,7 @@ class Fft(Graphics):
             self.no_channels = 2
 
         self.sample_rate = 44100 / 4
-        self.chunk = 512 / 2
+        self.chunk = self.width * 4
 
         self.stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
         self.stream.setchannels(self.no_channels)
@@ -38,10 +39,10 @@ class Fft(Graphics):
         # remove last element in array to makeit the same size as chunk
         fourier = numpy.delete(fourier, len(fourier) - 1)
         # find amplitude
-        power = numpy.log10(numpy.abs(fourier)) ** 2
+        power = numpy.log(numpy.abs(fourier)) ** 2
         # arrange array into self.width bars
         power = numpy.reshape(power, (self.width, (self.chunk / (3 - self.no_channels)) / self.width))
-        matrix = numpy.int_(numpy.average(power, axis=1))
+        matrix = numpy.int_(numpy.average(power, axis=1) / 4)
 
         return matrix
 
@@ -53,6 +54,7 @@ class Fft(Graphics):
         if l:
             try:
                 matrix = self.calc_levels(data)
+                self.min = min(matrix)
                 for x in xrange(len(matrix)):
                     if self.mode == 1:
                         self.draw_line(x, self.height, x, self.height - matrix[x], BLUE)
@@ -60,10 +62,13 @@ class Fft(Graphics):
                         self.draw_pixel(x, self.height - matrix[x], GREEN)
                     else:
                         if x >= (self.width - 1):
-                            self.draw_pixel(x, self.height - matrix[x], GREEN)
+                            self.draw_pixel(x, self.height - matrix[x] + self.min, GREEN)
                         else:
-                            self.draw_line(x, self.height - matrix[x], x, self.height - matrix[x + 1], GREEN)
+                            hl = self.height - matrix[x] + self.min
+                            hr = self.height - matrix[x + 1] + self.min
+                            self.draw_line(x, hl, x, hr, GREEN)
             except Exception as e:
+                traceback.print_exc()
                 if e.message != "not a whole number of frames":
                     raise e
         time.sleep(0.001)

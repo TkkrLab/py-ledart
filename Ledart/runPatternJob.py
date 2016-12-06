@@ -80,9 +80,7 @@ def sendout(args, targets, protocol):
     except Exception as e:
         traceback.print_exc()
         print("\r\ndest: %s" % (t))
-        print("pattern size, width, height: ",
-              pattern.get_size(), pattern.get_width(),
-              pattern.get_height())
+        print(pattern.__repr__)
         cleanup(8)
 sendout.previous = Surface(width=10, height=10)
 

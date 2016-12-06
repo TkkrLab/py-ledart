@@ -15,7 +15,8 @@ bcast = '10.42.0.0'
 moo = 'moo'
 
 dest = megamatrix
-width, height = 128, 64
+# width, height = 17, 10
+width, height = 128 * 4, 64
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
