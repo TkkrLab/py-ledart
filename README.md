@@ -127,6 +127,11 @@ install these through your favorite packagemanager:
     ffmpeg
     pygame
 ```
+make sure numpy is installed
+```
+    pip install git+https://bitbucket.org/pypy/numpy.git
+```
+notice it's pypy's for of numpy.
 
 ## installation
 installing the software is as easy as installing it with pip

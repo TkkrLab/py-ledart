@@ -12,7 +12,7 @@ class Fft(Graphics):
         Graphics.__init__(self, **kwargs)
 
         self.mode = kwargs.get('mode', 0)
-        self.sound_mode = kwargs.get('soundmode', 'mono')
+        self.sound_mode = kwargs.get('soundmode', 'stereo')
         self.topcolor = kwargs.get('topcolor', GREEN)
         self.barcolor = kwargs.get('barcolor', BLUE)
 
@@ -50,7 +50,7 @@ class Fft(Graphics):
         self.fill(BLACK)
 
         l, data = self.stream.read()
-        self.stream.pause(1)
+
         if l:
             try:
                 matrix = self.calc_levels(data)
@@ -71,5 +71,3 @@ class Fft(Graphics):
                 traceback.print_exc()
                 if e.message != "not a whole number of frames":
                     raise e
-        time.sleep(0.001)
-        self.stream.pause(0)

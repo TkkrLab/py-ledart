@@ -7,3 +7,4 @@ venv/
 Ledart.egg-info*
 py-ledart.sublime-project*
 py-ledart.sublime-workspace*
+*.cprof
