@@ -42,14 +42,14 @@ class Graphics(Surface):
 
 # wiki http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
     def draw_line(self, x1, y1, x2, y2, color):
-        if x1 < 0 or x1 >= self.width:
-            return
-        if x2 < 0 or x2 >= self.width:
-            return
-        if y1 < 0 or y1 >= self.height:
-            return
-        if y2 < 0 or y2 >= self.height:
-            return
+        # if x1 < 0 or x1 >= self.width:
+        #     return
+        # if x2 < 0 or x2 >= self.width:
+        #     return
+        # if y1 < 0 or y1 >= self.height:
+        #     return
+        # if y2 < 0 or y2 >= self.height:
+        #     return
 
         x1, y1 = int(x1), int(y1)
         x2, y2 = int(x2), int(y2)

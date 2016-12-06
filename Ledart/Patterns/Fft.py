@@ -11,7 +11,7 @@ class Fft(Graphics):
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
 
-        self.mode = kwargs.get('mode', 0)
+        self.mode = kwargs.get('mode', 1)
         self.sound_mode = kwargs.get('soundmode', 'stereo')
         self.topcolor = kwargs.get('topcolor', GREEN)
         self.barcolor = kwargs.get('barcolor', BLUE)
@@ -39,10 +39,11 @@ class Fft(Graphics):
         # remove last element in array to makeit the same size as chunk
         fourier = numpy.delete(fourier, len(fourier) - 1)
         # find amplitude
-        power = numpy.log(numpy.abs(fourier)) ** 2
+        # power = numpy.log(numpy.abs(fourier)) ** 2
+        power = numpy.abs(fourier) / 10000
         # arrange array into self.width bars
         power = numpy.reshape(power, (self.width, (self.chunk / (3 - self.no_channels)) / self.width))
-        matrix = numpy.int_(numpy.average(power, axis=1) / 4)
+        matrix = numpy.int_(numpy.average(power, axis=1))
 
         return matrix
 
@@ -54,10 +55,10 @@ class Fft(Graphics):
         if l:
             try:
                 matrix = self.calc_levels(data)
-                self.min = min(matrix)
+                self.min = min(matrix) - 1
                 for x in xrange(len(matrix)):
                     if self.mode == 1:
-                        self.draw_line(x, self.height, x, self.height - matrix[x], BLUE)
+                        self.draw_line(x, self.height - matrix[x], x, self.height-1, BLUE)
                     elif self.mode == 2:
                         self.draw_pixel(x, self.height - matrix[x], GREEN)
                     else:
