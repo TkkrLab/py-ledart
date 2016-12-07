@@ -1,4 +1,5 @@
 from Ledart.Tools.Graphics import Graphics, BLUE, BLACK, GREEN
+from Ledart.utils import translate
 
 import traceback
 import alsaaudio
@@ -12,7 +13,7 @@ class Fft(Graphics):
         Graphics.__init__(self, **kwargs)
 
         self.mode = kwargs.get('mode', 3)
-        self.sound_mode = kwargs.get('soundmode', 'stereo')
+        self.sound_mode = kwargs.get('soundmode', 'mono')
         self.topcolor = kwargs.get('topcolor', GREEN)
         self.barcolor = kwargs.get('barcolor', BLUE)
 
@@ -56,6 +57,7 @@ class Fft(Graphics):
             try:
                 matrix = self.calc_levels(data)
                 self.min = min(matrix) - 1
+                self.max = max(matrix)
                 for x in xrange(len(matrix)):
                     if self.mode == 1:
                         self.draw_line(x, self.height - matrix[x], x, self.height-1, BLUE)

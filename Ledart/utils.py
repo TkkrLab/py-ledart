@@ -106,21 +106,23 @@ def load_targets(configfile):
     # test if the config file exists, if not it's maybe a local file
     # and else it's probably a path description + file.
     basepath = os.path.dirname(os.path.realpath(__file__))
-    variables = {}
-    variables['basedir'] = basepath
+    variables = dict()
+    # variables['basedir'] = basepath
     
     if not os.path.exists(configfile):
         configfile = os.path.join(basepath, "configs", configfile)
-    
-    # print("loading config from: %s" % (configfile))
-    execfile(configfile, variables)
+
+    with open(configfile) as f:
+        exec(f, variables)
 
     targets = variables.get('targets', None)
     protocol = variables.get('protocol', None)
     matrix_sim = variables.get('matrixsim', None)
 
+    # print("configfile: %s" % configfile)
     # print("protocol: %s" % protocol)
     # print("matrixsim: %s" % matrix_sim)
+    # print("targets: %s" % (str(targets)))
 
     return (targets, protocol, matrix_sim)
 
