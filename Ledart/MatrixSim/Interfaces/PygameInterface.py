@@ -14,7 +14,7 @@ class PygameInterface(Interface):
             self.flags |= pygame.FULLSCREEN
         self.window = pygame.display.set_mode((self.width, self.height),
                                               self.flags)
-        if blocksize <= 6:
+        if blocksize < 4:
             self.pixelsurface = pygame.Surface((blocksize, blocksize))
         else:
             self.pixelsurface = pygame.Surface((blocksize - 2, blocksize - 2))
@@ -36,8 +36,8 @@ class PygameInterface(Interface):
 
             # check if the mouse pointer is on/in the window.
             # and if so hide it.
-            focused = pygame.mouse.get_focused()
-            pygame.mouse.set_visible(not focused)
+            # focused = pygame.mouse.get_focused()
+            # pygame.mouse.set_visible(not focused)
 
     def setcaption(self, caption):
         pygame.display.set_caption(caption + " (pygame)")

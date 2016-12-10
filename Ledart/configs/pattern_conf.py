@@ -23,7 +23,7 @@ dims = matrix(x=0, y=0, width=width, height=height)
 # protocol = LegacyLmcp(dispmode=rgb24)
 
 matrixsim = MatrixScreen(dims=dims,
-                         pixelsize=7,
+                         pixelsize=4,
                          fullscreen=False,
                          interface=interface_opts["pygame"])
 
@@ -71,5 +71,10 @@ targets = {
     # dest: GraphicsPixelTest(dims=dims),
     # dest: GraphicsDotTest(dims=dims),
     # dest: VUmeter(dims=dims)
-    1: Fft(dims=dims, mode=0),
+    dest: Fft(dims=dims, mode=1),
+
+    # 1: Fft(dims=matrix(0, 0, 64, 32), mode=0),
+    # 2: Fft(dims=matrix(0, 32, 64, 32), mode=1),
+    # 3: Fft(dims=matrix(64, 0, 64, 32), mode=2),
+    # 4: Fft(dims=matrix(64, 32, 64, 32), mode=3),
 }

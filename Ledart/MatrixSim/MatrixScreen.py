@@ -61,20 +61,20 @@ class MatrixScreen(object):
             color = data[index]
 
             # only draw if pixels differ
-            # if color != self.psurface[index]:
+            if color != self.psurface[index]:
                 # calculate position based on index, pixelsize, and data offset.
-            x, y = index
-            x, y = x * self.pixelSize, y * self.pixelSize
-            xo, yo = data.get_d_offset()
-            xo, yo = xo * self.pixelSize, yo * self.pixelSize
-            x, y = x + xo, y + yo
-            # create a rect based on calculated positions.
-            width, height = self.pixelSize, self.pixelSize
-            rect = (x, y, width, height)
-            # draw the actual block
-            self.interface.drawblock(rect, color)
-            # store the color we just drew
-            self.psurface[index] = color
+                x, y = index
+                x, y = x * self.pixelSize, y * self.pixelSize
+                xo, yo = data.get_d_offset()
+                xo, yo = xo * self.pixelSize, yo * self.pixelSize
+                x, y = x + xo, y + yo
+                # create a rect based on calculated positions.
+                width, height = self.pixelSize, self.pixelSize
+                rect = (x, y, width, height)
+                # draw the actual block
+                self.interface.drawblock(rect, color)
+                # store the color we just drew
+                self.psurface[index] = color
 
     def process(self, data):
         self.draw(data)

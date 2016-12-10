@@ -23,7 +23,7 @@ class Fft(Graphics):
             self.no_channels = 2
 
         self.sample_rate = 44100 / 4
-        self.chunk = self.width * 4
+        self.chunk = self.width * 2
 
         self.stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
         self.stream.setchannels(self.no_channels)
@@ -37,16 +37,9 @@ class Fft(Graphics):
         data = numpy.array(data, dtype='h')
         # apply fft - real data so rfft is used
         fourier = numpy.fft.rfft(data)
-        # remove last element in array to makeit the same size as chunk
-        fourier = numpy.delete(fourier, len(fourier) - 1)
-        # find amplitude
-        # power = numpy.log(numpy.abs(fourier)) ** 2
-        power = numpy.abs(fourier) / 10000
-        # arrange array into self.width bars
-        power = numpy.reshape(power, (self.width, (self.chunk / (3 - self.no_channels)) / self.width))
-        matrix = numpy.int_(numpy.average(power, axis=1))
+        fourier = [abs(val.real) / 10000 for val in fourier[:len(fourier)-1]]
+        return fourier
 
-        return matrix
 
     def generate(self):
         self.fill(BLACK)
@@ -56,11 +49,12 @@ class Fft(Graphics):
         if l:
             try:
                 matrix = self.calc_levels(data)
-                self.min = min(matrix) - 1
-                self.max = max(matrix)
+                # self.min = min(matrix)
+                # self.max = max(matrix)
                 for x in xrange(len(matrix)):
                     if self.mode == 1:
-                        self.draw_line(x, self.height - matrix[x], x, self.height-1, BLUE)
+                        h = self.height - matrix[x]
+                        self.draw_line(x, self.height - matrix[x], x, self.height, BLUE)
                     elif self.mode == 2:
                         self.draw_pixel(x, self.height - matrix[x], GREEN)
                     elif self.mode == 3:
