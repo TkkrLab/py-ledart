@@ -135,5 +135,7 @@ def checkList(first, second):
 def translate(value, leftmin, leftmax, rightmin, rightmax):
     leftspan = leftmax - leftmin
     rightspan = rightmax - rightmin
+    if leftspan == 0:
+        return 0
     valuescaled = float(value - leftmin) / float(leftspan)
     return rightmin + (valuescaled * rightspan)

@@ -71,7 +71,7 @@ targets = {
     # dest: GraphicsPixelTest(dims=dims),
     # dest: GraphicsDotTest(dims=dims),
     # dest: VUmeter(dims=dims)
-    dest: Fft(dims=dims, mode=1),
+    dest: Fft(dims=dims, mode=4),
 
     # 1: Fft(dims=matrix(0, 0, 64, 32), mode=0),
     # 2: Fft(dims=matrix(0, 32, 64, 32), mode=1),
