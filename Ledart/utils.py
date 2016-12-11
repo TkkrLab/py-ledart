@@ -40,6 +40,24 @@ def to_matrix(l, n):
     """
     return [l[i:i + n] for i in range(0, len(l), n)]
 
+def xfrange(start, stop, step):
+    """
+        returns a iterator that has a range of floats.
+        with float start till float stop with float steps.
+    """
+    i = 0
+    while start + i * step < stop:
+        yield start + i * step
+        i += 1
+
+def translate(value, leftmin, leftmax, rightmin, rightmax):
+    leftspan = leftmax - leftmin
+    rightspan = rightmax - rightmin
+    if leftspan == 0:
+        return 0
+    valuescaled = float(value - leftmin) / float(leftspan)
+    return rightmin + (valuescaled * rightspan)
+
 """ prints out a trace """
 def get_trace():
     exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -131,11 +149,3 @@ def checkList(first, second):
         if item1 != item2:
             return False
     return True
-
-def translate(value, leftmin, leftmax, rightmin, rightmax):
-    leftspan = leftmax - leftmin
-    rightspan = rightmax - rightmin
-    if leftspan == 0:
-        return 0
-    valuescaled = float(value - leftmin) / float(leftspan)
-    return rightmin + (valuescaled * rightspan)

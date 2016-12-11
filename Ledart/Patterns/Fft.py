@@ -28,17 +28,24 @@ class Fft(Graphics):
 
         self.fouriers = []
 
+    def get_complex_abs(self, value):
+        return ((value.real ** 2) + (value.imag ** 2)) ** 0.5
+
     def calc_levels(self, data):
         # convert raw data to numpy array
         data = struct.unpack("%dh" % (len(data) / 2), data)
         data = numpy.array(data, dtype='h')
         # apply fft - real data so rfft is used
         fourier = numpy.fft.rfft(data)
-        fourier = [int(abs(val.real) / 4000) for val in fourier[:len(fourier)-1]]
+        fourier = [self.get_complex_abs(val) for i, val in enumerate(fourier[:len(fourier)-1])]
+        fourier = [translate(val, min(fourier), max(fourier), 1, self.height * 0.8)  for val in fourier]
         return fourier
 
     def mean(self, a):
         return sum(a) / len(a)
+
+    def average_lists(self, lists):
+        return map(self.mean, zip(*lists))
 
     def generate(self):
         self.fill(BLACK)
@@ -51,21 +58,22 @@ class Fft(Graphics):
                 if len(self.fouriers) > 4:
                     del self.fouriers[0]
 
-                matrix = map(self.mean, zip(*self.fouriers))
+                fourier_data = map(self.mean, zip(*self.fouriers))
+                fourier_data = map(int, fourier_data)
 
-                for x in xrange(len(matrix)):
+                for x in xrange(len(fourier_data)):
                     if self.mode == 1:
-                        self.draw_line(x, self.height - matrix[x], x, self.height, BLUE)
+                        self.draw_line(x, self.height - fourier_data[x], x, self.height, BLUE)
                     elif self.mode == 2:
-                        self.draw_pixel(x, self.height - matrix[x], GREEN)
+                        self.draw_pixel(x, self.height - fourier_data[x], GREEN)
                     elif self.mode == 3:
-                        self.draw_line(x, (self.height / 2) - matrix[x], x, (self.height / 2) + matrix[x], GREEN)
+                        self.draw_line(x, (self.height / 2) - fourier_data[x], x, (self.height / 2) + fourier_data[x], GREEN)
                     elif self.mode == 4:
                         if x >= (self.width - 1):
-                            self.draw_pixel(x, self.height - matrix[x], GREEN)
+                            self.draw_pixel(x, self.height - fourier_data[x], GREEN)
                         else:
-                            hl = self.height - matrix[x]
-                            hr = self.height - matrix[x + 1]
+                            hl = self.height - fourier_data[x]
+                            hr = self.height - fourier_data[x + 1]
                             self.draw_line(x, hl, x, hr, GREEN)
                     else:
                         raise Exception("Unknown Mode")

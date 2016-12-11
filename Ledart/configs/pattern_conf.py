@@ -17,6 +17,7 @@ moo = 'moo'
 dest = megamatrix
 # width, height = 17, 10
 width, height = 128, 64
+# width, height = 256, 128
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
@@ -70,8 +71,13 @@ targets = {
     # dest: GraphicsLineTest(dims=dims),
     # dest: GraphicsPixelTest(dims=dims),
     # dest: GraphicsDotTest(dims=dims),
+    dest: SpiroGraph(dims=dims),
     # dest: VUmeter(dims=dims)
-    dest: Fft(dims=dims, mode=4),
+
+    # dest: Fft(dims=dims, mode=1),
+    # dest: Fft(dims=dims, mode=2),
+    # dest: Fft(dims=dims, mode=3),
+    # dest: Fft(dims=dims, mode=4),
 
     # 1: Fft(dims=matrix(0, 0, 64, 32), mode=0),
     # 2: Fft(dims=matrix(0, 32, 64, 32), mode=1),
