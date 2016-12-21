@@ -36,6 +36,7 @@ try:
     from VUmeter import *
     from Fft import *
     from SpiroGraph import *
+    from MetaBalls import *
 except Exception as e:
     debugprint("Various patterns >>", e)
     traceback.print_exc()
