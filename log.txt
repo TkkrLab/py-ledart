@@ -1,3 +1,0 @@
-current fps: 0.00 average: 0.00            current fps: 2.39 average: 1.19            
-
-Exiting(3) closing connections.
