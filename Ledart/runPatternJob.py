@@ -66,7 +66,6 @@ def sendout(args, targets, protocol):
             # generate the next set of images to send.
             pattern.generate()
             if matrixscreen:
-                matrixscreen.handleinput()
                 matrixscreen.process(pattern)
             if args.sendOnChange:
                 changed = (Surface(pattern) != Surface(sendout.previous))
@@ -90,6 +89,7 @@ def cleanup(d):
     os.system('stty sane; echo ""')
     if protocol:
         protocol.close()
+    matrixscreen.close()
     sys.exit(0)
 
 def sigint_handler(signal, frame):

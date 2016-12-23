@@ -4,7 +4,8 @@ from Ledart.Lmcp import *
 from Ledart.Artnet import *
 from Ledart.utils import matrix
 from Ledart.Patterns.Patterns import *
-from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
+from Ledart.MatrixSim.DetachedSim import DetachedScreen
+from Ledart.MatrixSim.MatrixScreen import interface_opts
 
 pixelmatrix = "Arduino-42"
 ledboard = 'ledboard'
@@ -23,10 +24,14 @@ dims = matrix(x=0, y=0, width=width, height=height)
 # protocol = LegacyLmcp(dispmode=grayscale)
 # protocol = LegacyLmcp(dispmode=rgb24)
 
-matrixsim = MatrixScreen(dims=dims,
-                         pixelsize=1,
-                         fullscreen=False,
-                         interface=interface_opts["pygame"])
+# matrixsim = MatrixScreen(dims=dims,
+#                          pixelsize=1,
+#                          fullscreen=False,
+#                          interface=interface_opts["pygame"])
+matrixsim = DetachedScreen(dims=dims,
+                           pixelsize=1,
+                           fullscreen=False,
+                           interface=interface_opts["pygame"])
 
 targets = {
     # dest: Ca(dims=dims),
@@ -49,7 +54,7 @@ targets = {
     # dest: DisplayImage(dims=dims, fname='/home/duality/Pictures/System-Shock-2.jpg'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad.mkv'),
-    dest: CamCapture(dims=dims),
+    # dest: CamCapture(dims=dims),
     # dest: Water(dims=dims),
     # dest: AliasedWPlasma(dims=dims),
     # dest: AliasedFire(dims=dims),
@@ -72,7 +77,7 @@ targets = {
     # dest: GraphicsPixelTest(dims=dims),
     # dest: GraphicsDotTest(dims=dims),
     # dest: SpiroGraph(dims=dims),
-    # dest: MetaBalls(dims=dims),
+    dest: MetaBalls(dims=dims),
     # dest: VUmeter(dims=dims)
 
     # dest: Fft(dims=dims, mode=1),

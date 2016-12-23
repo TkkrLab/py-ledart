@@ -77,6 +77,9 @@ class MatrixScreen(object):
                 self.psurface[index] = color
 
     def process(self, data):
+        # handle user input
+        self.handleinput()
+        # draw the data
         self.draw(data)
         # update the screen so our data is shown.
         self.interface.update()

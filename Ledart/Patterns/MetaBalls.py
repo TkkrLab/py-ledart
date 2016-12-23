@@ -135,6 +135,7 @@ class Ball(object):
 class MetaBalls(Graphics):
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
+        return
         self.balls = []
         for i in range(10):
             size = random.randint(4, 10)
@@ -146,6 +147,7 @@ class MetaBalls(Graphics):
         self.max = 0
  
     def generate(self):
+        return
         self.fill(BLACK)
 
         for point in self.indexes:
