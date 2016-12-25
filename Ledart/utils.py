@@ -1,5 +1,8 @@
 import os, sys
 import traceback
+from pprint import pprint
+
+from Ledart.ArgumentParser import get_args
 
 
 """
@@ -68,12 +71,15 @@ def get_trace():
 
 """ returns a list of objects found in a directory/module """
 def find_patterns_in_dir(dir):
+    args = get_args()
     patterns = []
+
     # see if dir is already in path. else add it.
     if dir not in sys.path:
         sys.path.append(dir)
     else:
         print("directory in path.")
+
     # for everything in a directory.
     for item in os.listdir(dir):
         # if it is a source file.
@@ -81,10 +87,12 @@ def find_patterns_in_dir(dir):
             # extract the file name and import it.
             sfile = item.split('.')[0]
             try:
-                print(sfile)
+                if args.debug:
+                    print("sfile: %s", str(sfile))
                 mod = __import__(sfile)
             except Exception as e:
-                print("%s:Couldn't import module cause: %s" % (sfile, e))
+                if args.debug:
+                    print("%s:Couldn't import module cause: %s" % (sfile, e))
                 traceback.print_exc()
                 continue
             # extract classes
@@ -116,19 +124,30 @@ def get_pattern_classes(module):
     # return a list of classes that have a generate function in them
     return patterns
 
-""" loads variables from a config file, that is actually a python file."""
+""" loads variables from a config file. (python file) """
 def load_targets(configfile):
     # this function allows loading of the config files specified by
     # --config=configfile and load patterns defined in there.
+    args = get_args()
 
     # test if the config file exists, if not it's maybe a local file
     # and else it's probably a path description + file.
     basepath = os.path.dirname(os.path.realpath(__file__))
-    variables = dict()
-    # variables['basedir'] = basepath
     
+    configpath = os.path.join(basepath, "configs")
     if not os.path.exists(configfile):
-        configfile = os.path.join(basepath, "configs", configfile)
+        configfile = os.path.join(configpath, configfile)
+
+    patternpath = os.path.join(basepath, "Patterns")
+
+    variables = dict()
+    for p in find_patterns_in_dir(patternpath):
+        variables[p.__name__] = p
+    
+    if args.debug:
+        print("\nfound patterns: ")
+        pprint(variables)
+        print(" ")
 
     with open(configfile) as f:
         exec(f, variables)
@@ -137,10 +156,11 @@ def load_targets(configfile):
     protocol = variables.get('protocol', None)
     matrixsim = variables.get('matrixsim', None)
 
-    # print("configfile: %s" % configfile)
-    # print("protocol: %s" % protocol)
-    # print("matrixsim: %s" % matrix_sim)
-    # print("targets: %s" % (str(targets)))
+    if args.debug:
+        print("configfile: %s" % configfile)
+        print("protocol: %s" % protocol)
+        print("matrixsim: %s" % matrixsim)
+        print("targets: %s" % (str(targets)))
 
     return (targets, protocol, matrixsim)
 

@@ -2,7 +2,6 @@
 
 # import some generaly used libraries
 import os
-import gc
 import sys
 import imp
 import time
@@ -86,24 +85,15 @@ sendout.previous = Surface(width=10, height=10)
 # cleanup exits calls close and leaves tty in sane state.
 def cleanup(d):
     print("\nExiting(%d) closing connections." % d)
+    # make tty be sane so that if the tty/terminal screws up.
+    # this will make it workable again.
     os.system('stty sane; echo ""')
-    if protocol:
-        protocol.close()
     sys.exit(0)
-
-def sigint_handler(signal, frame):
-    cleanup(3)
-
 
 # generate no byte code
 sys.dont_write_bytecode = True
 
 def main():
-    # first thing we do register at exit function.
-    # make tty be sane so that if the tty/terminal screws up.
-    # this will make it workable again.
-    signal.signal(signal.SIGINT, sigint_handler)
-    gc.disable()
 
     from ArgumentParser import get_args
     # get command line arguments
@@ -121,6 +111,14 @@ def main():
     else:
         # load config
         targets, protocol, matrixsim = load_targets(args.config)
+
+        # register a cleanup exit function.
+        def sigint_handler(signal, frame):
+            if protocol:
+                protocol.close()
+            matrixsim.close()
+            cleanup(3)
+        signal.signal(signal.SIGINT, sigint_handler)
 
         # check if there is anything configured.
         if not len(targets):

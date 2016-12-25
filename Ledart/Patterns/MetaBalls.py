@@ -16,12 +16,13 @@ class Ball(object):
         self.max_speed = 0
 
     def update(self):
+        self.accel = self.accel.limit(1)
         self.speed += self.accel
-        self.speed *= 0.998
+        # self.speed *= 0.9989
         self.pos += self.speed
         self.accel *= 0
 
-        self.handle_collision()
+        # self.handle_collision()
 
     def handle_collision(self):
         if (self.pos.x - self.size < 0 or

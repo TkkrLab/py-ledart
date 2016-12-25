@@ -3,7 +3,6 @@ import os
 from Ledart.Lmcp import *
 from Ledart.Artnet import *
 from Ledart.utils import matrix
-from Ledart.Patterns.Patterns import *
 from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 
 pixelmatrix = "Arduino-42"
