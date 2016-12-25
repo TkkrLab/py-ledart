@@ -1,8 +1,8 @@
 from Ledart import Graphics, BLACK, BLUE, RED, WHITE
 from Ledart import translate
+from Ledart import Vector
 
 from colorsys import *
-from Ledart import Vector
 import random
 
 class Ball(object):
@@ -10,29 +10,27 @@ class Ball(object):
         self.accel = Vector(x=0, y=0)
         self.speed = Vector(x=0, y=0)
         self.pos = Vector(x=x, y=y)
+        self.drag = 0.9989
         self.size = size
         self.g = g
         self.mass = self.size ** 6 / 2
         self.max_speed = 0
 
     def update(self):
-        self.accel = self.accel.limit(1)
         self.speed += self.accel
-        # self.speed *= 0.9989
+        self.speed *= self.drag
         self.pos += self.speed
         self.accel *= 0
 
-        # self.handle_collision()
+        self.handle_collision()
 
     def handle_collision(self):
         if (self.pos.x - self.size < 0 or
             self.pos.x > self.g.width - self.size):
-            # self.pos.x -= self.speed.x
             self.pos -= self.speed
             self.speed.x *= -1
         if (self.pos.y - self.size < 0 or 
             self.pos.y > self.g.height - self.size):
-            # self.pos.y -= self.speed.y
             self.pos -= self.speed
             self.speed.y *= -1
 
@@ -49,7 +47,7 @@ class MetaBalls(Graphics):
             x = random.randint(size, self.width - size)
             y = random.randint(size, self.height - size)
             ball = Ball(g=self, x=x, y=y, size=size)
-            # ball.speed += random.randint(20, 80) / 100.
+            ball.speed += (random.randint(0, 100) - 50) / 100.
             self.balls.append(ball)
         self.max = 0
         self.totalballsize = 0
