@@ -71,9 +71,9 @@ targets = {
     # dest: GraphicsPixelTest(dims=dims),
     # dest: GraphicsDotTest(dims=dims),
     # dest: SpiroGraph(dims=dims),
-    # dest: MetaBalls(dims=dims),
-    # dest: VUmeter(dims=dims)
-    dest: RandomWalker(dims=dims),
+    dest: MetaBalls(dims=dims),
+    # dest: VUmeter(dims=dims),
+    # dest: RandomWalker(dims=dims),
 
     # dest: Fft(dims=dims, mode=1),
     # dest: Fft(dims=dims, mode=2),

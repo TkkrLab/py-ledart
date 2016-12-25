@@ -61,6 +61,13 @@ def translate(value, leftmin, leftmax, rightmin, rightmax):
     valuescaled = float(value - leftmin) / float(leftspan)
     return rightmin + (valuescaled * rightspan)
 
+def constrain(value, start, end):
+    if value > end: 
+        return end
+    if value < start:
+        return start
+    return value
+
 """ prints out a trace """
 def get_trace():
     exc_type, exc_obj, exc_tb = sys.exc_info()

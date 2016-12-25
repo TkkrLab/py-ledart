@@ -1,6 +1,7 @@
 from Ledart import Graphics, BLACK, BLUE, RED, WHITE
 from Ledart import translate
 from Ledart import Vector
+from Ledart import constrain
 
 from colorsys import *
 import random
@@ -10,11 +11,11 @@ class Ball(object):
         self.accel = Vector(x=0, y=0)
         self.speed = Vector(x=0, y=0)
         self.pos = Vector(x=x, y=y)
-        self.drag = 0.9989
+        self.mass = size ** 6
+        self.max_speed = 0
+        self.drag = 0.996
         self.size = size
         self.g = g
-        self.mass = self.size ** 6 / 2
-        self.max_speed = 0
 
     def update(self):
         self.speed += self.accel
