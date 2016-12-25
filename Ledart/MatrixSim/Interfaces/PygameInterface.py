@@ -14,7 +14,7 @@ class PygameInterface(Interface):
             self.flags |= pygame.FULLSCREEN
         self.window = pygame.display.set_mode((self.width, self.height),
                                               self.flags)
-        if blocksize < 4:
+        if blocksize < 7:
             self.pixelsurface = pygame.Surface((blocksize, blocksize))
         else:
             self.pixelsurface = pygame.Surface((blocksize - 2, blocksize - 2))

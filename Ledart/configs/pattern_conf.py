@@ -24,7 +24,7 @@ dims = matrix(x=0, y=0, width=width, height=height)
 # protocol = LegacyLmcp(dispmode=rgb24)
 
 matrixsim = MatrixScreen(dims=dims,
-                         pixelsize=1,
+                         pixelsize=4,
                          fullscreen=False,
                          interface=interface_opts["pygame"])
 
@@ -49,7 +49,7 @@ targets = {
     # dest: DisplayImage(dims=dims, fname='/home/duality/Pictures/System-Shock-2.jpg'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad.mkv'),
-    dest: CamCapture(dims=dims),
+    # dest: CamCapture(dims=dims),
     # dest: Water(dims=dims),
     # dest: AliasedWPlasma(dims=dims),
     # dest: AliasedFire(dims=dims),
@@ -72,7 +72,7 @@ targets = {
     # dest: GraphicsPixelTest(dims=dims),
     # dest: GraphicsDotTest(dims=dims),
     # dest: SpiroGraph(dims=dims),
-    # dest: MetaBalls(dims=dims),
+    dest: MetaBalls(dims=dims),
     # dest: VUmeter(dims=dims)
 
     # dest: Fft(dims=dims, mode=1),

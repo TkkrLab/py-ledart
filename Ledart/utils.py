@@ -135,14 +135,14 @@ def load_targets(configfile):
 
     targets = variables.get('targets', None)
     protocol = variables.get('protocol', None)
-    matrix_sim = variables.get('matrixsim', None)
+    matrixsim = variables.get('matrixsim', None)
 
     # print("configfile: %s" % configfile)
     # print("protocol: %s" % protocol)
     # print("matrixsim: %s" % matrix_sim)
     # print("targets: %s" % (str(targets)))
 
-    return (targets, protocol, matrix_sim)
+    return (targets, protocol, matrixsim)
 
 def checkList(first, second):
     for item1, item2 in zip(first, second):

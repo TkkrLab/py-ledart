@@ -3,4 +3,4 @@ from Ledart.Tools.Graphics import *
 from Ledart.Tools.NumberSegmentBitMap import *
 from Ledart.Tools.Palet import *
 from Ledart.Tools.Timing import *
-
+from Ledart.Tools.Vector import *

@@ -19,7 +19,6 @@ from utils import find_patterns_in_dir
 from utils import matrix
 
 basepath = os.path.dirname(os.path.realpath(__file__))
-protocol, matrixscreen, targets = None, None, None
 
 
 def tst_patterns(directory, showpass=False):
@@ -56,7 +55,7 @@ def listpatterns():
         print(pattern)
 
 
-def sendout(args, targets, protocol):
+def sendout(args, targets, protocol, matrixsim):
     # sendout function that sends out data to the networked devices and
     # also to the matrix screen simulator if enabled.
     # or only to the matrix simulator if no pattern is selected.
@@ -65,9 +64,9 @@ def sendout(args, targets, protocol):
             pattern = targets[t]
             # generate the next set of images to send.
             pattern.generate()
-            if matrixscreen:
-                matrixscreen.handleinput()
-                matrixscreen.process(pattern)
+            if matrixsim:
+                matrixsim.handleinput()
+                matrixsim.process(pattern)
             if args.sendOnChange:
                 changed = (Surface(pattern) != Surface(sendout.previous))
                 sendout.previous = Surface(pattern)
@@ -121,10 +120,7 @@ def main():
         cleanup(4)
     else:
         # load config
-        global targets
-        global protocol
-        global matrixscreen
-        targets, protocol, matrixscreen = load_targets(args.config)
+        targets, protocol, matrixsim = load_targets(args.config)
 
         # check if there is anything configured.
         if not len(targets):
@@ -160,9 +156,9 @@ def main():
                 sys.stdout.write(fmtstr % fmt)
                 sys.stdout.flush()
             if args.fps > 0:
-                sendout(args, targets, protocol)
+                sendout(args, targets, protocol, matrixsim)
                 time.sleep(abs(fps))
             # else send everything out as fast as possible
             else:
-                sendout(args, targets, protocol)
+                sendout(args, targets, protocol, matrixsim)
             previousTime = currentTime
