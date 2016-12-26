@@ -8,7 +8,7 @@ class Vector(object):
 
     def magnitude(self):
         """ for every N square it, sum list. take square root. """
-        magnitude = sum([(self.axes[axis] * self.axes[axis]) for axis in self.axes]) ** 0.5
+        magnitude = reduce(lambda x, y: math.hypot(x, y), self.axes.values())
         return magnitude
 
     def set_mag(self, mag):
