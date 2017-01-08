@@ -3,8 +3,7 @@ from Ledart.Tools.Graphics import ColorRGBOps
 from Ledart.utils import to_matrix
 from Life.life import Life
 import random
-
-selected = 'BlueLife'
+import colorsys
 
 
 class RandomLife(Graphics):
@@ -79,6 +78,37 @@ class ProgressedLife(Graphics):
         self.life.process()
         self.draw()
 
+class CProgressedLife(Graphics):
+    '''
+    brighten spots with prolonged cell life,
+    while darken spots where there is less cell life
+    and color it accordingly 
+    '''
+    def __init__(self, **kwargs):
+        Graphics.__init__(self, **kwargs)
+        self.background = Graphics(**kwargs)
+
+        self.life = Life(self.width, self.height, 1, WHITE)
+        self.step = kwargs.get('decay', 4)
+        self.color_step = (self.step, self.step, self.step)
+        
+        self.fill(WHITE)
+
+    def draw(self):
+        for i, point in enumerate(self.background.get_points()):
+            color = self.background[point]
+            if self.life.field[i]:
+                color = ColorRGBOps.brighten(color, self.step)
+            else:
+                color = ColorRGBOps.darken(color, self.step)
+            self.background[point] = color
+            shade = color[0] / 256.
+            color = [int(c * 0xff) for c in colorsys.hsv_to_rgb(1 - shade, 1, shade)]
+            self[point] = color
+
+    def generate(self):
+        self.life.process()
+        self.draw()
 
 class MixedLife(Graphics):
     def __init__(self, **kwargs):

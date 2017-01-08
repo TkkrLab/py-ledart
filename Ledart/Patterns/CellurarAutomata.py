@@ -54,7 +54,7 @@ class Ca(Graphics):
         self.hpos += 1
         if self.hpos > self.height:
             self.hpos = 1
-            self.fill(BLACK)
+            # self.fill(BLACK)
             self.create_random_row(0)
             self.rule = random.randint(0, 0xff)
 

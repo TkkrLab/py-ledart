@@ -1,6 +1,8 @@
 from Interface import Interface
-import pygame
+
 from pygame.locals import *
+import pygame
+import os
 
 
 class PygameInterface(Interface):
@@ -9,9 +11,11 @@ class PygameInterface(Interface):
     """
     def __init__(self, width, height, blocksize, fullscreen=False):
         Interface.__init__(self, width, height, blocksize)
-        self.flags = 0
+        self.flags = pygame.NOFRAME
         if fullscreen:
             self.flags |= pygame.FULLSCREEN
+
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0, 0)
         self.window = pygame.display.set_mode((self.width, self.height),
                                               self.flags)
         if blocksize < 7:

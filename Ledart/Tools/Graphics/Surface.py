@@ -71,6 +71,9 @@ class Surface(object):
     def get_d_offset(self):
         return self.d_offset
 
+    def close(self):
+        pass
+
     """ allow to get/set value by point (x, y) or by index int(index) """
     def __getitem__(self, key):
         if type(key) == int:

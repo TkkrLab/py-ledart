@@ -30,4 +30,5 @@ setup(name='Ledart',
       install_requires=reqs,
       url='https://github.com/tkkrlab/py-ledart',
       download_url = ('https://github.com/tkkrlab/py-ledart/tarbal/%s' % version),
-      zip_safe=False)
+      zip_safe=False,
+      scripts=['scripts/ledart'])

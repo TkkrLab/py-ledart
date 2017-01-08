@@ -18,8 +18,6 @@ matrixsim = MatrixScreen(dims=dims,
                          fullscreen=False,
                          interface=interface_opts["pygame"])
 
-from Ledart.Patterns.Patterns import *
-
 targets = {
     dest: PixelLife(dims=dims, color=(0, 0, 0xff)),
 }
