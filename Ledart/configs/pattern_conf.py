@@ -22,12 +22,12 @@ width, height = 128, 64
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-# protocol = LegacyLmcp(dispmode=rgb24)
+protocol = LegacyLmcp(dispmode=rgb24)
 
-matrixsim = MatrixScreen(dims=dims,
-                         pixelsize=10,
-                         fullscreen=False,
-                         interface=interface_opts["pygame"])
+# matrixsim = MatrixScreen(dims=dims,
+#                          pixelsize=10,
+#                          fullscreen=False,
+#                          interface=interface_opts["pygame"])
 
 targets = {
     # dest: Ca(dims=dims),
@@ -90,13 +90,13 @@ targets = {
     # dest: RandomWalker(dims=dims),
     # dest: PerlinTest(dims=dims),
 
-    dest: Fft(dims=dims, mode=1),
+    # dest: Fft(dims=dims, mode=1),
     # dest: Fft(dims=dims, mode=2),
     # dest: Fft(dims=dims, mode=3),
     # dest: Fft(dims=dims, mode=4),
 
-    # 1: Fft(dims=matrix(0, 0, 64, 32), mode=0),
-    # 2: Fft(dims=matrix(0, 32, 64, 32), mode=1),
-    # 3: Fft(dims=matrix(64, 0, 64, 32), mode=2),
-    # 4: Fft(dims=matrix(64, 32, 64, 32), mode=3),
+    dest: Fft(dims=matrix(0, 0, 64, 32), mode=0),
+    dest: Fft(dims=matrix(0, 32, 64, 32), mode=1),
+    dest: Fft(dims=matrix(64, 0, 64, 32), mode=2),
+    dest: Fft(dims=matrix(64, 32, 64, 32), mode=3),
 }
