@@ -1,13 +1,15 @@
-from math import sin, cos, sqrt, pi, radians
-import time
-import random
-
-from Ledart.Tools.Graphics import Graphics, BLACK, BLUE
-from Ledart.Tools.Graphics.ConvertColors import HSVtoRGB
 from Ledart.Tools.Graphics.RGBColorTools import ColorRGBOps
+from Ledart.Tools.Graphics.ConvertColors import HSVtoRGB
+from Ledart.Tools.Graphics import Graphics, BLACK, BLUE
+from Ledart.Tools.Controllers import translate
 from Ledart.Tools.Palet import PaletGenerate
 from Ledart.Tools.Timing import Timer
-from Ledart.Tools.Controllers import translate
+from Ledart import constrain
+
+from math import sin, cos, sqrt, pi, radians, hypot
+import time
+import random
+import colorsys
 
 
 class RainbowEffect(Graphics):
@@ -128,233 +130,40 @@ class RevolvingCircle(Graphics):
         self.draw()
 
 
-class PlasmaThird(Graphics):
+class Plasma(Graphics):
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
         self.plasma = Graphics(surface=self)
+        self.tshift = 0.0
+        self.cshift = 0.0
 
-        self.x_range = xrange(0, self.width, 1)
-        self.y_range = xrange(0, self.height, 1)
-
-        speed = kwargs.get('speed', 10)
-        self.speed = speed
-        self.interval = speed
-        self.time = random.randint(0, 100)
-        self.previousTick = 0
-
-        self.angle = 0
-
-        self.generatePalette()
-        self.generatePlasmaSurface()
-
-    def generatePalette(self):
-        self.palette = []
-        for x in xrange(0, (2 ** 8), 1):
-            r = int(128 + 256 * sin(x) / 20)
-            g = int(128 + 256 * sin(r) / 100)
-            b = int(128 + 256 * sin(g) / 50)
-            colorRGB = (r, g, b)
-            self.palette.append(colorRGB)
-
-    def generatePlasmaSurface(self):
-        self.angle = self.time
-        x_offset = self.width * sin(radians(self.angle)) + self.width
-        y_offset = self.height * cos(radians(self.angle)) + self.height
-        for y in self.y_range:
-            for x in self.x_range:
-                c = int(128 + (128 * sin((x + x_offset) / 2.0))
-                        + 128 + (128 * sin((y + y_offset) / 2.0))
-                        + 128 + (128 * sin(((x + x_offset) + (y + y_offset)) /
-                                 2.0))
-                        + 128 + (128 * sin(sqrt(float((x + x_offset) *
-                                 (x + x_offset) +
-                                 (y + y_offset) * (y + y_offset))) / 2.0))
-                        ) / 4
-                color = (c,) * 3
-                self.plasma.draw_pixel(x, y, color)
-
-    def process(self):
-        if((time.time() - self.previousTick) >= 1. / self.interval):
-            self.previousTick = time.time()
-            self.time += 1
-
-    def draw(self):
-        paletteShift = self.time
-        self.generatePlasmaSurface()
-        for y in self.y_range:
-            for x in self.x_range:
-                plasma_color = self.plasma.read_pixel(x, y)
-                color_shift = self.palette[paletteShift % 256]
-                r = (plasma_color[0] + color_shift[0]) % 256
-                g = (plasma_color[1] + color_shift[1]) % 256
-                b = (plasma_color[2] + color_shift[2]) % 256
-                color = (r, g, b,)
-                # darken the color to create a better contrast
-                color = ColorRGBOps.brighten(color, 20)
-                self.draw_pixel(x, y, color)
+    def dist(self, x1, y1, x2, y2):
+        return hypot(x1 - x2, y1 - y2)
 
     def generate(self):
-        self.fill(BLACK)
-        self.process()
-        self.draw()
+        self.tshift += 0.007
+        self.cshift += 0.01
 
-
-class PlasmaSecond(Graphics):
-    def __init__(self, **kwargs):
-        Graphics.__init__(self, **kwargs)
-        self.plasma = Graphics(surface=self)
-
-        self.x_range = xrange(0, self.width, 1)
-        self.y_range = xrange(0, self.height, 1)
-
-        speed = kwargs.get('speed', 1)
-        self.speed = speed
-        self.interval = 1000 / self.speed
-        self.time = random.randint(0, 100)
-        self.previousTick = 0
-
-        self.angle = 0
-
-        self.generatePalette()
-        self.generatePlasmaSurface()
-
-    def generatePalette(self):
-        self.palette = []
-        for x in xrange(0, (2 ** 16), 1):
-            # int(128.0 +128*sin(pi*x/40.))
-            r = 30
-            g = int(128.0 + 128 * sin(pi * x / 160.))
-            b = int(128.0 + 128 * sin(pi * x / 80.))
-            colorRGB = (r, g, b)
-            self.palette.append(colorRGB)
-
-    def generatePlasmaSurface(self):
-        self.angle = self.time / self.speed
-        x_offset = (self.width * sin(radians(self.angle)) +
-                    self.width * sin(radians(self.angle)))
-        y_offset = (self.height * cos(radians(self.angle)) +
-                    self.height * cos(radians(self.angle)))
-        for y in self.y_range:
-            for x in self.x_range:
-                c = int(128 + (128 * sin((x + x_offset) / 2.0))
-                        + 128 + (128 * sin((y + y_offset) / 2.0))
-                        + (128 + (128 * sin(((x + x_offset) +
-                           (y + y_offset)) / 2.0)))
-                        + (128 + (128 * sin(sqrt(float((x + x_offset) *
-                           (x + x_offset) + (y + y_offset) * (y + y_offset)))
-                            / 2.0)))
-                        ) / 4
-                color = (c,) * 3
-                self.plasma.draw_pixel(x, y, color)
-
-    def process(self):
-        millis = round(time.time() * 1000)
-        if((millis - self.previousTick) >= self.interval):
-            self.previousTick = time.time()
-            self.time += 1
-
-    def draw(self):
-        paletteShift = self.time / self.speed
-        self.generatePlasmaSurface()
-        for y in self.y_range:
-            for x in self.x_range:
-                plasma_color = self.plasma.read_pixel(x, y)
-                color_shift = self.palette[paletteShift % len(self.palette)]
-                r = (plasma_color[0] + color_shift[0]) % 256
-                g = (plasma_color[1] + color_shift[1]) % 256
-                b = (plasma_color[2] + color_shift[2]) % 256
-                color = (r, g, b,)
-                # darken the color to create a better contrast
-                color = ColorRGBOps.darken(color, 50)
-                self.draw_pixel(x, y, color)
-
-    def generate(self):
-        self.fill(BLACK)
-        self.process()
-        self.draw()
-
-
-class PlasmaFirst(Graphics):
-    def __init__(self, **kwargs):
-        Graphics.__init__(self, **kwargs)
-        self.plasma = Graphics(surface=self)
-
-        self.x_range = xrange(0, self.width, 1)
-        self.y_range = xrange(0, self.height, 1)
-
-        speed = kwargs.get('speed', 20)
-        self.interval = .1 / speed
-        self.time = 0
-        self.previousTick = 0
-
-        self.generatePalette()
-        self.generatePlasmaSurface()
-
-    def generatePalette(self):
-        self.palette = []
-        for x in xrange(0, 256, 1):
-            colorRGB = HSVtoRGB((x, 255, 255,))
-            self.palette.append(colorRGB)
-
-    def generatePlasmaSurface(self):
-        for y in self.y_range:
-            for x in self.x_range:
-                # c = int(abs(256*sin((x+y+self.time)/3.0)))
-                c = int(128.0 + (128.0 * sin((x + 6) / 2.4))
-                        + 128.0 + (128.0 * cos(y / 3.4))
-                        ) / 2
-                color = (c,) * 3
-                self.plasma.draw_pixel(x, y, color)
-
-    def process(self):
-        if((time.time() - self.previousTick) >= self.interval):
-            self.previousTick = time.time()
-            self.time += 1
-        paletteShift = self.time
-        for y in self.y_range:
-            for x in self.x_range:
-                plasma_color = self.plasma.read_pixel(x, y)
-                color_shift = self.palette[paletteShift % 256]
-                r = (plasma_color[0] + color_shift[0]) % 256
-                g = (plasma_color[1] + color_shift[1]) % 256
-                b = (plasma_color[2] + color_shift[2]) % 256
-                color = (r, g, b,)
-                color = ColorRGBOps.darken(color, 50)
-                self.draw_pixel(x, y, color)
-
-    def draw(self):
-        pass
-
-    def generate(self):
-        self.fill(BLACK)
-        self.process()
-        self.draw()
-
-import colorsys
-
-def generate_color(n=5):
-    hsv_tuples = [(x * 0.9 / n, 0.9, 0.9) for x in xrange(n)]
-    hex_out = []
-    for rgb in hsv_tuples:
-        rgb = map(lambda x: int(x*0xff), colorsys.hsv_to_rgb(*rgb))
-        hex_out.append(rgb)
-    return hex_out
-
-class TestPlasma(Graphics):
-    def __init__(self, **kwargs):
-        Graphics.__init__(self, **kwargs)
-        self.colors = generate_color(self.get_size())
-        self.scaler = 10
-        self.n = 1
-        self.lim = 1e2
-
-    def generate(self):
         for point in self.get_points():
             x, y = point
-            nx = int(self.n * sin(radians(x)) / self.scaler)
-            ny = int(self.n * cos(radians(y)) / self.scaler)
-            np = int((nx * ny) ** 0.5)
-            if (np % len(self.colors)) < self.lim:
-                np = self.lim
-            self[x, y] = self.colors[int(np % len(self.colors))]
-            self.n += 1
+            w, h = self.width, self.height
+            # cv = (1.0 + sin(hypot((x - w / 2.0), (y - h / 2.0)) / 8.0)) / 2
+            # cv = (1.0 + sin(x / 16.0)) / 2.0 + (1.0 + sin(y / 16.0) / 2.0)
+
+            # cv = (
+            #         (1 + sin(x / 8.0) / 2.0)
+            #       + (1 + sin(y / 8.0) / 2.0)
+            #       + (1 + sin((x + y) / 8.0) / 2.0)
+            #       + (1 + sin(hypot(x, y) / 8.0) / 2.0))
+            # cv = (self.cshift + cv) % 1.0
+            
+            x_offset = w * sin(radians(self.tshift)) + w
+            y_offset = h * cos(radians(self.tshift)) + h
+
+            cv = ((1 + sin(x_offset + self.dist(x + self.tshift, y, 128.0, 128.0) / 60.0) / 2)
+                  + (1 + sin(y_offset + self.dist(x + self.tshift, y, 64.0, 64.0) / 60.0) / 2)
+                  + (1 + sin(x_offset + self.dist(x, y / 7.0, 192.0, 64) / 60.0) / 2)
+                  + (1 + sin(y_offset + self.dist(x, y, 192.0, 100.0) / 60.0) / 2))
+
+            color = [int(0xff * c) for c in colorsys.hsv_to_rgb((self.cshift + cv) % 1.0, 1, 1)]
+            self.draw_pixel(x, y, color)

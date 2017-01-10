@@ -68,9 +68,7 @@ targets = {
     # dest: RainbowEffect(dims=dims),
     # dest: ColorFade(dims=dims),
     
-    # dest: PlasmaFirst(dims=dims),
-    # dest: PlasmaSecond(dims=dims),
-    # dest: PlasmaThird(dims=dims),
+    dest: Plasma(dims=dims),
     # dest: RevolvingCircle(dims=dims),
 
     # dest: RainPattern(dims=dims, chance=0.7, color=(40, 60, 255)),
@@ -95,8 +93,8 @@ targets = {
     # dest: Fft(dims=dims, mode=3),
     # dest: Fft(dims=dims, mode=4),
 
-    dest: Fft(dims=matrix(0, 0, 64, 32), mode=0),
-    dest: Fft(dims=matrix(0, 32, 64, 32), mode=1),
-    dest: Fft(dims=matrix(64, 0, 64, 32), mode=2),
-    dest: Fft(dims=matrix(64, 32, 64, 32), mode=3),
+    # 1: Fft(dims=matrix(0, 0, 64, 32), mode=1),
+    # 2: Fft(dims=matrix(0, 32, 64, 32), mode=2),
+    # 3: Fft(dims=matrix(64, 0, 64, 32), mode=3),
+    # 4: Fft(dims=matrix(64, 32, 64, 32), mode=4),
 }

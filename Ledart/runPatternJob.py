@@ -116,7 +116,8 @@ def main():
         def sigint_handler(signal, frame):
             if protocol:
                 protocol.close()
-            matrixsim.close()
+            if matrixsim:
+                matrixsim.close()
             cleanup(3)
         signal.signal(signal.SIGINT, sigint_handler)
 

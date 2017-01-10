@@ -54,7 +54,8 @@ class PygameInterface(Interface):
         self.window.blit(self.pixelsurface, rect)
 
     def update(self):
-        pygame.display.flip()
+        # pygame.display.flip()
+        pygame.display.update()
 
     def quit(self):
         pygame.quit()

@@ -53,7 +53,7 @@ class Fft(Graphics):
         # get absolute values and apply a window.
         fourier = [self.get_complex_abs(val) * self.window[i] for i, val in enumerate(fourier[:len(fourier)-1])]
         # check if there is anything usefull transform for use if so.
-        fourier = [(val) / 16000 if val != 0 else 0 for i, val in enumerate(fourier)]
+        fourier = [(val) / 20000 if val != 0 else 0 for i, val in enumerate(fourier)]
         return fourier
 
     def mean(self, a):
@@ -61,19 +61,6 @@ class Fft(Graphics):
 
     def average_lists(self, lists):
         return map(self.mean, zip(*lists))
-
-    # override function for special line drawing! 
-    # def draw_bar(self, x, y, height):
-    #     x, height = int(x), int(height)
-
-    #     for yh in xrange(0, height):
-    #         color = [int(c * 0xff) for c in colorsys.hsv_to_rgb(yh / float(self.height), 1, 1)]
-    #         self.draw_pixel(x, y + self.height - yh - 1, color)
-
-    # def draw_bartop(self, x, height):
-    #     x, height = int(x), int(height)
-    #     color = [int(c * 0xff) for c in colorsys.hsv_to_rgb(height / float(self.height), 1, 1)]
-    #     self.draw_pixel(x, self.height - height - 1, color)
 
     def draw_pixel(self, x, y, color):
         color = [int(c * 0xff) for c in colorsys.hsv_to_rgb(y / float(self.height), 1, 1)]
@@ -108,8 +95,9 @@ class Fft(Graphics):
                             hr = self.height - self.height * fourier_data[x + 1]
                             self.draw_line(x, hl, x, hr, BLACK)
                     else:
+                        print("mode: %d" % (self.mode))
                         raise Exception("Unknown Mode")
             except Exception as e:
-                traceback.print_exc()
                 if e.message != "not a whole number of frames":
+                    traceback.print_exc()
                     raise e
