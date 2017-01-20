@@ -141,8 +141,8 @@ class Plasma(Graphics):
         return hypot(x1 - x2, y1 - y2)
 
     def generate(self):
-        self.tshift += 0.007
-        self.cshift += 0.01
+        self.tshift += 0.07
+        self.cshift += 0.0
 
         for point in self.get_points():
             x, y = point
@@ -160,10 +160,16 @@ class Plasma(Graphics):
             x_offset = w * sin(radians(self.tshift)) + w
             y_offset = h * cos(radians(self.tshift)) + h
 
-            cv = ((1 + sin(x_offset + self.dist(x + self.tshift, y, 128.0, 128.0) / 60.0) / 2)
-                  + (1 + sin(y_offset + self.dist(x + self.tshift, y, 64.0, 64.0) / 60.0) / 2)
-                  + (1 + sin(x_offset + self.dist(x, y / 7.0, 192.0, 64) / 60.0) / 2)
-                  + (1 + sin(y_offset + self.dist(x, y, 192.0, 100.0) / 60.0) / 2))
+            # cv = ((1 + sin(x_offset + self.dist(x + self.tshift, y, 128.0, 128.0) / 60.0) / 2)
+            #       + (1 + sin(y_offset + self.dist(x + self.tshift, y, 64.0, 64.0) / 60.0) / 2)
+            #       + (1 + sin(x_offset + self.dist(x, y / 7.0, 192.0, 64) / 60.0) / 2)
+            #       + (1 + sin(y_offset + self.dist(x, y, 192.0, 100.0) / 60.0) / 2))
 
-            color = [int(0xff * c) for c in colorsys.hsv_to_rgb((self.cshift + cv) % 1.0, 1, 1)]
+            stretch = 256
+            cv = (sin(self.dist(x + x_offset + self.tshift, y + y_offset, self.height, self.width) / stretch)
+                 + sin(self.dist(x + x_offset, y + y_offset, self.width, self.height) / stretch)
+                 + sin(self.dist(x + x_offset, y + y_offset + self.tshift, self.height, self.width) / stretch)
+                 + sin(self.dist(x + x_offset, y + y_offset, self.width, self.height) / stretch))
+
+            color = [int(0xff * c) for c in colorsys.hsv_to_rgb(self.cshift + cv, 1, 1)]
             self.draw_pixel(x, y, color)

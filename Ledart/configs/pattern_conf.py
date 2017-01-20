@@ -22,12 +22,12 @@ width, height = 128, 64
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-protocol = LegacyLmcp(dispmode=rgb24)
+# protocol = LegacyLmcp(dispmode=rgb24)
 
-# matrixsim = MatrixScreen(dims=dims,
-#                          pixelsize=10,
-#                          fullscreen=False,
-#                          interface=interface_opts["pygame"])
+matrixsim = MatrixScreen(dims=dims,
+                         pixelsize=10,
+                         fullscreen=False,
+                         interface=interface_opts["pygame"])
 
 targets = {
     # dest: Ca(dims=dims),
@@ -56,10 +56,8 @@ targets = {
     
     # dest: Water(dims=dims),
     
-    # dest: AliasedWPlasma(dims=dims),
     # dest: AliasedFire(dims=dims),
     # dest: MiniFire(dims=dims),
-    # dest: TestPlasma(dims=dims),
     # dest: Smolders(dims=dims),
     # dest: FireOne(dims=dims),
     # dest: FireTwo(dims=dims),
@@ -68,7 +66,7 @@ targets = {
     # dest: RainbowEffect(dims=dims),
     # dest: ColorFade(dims=dims),
     
-    dest: Plasma(dims=dims),
+    # dest: Plasma(dims=dims),
     # dest: RevolvingCircle(dims=dims),
 
     # dest: RainPattern(dims=dims, chance=0.7, color=(40, 60, 255)),
@@ -81,7 +79,9 @@ targets = {
     # dest: GraphicsLineScroll(dims=dims),
     # dest: FillTest(dims=dims),
     
-    # dest: SpiroGraph(dims=dims),
+    # dest: SpiroGraph(dims=dims, mode=0),
+    # dest: SpiroGraph(dims=dims, mode=1),
+    # dest: SpiroGraph(dims=dims, mode=2),
     # dest: MetaBalls(dims=dims),
 
     # dest: VUmeter(dims=dims),

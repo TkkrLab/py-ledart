@@ -1,9 +1,11 @@
 from Ledart.ArgumentParser import get_args
 from Ledart import Graphics, BLUE, BLACK
 from Ledart import xfrange
+from Ledart import Timer
 
 import fractions
 import random
+import colorsys
 from math import sin, cos, radians, pi
 
 class SpiroGraph(Graphics):
@@ -13,14 +15,10 @@ class SpiroGraph(Graphics):
         self.res = kwargs.get('res', 0.001)
         self.scale = kwargs.get('scale', 0.7)
 
-        self.xp = kwargs.get('xp', random.randint(1, self.width))
-        self.yp = kwargs.get('yp', random.randint(1, self.height))
-
-        self.R = kwargs.get('R', random.randint(1, self.width))
-        self.r = kwargs.get('r', random.randint(1, self.width))
-        self.d = kwargs.get('d', random.randint(1, self.width))
+        self.new_params(**kwargs)
 
         self.mode = kwargs.get('mode', 0)
+        self.timer = Timer(3.0)
 
         self.nice_ones = [(66, 15, 58),
                           (95, 10, 92),
@@ -50,7 +48,14 @@ class SpiroGraph(Graphics):
         self.turns = self.r // gcdval
 
         self.prev_pos = None
-        self.draw_spiro()
+
+    def new_params(self, **kwargs):
+        self.xp = kwargs.get('xp', random.randint(1, self.width))
+        self.yp = kwargs.get('yp', random.randint(1, self.height))
+
+        self.R = kwargs.get('R', random.randint(1, self.width))
+        self.r = kwargs.get('r', random.randint(1, self.width))
+        self.d = kwargs.get('d', random.randint(1, self.width))
 
     def draw_spiro(self):
         self.fill(BLACK)
@@ -67,5 +72,53 @@ class SpiroGraph(Graphics):
                                BLUE)
             self.prev_pos = x, y
 
+    def get_around(self, x, y):
+        n = 0
+        # for i in range(0, 3):
+        #     for j in range(0, 3):
+        #         nx = (x + i + self.width) % self.width
+        #         ny = (y + i + self.height) % self.height
+        #     if self[(x, y)] != BLACK:
+        #         n += 1
+        if self[(x, y)] != BLACK:
+            n += 1
+        if self[(x - 1, y)] != BLACK:
+            n += 1
+        if self[(x + 1, y)] != BLACK:
+            n += 1
+
+        if self[(x, y + 1)] != BLACK:
+            n += 1
+        if self[(x - 1, y + 1)] != BLACK:
+            n += 1
+        if self[(x + 1, y + 1)] != BLACK:
+            n += 1
+
+        if self[(x, y - 1)] != BLACK:
+            n += 1
+        if self[(x - 1, y - 1)] != BLACK:
+            n += 1
+        if self[(x + 1, y - 1)] != BLACK:
+            n += 1
+
+        return n
+
+    def draw_color_spiro(self):
+        self.draw_spiro()
+        for x in range(1, self.width - 1):
+            for y in range(1, self.height - 1):
+                cv = self.get_around(x, y) / 9.
+                color = [int(0xff * c) for c in colorsys.hsv_to_rgb(cv, 1, 1)]
+                self[(x, y)] = color
+
     def generate(self):
-        pass
+        if self.mode == 0:
+            self.draw_spiro()
+        elif self.mode == 1:
+            self.new_params()
+            if self.timer.valid():
+                self.draw_spiro()
+        elif self.mode == 2:
+            self.new_params()
+            if self.timer.valid():
+                self.draw_color_spiro()
