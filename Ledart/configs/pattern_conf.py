@@ -13,21 +13,23 @@ localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
 
-dest = megamatrix
+# dest = megamatrix
+dest = minimatrix
 # width, height = 17, 10
-width, height = 128, 64
+# width, height = 128, 64
+width, height = 64, 32
 # pixelsize = 1024 / 128
 # height = (768 - 20) / pixelsize
 # width, height = 256, 128
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-# protocol = LegacyLmcp(dispmode=rgb24)
+protocol = LegacyLmcp(dispmode=rgb24)
 
-matrixsim = MatrixScreen(dims=dims,
-                         pixelsize=10,
-                         fullscreen=False,
-                         interface=interface_opts["pygame"])
+# matrixsim = MatrixScreen(dims=dims,
+#                          pixelsize=10,
+#                          fullscreen=False,
+#                          interface=interface_opts["pygame"])
 
 targets = {
     # dest: Ca(dims=dims),
@@ -88,7 +90,7 @@ targets = {
     # dest: RandomWalker(dims=dims),
     # dest: PerlinTest(dims=dims),
 
-    # dest: Fft(dims=dims, mode=1),
+    dest: Fft(dims=dims, mode=1),
     # dest: Fft(dims=dims, mode=2),
     # dest: Fft(dims=dims, mode=3),
     # dest: Fft(dims=dims, mode=4),
