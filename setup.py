@@ -18,7 +18,8 @@ reqs = ['Pillow >= 2.9.0',
         'pygame-cffi >= 0.1.1',
         'pyserial >= 3.1.1',
         'python-xlib >= 0.16',
-        'pyalsaaudio >= 0.8.2',]
+        'pyalsaaudio >= 0.8.2',
+	'numpy']
 
 setup(name='Ledart',
       version=version,
