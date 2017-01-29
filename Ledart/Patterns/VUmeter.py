@@ -2,6 +2,7 @@ from Ledart.utils import chunked, translate
 from Ledart.Tools.Graphics import Graphics, BLUE, WHITE, BLACK
 
 import alsaaudio
+import colorsys
 import audioop
 import struct
 import time
@@ -30,6 +31,10 @@ class VUmeter(Graphics):
     def average_lists(self, lists):
         return map(self.mean, zip(*lists))
 
+    def draw_pixel(self, x, y, color):
+        color = [int(c * 0xff) for c in colorsys.hsv_to_rgb(y / float(self.height), 1, 1)]
+        Graphics.draw_pixel(self, x, y, color)
+
     def generate(self):
         self.fill(BLACK)
         l, data = self.stream.read()
@@ -37,20 +42,20 @@ class VUmeter(Graphics):
         if l:
             data = struct.unpack("%dh" % (len(data) / 2), data)
             self.chunks.append(data)
-            if len(self.chunks) > 10:
+            if len(self.chunks) > 100:
                 del self.chunks[0]
             data = self.average_lists(self.chunks)
             # scale values to the window.
             data = [translate(val, min(data), max(data), 1, self.height * 0.8) for val in data]
 
             for x in xrange(len(data)):
-                if self.mode == 1:
+                if self.mode == 0:
                     self.draw_line(x, self.height - data[x], x, self.height, BLUE)
-                elif self.mode == 2:
+                elif self.mode == 1:
                     self.draw_pixel(x, self.height - data[x], BLUE)
-                elif self.mode == 3:
+                elif self.mode == 2:
                     self.draw_line(x, (self.height / 2) - data[x] / 2, x, (self.height / 2) + data[x] / 2, BLUE)
-                elif self.mode == 4:
+                elif self.mode == 3:
                     if x >= (self.width - 1):
                         self.draw_pixel(x, self.height - data[x], BLUE)
                     else:

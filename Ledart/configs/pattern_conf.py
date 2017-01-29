@@ -86,11 +86,15 @@ targets = {
     # dest: SpiroGraph(dims=dims, mode=2),
     # dest: MetaBalls(dims=dims),
 
-    # dest: VUmeter(dims=dims),
+    # dest: VUmeter(dims=dims, mode=0),
+    # dest: VUmeter(dims=dims, mode=1),
+    # dest: VUmeter(dims=dims, mode=2),
+    dest: VUmeter(dims=dims, mode=3),
+    
     # dest: RandomWalker(dims=dims),
     # dest: PerlinTest(dims=dims),
 
-    dest: Fft(dims=dims, mode=1),
+    # dest: Fft(dims=dims, mode=1),
     # dest: Fft(dims=dims, mode=2),
     # dest: Fft(dims=dims, mode=3),
     # dest: Fft(dims=dims, mode=4),

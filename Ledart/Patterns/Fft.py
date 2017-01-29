@@ -34,8 +34,8 @@ class Fft(Graphics):
 
         # self.window = numpy.bartlett(self.width)
         # self.window = numpy.blackman(self.width)
-        self.window = numpy.hamming(self.width)
-        # self.window = numpy.hanning(self.width)
+        # self.window = numpy.hamming(self.width)
+        self.window = numpy.hanning(self.width)
         # self.window = numpy.kaiser(self.width, 0)
         # self.window = [1, ] * self.width
 
