@@ -7,6 +7,21 @@ led/lighting devices.
 import socket
 import select
 
+class BaseInterface(object):
+    def __init__(self):
+        pass
+
+    def open(self):
+        pass
+
+    def transmit(self, data, dest):
+        pass
+
+    def send(self, data, dest):
+        pass
+
+    def close(self):
+        pass
 
 class TcpSocket(object):
     """

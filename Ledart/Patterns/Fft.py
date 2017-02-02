@@ -13,6 +13,7 @@ stream = None
 
 
 class Fft(Graphics):
+    stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL, cardindex=1)
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
 
@@ -23,12 +24,10 @@ class Fft(Graphics):
         self.sample_rate = 44100 / 4
         self.chunk = self.width * 2
         self.no_channels = kwargs.get('channels', 1)
-
-        self.stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
-        self.stream.setchannels(self.no_channels)
-        self.stream.setrate(self.sample_rate)
         self.stream.setformat(alsaaudio.PCM_FORMAT_S16_LE)
+        self.stream.setchannels(self.no_channels)
         self.stream.setperiodsize(self.chunk)
+        self.stream.setrate(self.sample_rate)
 
         self.color_pallet = [c / self.height for c in range(self.height)]
 
@@ -53,7 +52,7 @@ class Fft(Graphics):
         # get absolute values and apply a window.
         fourier = [self.get_complex_abs(val) * self.window[i] for i, val in enumerate(fourier[:len(fourier)-1])]
         # check if there is anything usefull transform for use if so.
-        fourier = [(val) / 20000 if val != 0 else 0 for i, val in enumerate(fourier)]
+        fourier = [(val / 3000) if val != 0 else 0 for val in fourier]
         return fourier
 
     def mean(self, a):
@@ -74,7 +73,7 @@ class Fft(Graphics):
         if l:
             try:
                 self.fouriers.append(self.calc_levels(data))
-                if len(self.fouriers) > 5:
+                if len(self.fouriers) > 10:
                     del self.fouriers[0]
 
                 fourier_data = map(self.mean, zip(*self.fouriers))

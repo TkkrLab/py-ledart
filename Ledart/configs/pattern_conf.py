@@ -1,6 +1,7 @@
 # import all patterns availble for use.
 import os
 from Ledart.Lmcp import *
+from Ledart.Ffmpegstreamer import *
 from Ledart.Artnet import *
 from Ledart.utils import matrix
 from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
@@ -14,17 +15,20 @@ bcast = '10.42.0.0'
 moo = 'moo'
 
 # dest = megamatrix
-dest = minimatrix
+dest = localhost
 # width, height = 17, 10
 # width, height = 128, 64
-width, height = 64, 32
+width, height = 128, 64
 # pixelsize = 1024 / 128
 # height = (768 - 20) / pixelsize
 # width, height = 256, 128
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-protocol = LegacyLmcp(dispmode=rgb24)
+# protocol = LegacyLmcp(dispmode=rgb24)
+# protocol = StreamPlay(dims=dims)
+protocol = Stream(dims=dims)
+# Stream(dims=dims)
 
 # matrixsim = MatrixScreen(dims=dims,
 #                          pixelsize=10,
@@ -32,6 +36,7 @@ protocol = LegacyLmcp(dispmode=rgb24)
 #                          interface=interface_opts["pygame"])
 
 targets = {
+    # dest: MetaBalls(dims=dims)
     # dest: Ca(dims=dims),
     # dest: MixedLife(dims=dims),
     # dest: ProgressedLife(dims=dims, decay=5),
@@ -89,12 +94,12 @@ targets = {
     # dest: VUmeter(dims=dims, mode=0),
     # dest: VUmeter(dims=dims, mode=1),
     # dest: VUmeter(dims=dims, mode=2),
-    dest: VUmeter(dims=dims, mode=3),
+    # dest: VUmeter(dims=dims, mode=3),
     
     # dest: RandomWalker(dims=dims),
     # dest: PerlinTest(dims=dims),
 
-    # dest: Fft(dims=dims, mode=1),
+    dest: Fft(dims=dims, mode=1),
     # dest: Fft(dims=dims, mode=2),
     # dest: Fft(dims=dims, mode=3),
     # dest: Fft(dims=dims, mode=4),

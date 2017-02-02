@@ -8,6 +8,7 @@ import struct
 import time
 
 class VUmeter(Graphics):
+    stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL, cardindex=1)
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
 
@@ -17,7 +18,6 @@ class VUmeter(Graphics):
         self.chunk = self.width * 2
         self.no_channels = 1
 
-        self.stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
         self.stream.setchannels(self.no_channels)
         self.stream.setrate(self.sample_rate)
         self.stream.setformat(alsaaudio.PCM_FORMAT_S16_LE)
@@ -42,7 +42,7 @@ class VUmeter(Graphics):
         if l:
             data = struct.unpack("%dh" % (len(data) / 2), data)
             self.chunks.append(data)
-            if len(self.chunks) > 100:
+            if len(self.chunks) > 25:
                 del self.chunks[0]
             data = self.average_lists(self.chunks)
             # scale values to the window.

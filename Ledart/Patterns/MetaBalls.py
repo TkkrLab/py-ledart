@@ -13,7 +13,7 @@ class Ball(object):
         self.pos = Vector(x=x, y=y)
         self.mass = size ** 6 * 2
         self.max_speed = 0
-        self.drag = 0.98
+        self.drag = 0.988
         self.size = size
         self.g = g
 

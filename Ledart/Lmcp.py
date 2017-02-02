@@ -96,12 +96,6 @@ class LegacyLmcp(UdpSocket):
         self.send_clear()
         UdpSocket(self).close()
 
-    def __del__(self):
-        self.close()
-
-    def __exit__(self):
-        self.close()
-
 
 class Lmcp(LegacyLmcp):
     """
