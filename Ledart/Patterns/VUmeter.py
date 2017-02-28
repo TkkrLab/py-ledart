@@ -8,7 +8,7 @@ import struct
 import time
 
 class VUmeter(Graphics):
-    stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL, cardindex=1)
+    stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
 

@@ -14,24 +14,24 @@ localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
 
-# dest = megamatrix
-dest = localhost
+dest = minimatrix
+# dest = localhost
 # width, height = 17, 10
 # width, height = 128, 64
-width, height = 128, 64
+width, height = 64, 32
 # pixelsize = 1024 / 128
 # height = (768 - 20) / pixelsize
 # width, height = 256, 128
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-# protocol = LegacyLmcp(dispmode=rgb24)
+protocol = LegacyLmcp(dispmode=rgb24)
 # protocol = StreamPlay(dims=dims)
-protocol = Stream(dims=dims)
+# protocol = Stream(dims=dims)
 # Stream(dims=dims)
 
 # matrixsim = MatrixScreen(dims=dims,
-#                          pixelsize=10,
+#                          pixelsize=8,
 #                          fullscreen=False,
 #                          interface=interface_opts["pygame"])
 
@@ -59,7 +59,7 @@ targets = {
     # dest: DisplayImage(dims=dims, fname='/home/duality/Pictures/System-Shock-2.jpg'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad.mkv'),
-    # dest: CamCapture(dims=dims),
+    dest: CamCapture(dims=dims),
     
     # dest: Water(dims=dims),
     
@@ -99,7 +99,7 @@ targets = {
     # dest: RandomWalker(dims=dims),
     # dest: PerlinTest(dims=dims),
 
-    dest: Fft(dims=dims, mode=1),
+    # dest: Fft(dims=dims, mode=1),
     # dest: Fft(dims=dims, mode=2),
     # dest: Fft(dims=dims, mode=3),
     # dest: Fft(dims=dims, mode=4),

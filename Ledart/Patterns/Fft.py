@@ -9,11 +9,8 @@ import numpy
 import time
 import math
 
-stream = None
-
-
 class Fft(Graphics):
-    stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL, cardindex=1)
+    stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
 
@@ -43,12 +40,12 @@ class Fft(Graphics):
     def get_complex_abs(self, value):
         return ((value.real ** 2) + (value.imag ** 2)) ** 0.5
 
-    def calc_levels(self, data):
+    def calc_levels(self, data, length):
         # convert raw data to numpy array
-        data = struct.unpack("%dh" % (len(data) / 2), data)
+        data = struct.unpack("%dh" % length, data)
         data = numpy.array(data, dtype='h')
         # apply fft - real data so rfft is used
-        fourier = numpy.fft.rfft(data, n=len(data), norm='ortho')
+        fourier = numpy.fft.rfft(data, n=length, norm='ortho')
         # get absolute values and apply a window.
         fourier = [self.get_complex_abs(val) * self.window[i] for i, val in enumerate(fourier[:len(fourier)-1])]
         # check if there is anything usefull transform for use if so.
@@ -72,7 +69,7 @@ class Fft(Graphics):
 
         if l:
             try:
-                self.fouriers.append(self.calc_levels(data))
+                self.fouriers.append(self.calc_levels(data, l))
                 if len(self.fouriers) > 10:
                     del self.fouriers[0]
 
