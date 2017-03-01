@@ -25,10 +25,9 @@ width, height = 64, 32
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-protocol = LegacyLmcp(dispmode=rgb24)
+# protocol = LegacyLmcp(dispmode=rgb24)
 # protocol = StreamPlay(dims=dims)
-# protocol = Stream(dims=dims)
-# Stream(dims=dims)
+protocol = Stream(dims=dims)
 
 # matrixsim = MatrixScreen(dims=dims,
 #                          pixelsize=8,
@@ -41,7 +40,7 @@ targets = {
     # dest: MixedLife(dims=dims),
     # dest: ProgressedLife(dims=dims, decay=5),
     # dest: CProgressedLife(dims=dims, decay=1),
-    # dest: PixelLife(dims=dims, color=(0, 0, 0xFF)),
+    dest: PixelLife(dims=dims, color=(0, 0, 0xFF)),
     # dest: RandomLife(dims=dims),
 
     # dest: Mandelbrot(dims=dims),
@@ -59,7 +58,7 @@ targets = {
     # dest: DisplayImage(dims=dims, fname='/home/duality/Pictures/System-Shock-2.jpg'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad-noshadow.mp4'),
     # dest: VideoPlay(dims=dims, fname='/home/duality/Videos/bad.mkv'),
-    dest: CamCapture(dims=dims),
+    # dest: CamCapture(dims=dims),
     
     # dest: Water(dims=dims),
     
