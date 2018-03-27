@@ -1,4 +1,4 @@
-from Tools.Graphics import Surface
+from Ledart.Tools.Graphics import Surface
 
 
 # this function swaps widht and height

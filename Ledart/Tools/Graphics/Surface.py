@@ -38,14 +38,14 @@ class Surface(object):
         if default == None:
             default = self.color_rep
 
-        return [default for i in xrange(self.size)]
+        return [default for i in range(self.size)]
 
     """ returns a dictionary that is a map of points (x, y) to indexes int(index)"""
     def gen_indexes(self):
         indexes = {}
         p = 0
-        for y in xrange(0, self.height):
-            for x in xrange(0, self.width):
+        for y in range(0, self.height):
+            for x in range(0, self.width):
                 pos = (x, y)
                 indexes[pos] = p
                 p += 1
@@ -73,6 +73,13 @@ class Surface(object):
 
     def close(self):
         pass
+
+    def flatten(self):
+        flattend_list = []
+        for color in self:
+            for c in color:
+                flattend_list.append(c)
+        return flattend_list
 
     """ allow to get/set value by point (x, y) or by index int(index) """
     def __getitem__(self, key):
@@ -103,16 +110,6 @@ class Surface(object):
 
     def __len__(self):
         return self.size
-
-    """ function returns a list of bytes. """
-    def __bytes__(self):
-        __str = [chr(c) for color in self.surface for c in color]
-        return bytearray(__str)
-
-    """ function returns a list of bytes. (python2.7 strings) """
-    def __str__(self):
-        __str = [chr(c) for color in self.surface for c in color]
-        return ''.join(__str)
 
     """ basic Surface representation and info. """
     def __repr__(self):

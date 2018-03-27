@@ -1,5 +1,5 @@
 import random
-from Surface import Surface
+from .Surface import Surface
 
 
 def rand_color():
@@ -16,7 +16,7 @@ class Graphics(Surface):
     def fill(self, color):
         if not isinstance(color, list):
             raise ValueError
-        for i in xrange(0, self.get_size()):
+        for i in range(0, self.get_size()):
             if self.surface[i] != color:
                 self.surface[i] = color
 
@@ -65,7 +65,7 @@ class Graphics(Surface):
         else:
             ystep = -1
         try:
-            for x in xrange(x1, x2 + 1):
+            for x in range(x1, x2 + 1):
                 if issteep:
                     self.draw_pixel(y, x, color)
                 else:

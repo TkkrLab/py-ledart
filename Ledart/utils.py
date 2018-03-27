@@ -9,6 +9,13 @@ from Ledart.ArgumentParser import get_args
     these functions are utils, that are handy to have for various things.
 """
 
+
+def mean(a):
+    return sum(a) / len(a)
+
+def average_lists(lists):
+    return list(map(mean, zip(*lists)))
+
 def matrix(x=0, y=0, width=1, height=1):
     return [x, y, width, height]
 
@@ -34,7 +41,7 @@ def chunks(l, n):
     """
     yields chunks of a list.
     """
-    for i in xrange(0, len(l), n):
+    for i in range(0, len(l), n):
         yield l[i:i + n]
 
 def to_matrix(l, n):
@@ -156,8 +163,11 @@ def load_targets(configfile):
         pprint(variables)
         print(" ")
 
+    configlines = ""
     with open(configfile) as f:
-        exec(f, variables)
+        configlines = f.read()
+
+    exec(configlines, variables)
 
     targets = variables.get('targets', None)
     protocol = variables.get('protocol', None)

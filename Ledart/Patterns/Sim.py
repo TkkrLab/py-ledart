@@ -64,7 +64,9 @@ class Particle(object):
             other.x -= math.sin(angle)*overlap
             other.y += math.cos(angle)*overlap
 
-    def addVectors(self, (angle1, length1), (angle2, length2)):
+    def addVectors(self, v1, v2):
+        angle1, length1 = v1
+        angle2, length2 = v2
         x = math.sin(angle1) * length1 + math.sin(angle2) * length2
         y = math.cos(angle1) * length1 + math.cos(angle2) * length2
         angle = 0.5 * math.pi - math.atan2(y, x)

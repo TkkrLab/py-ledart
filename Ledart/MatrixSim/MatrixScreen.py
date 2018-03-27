@@ -7,22 +7,22 @@ from Ledart.utils import matrix
 
 # setup interface options, if no interface possible
 # set to a dummy
-from Interfaces.Interface import Interface
+from .Interfaces.Interface import Interface
 interface_opts = {
     "dummy": Interface
 }
 
 # set an option for a pygame interface
 try:
-    from Interfaces.PygameInterface import PygameInterface
+    from .Interfaces.PygameInterface import PygameInterface
     interface_opts["pygame"] = PygameInterface
 except Exception as e:
-    print("module not installed, %s" % str(e))
+    print("Module not installed, %s" % str(e))
     interface_opts["pygame"] = Interface
 
 # set an option for a opengl interface
 try:
-    from Interfaces.OpenGlInterface import OpenGlInterface
+    from .Interfaces.OpenGlInterface import OpenGlInterface
     interface_opts["opengl"] = OpenGlInterface
 except Exception as e:
     print("Module not installed, %s" % str(e))
@@ -49,32 +49,40 @@ class MatrixScreen(object):
         self.interface.setcaption("Matrix Simulator.")
         self.psurface = Surface(dims=dims)
 
+        self.interval = 1. / 30.
+        self.current = 0
+        self.previous = 0
+
     def handleinput(self):
         self.interface.handleinput()
 
     def draw(self, data):
-        # get the indexes of every pixel
-        indexes = data.indexes
-        # itterate of the colors of every pixel.
-        for i, index in enumerate(indexes):
-            # take the color
-            color = data[index]
+        self.current = time.time()
+        if((self.current - self.previous) > self.interval):
+            self.previous = self.current
+            
+            # get the indexes of every pixel
+            indexes = data.indexes
+            # itterate of the colors of every pixel.
+            for i, index in enumerate(indexes):
+                # take the color
+                color = data[index]
 
-            # only draw if pixels differ
-            if color != self.psurface[index]:
-                # calculate position based on index, pixelsize, and data offset.
-                x, y = index
-                x, y = x * self.pixelSize, y * self.pixelSize
-                xo, yo = data.get_d_offset()
-                xo, yo = xo * self.pixelSize, yo * self.pixelSize
-                x, y = x + xo, y + yo
-                # create a rect based on calculated positions.
-                width, height = self.pixelSize, self.pixelSize
-                rect = (x, y, width, height)
-                # draw the actual block
-                self.interface.drawblock(rect, color)
-                # store the color we just drew
-                self.psurface[index] = color
+                # only draw if pixels differ
+                if color != self.psurface[index]:
+                    # calculate position based on index, pixelsize, and data offset.
+                    x, y = index
+                    x, y = x * self.pixelSize, y * self.pixelSize
+                    xo, yo = data.get_d_offset()
+                    xo, yo = xo * self.pixelSize, yo * self.pixelSize
+                    x, y = x + xo, y + yo
+                    # create a rect based on calculated positions.
+                    width, height = self.pixelSize, self.pixelSize
+                    rect = (x, y, width, height)
+                    # draw the actual block
+                    self.interface.drawblock(rect, color)
+                    # store the color we just drew
+                    self.psurface[index] = color
 
     def process(self, data):
         self.draw(data)

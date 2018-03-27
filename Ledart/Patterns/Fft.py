@@ -1,9 +1,10 @@
+from Ledart.utils import translate, chunks, mean, average_lists
 from Ledart.Tools.Graphics import Graphics, BLUE, BLACK, GREEN
-from Ledart.utils import translate
 
 import traceback
 import alsaaudio
 import colorsys
+import pyaudio
 import struct
 import numpy
 import time
@@ -11,8 +12,55 @@ import math
 
 stream = None
 
-
 class Fft(Graphics):
+    def __init__(self, **kwargs):
+        super(Graphics, self).__init__(**kwargs)
+        self.audioChannels = 1
+        self.rate = 44100
+        self.chunksize = 1024
+
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=pyaudio.paInt32,
+                                  channels=self.audioChannels,
+                                  rate=self.rate,
+                                  input=True,
+                                  output=False,
+                                  frames_per_buffer=self.chunksize,
+                                  stream_callback=self.audioCallback)
+
+        self.stream.start_stream()
+        self.data = None
+        self.new_data = False
+
+        self.wave_data = []
+        self.avg_value = 10
+
+    def audioCallback(self, in_data, frame_count, time_info, status):
+        self.data = struct.unpack("%si" % int(len(in_data) / 4), in_data)
+        self.new_data = True
+        return (None, pyaudio.paContinue)
+
+    def calc_data(self):
+        data = []
+        for i, chunk in enumerate(chunks(self.data, int(1024 / self.width))):
+            # lvalue = list([abs(int((ch / (2 ** 31)) * self.width)) for ch in chunk])
+            # value = int(sum(lvalue) / len(lvalue))
+            value = abs(chunk[0] / (2 ** 31)) * self.width
+            data.append(value)
+        return data
+
+    def generate(self):
+        self.fill(BLACK)
+        if(self.new_data):
+            self.wave_data.append(self.calc_data())
+            if(len(self.wave_data) > self.avg_value):
+                del self.wave_data[0]
+            data = average_lists(self.wave_data)
+            for i, value in enumerate(data):
+                self.draw_line(-1, i, value - 1, i, BLUE)
+
+
+class Fft_(Graphics):
     def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
 
@@ -20,7 +68,7 @@ class Fft(Graphics):
         self.topcolor = kwargs.get('topcolor', GREEN)
         self.barcolor = kwargs.get('barcolor', BLUE)
 
-        self.sample_rate = 44100 / 4
+        self.sample_rate = int(44100 / 4)
         self.chunk = self.width * 2
         self.no_channels = kwargs.get('channels', 1)
 

@@ -8,28 +8,33 @@ from Ledart.MatrixSim.MatrixScreen import MatrixScreen, interface_opts
 pixelmatrix = "Arduino-42"
 ledboard = 'ledboard'
 minimatrix = 'minimatrix'
-megamatrix = 'megamatrix'
+megamatrix = '10.42.1.2'
+candymachine = 'candymachine.tkkrlab'
 localhost = "127.0.0.1"
 bcast = '10.42.0.0'
 moo = 'moo'
 
 # dest = megamatrix
-dest = minimatrix
+# dest = megamatrix
+dest = localhost
 # width, height = 17, 10
-# width, height = 128, 64
-width, height = 64, 32
+width, height = 128, 64
+# width, height = 64, 32
+# width, height = 256, 128
+# width, height = 9, 6
+
 # pixelsize = 1024 / 128
 # height = (768 - 20) / pixelsize
-# width, height = 256, 128
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-protocol = LegacyLmcp(dispmode=rgb24)
+# protocol = LedMatrix(port=4201)
+# protocol = Artnet()
 
-# matrixsim = MatrixScreen(dims=dims,
-#                          pixelsize=10,
-#                          fullscreen=False,
-#                          interface=interface_opts["pygame"])
+matrixsim = MatrixScreen(dims=dims,
+                         pixelsize=10,
+                         fullscreen=False,
+                         interface=interface_opts["pygame"])
 
 targets = {
     # dest: Ca(dims=dims),
@@ -86,10 +91,10 @@ targets = {
     # dest: SpiroGraph(dims=dims, mode=2),
     # dest: MetaBalls(dims=dims),
 
-    # dest: VUmeter(dims=dims, mode=0),
+    dest: VUmeter(dims=dims, mode=0),
     # dest: VUmeter(dims=dims, mode=1),
     # dest: VUmeter(dims=dims, mode=2),
-    dest: VUmeter(dims=dims, mode=3),
+    # dest: VUmeter(dims=dims, mode=3),
     
     # dest: RandomWalker(dims=dims),
     # dest: PerlinTest(dims=dims),

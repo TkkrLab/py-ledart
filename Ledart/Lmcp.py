@@ -10,8 +10,8 @@ py-ledart software.
 
 """
 
-from DeviceInterfaces import UdpSocket
-from utils import chunked
+from .DeviceInterfaces import UdpSocket
+from .utils import chunked
 
 def rgb24(colordata):
     """ 
@@ -67,8 +67,8 @@ class LegacyLmcp(UdpSocket):
         else:
             draw_image = self.draw_image_rgb
         (x, y), width, height = data.d_offset, data.width, data.height
-        size = self.send_limit / width
-        chunksize = size * width
+        size = int(self.send_limit / width)
+        chunksize = int(size * width)
         for i, chunk in chunked(data, chunksize):
             packet = (draw_image + chr(x) + chr(y + size * i) +
                       chr(width) + chr(size))
@@ -134,3 +134,10 @@ class TestLmcp(LegacyLmcp):
         packet += str(data)
         self.transmit(packet, dest)
         self.transmit(self.writeout, dest)
+
+class LedMatrix(UdpSocket):
+    def __init__(self, port=4201):
+        UdpSocket.__init__(self, port=port)
+
+    def send(self, data, dest):
+        self.transmit(data.flatten(), dest)

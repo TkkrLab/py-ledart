@@ -1,4 +1,4 @@
-from Interface import Interface
+from .Interface import Interface
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 

@@ -1,7 +1,7 @@
 from math import floor
-from HSLColorTools import *
-from HSVColorTools import *
-from RGBColorTools import *
+from .HSLColorTools import *
+from .HSVColorTools import *
+from .RGBColorTools import *
 
 def RGBtoHSL(color):
 	r,g,b, = color

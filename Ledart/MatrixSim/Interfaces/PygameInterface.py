@@ -1,4 +1,4 @@
-from Interface import Interface
+from .Interface import Interface
 
 from pygame.locals import *
 import pygame
@@ -11,7 +11,7 @@ class PygameInterface(Interface):
     """
     def __init__(self, width, height, blocksize, fullscreen=False):
         Interface.__init__(self, width, height, blocksize)
-        self.flags = pygame.NOFRAME
+        self.flags = 0
         if fullscreen:
             self.flags |= pygame.FULLSCREEN
 

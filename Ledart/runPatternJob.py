@@ -12,10 +12,10 @@ from socket import gethostbyname
 
 import cProfile
 
-from Tools.Graphics import Surface
-from utils import load_targets
-from utils import find_patterns_in_dir
-from utils import matrix
+from Ledart.Tools.Graphics import Surface
+from .utils import load_targets
+from .utils import find_patterns_in_dir
+from .utils import matrix
 
 basepath = os.path.dirname(os.path.realpath(__file__))
 
@@ -95,7 +95,7 @@ sys.dont_write_bytecode = True
 
 def main():
 
-    from ArgumentParser import get_args
+    from .ArgumentParser import get_args
     # get command line arguments
     args = get_args()
 
@@ -127,9 +127,15 @@ def main():
             cleanup(7)
         # resolve hostenames if protocol specified.
         # else it doesn't really matter.
-        for target in targets:
-            if protocol:
-                targets[gethostbyname(target)] = targets.pop(target)
+
+        # for target in targets:
+        #     if protocol:
+        #         targets[gethostbyname(target)] = targets.pop(target)
+        resolved_targets = {}
+        for key in targets.keys():
+            resolved_targets[gethostbyname(key)] = targets[key]
+        targets = resolved_targets
+
         # ---------
         if protocol:
             protocol.open()

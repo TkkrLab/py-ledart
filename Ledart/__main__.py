@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import runPatternJob
+import Ledart.runPatternJob
 
 if __name__ == "__main__":
-    runPatternJob.main()
+    Ledart.runPatternJob.main()

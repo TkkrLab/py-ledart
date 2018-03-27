@@ -149,7 +149,7 @@ class ScreenCapture(Surface):
     def generate(self):
         # read and turn all elements into int values.
         raw_image = self.pipe.stdout.read(self.width * self.height * 3)
-        raw_image = map(ord, raw_image)
+        # raw_image = map(ord, raw_image)
         # create an itterator
         it = iter(raw_image)
         # use the itterator to zip three following values together.

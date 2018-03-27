@@ -5,9 +5,9 @@
 # 2015-12-12 Duality:
 # class structure introduced for easy implentation of other
 # protocols, and abstraction of sockets.
-from DeviceInterfaces import UdpSocket
-from Filter import convert_snake_layout
-from Filter import convert_dim_layout
+from .DeviceInterfaces import UdpSocket
+from .Filter import convert_snake_layout
+from .Filter import convert_dim_layout
 
 
 class Artnet(UdpSocket):
@@ -23,12 +23,14 @@ class Artnet(UdpSocket):
             raise(Exception("dmxdata to big to fit packet."))
         #              01234567   8   9   a   b   c   d   e   f   10  11
         #                         op-code protver seq phy universe len
-        data = bytearray("Art-Net\x00\x00\x50\x00\x0e\x00\x00")
-        data += chr(int(universe % 256))
-        data += chr(int(universe / 256))
-        data += chr(int(size / 256))
-        data += chr(int(size % 256))
-        data += str(dmxdata)
+        header = b"Art-Net\x00\x00\x50\x00\x0e\x00\x00"
+        data = bytearray(header)
+        data.append(int(universe % 256))
+        data.append(int(universe / 256))
+        data.append(int(size / 256))
+        data.append(int(size % 256))
+        data.extend(bytes(dmxdata.flatten()))
+
         return data
 
     def send(self, data, ip):

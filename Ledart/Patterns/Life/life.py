@@ -58,7 +58,7 @@ class Life(object):
 
     # create a random field
     def createRandomField(self):
-        for i in xrange(self.fieldSize):
+        for i in range(self.fieldSize):
             self.field[i] = random.randint(0, 1)
 
     def insertImage(self, img):

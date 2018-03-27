@@ -1,21 +1,80 @@
-from Ledart.utils import chunked, translate
+from Ledart.utils import chunked, translate, chunks, mean, average_lists
 from Ledart.Tools.Graphics import Graphics, BLUE, WHITE, BLACK
 
 import alsaaudio
 import colorsys
 import audioop
+import pyaudio
 import struct
 import time
 
 class VUmeter(Graphics):
     def __init__(self, **kwargs):
+        super(Graphics, self).__init__(**kwargs)
+        self.audioChannels = 1
+        self.rate = 44100
+        self.chunksize = 1024
+
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=pyaudio.paInt32,
+                                  channels=self.audioChannels,
+                                  rate=self.rate,
+                                  input=True,
+                                  output=False,
+                                  frames_per_buffer=self.chunksize,
+                                  stream_callback=self.audioCallback)
+
+        self.stream.start_stream()
+        self.data = None
+        self.new_data = False
+
+        self.wave_data = []
+        self.avg_value = 10
+
+    def audioCallback(self, in_data, frame_count, time_info, status):
+        self.data = struct.unpack("%si" % int(len(in_data) / 4), in_data)
+        self.new_data = True
+        return (None, pyaudio.paContinue)
+
+    def calc_data(self):
+        data = []
+        for i, chunk in enumerate(chunks(self.data, int(self.chunksize / self.width))):
+            # lvalue = list([abs(int((ch / (2 ** 31)) * self.width)) for ch in chunk])
+            # value = int(sum(lvalue) / len(lvalue))
+            # value = abs(chunk[0] / (2 ** 31)) * self.height
+
+            value = ((chunk[0] / (2 ** 30)) + 2) * self.height / 4
+            # lvalue = list([((ch / (2 ** 30))  + 2) * self.height / 4 for ch in chunk])
+            # value = int(sum(lvalue) / len(lvalue))
+            
+            data.append(value)
+        return data
+
+    def generate(self):
+        self.fill(BLACK)
+        if self.new_data:
+            self.wave_data.append(self.calc_data())
+            if(len(self.wave_data) > self.avg_value):
+                del self.wave_data[0]
+            data = average_lists(self.wave_data)
+            for i, (p1, p2) in enumerate(zip(data[0:-1:1], data[1::1])):
+                self.draw_line(i, p1, i, p2, BLUE)
+            # for i, value in enumerate(data):
+                # self.draw_line(-1, i, value - 1, i, BLUE)
+                # self.draw_line(i, self.height - 1, i, self.height - value, BLUE)
+                # self.draw_pixel(i, self.height - value, BLUE)
+
+
+class VUmeter1(Graphics):
+    def __init__(self, **kwargs):
         Graphics.__init__(self, **kwargs)
 
         self.mode = kwargs.get('mode', 3)
         
-        self.sample_rate = 44100 / 4
+        self.sample_rate = int(44100 / 4)
         self.chunk = self.width * 2
         self.no_channels = 1
+        self.average_size = 10
 
         self.stream = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
         self.stream.setchannels(self.no_channels)
@@ -29,7 +88,7 @@ class VUmeter(Graphics):
         return sum(a) / len(a)
 
     def average_lists(self, lists):
-        return map(self.mean, zip(*lists))
+        return list(map(self.mean, zip(*lists)))
 
     def draw_pixel(self, x, y, color):
         color = [int(c * 0xff) for c in colorsys.hsv_to_rgb(y / float(self.height), 1, 1)]
@@ -42,13 +101,13 @@ class VUmeter(Graphics):
         if l:
             data = struct.unpack("%dh" % (len(data) / 2), data)
             self.chunks.append(data)
-            if len(self.chunks) > 100:
+            if len(self.chunks) > self.average_size:
                 del self.chunks[0]
             data = self.average_lists(self.chunks)
             # scale values to the window.
             data = [translate(val, min(data), max(data), 1, self.height * 0.8) for val in data]
 
-            for x in xrange(len(data)):
+            for x in range(len(data)):
                 if self.mode == 0:
                     self.draw_line(x, self.height - data[x], x, self.height, BLUE)
                 elif self.mode == 1:

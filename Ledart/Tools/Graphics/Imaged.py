@@ -1,7 +1,7 @@
 from PIL import Image
 import Ledart
 import os
-from Surface import Surface
+from .Surface import Surface
 
 class ImageSurface(Surface):
     # def __init__(self, width, height, fname, thumbnail=False):

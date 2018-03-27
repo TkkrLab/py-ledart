@@ -62,8 +62,8 @@ class RevolvingCircle(Graphics):
         Graphics.__init__(self, **kwargs)
         self.plasma = Graphics(surface=self)
 
-        self.x_range = xrange(0, self.width, 1)
-        self.y_range = xrange(0, self.height, 1)
+        self.x_range = range(0, self.width, 1)
+        self.y_range = range(0, self.height, 1)
 
         self.speed = kwargs.get('speed', 1)
         self.interval = 1000 / self.speed
@@ -79,7 +79,7 @@ class RevolvingCircle(Graphics):
     def generatePalette(self):
         self.palette = []
         pal = PaletGenerate()
-        for x in xrange(0, 0xff * 3, 1):
+        for x in range(0, 0xff * 3, 1):
             color = pal.colorFade()
             r, g, b = color
             colorRGB = (r, g, b)
@@ -115,7 +115,7 @@ class RevolvingCircle(Graphics):
         for y in self.y_range:
             for x in self.x_range:
                 plasma_color = self.plasma.read_pixel(x, y)
-                color_shift = self.palette[paletteShift % len(self.palette)]
+                color_shift = self.palette[int(paletteShift % len(self.palette))]
                 r = (plasma_color[0] + color_shift[0]) % (len(self.palette))
                 g = (plasma_color[1] + color_shift[1]) % (len(self.palette))
                 b = (plasma_color[2] + color_shift[2]) % (len(self.palette))
