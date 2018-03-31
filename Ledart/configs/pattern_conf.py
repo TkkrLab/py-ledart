@@ -16,19 +16,20 @@ moo = 'moo'
 
 # dest = megamatrix
 # dest = megamatrix
-dest = localhost
+dest = megamatrix
 # width, height = 17, 10
 width, height = 128, 64
 # width, height = 64, 32
 # width, height = 256, 128
 # width, height = 9, 6
 
+
 # pixelsize = 1024 / 128
 # height = (768 - 20) / pixelsize
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-# protocol = LedMatrix(port=4201)
+protocol = LedMatrix(port=4201)
 # protocol = Artnet()
 
 matrixsim = MatrixScreen(dims=dims,
@@ -91,7 +92,8 @@ targets = {
     # dest: SpiroGraph(dims=dims, mode=2),
     # dest: MetaBalls(dims=dims),
 
-    dest: VUmeter(dims=dims, mode=0),
+    dest: SoundColor(dims=dims),
+    # dest: VUmeter(dims=dims, mode=0),
     # dest: VUmeter(dims=dims, mode=1),
     # dest: VUmeter(dims=dims, mode=2),
     # dest: VUmeter(dims=dims, mode=3),

@@ -1,13 +1,92 @@
 from Ledart.utils import chunked, translate, chunks, mean, average_lists
 from Ledart.Tools.Graphics import Graphics, BLUE, WHITE, BLACK
 
-import alsaaudio
 import colorsys
-import audioop
-import pyaudio
 import struct
-import time
+import random
 
+def colors(N):
+    HSV_tuples = [(x*1.0/N, 0.5, 0.5) for x in range(N)]
+    RGB_tuples = list(map(lambda x: colorsys.hsv_to_rgb(*x), HSV_tuples))
+    return RGB_tuples
+
+class SoundColor(Graphics):
+    def __init__(self, **kwargs):
+        super(Graphics, self).__init__(**kwargs)
+        self.audioChannels = 1
+        self.rate = 44100
+        self.chunksize = 1024
+
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=pyaudio.paInt32,
+                                  channels=self.audioChannels,
+                                  rate=self.rate,
+                                  input=True,
+                                  output=False,
+                                  frames_per_buffer=self.chunksize,
+                                  stream_callback=self.audioCallback)
+
+        self.stream.start_stream()
+        self.data = None
+        self.new_data = False
+
+        self.height_wave_data = []
+        self.width_wave_data = []
+        self.avg_value = 10
+
+        self.lines = []
+        self.max_lines = 4
+        self.index = 0
+        # self.palette = seaborn.color_palette('Blues_d', n_colors=0xff + 1)
+        self.palette = colors(0xff + 1)
+
+    def audioCallback(self, in_data, frame_count, time_info, status):
+        self.data = struct.unpack("%si" % int(len(in_data) / 4), in_data)
+        self.new_data = True
+        return (None, pyaudio.paContinue)
+
+    def calc_data(self, length, scale):
+        data = []
+        for i, chunk in enumerate(chunks(self.data, int(self.chunksize / length))):
+            # value = self.height / 2 + self.height * ((mean(chunk) / self.chunksize) / 200000)
+            value = scale / 2 + scale * (chunk[0] / (2 ** 32)) * 20
+
+            # lvalue = list([((ch / (2 ** 30))  + 2) * self.height / 4 for ch in chunk])
+            # value = int(sum(lvalue) / len(lvalue))
+            
+            data.append(value)
+        return data
+
+    def generate(self):
+        self.fill(BLACK)
+        if self.new_data:
+
+            self.width_wave_data.append(self.calc_data(self.width, self.height))
+            if(len(self.width_wave_data) > self.avg_value):
+                del self.width_wave_data[0]
+
+            self.height_wave_data.append(self.calc_data(self.height, self.width))
+            if(len(self.height_wave_data) > self.avg_value):
+                del self.height_wave_data[0]
+            
+            ydata = average_lists(self.height_wave_data)
+            ydata_min = min(ydata)
+            ydata_max = max(ydata)
+
+            xdata = average_lists(self.width_wave_data)
+            xdata_min = min(xdata)
+            xdata_max = max(xdata)
+
+            for x in range(self.width):
+                for y in range(self.height):
+                    xc = translate(xdata[x], xdata_min, xdata_max, 0, 0xff)
+                    yc = translate(ydata[y], ydata_min, ydata_max, 0, 0xff)
+                    c = abs((xc + yc) / 2)
+                    color = self.palette[int(c)]
+                    color = [int(c * 0xff) for c in color]
+                    self.draw_pixel(x, y, color)
+
+"""
 class VUmeter(Graphics):
     def __init__(self, **kwargs):
         super(Graphics, self).__init__(**kwargs)
@@ -31,19 +110,21 @@ class VUmeter(Graphics):
         self.wave_data = []
         self.avg_value = 10
 
+        self.lines = []
+        self.max_lines = 4
+        self.index = 0
+
     def audioCallback(self, in_data, frame_count, time_info, status):
         self.data = struct.unpack("%si" % int(len(in_data) / 4), in_data)
         self.new_data = True
         return (None, pyaudio.paContinue)
 
-    def calc_data(self):
+    def calc_data(self, length, scale):
         data = []
-        for i, chunk in enumerate(chunks(self.data, int(self.chunksize / self.width))):
-            # lvalue = list([abs(int((ch / (2 ** 31)) * self.width)) for ch in chunk])
-            # value = int(sum(lvalue) / len(lvalue))
-            # value = abs(chunk[0] / (2 ** 31)) * self.height
+        for i, chunk in enumerate(chunks(self.data, int(self.chunksize / length))):
+            # value = self.height / 2 + self.height * ((mean(chunk) / self.chunksize) / 200000)
+            value = scale / 2 + scale * (chunk[0] / (2 ** 32)) * 20
 
-            value = ((chunk[0] / (2 ** 30)) + 2) * self.height / 4
             # lvalue = list([((ch / (2 ** 30))  + 2) * self.height / 4 for ch in chunk])
             # value = int(sum(lvalue) / len(lvalue))
             
@@ -53,16 +134,12 @@ class VUmeter(Graphics):
     def generate(self):
         self.fill(BLACK)
         if self.new_data:
-            self.wave_data.append(self.calc_data())
+            self.wave_data.append(self.calc_data(self.width, self.height))
             if(len(self.wave_data) > self.avg_value):
                 del self.wave_data[0]
             data = average_lists(self.wave_data)
-            for i, (p1, p2) in enumerate(zip(data[0:-1:1], data[1::1])):
-                self.draw_line(i, p1, i, p2, BLUE)
-            # for i, value in enumerate(data):
-                # self.draw_line(-1, i, value - 1, i, BLUE)
-                # self.draw_line(i, self.height - 1, i, self.height - value, BLUE)
-                # self.draw_pixel(i, self.height - value, BLUE)
+            for i, (p1, p2) in enumerate(zip(data[0:-1:], data[1:-1:1])):
+                    self.draw_line(i, p1, i, p2, BLUE)
 
 
 class VUmeter1(Graphics):
@@ -126,3 +203,4 @@ class VUmeter1(Graphics):
             #         h = audioop.max(data, 2) / 100
             #     color = [min(h, 0xff), max(0xff - h, 0), 0]
             #     self.draw_line(x, self.height, x, self.height - h, color)
+"""
