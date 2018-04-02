@@ -92,7 +92,10 @@ targets = {
     # dest: SpiroGraph(dims=dims, mode=2),
     # dest: MetaBalls(dims=dims),
 
-    dest: SoundColor(dims=dims),
+    # dest: SoundColor(dims=dims, mode=0),
+    # dest: SoundColor(dims=dims, mode=1),
+    dest: SoundColor(dims=dims, mode=2, num_avg=100),
+
     # dest: VUmeter(dims=dims, mode=0),
     # dest: VUmeter(dims=dims, mode=1),
     # dest: VUmeter(dims=dims, mode=2),
