@@ -35,7 +35,7 @@ class SoundColor(Graphics):
 
         self.height_wave_data = []
         self.width_wave_data = []
-        self.avg_value = kwargs.get("num_avg", 2)
+        self.avg_value = max(kwargs.get("num_avg", 2), 1) # 1 or more
 
         self.lines = []
         self.max_lines = 4
