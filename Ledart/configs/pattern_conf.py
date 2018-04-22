@@ -16,12 +16,12 @@ moo = 'moo'
 
 # dest = megamatrix
 # dest = megamatrix
-dest = megamatrix
+dest = candymachine
 # width, height = 17, 10
-width, height = 128, 64
+# width, height = 128, 64
 # width, height = 64, 32
 # width, height = 256, 128
-# width, height = 9, 6
+width, height = 9, 6
 
 
 # pixelsize = 1024 / 128
@@ -29,8 +29,8 @@ width, height = 128, 64
 dims = matrix(x=0, y=0, width=width, height=height)
 
 # protocol = LegacyLmcp(dispmode=grayscale)
-protocol = LedMatrix(port=4201)
-# protocol = Artnet()
+# protocol = LedMatrix(port=4201)
+protocol = Artnet()
 
 matrixsim = MatrixScreen(dims=dims,
                          pixelsize=10,
@@ -75,7 +75,7 @@ targets = {
     # dest: ColorFade(dims=dims),
     
     # dest: Plasma(dims=dims),
-    # dest: RevolvingCircle(dims=dims),
+    dest: RevolvingCircle(dims=dims),
 
     # dest: RainPattern(dims=dims, chance=0.7, color=(40, 60, 255)),
 
@@ -94,7 +94,7 @@ targets = {
 
     # dest: SoundColor(dims=dims, mode=0),
     # dest: SoundColor(dims=dims, mode=1),
-    dest: SoundColor(dims=dims, mode=2, num_avg=-1),
+    # dest: SoundColor(dims=dims, mode=2, num_avg=10),
 
     # dest: VUmeter(dims=dims, mode=0),
     # dest: VUmeter(dims=dims, mode=1),
