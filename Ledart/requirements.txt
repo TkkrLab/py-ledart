@@ -1,4 +1,4 @@
-Pillow==3.3.0
+Pillow==9.0.1
 PyOpenGL==3.1.0
 PyUserInput==0.1.10
 cffi==1.7.0
